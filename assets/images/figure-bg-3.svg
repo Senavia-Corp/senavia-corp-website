@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 50 39.5">
+  
+  <defs>
+    
+    <radialGradient id="Degradado_sin_nombre_75" data-name="Degradado sin nombre 75" cx="30.7" cy="20.2" fx="21.1" fy="20.2" r="10.3" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#31cb24"></stop>
+      <stop offset=".2" stop-color="#51d229"></stop>
+      <stop offset=".4" stop-color="#69d72d"></stop>
+      <stop offset=".5" stop-color="#72da2f"></stop>
+      <stop offset=".6" stop-color="#77db30"></stop>
+      <stop offset=".8" stop-color="#87de33"></stop>
+      <stop offset=".9" stop-color="#a2e437"></stop>
+      <stop offset="1" stop-color="#ade73a"></stop>
+    </radialGradient>
+    <radialGradient id="Degradado_sin_nombre_751" data-name="Degradado sin nombre 75" cx="27.1" cy="19.7" fx="7.2" fy="19.7" r="21.4" xlink:href="#Degradado_sin_nombre_75"></radialGradient>
+    <radialGradient id="Degradado_sin_nombre_752" data-name="Degradado sin nombre 75" cx="2.6" cy="19" fx="2.6" fy="19" r="2.6" xlink:href="#Degradado_sin_nombre_75"></radialGradient>
+  </defs>
+  <circle class="st2" cx="30.7" cy="20.2" r="10.3"></circle>
+  <path class="st0" d="M50,20.2c0,10.6-8.6,19.3-19.3,19.3S11.5,30.9,11.5,20.2,20.1.9,30.7.9s19.3,8.6,19.3,19.3ZM30.7,5.1c-8.4,0-15.1,6.8-15.1,15.1s6.8,15.1,15.1,15.1,15.1-6.8,15.1-15.1-6.8-15.1-15.1-15.1ZM11.5,0c-4,0-7.2,3.2-7.2,7.2s3.2,7.2,7.2,7.2,7.2-3.2,7.2-7.2S15.5,0,11.5,0Z"></path>
+  <circle class="st1" cx="2.6" cy="19" r="2.6"></circle>
+</svg>
