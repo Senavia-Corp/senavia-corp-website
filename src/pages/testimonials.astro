@@ -1,0 +1,360 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "Testimonials — SENAVIA Corp · Video Reviews from South Florida Clients";
+const description = "Hear directly from South Florida business owners SENAVIA Corp has worked with. Video testimonials and Google Reviews from contractors, e-commerce brands, and service businesses.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/testimonials"
+  jsonLdType="home"
+  screenLabel="Testimonials"
+>
+<main>
+
+  <!-- ============================================================
+       HERO — Compact
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Testimonials Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">Real clients · Real results</div>
+      <h1>Testimonial Videos</h1>
+      <p>Hear directly from South Florida business owners we've worked with.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VIDEO TESTIMONIAL GRID
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Video Testimonials">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">In their words</div>
+        <h2>Voices Behind the Projects</h2>
+        <p>Eight clients across web design, e-commerce, custom apps, and marketing — sharing what changed after working with SENAVIA.</p>
+      </div>
+      <div class="vt-grid" data-reveal-children>
+        
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Carlos Rivera, Pergola Plus Florida">
+          <div class="vt-thumb bg-1">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">2:14</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Carlos Rivera</h3>
+            <span class="vt-business">Pergola Plus Florida</span>
+            <span class="vt-tag" data-tag="web-design">Web Design</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Maria Gonzalez, ANGELE GLOW Skincare">
+          <div class="vt-thumb bg-4">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">1:48</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Maria Gonzalez</h3>
+            <span class="vt-business">ANGELE GLOW Skincare</span>
+            <span class="vt-tag" data-tag="ecommerce">E-commerce</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from James Patterson, Mariner Marine">
+          <div class="vt-thumb bg-3">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">3:02</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">James Patterson</h3>
+            <span class="vt-business">Mariner Marine</span>
+            <span class="vt-tag" data-tag="webapp">Web App</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Sofía Alvarez, Casa Lumière Interiors">
+          <div class="vt-thumb bg-7">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">2:36</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Sofía Alvarez</h3>
+            <span class="vt-business">Casa Lumière Interiors</span>
+            <span class="vt-tag" data-tag="marketing">Marketing</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Luis Hernández, AB Aluminum & Screens">
+          <div class="vt-thumb bg-5">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">1:55</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Luis Hernández</h3>
+            <span class="vt-business">AB Aluminum & Screens</span>
+            <span class="vt-tag" data-tag="web-design">Web Design</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Daniel Cohen, Atlas Logistics">
+          <div class="vt-thumb bg-6">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">2:51</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Daniel Cohen</h3>
+            <span class="vt-business">Atlas Logistics</span>
+            <span class="vt-tag" data-tag="webapp">Web App</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Andrea Reyes, Lake Scaping LLC">
+          <div class="vt-thumb bg-2">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">2:08</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Andrea Reyes</h3>
+            <span class="vt-business">Lake Scaping LLC</span>
+            <span class="vt-tag" data-tag="web-design">Web Design</span>
+          </div>
+        </article>
+
+        <article class="vt-card" tabindex="0" role="button" aria-label="Play video testimonial from Thiago Moreira, Solé Roofing Group">
+          <div class="vt-thumb bg-8">
+            <span class="vt-play" aria-hidden="true">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+            </span>
+            <span class="vt-duration">1:42</span>
+          </div>
+          <div class="vt-meta">
+            <h3 class="vt-name">Thiago Moreira</h3>
+            <span class="vt-business">Solé Roofing Group</span>
+            <span class="vt-tag" data-tag="marketing">Marketing</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GOOGLE REVIEWS
+       ============================================================ -->
+  <div class="green-bg">
+    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
+    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
+    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
+
+    <section class="section section-flush" data-screen-label="03 Google Reviews">
+      <div class="container">
+        <div class="gr-header" data-reveal>
+          <div>
+            <div class="eyebrow">Google Reviews</div>
+            <h2>Trusted by Businesses Across South Florida</h2>
+            <p>Verified reviews on Google from contractors, e-commerce brands, and service operators we've helped grow since 2021.</p>
+          </div>
+          <div class="gr-rating">
+            <div class="gr-score">
+              5.0
+              <span class="gr-score-stars" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+            </div>
+            <span class="gr-meta">From <strong>47 verified reviews</strong> on Google</span>
+          </div>
+        </div>
+
+        <div class="gr-grid" data-elfsight-app-id="d2ce1169-e2c8-43d7-873d-f9e6f7bc1e07" data-reveal-children>
+          
+        <article class="gr-card">
+          <span class="gr-quote" aria-hidden="true">"</span>
+          <div class="gr-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <p class="gr-text">Senavia rebuilt our roofing company website and within two months we doubled our qualified leads. The team is detail-oriented, communicative, and clearly knows local SEO inside out.</p>
+          <div class="gr-author">
+            <span class="gr-avatar a1" aria-hidden="true">CR</span>
+            <div class="gr-author-info">
+              <span class="gr-author-name">Carlos Rivera</span>
+              <span class="gr-author-date">2 weeks ago</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gr-card">
+          <span class="gr-quote" aria-hidden="true">"</span>
+          <div class="gr-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <p class="gr-text">Their design work elevated our brand instantly — modern, fast, and converting. We&apos;ve climbed three Google ranking positions for our main keywords since launch. Highly recommend.</p>
+          <div class="gr-author">
+            <span class="gr-avatar a2" aria-hidden="true">MG</span>
+            <div class="gr-author-info">
+              <span class="gr-author-name">Maria Gonzalez</span>
+              <span class="gr-author-date">1 month ago</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gr-card">
+          <span class="gr-quote" aria-hidden="true">"</span>
+          <div class="gr-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <p class="gr-text">Best agency decision we&apos;ve made. Communication is fast, the SEO strategy actually drives traffic, and the website performs in Core Web Vitals. Real partners, not just vendors.</p>
+          <div class="gr-author">
+            <span class="gr-avatar a3" aria-hidden="true">JP</span>
+            <div class="gr-author-info">
+              <span class="gr-author-name">James Patterson</span>
+              <span class="gr-author-date">3 months ago</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gr-card">
+          <span class="gr-quote" aria-hidden="true">"</span>
+          <div class="gr-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <p class="gr-text">The bilingual EN/ES approach was exactly what our Miami clients needed. Senavia delivered a beautiful site and an SEO strategy that ranks us in both languages — a rare combination.</p>
+          <div class="gr-author">
+            <span class="gr-avatar a4" aria-hidden="true">SA</span>
+            <div class="gr-author-info">
+              <span class="gr-author-name">Sofía Alvarez</span>
+              <span class="gr-author-date">5 weeks ago</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gr-card">
+          <span class="gr-quote" aria-hidden="true">"</span>
+          <div class="gr-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <p class="gr-text">They built us a custom quote tool that has paid for itself ten times over. The admin panel is intuitive, and the team kept us informed throughout. Couldn&apos;t ask for more.</p>
+          <div class="gr-author">
+            <span class="gr-avatar a5" aria-hidden="true">LH</span>
+            <div class="gr-author-info">
+              <span class="gr-author-name">Luis Hernández</span>
+              <span class="gr-author-date">2 months ago</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="gr-card">
+          <span class="gr-quote" aria-hidden="true">"</span>
+          <div class="gr-stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+          <p class="gr-text">Senavia took our landscaping business from word-of-mouth-only to a steady inbound pipeline. Their Google Ads management and on-page SEO doubled our monthly inquiries.</p>
+          <div class="gr-author">
+            <span class="gr-avatar a6" aria-hidden="true">AR</span>
+            <div class="gr-author-info">
+              <span class="gr-author-name">Andrea Reyes</span>
+              <span class="gr-author-date">4 months ago</span>
+            </div>
+          </div>
+        </article>
+        </div>
+
+        <div class="gr-footer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+          </svg>
+          <span>Powered by Google · 5.0 ★ from 47 reviews</span>
+          <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-secondary is-sm" style="margin-left: 14px;">Read All Reviews</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="04 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Want to Be Our Next Success Story?</h2>
+      <p>Schedule a 30-minute consultation and let's plan a digital strategy worth talking about.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Video modal -->
+<div class="vt-modal" id="vtModal" aria-hidden="true" role="dialog" aria-label="Video player">
+  <div class="vt-modal-frame">
+    <button class="vt-modal-close" id="vtModalClose" type="button" aria-label="Close video">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="6" y1="18" x2="18" y2="6"></line></svg>
+    </button>
+    <div class="vt-modal-placeholder" id="vtModalContent">Video placeholder — embed your testimonial here</div>
+  </div>
+</div>
+
+<!-- Initialize Calendly inline widget once the script loads -->
+<script>
+  (function(){
+    var el = document.getElementById('calendlyInline');
+    if (!el) return;
+    function init() {
+      if (!window.Calendly) { setTimeout(init, 200); return; }
+      window.Calendly.initInlineWidget({
+        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
+        parentElement: el,
+        prefill: {}, utm: {}
+      });
+      // Mark loaded after a beat
+      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
+    }
+    init();
+  })();
+</script>
+
+<!-- Language switcher -->
+
+<!-- Video testimonial modal -->
+<script>
+  (function(){
+    var modal = document.getElementById('vtModal');
+    var closeBtn = document.getElementById('vtModalClose');
+    var content = document.getElementById('vtModalContent');
+    if (!modal) return;
+    var cards = document.querySelectorAll('.vt-card');
+    function open(card){
+      var label = card.getAttribute('aria-label') || 'Video testimonial';
+      content.textContent = label.replace(/^Play video testimonial from /, '') + ' — Video placeholder';
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function close(){
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    cards.forEach(function(c){
+      c.addEventListener('click', function(){ open(c); });
+      c.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c); }
+      });
+    });
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function(e){ if (e.target === modal) close(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+  })();
+</script>
+</BaseLayout>

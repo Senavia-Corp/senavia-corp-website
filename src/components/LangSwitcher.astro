@@ -1,0 +1,32 @@
+---
+import Flags from './Flags.astro';
+---
+<div class="nav-lang" data-lang-switcher>
+  <button
+    class="nav-lang-trigger"
+    type="button"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-label="Change language"
+  >
+    <span class="lang-only-en"><Flags variant="en" /></span>
+    <span class="lang-only-es"><Flags variant="es" /></span>
+    <span class="lang-label">
+      <span class="lang-only-en">EN</span>
+      <span class="lang-only-es">ES</span>
+    </span>
+    <span class="caret"></span>
+  </button>
+  <div class="nav-lang-menu" role="menu">
+    <a href="#" class="nav-lang-option" data-lang="en" role="menuitem">
+      <Flags variant="en" size="lg" />
+      <span class="lang-text">English</span>
+      <span class="check" aria-hidden="true"></span>
+    </a>
+    <a href="#" class="nav-lang-option" data-lang="es" role="menuitem">
+      <Flags variant="es" size="lg" />
+      <span class="lang-text">Español</span>
+      <span class="check" aria-hidden="true"></span>
+    </a>
+  </div>
+</div>

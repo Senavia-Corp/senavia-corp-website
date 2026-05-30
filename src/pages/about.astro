@@ -1,0 +1,178 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "About SENAVIA Corp — South Florida Web Design & Marketing Agency";
+const description = "Meet SENAVIA Corp — a Google Partner-certified digital agency in Plantation, FL. Bilingual EN/ES team helping South Florida businesses grow online.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/about"
+  jsonLdType="about"
+  screenLabel="About"
+>
+<main>
+
+  <!-- ============================================================
+       HERO (compact, ~60vh)
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 About Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/bg-video-poster.jpg">
+      <source src="/videos/bg-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">About SENAVIA Corp</div>
+      <h1>A Digital Agency You Can Trust — Based in Plantation, FL</h1>
+      <p>SENAVIA Corp is a Google Partner-certified digital agency with a proven track record of helping South Florida businesses establish and grow their digital presence. Meet the team behind the results.</p>
+      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Book a Free Call</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SPLIT — Your Miami Digital Growth Partner
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Growth Partner">
+    <div class="container">
+      <div class="split" data-reveal>
+        <div class="split-copy">
+          <div class="eyebrow">Your South Florida partner</div>
+          <h2>Your Miami Digital Growth Partner</h2>
+          <p>SENAVIA Corp is a results-driven web design and digital marketing agency headquartered in Plantation, FL. We work shoulder-to-shoulder with contractors, service businesses, and SMBs across Miami-Dade, Broward, and Palm Beach — translating brand vision into websites and marketing systems that compound traffic, leads, and revenue.</p>
+          <p>Every engagement starts with the same question: <em style="color: var(--white); font-style: normal;">what does growth actually look like for this business?</em> From there we build the strategy, the site, and the SEO infrastructure to deliver it — measured in rankings, conversions, and pipeline.</p>
+          <div class="chip-row" aria-label="Capabilities">
+            <span class="chip"><span class="dot"></span>Web Design</span>
+            <span class="chip"><span class="dot"></span>Local SEO</span>
+            <span class="chip"><span class="dot"></span>Google Ads</span>
+            <span class="chip"><span class="dot"></span>Webflow Development</span>
+            <span class="chip"><span class="dot"></span>Shopify E-commerce</span>
+            <span class="chip"><span class="dot"></span>Conversion Optimization</span>
+          </div>
+        </div>
+        <div class="split-media">
+          <img src="/images/about/agency-team.avif" alt="SENAVIA Corp team at work in the Plantation, Florida office" loading="lazy">
+          <span class="badge-overlay">Plantation, FL · Est. 2019</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MISSION — value props (3 glass cards)
+       ============================================================ -->
+  <section class="section" data-screen-label="03 Mission Values">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">Our mission</div>
+        <h2>The Standards Behind Every Project</h2>
+        <p>We hold every site, campaign, and integration to the same three commitments — non-negotiables that distinguish a SENAVIA build from a templated agency deliverable.</p>
+      </div>
+      <div class="grid-3" data-reveal-children>
+        <article class="value-card">
+          <span class="step">01 · Performance</span>
+          <h3>Performance-first</h3>
+          <p>Every site we build is optimized for Core Web Vitals and conversion — fast LCP, low CLS, instant interaction, and architectures designed to stay fast as content scales.</p>
+        </article>
+        <article class="value-card">
+          <span class="step">02 · Discoverability</span>
+          <h3>SEO baked in</h3>
+          <p>Technical SEO, schema markup, and Answer Engine Optimization are part of the build, not a paid add-on. Your site ships ready to rank — in Google, AI Overviews, and the local 3-pack.</p>
+        </article>
+        <article class="value-card">
+          <span class="step">03 · Local fluency</span>
+          <h3>Bilingual &amp; local</h3>
+          <p>An EN/ES team serving South Florida with deep market knowledge — copy that resonates with both audiences, schema that captures bilingual searches, and partners who actually know the territory.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PHILOSOPHY — pull-quote inside green-bg wrapper
+       ============================================================ -->
+  <div class="green-bg">
+    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
+    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
+    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
+
+    <section class="section" data-screen-label="04 Philosophy">
+      <div class="container">
+        <div class="philosophy" data-reveal>
+          <span class="quote-mark" aria-hidden="true">"</span>
+          <blockquote>
+            We don't build websites to look good in case studies — we build them to <em>show up in search</em>, <em>convert traffic</em>, and <em>compound revenue</em> for the South Florida businesses that trust us with their growth.
+          </blockquote>
+          <div class="attribution">
+            <span class="avatar" aria-hidden="true">JF</span>
+            <span class="who">
+              <strong>Juan Fonseca</strong>
+              <span>Founder &amp; CEO · SENAVIA Corp</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI row -->
+    <section class="section" data-screen-label="05 Quick Facts" style="padding-top: 2rem;">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="eyebrow">By the numbers</div>
+          <h2>Built for South Florida, Trusted to Deliver</h2>
+        </div>
+        <div class="stat-grid" data-reveal-children>
+          <article class="stat-card">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </span>
+            <span class="stat-value">100+</span>
+            <span class="stat-label">Websites launched across South Florida since 2019</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15c2.21 0 4-1.79 4-4V5a4 4 0 0 0-8 0v6c0 2.21 1.79 4 4 4z"/><path d="M19 11a7 7 0 0 1-14 0"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+            </span>
+            <span class="stat-value">Certified</span>
+            <span class="stat-label">Google Partner agency — verified track record &amp; spend</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </span>
+            <span class="stat-value">EN / ES</span>
+            <span class="stat-label">Bilingual team — fluent service for both audiences</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <span class="stat-value">3 Counties</span>
+            <span class="stat-label">Miami-Dade · Broward · Palm Beach — local-first focus</span>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="06 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Let's Build Your Next Digital Success Story</h2>
+      <p>Schedule your free web design &amp; SEO consultation and get a custom strategy to increase traffic, leads, and conversions.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Shared page interactions (reveals + autoplay + marquee) -->
+</BaseLayout>

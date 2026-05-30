@@ -1,0 +1,26 @@
+---
+import { CALENDLY_URL } from '@/data/site';
+interface Props {
+  label?: string;
+  class?: string;
+  block?: boolean;
+}
+const {
+  label = 'Book a Free Call',
+  class: extraClass = '',
+  block = false,
+} = Astro.props;
+const classes = ['btn', block ? 'is-block' : '', extraClass]
+  .filter(Boolean)
+  .join(' ');
+---
+<a
+  href="#"
+  class={classes}
+  data-calendly-trigger
+  data-track="book_call_click"
+  onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}
+>
+  <span class="lang-only-en">{label}</span>
+  <span class="lang-only-es">{label === 'Book a Free Call' ? 'Agenda una Llamada' : label}</span>
+</a>

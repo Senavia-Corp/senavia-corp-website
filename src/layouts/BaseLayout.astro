@@ -1,0 +1,123 @@
+---
+import '@fontsource-variable/inter/index.css';
+import '@/styles/senavia.css';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import Seo from '@/components/Seo.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import { CALENDLY_URL } from '@/data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  jsonLdType?: 'home' | 'about' | 'service' | 'portfolio' | 'blog' | 'localbusiness' | 'pricing';
+  jsonLdData?: Record<string, unknown>;
+  noindex?: boolean;
+  bodyClass?: string;
+  screenLabel?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogType = 'website',
+  jsonLdType = 'home',
+  jsonLdData = {},
+  noindex = false,
+  bodyClass = '',
+  screenLabel,
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en" class="no-js lang-en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="alternate" hreflang="en" href={canonical || Astro.url.pathname} />
+    <link rel="alternate" hreflang="es" href={canonical || Astro.url.pathname} />
+    <link rel="alternate" hreflang="x-default" href={canonical || Astro.url.pathname} />
+
+    <Seo
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType={ogType}
+      noindex={noindex}
+    />
+    <JsonLd type={jsonLdType} data={jsonLdData} />
+
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.replace('no-js', 'js');
+        var saved = null;
+        try { saved = localStorage.getItem('senavia.lang'); } catch (e) {}
+        if (saved === 'es') {
+          d.classList.remove('lang-en');
+          d.classList.add('lang-es');
+          d.setAttribute('lang', 'es');
+        }
+      })();
+    </script>
+
+    <!-- Calendly -->
+    <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+    <!-- Plausible (loaded conditionally — production only via env) -->
+    <script
+      defer
+      data-domain="new.senaviacorp.com"
+      src="https://plausible.io/js/script.tagged-events.outbound-links.js"
+    ></script>
+    <script is:inline>
+      window.plausible = window.plausible || function () {
+        (window.plausible.q = window.plausible.q || []).push(arguments);
+      };
+    </script>
+  </head>
+  <body class={bodyClass} data-screen-label={screenLabel}>
+    <Nav />
+
+    <slot />
+
+    <Footer />
+
+    <!-- Global language switcher logic -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        function setLang(lang) {
+          if (lang !== 'en' && lang !== 'es') return;
+          d.classList.toggle('lang-es', lang === 'es');
+          d.classList.toggle('lang-en', lang === 'en');
+          d.setAttribute('lang', lang);
+          try { localStorage.setItem('senavia.lang', lang); } catch (e) {}
+          window.dispatchEvent(new CustomEvent('languagechange', { detail: { lang: lang } }));
+          if (typeof window.plausible === 'function') window.plausible('lang_switch', { props: { lang: lang } });
+        }
+        document.addEventListener('click', function (e) {
+          var target = e.target as HTMLElement | null;
+          var opt = target ? target.closest('.nav-lang-option') : null;
+          if (!opt) return;
+          e.preventDefault();
+          var lang = opt.getAttribute('data-lang');
+          if (lang) setLang(lang);
+          if (document.activeElement && (document.activeElement as HTMLElement).blur) {
+            (document.activeElement as HTMLElement).blur();
+          }
+        });
+      })();
+    </script>
+
+    <!-- Home/global interactions: carousels, reveals, video autoplay -->
+    <script src="/scripts/home.js" defer></script>
+  </body>
+</html>

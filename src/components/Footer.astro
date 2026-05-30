@@ -1,0 +1,121 @@
+---
+import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
+---
+<footer id="footer" class="footer" data-screen-label="09 Footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-col">
+        <img class="brand-logo" src="/images/Logo-Senavia.svg" alt="SENAVIA Corp" width="180" height="40" />
+        <p>
+          <span class="lang-only-en">
+            Senavia is a Google Partner-certified digital agency in South Florida. We specialize in web design, development, and digital marketing for contractors and local businesses.
+          </span>
+          <span class="lang-only-es">
+            Senavia es una agencia digital certificada como Google Partner en el Sur de la Florida. Nos especializamos en diseño web, desarrollo y marketing digital para contratistas y negocios locales.
+          </span>
+        </p>
+      </div>
+      <div class="footer-col">
+        <h3>
+          <span class="lang-only-en">Services</span>
+          <span class="lang-only-es">Servicios</span>
+        </h3>
+        <ul class="footer-list">
+          <li><a href="/services/web-design"><span class="lang-only-en">Website Design</span><span class="lang-only-es">Diseño Web</span></a></li>
+          <li><a href="/services/digital-marketing"><span class="lang-only-en">Digital Marketing</span><span class="lang-only-es">Marketing Digital</span></a></li>
+          <li><a href="/services/web-development"><span class="lang-only-en">Website Development</span><span class="lang-only-es">Desarrollo Web</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>
+          <span class="lang-only-en">Main Pages</span>
+          <span class="lang-only-es">Páginas</span>
+        </h3>
+        <ul class="footer-list">
+          <li><a href="/portfolio"><span class="lang-only-en">Work Portfolio</span><span class="lang-only-es">Portafolio</span></a></li>
+          <li><a href="/about"><span class="lang-only-en">About Us</span><span class="lang-only-es">Nosotros</span></a></li>
+          <li><a href="/services"><span class="lang-only-en">Services</span><span class="lang-only-es">Servicios</span></a></li>
+          <li><a href="/service-areas"><span class="lang-only-en">Service Areas</span><span class="lang-only-es">Áreas de Servicio</span></a></li>
+          <li><a href="/pricing"><span class="lang-only-en">Prices &amp; Packages</span><span class="lang-only-es">Precios y Paquetes</span></a></li>
+          <li><a href="/testimonials"><span class="lang-only-en">Testimonials</span><span class="lang-only-es">Testimonios</span></a></li>
+          <li><a href="/blog"><span class="lang-only-en">Blog &amp; Tips</span><span class="lang-only-es">Blog y Consejos</span></a></li>
+          <li><a href="/contact"><span class="lang-only-en">Contact Us</span><span class="lang-only-es">Contacto</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>
+          <span class="lang-only-en">Certifications &amp; Affiliations</span>
+          <span class="lang-only-es">Certificaciones y Afiliaciones</span>
+        </h3>
+        <a
+          href={GOOGLE_PARTNER_URL}
+          target="_blank"
+          rel="noopener"
+          class="footer-google"
+          aria-label="Google Partner — see our profile"
+        >
+          <span class="gpb">
+            <svg class="gpb-mark" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+            </svg>
+            <span class="gpb-text">
+              <span class="l1">Google</span>
+              <span class="l2">Partner</span>
+            </span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-info">
+      <a class="footer-info-item" href={`tel:${NAP.phoneE164}`}>
+        <span class="k">
+          <span class="lang-only-en">Call Us!</span>
+          <span class="lang-only-es">¡Llámanos!</span>
+        </span>
+        <span class="v">{NAP.phone}</span>
+      </a>
+      <a class="footer-info-item" href={NAP.googleMapsUrl} target="_blank" rel="noopener">
+        <span class="k">
+          <span class="lang-only-en">Visit Us!</span>
+          <span class="lang-only-es">¡Visítanos!</span>
+        </span>
+        <span class="v">{NAP.streetAddress}, {NAP.addressLocality}, {NAP.addressRegion} {NAP.postalCode}</span>
+      </a>
+      <a class="footer-info-item" href={`mailto:${NAP.email}`}>
+        <span class="k">
+          <span class="lang-only-en">Message Us!</span>
+          <span class="lang-only-es">¡Escríbenos!</span>
+        </span>
+        <span class="v">{NAP.email}</span>
+      </a>
+      <div class="footer-info-item">
+        <span class="k">
+          <span class="lang-only-en">Available Hours</span>
+          <span class="lang-only-es">Horario</span>
+        </span>
+        <span class="v">{NAP.hours}</span>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>
+        <span class="lang-only-en">Copyright © {SITE.copyrightYear} {SITE.legalName}. All rights reserved.</span>
+        <span class="lang-only-es">Copyright © {SITE.copyrightYear} {SITE.legalName}. Todos los derechos reservados.</span>
+      </div>
+      <div class="legal">
+        <a href="/terms"><span class="lang-only-en">Terms &amp; Conditions</span><span class="lang-only-es">Términos</span></a>
+        <a href="/privacy"><span class="lang-only-en">Privacy Policy</span><span class="lang-only-es">Privacidad</span></a>
+        <a href="/sitemap-index.xml">Sitemap</a>
+      </div>
+      <div class="footer-social">
+        <a href={SOCIAL.instagram} aria-label="Instagram" target="_blank" rel="noopener"><img src="/images/insta.svg" alt="" /></a>
+        <a href={SOCIAL.facebook} aria-label="Facebook" target="_blank" rel="noopener"><img src="/images/face.svg" alt="" /></a>
+        <a href={SOCIAL.youtube} aria-label="YouTube" target="_blank" rel="noopener"><img src="/images/youtube.svg" alt="" /></a>
+      </div>
+    </div>
+  </div>
+</footer>

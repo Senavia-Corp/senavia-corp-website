@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Estimator from '@/components/Estimator';
+const title = "Website Cost Estimator — SENAVIA Corp · Get an Instant Project Quote";
+const description = "Get a custom estimate for your website project in under 2 minutes. Free, no commitment — pick your project type, features, and timeline.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/website-cost-estimator-online"
+  jsonLdType="home"
+  screenLabel="Cost Estimator"
+>
+<main>
+
+  <!-- ============================================================
+       HERO — Compact
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Estimator Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">Free · No commitment · 2 minutes</div>
+      <h1>Online Website Estimator</h1>
+      <p>Get a custom estimate for your website project in under 2 minutes.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ESTIMATOR WIZARD
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Estimator">
+    <div class="container">
+      <Estimator client:load />
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="03 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Want to Talk to a Human Instead?</h2>
+      <p>Sometimes the estimator can't capture the nuance. Call us — we love these conversations.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+</BaseLayout>

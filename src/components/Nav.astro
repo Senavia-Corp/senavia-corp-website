@@ -1,0 +1,280 @@
+---
+import { NAV, NAP, CALENDLY_URL } from '@/data/site';
+import LangSwitcher from './LangSwitcher.astro';
+---
+<nav class="nav" data-screen-label="01 Navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand" aria-label="SENAVIA Corp — Home">
+      <img src="/images/Logo-Senavia.svg" alt="SENAVIA Corp" width="180" height="40" />
+    </a>
+
+    <div class="nav-links">
+      <div class="nav-dropdown">
+        <a href="/services" class="nav-link">
+          <span class="lang-only-en">Services</span>
+          <span class="lang-only-es">Servicios</span>
+          <span class="caret"></span>
+        </a>
+        <div class="nav-panel">
+          {NAV.services.map((item) => (
+            <a class="nav-panel-item" href={item.href}>
+              <span class="ic"><img src={item.icon} alt="" /></span>
+              <h4>
+                <span class="lang-only-en">{item.title_en}</span>
+                <span class="lang-only-es">{item.title_es}</span>
+              </h4>
+              <p>
+                <span class="lang-only-en">{item.desc_en}</span>
+                <span class="lang-only-es">{item.desc_es}</span>
+              </p>
+              <span class="more">
+                <span class="lang-only-en">Learn More</span>
+                <span class="lang-only-es">Saber Más</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <a href="/portfolio" class="nav-link">
+        <span class="lang-only-en">Portfolio</span>
+        <span class="lang-only-es">Portafolio</span>
+      </a>
+
+      <div class="nav-dropdown">
+        <a href="/about" class="nav-link">
+          <span class="lang-only-en">About Us</span>
+          <span class="lang-only-es">Nosotros</span>
+          <span class="caret"></span>
+        </a>
+        <div class="nav-panel">
+          {NAV.about.map((item) => (
+            <a class="nav-panel-item" href={item.href}>
+              <span class="ic"><img src={item.icon} alt="" /></span>
+              <h4>
+                <span class="lang-only-en">{item.title_en}</span>
+                <span class="lang-only-es">{item.title_es}</span>
+              </h4>
+              <p>
+                <span class="lang-only-en">{item.desc_en}</span>
+                <span class="lang-only-es">{item.desc_es}</span>
+              </p>
+              <span class="more">
+                <span class="lang-only-en">Learn More</span>
+                <span class="lang-only-es">Saber Más</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="nav-dropdown">
+        <a href="/pricing" class="nav-link">
+          <span class="lang-only-en">Resources</span>
+          <span class="lang-only-es">Recursos</span>
+          <span class="caret"></span>
+        </a>
+        <div class="nav-panel">
+          {NAV.resources.map((item) => (
+            <a class="nav-panel-item" href={item.href}>
+              <span class="ic"><img src={item.icon} alt="" /></span>
+              <h4>
+                <span class="lang-only-en">{item.title_en}</span>
+                <span class="lang-only-es">{item.title_es}</span>
+              </h4>
+              <p>
+                <span class="lang-only-en">{item.desc_en}</span>
+                <span class="lang-only-es">{item.desc_es}</span>
+              </p>
+              <span class="more">
+                <span class="lang-only-en">Learn More</span>
+                <span class="lang-only-es">Saber Más</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <a href="/contact" class="nav-link">
+        <span class="lang-only-en">Contact Us</span>
+        <span class="lang-only-es">Contacto</span>
+      </a>
+    </div>
+
+    <div class="nav-cta">
+      <a
+        href="#"
+        class="btn is-nav-primary"
+        data-calendly-trigger
+        data-track="book_call_click"
+        onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}
+      >
+        <span class="lang-only-en">Book a Free Call</span>
+        <span class="lang-only-es">Agenda una Llamada</span>
+      </a>
+      <a href={`tel:${NAP.phoneE164}`} class="nav-call">
+        <span class="phone-ic"><img src="/images/phone_1.svg" alt="" /></span>
+        <span class="text">
+          <span class="label">
+            <span class="lang-only-en">Call Us Now!</span>
+            <span class="lang-only-es">¡Llámanos!</span>
+          </span>
+          <span class="number">{NAP.phone}</span>
+        </span>
+      </a>
+      <LangSwitcher />
+      <button class="nav-burger" aria-label="Open menu" id="navBurger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-scrim" id="navScrim"></div>
+<aside class="nav-mobile" id="navMobile" aria-hidden="true">
+  <div class="nav-mobile-head">
+    <img src="/images/Logo-Senavia.svg" alt="SENAVIA Corp" />
+    <button class="nav-mobile-close" id="navClose" aria-label="Close menu"></button>
+  </div>
+  <div class="nav-mobile-body">
+    <div class="nav-mobile-section">
+      <div class="nav-mobile-link" data-toggle>
+        <span class="lang-only-en">Services</span>
+        <span class="lang-only-es">Servicios</span>
+        <span class="caret"></span>
+      </div>
+      <div class="nav-mobile-sub">
+        {NAV.services.map((item) => (
+          <a href={item.href}>
+            <span class="ic"><img src={item.icon} alt="" /></span>
+            <span class="lang-only-en">{item.title_en}</span>
+            <span class="lang-only-es">{item.title_es}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="nav-mobile-section">
+      <a class="nav-mobile-link" href="/portfolio">
+        <span class="lang-only-en">Portfolio</span>
+        <span class="lang-only-es">Portafolio</span>
+      </a>
+    </div>
+    <div class="nav-mobile-section">
+      <div class="nav-mobile-link" data-toggle>
+        <span class="lang-only-en">About Us</span>
+        <span class="lang-only-es">Nosotros</span>
+        <span class="caret"></span>
+      </div>
+      <div class="nav-mobile-sub">
+        {NAV.about.map((item) => (
+          <a href={item.href}>
+            <span class="ic"><img src={item.icon} alt="" /></span>
+            <span class="lang-only-en">{item.title_en}</span>
+            <span class="lang-only-es">{item.title_es}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="nav-mobile-section">
+      <div class="nav-mobile-link" data-toggle>
+        <span class="lang-only-en">Resources</span>
+        <span class="lang-only-es">Recursos</span>
+        <span class="caret"></span>
+      </div>
+      <div class="nav-mobile-sub">
+        {NAV.resources.map((item) => (
+          <a href={item.href}>
+            <span class="ic"><img src={item.icon} alt="" /></span>
+            <span class="lang-only-en">{item.title_en}</span>
+            <span class="lang-only-es">{item.title_es}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="nav-mobile-section">
+      <a class="nav-mobile-link" href="/contact">
+        <span class="lang-only-en">Contact Us</span>
+        <span class="lang-only-es">Contacto</span>
+      </a>
+    </div>
+    <a
+      href="#"
+      class="btn is-block"
+      style="margin-top:8px;"
+      data-calendly-trigger
+      data-track="book_call_click"
+      onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}
+    >
+      <span class="lang-only-en">Book a Free Call</span>
+      <span class="lang-only-es">Agenda una Llamada</span>
+    </a>
+  </div>
+  <div class="nav-mobile-foot">
+    <a href={`tel:${NAP.phoneE164}`} class="nav-call">
+      <span class="phone-ic"><img src="/images/phone_1.svg" alt="" /></span>
+      <span class="text">
+        <span class="label">
+          <span class="lang-only-en">Call Us Now!</span>
+          <span class="lang-only-es">¡Llámanos!</span>
+        </span>
+        <span class="number">{NAP.phone}</span>
+      </span>
+    </a>
+    <div class="row">
+      <LangSwitcher />
+      <span class="nav-social">
+        <a href={`https://www.instagram.com/senaviacorp`} aria-label="Instagram" target="_blank" rel="noopener"><img src="/images/insta.svg" alt="" /></a>
+        <a href={`https://www.facebook.com/senaviacorp`} aria-label="Facebook" target="_blank" rel="noopener"><img src="/images/face.svg" alt="" /></a>
+        <a href={`https://www.youtube.com/@senaviacorp`} aria-label="YouTube" target="_blank" rel="noopener"><img src="/images/youtube.svg" alt="" /></a>
+      </span>
+    </div>
+  </div>
+</aside>
+
+<script>
+  (function () {
+    var burger = document.getElementById('navBurger');
+    var menu = document.getElementById('navMobile');
+    var scrim = document.getElementById('navScrim');
+    var close = document.getElementById('navClose');
+    if (!burger || !menu || !scrim || !close) return;
+    function open() {
+      menu!.classList.add('is-open');
+      scrim!.classList.add('is-open');
+      document.body.classList.add('nav-locked');
+      menu!.setAttribute('aria-hidden', 'false');
+      burger!.setAttribute('aria-expanded', 'true');
+    }
+    function shut() {
+      menu!.classList.remove('is-open');
+      scrim!.classList.remove('is-open');
+      document.body.classList.remove('nav-locked');
+      menu!.setAttribute('aria-hidden', 'true');
+      burger!.setAttribute('aria-expanded', 'false');
+    }
+    burger.addEventListener('click', open);
+    close.addEventListener('click', shut);
+    scrim.addEventListener('click', shut);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') shut();
+    });
+    var mqDesktop = window.matchMedia('(min-width: 1181px)');
+    mqDesktop.addEventListener('change', function (e) {
+      if (e.matches) shut();
+    });
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        shut();
+      });
+    });
+    menu.querySelectorAll('[data-toggle]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        el.parentElement?.classList.toggle('is-open');
+      });
+    });
+  })();
+</script>

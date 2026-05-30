@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .st0 { fill: url(#Degradado_sin_nombre_2); }
+      .st1 { fill: url(#Degradado_sin_nombre_22); }
+      .st2 { fill: url(#Degradado_sin_nombre_21); }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_2" data-name="Degradado sin nombre 2" x1="0" y1="25" x2="50" y2="25" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#31cb24"></stop>
+      <stop offset=".2" stop-color="#51d229"></stop>
+      <stop offset=".4" stop-color="#69d72d"></stop>
+      <stop offset=".6" stop-color="#87de33"></stop>
+      <stop offset=".8" stop-color="#a2e437"></stop>
+      <stop offset="1" stop-color="#ade73a"></stop>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_21" data-name="Degradado sin nombre 2" x1="14.6" y1="28.2" x2="24.9" y2="28.2" xlink:href="#Degradado_sin_nombre_2"></linearGradient>
+    <linearGradient id="Degradado_sin_nombre_22" data-name="Degradado sin nombre 2" x1="20.8" y1="25" x2="37.4" y2="25" xlink:href="#Degradado_sin_nombre_2"></linearGradient>
+  </defs>
+  <path class="st0" d="M25,50C11.3,50,0,38.8,0,25S11.3,0,25,0s25,11.3,25,25-11.2,25-25,25ZM25,4.2C13.5,4.2,4.2,13.5,4.2,25s9.4,20.8,20.8,20.8,20.8-9.4,20.8-20.8S36.5,4.2,25,4.2Z"></path>
+  <path class="st2" d="M22.9,33.3c-.6,0-1-.2-1.5-.6l-6.2-6.2c-.8-.8-.8-2.1,0-2.9s2.1-.8,2.9,0l6.2,6.3c.8.8.8,2.1,0,2.9s-.8.6-1.5.6h.1Z"></path>
+  <path class="st1" d="M22.9,33.3c-.6,0-1-.2-1.5-.6-.8-.8-.8-2.1,0-2.9l12.5-12.5c.8-.8,2.1-.8,2.9,0,.8.8.8,2.1,0,2.9l-12.5,12.5c-.4.4-.8.6-1.5.6h0Z"></path>
+</svg>
