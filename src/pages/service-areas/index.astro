@@ -1,0 +1,452 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "Service Areas — SENAVIA Corp · Web Design &amp; Marketing Across South Florida";
+const description = "SENAVIA Corp serves businesses across Miami-Dade, Broward, and Palm Beach counties. Web design, development, and marketing for South Florida.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/service-areas"
+  jsonLdType="localbusiness"
+  screenLabel="Service Areas"
+>
+<main>
+
+  <!-- ============================================================
+       HERO — Compact
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Service Areas Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">Headquartered in Plantation, FL</div>
+      <h1>Web Design &amp; Marketing Services Across South Florida</h1>
+      <p>We serve businesses across Miami-Dade, Broward, and Palm Beach counties.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       INTERACTIVE MAP + COUNTY COLUMN
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Coverage Map">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">Coverage map</div>
+        <h2>Where We Work in South Florida</h2>
+        <p>Three counties, 36 cities, and a dedicated bilingual team based in Plantation — hover any region to explore who we serve there.</p>
+      </div>
+
+      <div class="sa-map-wrap" data-reveal>
+        <div class="sa-map" id="saMap">
+          <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="South Florida coverage map">
+            <defs>
+              <linearGradient id="oceanGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="rgba(45,125,184,0)"/>
+                <stop offset="100%" stop-color="rgba(45,125,184,0.2)"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Ocean strip on right -->
+            <rect x="320" y="0" width="80" height="500" fill="url(#oceanGrad)"/>
+            <text x="362" y="250" class="sa-ocean-label" transform="rotate(90 362 250)" text-anchor="middle">ATLANTIC OCEAN</text>
+
+            <!-- Palm Beach County (north, top) -->
+            <path class="sa-county-shape" data-county="palm-beach"
+                  d="M 50 50 L 320 50 L 320 175 L 270 175 L 220 165 L 170 175 L 120 170 L 80 180 L 50 165 Z"/>
+            <text class="sa-county-label" x="180" y="105" text-anchor="middle">PALM BEACH</text>
+            <text class="sa-county-sub" x="180" y="125" text-anchor="middle">COUNTY · 01</text>
+            <!-- Palm Beach pins -->
+            <g>
+              <circle class="sa-pin" cx="290" cy="120" r="5"/>
+              <text class="sa-pin-label" x="282" y="138" text-anchor="end">West Palm Beach</text>
+            </g>
+            <g>
+              <circle class="sa-pin" cx="285" cy="155" r="4"/>
+              <text class="sa-pin-label" x="277" y="158" text-anchor="end">Boca Raton</text>
+            </g>
+
+            <!-- Broward County (middle) -->
+            <path class="sa-county-shape" data-county="broward"
+                  d="M 50 175 L 80 180 L 120 170 L 170 175 L 220 165 L 270 175 L 320 175 L 320 290 L 280 295 L 230 285 L 180 295 L 130 285 L 80 295 L 50 280 Z"/>
+            <text class="sa-county-label" x="180" y="220" text-anchor="middle">BROWARD</text>
+            <text class="sa-county-sub" x="180" y="240" text-anchor="middle">COUNTY · 02</text>
+            <!-- Broward pins -->
+            <g>
+              <circle class="sa-pin" cx="295" cy="245" r="5.5"/>
+              <text class="sa-pin-label" x="287" y="248" text-anchor="end">Fort Lauderdale</text>
+            </g>
+            <g>
+              <circle class="sa-pin is-hq" cx="250" cy="265" r="6" fill="#fff" stroke="#99cc33" stroke-width="2"/>
+              <text class="sa-pin-label" x="242" y="268" text-anchor="end" style="font-weight:600;fill:#fff;">Plantation · HQ</text>
+            </g>
+            <g>
+              <circle class="sa-pin" cx="290" cy="280" r="4"/>
+              <text class="sa-pin-label" x="282" y="283" text-anchor="end">Hollywood</text>
+            </g>
+
+            <!-- Miami-Dade County (south, bottom) -->
+            <path class="sa-county-shape" data-county="miami-dade"
+                  d="M 50 290 L 80 295 L 130 285 L 180 295 L 230 285 L 280 295 L 320 290 L 320 450 L 240 450 L 180 460 L 130 455 L 80 450 L 50 440 Z"/>
+            <text class="sa-county-label" x="180" y="345" text-anchor="middle">MIAMI-DADE</text>
+            <text class="sa-county-sub" x="180" y="365" text-anchor="middle">COUNTY · 03</text>
+            <!-- Miami-Dade pins -->
+            <g>
+              <circle class="sa-pin" cx="295" cy="385" r="6"/>
+              <text class="sa-pin-label" x="287" y="388" text-anchor="end">Miami</text>
+            </g>
+            <g>
+              <circle class="sa-pin" cx="305" cy="400" r="4"/>
+              <text class="sa-pin-label" x="297" y="403" text-anchor="end">Miami Beach</text>
+            </g>
+            <g>
+              <circle class="sa-pin" cx="285" cy="415" r="4"/>
+              <text class="sa-pin-label" x="277" y="418" text-anchor="end">Coral Gables</text>
+            </g>
+            <g>
+              <circle class="sa-pin" cx="245" cy="395" r="4"/>
+              <text class="sa-pin-label" x="237" y="398" text-anchor="end">Doral</text>
+            </g>
+
+            <!-- Compass -->
+            <g transform="translate(70 70)">
+              <line x1="0" y1="-18" x2="0" y2="18" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <line x1="-18" y1="0" x2="18" y2="0" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <text class="sa-compass" x="0" y="-22" text-anchor="middle">N</text>
+              <text class="sa-compass" x="0" y="32" text-anchor="middle">S</text>
+              <text class="sa-compass" x="22" y="4">E</text>
+              <text class="sa-compass" x="-22" y="4" text-anchor="end">W</text>
+            </g>
+
+            <!-- Scale -->
+            <g transform="translate(60 470)">
+              <line x1="0" y1="0" x2="60" y2="0" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <line x1="30" y1="-3" x2="30" y2="3" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <line x1="60" y1="-4" x2="60" y2="4" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <text class="sa-compass" x="30" y="18" text-anchor="middle" style="font-size:9px;">~15 MI</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="sa-counties">
+          <a class="sa-county-card" href="#miami-dade" data-county="miami-dade">
+            <div class="sa-county-card-head">
+              <span class="sa-county-dot"></span>
+              <h3>Miami-Dade County</h3>
+            </div>
+            <div class="sa-county-meta">2.7M residents · 1,946 sq mi</div>
+            <p>12 cities served · Hover the map to explore.</p>
+          </a>
+          <a class="sa-county-card" href="#broward" data-county="broward">
+            <div class="sa-county-card-head">
+              <span class="sa-county-dot"></span>
+              <h3>Broward County</h3>
+            </div>
+            <div class="sa-county-meta">1.95M residents · 1,323 sq mi</div>
+            <p>12 cities served · Hover the map to explore.</p>
+          </a>
+          <a class="sa-county-card" href="#palm-beach" data-county="palm-beach">
+            <div class="sa-county-card-head">
+              <span class="sa-county-dot"></span>
+              <h3>Palm Beach County</h3>
+            </div>
+            <div class="sa-county-meta">1.5M residents · 1,969 sq mi</div>
+            <p>12 cities served · Hover the map to explore.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       COUNTY SECTIONS
+       ============================================================ -->
+  <a id="miami-dade"></a>
+
+  <section class="section" data-screen-label="03 Miami-Dade County">
+    <div class="container">
+      <div class="sa-split" data-reveal>
+        <div class="sa-split-copy">
+          <div class="sa-section-head">
+            <span class="county-num">County · 01</span>
+            <h2>Web Design Services Across Miami-Dade</h2>
+          </div>
+          <h3>From Miami's skyline to Doral's industrial corridor, we build conversion-focused websites for South Florida's most competitive market.</h3>
+          <p>Miami-Dade is where SENAVIA does its sharpest work — high-pressure verticals, bilingual EN/ES audiences, and buyers who decide in seconds. Our local-SEO playbook is tuned to the map pack across all 34 municipalities, and our design system carries the brand polish that Miami buyers expect from day one.</p>
+        </div>
+        <div class="sa-split-art art-dade">
+          <div class="county-overlay">
+            <h4>Miami-Dade County</h4>
+            <span class="county-pop">2.7M residents · 1,946 sq mi</span>
+          </div>
+        </div>
+      </div>
+      <div class="sa-cities" data-reveal-children>
+          <a href="/service-areas/miami" class="sa-city">
+            <span>Miami</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/coral-gables" class="sa-city">
+            <span>Coral Gables</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/doral" class="sa-city">
+            <span>Doral</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/hialeah" class="sa-city">
+            <span>Hialeah</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/miami-beach" class="sa-city">
+            <span>Miami Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/kendall" class="sa-city">
+            <span>Kendall</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/aventura" class="sa-city">
+            <span>Aventura</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/coral-way" class="sa-city">
+            <span>Coral Way</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/pinecrest" class="sa-city">
+            <span>Pinecrest</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/homestead" class="sa-city">
+            <span>Homestead</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/cutler-bay" class="sa-city">
+            <span>Cutler Bay</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/north-miami" class="sa-city">
+            <span>North Miami</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+      </div>
+    </div>
+  </section>
+
+  <a id="broward"></a>
+
+  <section class="section" data-screen-label="04 Broward County">
+    <div class="container">
+      <div class="sa-split" data-reveal>
+        <div class="sa-split-copy">
+          <div class="sa-section-head">
+            <span class="county-num">County · 02</span>
+            <h2>Web Design Services Across Broward</h2>
+          </div>
+          <h3>SENAVIA Corp is headquartered in Plantation. Broward is home — and it's where our retainer client base is strongest.</h3>
+          <p>From Fort Lauderdale's coastal commerce to Pembroke Pines' suburban service economy, Broward businesses operate in a tight, networked market. We help local contractors, retailers, and professional firms own their corner of it — through clean web architecture, conversion-tuned landing pages, and a Google Business Profile strategy that gets calls.</p>
+        </div>
+        <div class="sa-split-art art-broward">
+          <div class="county-overlay">
+            <h4>Broward County</h4>
+            <span class="county-pop">1.95M residents · 1,323 sq mi</span>
+          </div>
+        </div>
+      </div>
+      <div class="sa-cities" data-reveal-children>
+          <a href="/service-areas/plantation" class="sa-city">
+            <span>Plantation</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/fort-lauderdale" class="sa-city">
+            <span>Fort Lauderdale</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/hollywood" class="sa-city">
+            <span>Hollywood</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/pembroke-pines" class="sa-city">
+            <span>Pembroke Pines</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/sunrise" class="sa-city">
+            <span>Sunrise</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/coral-springs" class="sa-city">
+            <span>Coral Springs</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/davie" class="sa-city">
+            <span>Davie</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/pompano-beach" class="sa-city">
+            <span>Pompano Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/weston" class="sa-city">
+            <span>Weston</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/tamarac" class="sa-city">
+            <span>Tamarac</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/cooper-city" class="sa-city">
+            <span>Cooper City</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/hallandale-beach" class="sa-city">
+            <span>Hallandale Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+      </div>
+    </div>
+  </section>
+
+  <a id="palm-beach"></a>
+
+  <section class="section" data-screen-label="05 Palm Beach County">
+    <div class="container">
+      <div class="sa-split" data-reveal>
+        <div class="sa-split-copy">
+          <div class="sa-section-head">
+            <span class="county-num">County · 03</span>
+            <h2>Web Design Services Across Palm Beach</h2>
+          </div>
+          <h3>Palm Beach's premium buyer profile demands premium presentation. We deliver brand-first sites that earn trust on first scroll.</h3>
+          <p>Whether you're serving West Palm Beach's urban core or Boca Raton's affluent corridors, Palm Beach businesses compete on quality of presentation as much as quality of work. Our design and content systems are built for that bar — careful typography, generous imagery, and conversion paths that respect a higher-consideration buyer.</p>
+        </div>
+        <div class="sa-split-art art-palmbeach">
+          <div class="county-overlay">
+            <h4>Palm Beach County</h4>
+            <span class="county-pop">1.5M residents · 1,969 sq mi</span>
+          </div>
+        </div>
+      </div>
+      <div class="sa-cities" data-reveal-children>
+          <a href="/service-areas/west-palm-beach" class="sa-city">
+            <span>West Palm Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/boca-raton" class="sa-city">
+            <span>Boca Raton</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/delray-beach" class="sa-city">
+            <span>Delray Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/boynton-beach" class="sa-city">
+            <span>Boynton Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/jupiter" class="sa-city">
+            <span>Jupiter</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/wellington" class="sa-city">
+            <span>Wellington</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/lake-worth-beach" class="sa-city">
+            <span>Lake Worth Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/palm-beach-gardens" class="sa-city">
+            <span>Palm Beach Gardens</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/greenacres" class="sa-city">
+            <span>Greenacres</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/royal-palm-beach" class="sa-city">
+            <span>Royal Palm Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/riviera-beach" class="sa-city">
+            <span>Riviera Beach</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="/service-areas/belle-glade" class="sa-city">
+            <span>Belle Glade</span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="06 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Serving All of South Florida</h2>
+      <p>Don't see your city listed? We work across the tri-county region. Call or book a free consultation.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Initialize Calendly inline widget once the script loads -->
+<script>
+  (function(){
+    var el = document.getElementById('calendlyInline');
+    if (!el) return;
+    function init() {
+      if (!window.Calendly) { setTimeout(init, 200); return; }
+      window.Calendly.initInlineWidget({
+        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
+        parentElement: el,
+        prefill: {}, utm: {}
+      });
+      // Mark loaded after a beat
+      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
+    }
+    init();
+  })();
+</script>
+
+<!-- Language switcher -->
+
+<!-- Map + county sync -->
+<script>
+  (function(){
+    var shapes = document.querySelectorAll('.sa-county-shape');
+    var cards  = document.querySelectorAll('.sa-county-card');
+
+    function setActive(id) {
+      shapes.forEach(function(s){ s.classList.toggle('is-active', s.getAttribute('data-county') === id); });
+      cards.forEach(function(c){ c.classList.toggle('is-active', c.getAttribute('data-county') === id); });
+    }
+    function clear() {
+      shapes.forEach(function(s){ s.classList.remove('is-active'); });
+      cards.forEach(function(c){ c.classList.remove('is-active'); });
+    }
+
+    shapes.forEach(function(s){
+      s.addEventListener('mouseenter', function(){ setActive(s.getAttribute('data-county')); });
+      s.addEventListener('mouseleave', clear);
+    });
+    cards.forEach(function(c){
+      c.addEventListener('mouseenter', function(){ setActive(c.getAttribute('data-county')); });
+      c.addEventListener('mouseleave', clear);
+    });
+  })();
+</script>
+</BaseLayout>

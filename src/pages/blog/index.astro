@@ -1,0 +1,318 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "Blog &amp; Tips — SENAVIA Corp · Web, SEO &amp; Marketing Insights";
+const description = "Expert insights on web development, SEO, digital marketing, and automation — from the SENAVIA Corp team in South Florida.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/blog"
+  jsonLdType="home"
+  screenLabel="Blog"
+>
+<main>
+
+  <!-- ============================================================
+       HERO — Compact
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Blog Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">Field notes · Updated weekly</div>
+      <h1>Blog &amp; tips</h1>
+      <p>Expert insights on web development, SEO, digital marketing, and automation.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BLOG GRID + SIDEBAR
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Blog Grid">
+    <div class="container">
+      <div class="blog-wrap">
+
+        <!-- MAIN -->
+        <div class="blog-main">
+          <div class="blog-toolbar" data-reveal>
+            <span class="blog-count">Showing <span class="accent">8</span> of <span class="accent">109</span> articles</span>
+            <label class="blog-sort">
+              Sort by
+              <select aria-label="Sort articles">
+                <option>Newest first</option>
+                <option>Oldest first</option>
+                <option>Most read</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="blog-grid" data-reveal-children>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-3"></div>
+          <span class="blog-tag" data-cat="seo">SEO</span>
+          <h3>Local SEO in 2025: A Tactical Guide for Miami Service Businesses</h3>
+          <p class="blog-excerpt">How to win the map pack across Miami-Dade with structured data, GBP optimization, and review velocity.</p>
+          <div class="blog-meta">
+            <span class="blog-author av1" aria-hidden="true">CM</span>
+            <span class="blog-author-name">Carlos Méndez</span>
+            <span class="sep">·</span>
+            <span>May 12, 2025</span>
+            <span class="sep">·</span>
+            <span>8 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-4"></div>
+          <span class="blog-tag" data-cat="marketing">Marketing</span>
+          <h3>Google Ads vs Meta Ads: Where Should Service Brands Spend in 2025?</h3>
+          <p class="blog-excerpt">A budget framework for service businesses choosing between paid search intent and paid social demand generation.</p>
+          <div class="blog-meta">
+            <span class="blog-author av4" aria-hidden="true">AR</span>
+            <span class="blog-author-name">Andrea Reyes</span>
+            <span class="sep">·</span>
+            <span>May 5, 2025</span>
+            <span class="sep">·</span>
+            <span>6 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-1"></div>
+          <span class="blog-tag" data-cat="web-design">Web Design</span>
+          <h3>The Anatomy of a Conversion-Focused Homepage in 2025</h3>
+          <p class="blog-excerpt">Section-by-section breakdown of what a modern South Florida service homepage needs to convert above 5%.</p>
+          <div class="blog-meta">
+            <span class="blog-author av2" aria-hidden="true">SA</span>
+            <span class="blog-author-name">Sofía Alvarez</span>
+            <span class="sep">·</span>
+            <span>Apr 28, 2025</span>
+            <span class="sep">·</span>
+            <span>9 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-6"></div>
+          <span class="blog-tag" data-cat="development">Development</span>
+          <h3>When to Build Custom vs Buy a SaaS: A Founder's Decision Matrix</h3>
+          <p class="blog-excerpt">A simple scoring model for evaluating custom platform development against off-the-shelf SaaS solutions.</p>
+          <div class="blog-meta">
+            <span class="blog-author av3" aria-hidden="true">JP</span>
+            <span class="blog-author-name">James Patterson</span>
+            <span class="sep">·</span>
+            <span>Apr 20, 2025</span>
+            <span class="sep">·</span>
+            <span>7 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-5"></div>
+          <span class="blog-tag" data-cat="tips">Tips</span>
+          <h3>10 Webflow Productivity Tricks That Save Designers Hours Per Week</h3>
+          <p class="blog-excerpt">Component variants, CMS tricks, and class-naming patterns that compound across every project we ship.</p>
+          <div class="blog-meta">
+            <span class="blog-author av2" aria-hidden="true">SA</span>
+            <span class="blog-author-name">Sofía Alvarez</span>
+            <span class="sep">·</span>
+            <span>Apr 14, 2025</span>
+            <span class="sep">·</span>
+            <span>5 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-7"></div>
+          <span class="blog-tag" data-cat="marketing">Marketing</span>
+          <h3>Why Your Cost-Per-Lead Spiked (And How to Bring It Back Down)</h3>
+          <p class="blog-excerpt">A diagnostic walkthrough for service businesses watching CPL creep up month over month.</p>
+          <div class="blog-meta">
+            <span class="blog-author av4" aria-hidden="true">AR</span>
+            <span class="blog-author-name">Andrea Reyes</span>
+            <span class="sep">·</span>
+            <span>Apr 7, 2025</span>
+            <span class="sep">·</span>
+            <span>6 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-2"></div>
+          <span class="blog-tag" data-cat="seo">SEO</span>
+          <h3>Schema Markup That Actually Moves Rankings — A 2025 Cheat Sheet</h3>
+          <p class="blog-excerpt">The 7 schema types we ship on every site, with code snippets and validation tips.</p>
+          <div class="blog-meta">
+            <span class="blog-author av1" aria-hidden="true">CM</span>
+            <span class="blog-author-name">Carlos Méndez</span>
+            <span class="sep">·</span>
+            <span>Apr 1, 2025</span>
+            <span class="sep">·</span>
+            <span>8 min read</span>
+          </div>
+        </a>
+
+        <a href="#" class="blog-card">
+          <div class="blog-cover bg-8"></div>
+          <span class="blog-tag" data-cat="development">Development</span>
+          <h3>Integrating QuickBooks with Your Custom Admin Panel: A Practical Guide</h3>
+          <p class="blog-excerpt">How we wire QuickBooks Online to internal job-tracking and billing tools — auth, webhooks, and reconciliation.</p>
+          <div class="blog-meta">
+            <span class="blog-author av3" aria-hidden="true">JP</span>
+            <span class="blog-author-name">James Patterson</span>
+            <span class="sep">·</span>
+            <span>Mar 25, 2025</span>
+            <span class="sep">·</span>
+            <span>11 min read</span>
+          </div>
+        </a>
+          </div>
+
+          <nav class="blog-pagination" aria-label="Blog pagination">
+            <button class="blog-page is-arrow" type="button" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
+              Prev
+            </button>
+            <button class="blog-page is-active" type="button">1</button>
+            <button class="blog-page" type="button">2</button>
+            <button class="blog-page" type="button">3</button>
+            <span class="blog-ellipsis">…</span>
+            <button class="blog-page" type="button">14</button>
+            <button class="blog-page is-arrow" type="button">
+              Next
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+            </button>
+          </nav>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="blog-sidebar" aria-label="Blog sidebar">
+
+          <div class="sub-card" data-reveal>
+            <span class="side-eyebrow">Newsletter</span>
+            <h3>Get growth tips in your inbox</h3>
+            <p>One email per month with SEO, design, and marketing playbooks from the SENAVIA team. No spam, unsubscribe anytime.</p>
+            <form class="sub-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed';">
+              <input type="email" required placeholder="you@business.com" aria-label="Email address">
+              <button type="submit" class="btn">Subscribe</button>
+            </form>
+            <p class="sub-note">By subscribing you agree to our privacy policy. Used only for monthly insights.</p>
+          </div>
+
+          <div class="side-card" data-reveal>
+            <h3>Categories</h3>
+            <ul class="cat-list">
+              <li><a href="#"><span>SEO</span><span class="count">24</span></a></li>
+              <li><a href="#"><span>Web Design</span><span class="count">18</span></a></li>
+              <li><a href="#"><span>Marketing</span><span class="count">21</span></a></li>
+              <li><a href="#"><span>Development</span><span class="count">14</span></a></li>
+              <li><a href="#"><span>Tips</span><span class="count">32</span></a></li>
+            </ul>
+          </div>
+
+          <div class="side-card" data-reveal>
+            <h3>Featured Articles</h3>
+            <ul class="feat-list">
+              <li>
+                <a href="#" class="feat-item">
+                  <span class="feat-thumb" style="background: linear-gradient(135deg, #2D7DB8, #33CCCC);"></span>
+                  <span class="feat-body">
+                    <span class="feat-title">How We Doubled a Roofer's Qualified Leads in 60 Days</span>
+                    <span class="feat-date">Mar 18, 2025</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="feat-item">
+                  <span class="feat-thumb" style="background: linear-gradient(135deg, #D14F8C, #F0A050);"></span>
+                  <span class="feat-body">
+                    <span class="feat-title">GA4 Setup Checklist for South Florida Service Businesses</span>
+                    <span class="feat-date">Mar 11, 2025</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="feat-item">
+                  <span class="feat-thumb" style="background: linear-gradient(135deg, #7B3FE4, #C13B8A);"></span>
+                  <span class="feat-body">
+                    <span class="feat-title">Why Mobile Page Speed Is Now the #1 Conversion Lever</span>
+                    <span class="feat-date">Mar 4, 2025</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="feat-item">
+                  <span class="feat-thumb" style="background: linear-gradient(135deg, #4A3F8E, #33CCCC);"></span>
+                  <span class="feat-body">
+                    <span class="feat-title">Building a Bilingual EN / ES Site Without Doubling Your Stack</span>
+                    <span class="feat-date">Feb 25, 2025</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="03 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Ready to Put These Tips Into Practice?</h2>
+      <p>Schedule a 30-minute consultation and let's design a digital strategy worth talking about.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Initialize Calendly inline widget once the script loads -->
+<script>
+  (function(){
+    var el = document.getElementById('calendlyInline');
+    if (!el) return;
+    function init() {
+      if (!window.Calendly) { setTimeout(init, 200); return; }
+      window.Calendly.initInlineWidget({
+        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
+        parentElement: el,
+        prefill: {}, utm: {}
+      });
+      // Mark loaded after a beat
+      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
+    }
+    init();
+  })();
+</script>
+
+<!-- Language switcher -->
+
+<!-- Blog pagination + interactions -->
+<script>
+  (function(){
+    var pages = document.querySelectorAll('.blog-page:not(.is-arrow)');
+    pages.forEach(function(p){
+      p.addEventListener('click', function(){
+        document.querySelectorAll('.blog-page').forEach(function(x){ x.classList.remove('is-active'); });
+        p.classList.add('is-active');
+        window.scrollTo({ top: document.querySelector('.blog-main').offsetTop - 100, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
+</BaseLayout>

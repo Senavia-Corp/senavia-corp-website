@@ -1,0 +1,183 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "Services — SENAVIA Corp · Web Design, Digital Marketing & Development";
+const description = "End-to-end digital agency services for South Florida businesses — custom web design, SEO-driven marketing, and scalable web development.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/services"
+  jsonLdType="service"
+  screenLabel="Services"
+>
+<main>
+
+  <!-- ============================================================
+       HERO (compact)
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Services Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/bg-video-poster.jpg">
+      <source src="/videos/bg-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">What we do</div>
+      <h1>Digital Agency Services Built for Business Growth</h1>
+      <p>Three connected practices — Web Design, Digital Marketing, and Web Development — combined into a single growth system. We build the site, drive the traffic, and engineer the systems that scale your South Florida business.</p>
+      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Book a Free Call</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SERVICES — detailed 3 cards
+       ============================================================ -->
+  <section id="services" class="section" data-screen-label="02 Services Detail">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">The 3 pillars</div>
+        <h2>Digital Services Designed To Grow Your Business In South Florida</h2>
+        <p>From custom web design to digital marketing and custom software development — SENAVIA Corp delivers end-to-end digital solutions that help South Florida businesses attract more customers, rank higher on Google, and scale revenue faster.</p>
+      </div>
+      <div class="grid-3 services-detailed" data-reveal-children>
+
+        <article class="card-border is-purple">
+          <a class="card-glass service-link" href="/services/web-design">
+            <span class="svc-icon"><img src="/images/Web-Design-Icon.svg" alt=""></span>
+            <h3>Web Design</h3>
+            <p class="svc-tagline">Modern, responsive, SEO-optimized websites that convert visitors into customers and strengthen brand authority across South Florida.</p>
+            <ul class="svc-list">
+              <li>Custom UX &amp; UI design</li>
+              <li>Webflow &amp; CMS builds</li>
+              <li>E-commerce on Shopify</li>
+              <li>Core Web Vitals tuning</li>
+              <li>Conversion-rate optimization</li>
+            </ul>
+            <span class="more">Explore Web Design</span>
+          </a>
+        </article>
+
+        <article class="card-border is-cyan">
+          <a class="card-glass service-link" href="/services/digital-marketing">
+            <span class="svc-icon is-cyan"><img src="/images/Marketing-Icon.svg" alt=""></span>
+            <h3>Digital Marketing</h3>
+            <p class="svc-tagline">SEO, Google Ads, and data-driven marketing strategies that attract qualified traffic and generate leads for local businesses.</p>
+            <ul class="svc-list">
+              <li>Local SEO &amp; Google Business Profile</li>
+              <li>Google Ads &amp; Meta Ads</li>
+              <li>Technical SEO &amp; schema</li>
+              <li>Content &amp; AEO strategy</li>
+              <li>Analytics &amp; attribution</li>
+            </ul>
+            <span class="more">Explore Marketing</span>
+          </a>
+        </article>
+
+        <article class="card-border is-green">
+          <a class="card-glass service-link" href="/services/web-development">
+            <span class="svc-icon is-green"><img src="/images/Development-Icon.svg" alt=""></span>
+            <h3>Web Development</h3>
+            <p class="svc-tagline">Scalable web solutions in Webflow, Shopify, and custom systems — engineered for performance, conversion, and growth.</p>
+            <ul class="svc-list">
+              <li>Custom web applications</li>
+              <li>API &amp; CRM integrations</li>
+              <li>Internal admin panels</li>
+              <li>Automation &amp; workflows</li>
+              <li>Headless CMS architectures</li>
+            </ul>
+            <span class="more">Explore Development</span>
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PROCESS (inside green-bg)
+       ============================================================ -->
+  <div class="green-bg">
+    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
+    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
+    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
+
+    <section id="process" class="section" data-screen-label="03 Process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="eyebrow">How we work</div>
+          <h2>Our Process</h2>
+          <p>We understand your goals and challenges, create a tailored plan with clear estimates, and build a custom solution designed for your success.</p>
+        </div>
+        <div class="grid-4" data-reveal-children>
+          <article class="process-block">
+            <img class="process-img" src="/images/process/explore.avif" alt="" loading="lazy">
+            <div class="process-glass"></div>
+            <div class="process-content">
+              <div class="process-header">
+                <h3>1. Explore</h3>
+                <h4>Digital Strategy &amp; Market Discovery</h4>
+              </div>
+              <p>We analyze goals, audience, and market to uncover growth opportunities across South Florida.</p>
+            </div>
+          </article>
+          <article class="process-block">
+            <img class="process-img" src="/images/process/estimate.avif" alt="" loading="lazy">
+            <div class="process-glass"></div>
+            <div class="process-content">
+              <div class="process-header">
+                <h3>2. Estimate</h3>
+                <h4>Project Planning &amp; Strategic Roadmap</h4>
+              </div>
+              <p>We define a clear project plan aligned with your budget, timeline, and objectives.</p>
+            </div>
+          </article>
+          <article class="process-block">
+            <img class="process-img" src="/images/process/development.avif" alt="" loading="lazy">
+            <div class="process-glass"></div>
+            <div class="process-content">
+              <div class="process-header">
+                <h3>3. Development</h3>
+                <h4>Custom Web Development &amp; SEO</h4>
+              </div>
+              <p>We build high-performance websites and platforms optimized for SEO and conversions.</p>
+            </div>
+          </article>
+          <article class="process-block">
+            <img class="process-img" src="/images/process/delivery.avif" alt="" loading="lazy">
+            <div class="process-glass"></div>
+            <div class="process-content">
+              <div class="process-header">
+                <h3>4. Delivery</h3>
+                <h4>Website Launch &amp; Ongoing Optimization</h4>
+              </div>
+              <p>We launch and optimize your digital presence from Plantation, serving South Florida.</p>
+            </div>
+          </article>
+        </div>
+        <div class="center-cta" style="margin-top: 3rem;" data-reveal>
+          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Book a Free Call</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="04 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Let's Build Your Next Digital Success Story</h2>
+      <p>Schedule your free web design &amp; SEO consultation and get a custom strategy to increase traffic, leads, and conversions.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+</BaseLayout>

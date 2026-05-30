@@ -1,0 +1,458 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "Pricing — SENAVIA Corp · Web Design &amp; E-Commerce Packages";
+const description = "Transparent pricing for SENAVIA Corp web design and e-commerce packages. Choose the tier that matches your stage — Starter, Growth, Pro, or Enterprise.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/pricing"
+  jsonLdType="pricing"
+  screenLabel="Pricing"
+>
+<main>
+
+  <!-- ============================================================
+       HERO — Compact
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Pricing Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">Transparent pricing · No hidden fees</div>
+      <h1>Web Design Packages Built to Grow Your Business</h1>
+      <p>Transparent pricing for Business Websites and E-Commerce stores. Choose the tier that matches your stage.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRICING TABS + TIERS
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Pricing Tiers">
+    <div class="container">
+
+      <div class="price-tabs" role="tablist" aria-label="Service type">
+        <button class="price-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="pane-bw" data-tab="bw">Business Website</button>
+        <button class="price-tab" type="button" role="tab" aria-selected="false" aria-controls="pane-ec" data-tab="ec">E-Commerce</button>
+      </div>
+
+      <div class="tier-pane is-active" id="pane-bw" role="tabpanel" data-pane="bw">
+        <div class="tier-grid" data-reveal-children>
+          
+        <article class="tier-card">
+          
+          <div class="tier-head">
+            <span class="tier-code">BW-1</span>
+            <h3 class="tier-name">Starter</h3>
+            <p class="tier-tagline">A clean, mobile-first launchpad for new businesses.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount">$1,500</span>
+            <span class="unit">/ project</span>
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Up to 5 pages</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Fully mobile-responsive design</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Basic on-page SEO setup</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Contact form &amp; Google Maps embed</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>SSL, hosting setup, domain config</li>
+          </ul>
+          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Get Started</a>
+        </article>
+
+        <article class="tier-card">
+          
+          <div class="tier-head">
+            <span class="tier-code">BW-2</span>
+            <h3 class="tier-name">Growth</h3>
+            <p class="tier-tagline">For growing brands that need content + analytics.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount">$3,500</span>
+            <span class="unit">/ project</span>
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Up to 10 pages</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Advanced SEO &amp; schema markup</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Blog setup with CMS</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>GA4 + GTM tracking installed</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Lead capture &amp; email integration</li>
+          </ul>
+          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Get Started</a>
+        </article>
+
+        <article class="tier-card is-featured">
+          <span class="ribbon">Most Popular</span>
+          <div class="tier-head">
+            <span class="tier-code">BW-3</span>
+            <h3 class="tier-name">Pro</h3>
+            <p class="tier-tagline">A conversion engine for established service businesses.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount">$6,500</span>
+            <span class="unit">/ project</span>
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Up to 20 pages</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Custom CMS &amp; dynamic content</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Conversion optimization &amp; A/B testing</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Advanced schema &amp; AEO structure</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Bilingual EN/ES setup ready</li>
+          </ul>
+          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Get Started</a>
+        </article>
+
+        <article class="tier-card">
+          
+          <div class="tier-head">
+            <span class="tier-code">BW-4</span>
+            <h3 class="tier-name">Enterprise</h3>
+            <p class="tier-tagline">Tailored architecture, integrations, and continuous lift.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount is-custom">Custom</span>
+            
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Custom information architecture</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>CRM &amp; ERP integrations</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Headless / hybrid CMS stacks</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Dedicated SLA &amp; retainer</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Ongoing optimization &amp; reporting</li>
+          </ul>
+          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Talk to Sales</a>
+        </article>
+        </div>
+      </div>
+
+      <div class="tier-pane" id="pane-ec" role="tabpanel" data-pane="ec" hidden>
+        <div class="tier-grid" data-reveal-children>
+          
+        <article class="tier-card">
+          
+          <div class="tier-head">
+            <span class="tier-code">EC-1</span>
+            <h3 class="tier-name">Storefront</h3>
+            <p class="tier-tagline">Get selling fast with a clean Shopify or Webflow store.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount">$2,800</span>
+            <span class="unit">/ project</span>
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Up to 30 products</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Shopify / Webflow E-commerce</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Mobile checkout optimization</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Stripe &amp; PayPal setup</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Tax &amp; shipping zones configured</li>
+          </ul>
+          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Get Started</a>
+        </article>
+
+        <article class="tier-card">
+          
+          <div class="tier-head">
+            <span class="tier-code">EC-2</span>
+            <h3 class="tier-name">Brand</h3>
+            <p class="tier-tagline">Full brand commerce site with content &amp; reviews.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount">$5,500</span>
+            <span class="unit">/ project</span>
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Up to 100 products</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Custom product templates</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Blog &amp; editorial pages</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Reviews &amp; UGC integration</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>GA4 + Meta pixel + CAPI</li>
+          </ul>
+          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Get Started</a>
+        </article>
+
+        <article class="tier-card is-featured">
+          <span class="ribbon">Most Popular</span>
+          <div class="tier-head">
+            <span class="tier-code">EC-3</span>
+            <h3 class="tier-name">Pro</h3>
+            <p class="tier-tagline">Subscription-ready commerce engineered for ROAS.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount">$9,500</span>
+            <span class="unit">/ project</span>
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Unlimited products</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Subscription &amp; loyalty modules</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Conversion-optimized PDPs</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Klaviyo / email automation flows</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Headless options available</li>
+          </ul>
+          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Get Started</a>
+        </article>
+
+        <article class="tier-card">
+          
+          <div class="tier-head">
+            <span class="tier-code">EC-4</span>
+            <h3 class="tier-name">Enterprise</h3>
+            <p class="tier-tagline">Multi-region commerce with deep integrations.</p>
+          </div>
+          <div class="tier-price">
+            <span class="amount is-custom">Custom</span>
+            
+          </div>
+          <ul class="tier-features">
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Custom storefront architecture</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>ERP / inventory integrations</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Multi-currency &amp; localization</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>B2B / wholesale portals</li>
+            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>Dedicated retainer &amp; SLAs</li>
+          </ul>
+          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">Talk to Sales</a>
+        </article>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WHAT'S INCLUDED IN EVERY PACKAGE
+       ============================================================ -->
+  <div class="green-bg">
+    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
+    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
+    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
+
+    <section class="section section-flush" data-screen-label="03 Included">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="eyebrow">No surprises</div>
+          <h2>What's Included in Every Package</h2>
+          <p>Eight foundations shipped with every SENAVIA build — whether you're on the Starter tier or a custom enterprise engagement.</p>
+        </div>
+        <div class="inc-grid" data-reveal-children>
+          
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>Hosting setup &amp; SSL</h3>
+            <p>Domain wiring, DNS, SSL certificate, and CDN configuration on day one.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>On-page SEO foundations</h3>
+            <p>Meta titles, descriptions, alt text, sitemap, and robots.txt baked into every build.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>Mobile-first responsive design</h3>
+            <p>Designed for the phone first, then scaled up — no mobile site as afterthought.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>GA4 &amp; conversion tracking</h3>
+            <p>Analytics, GTM, and conversion goals installed and verified before launch.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>CMS training session</h3>
+            <p>Live 60-minute walkthrough so your team can update content with confidence.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>30-day post-launch optimization</h3>
+            <p>Bug fixes, performance tuning, and conversion adjustments included after go-live.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>Core Web Vitals tuning</h3>
+            <p>Lighthouse passes for LCP, INP, and CLS — fast loads, no layout jank.</p>
+          </div>
+        </article>
+
+        <article class="inc-item">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+          <div>
+            <h3>Bilingual EN / ES support</h3>
+            <p>All deliverables, training, and copy reviews available in English and Spanish.</p>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ADD-ONS / WEB COMPONENTS
+         ============================================================ -->
+    <section class="section" data-screen-label="04 Add-ons">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div class="eyebrow">Optional modules</div>
+          <h2>Add-Ons &amp; Web Components</h2>
+          <p>Bolt-on components to extend any package. Bundle multiple add-ons and ask about combined pricing.</p>
+        </div>
+        <div class="addon-grid" data-reveal-children>
+          
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Online Booking System</h3>
+            <span class="addon-price">$650</span>
+          </div>
+          <p>Embedded calendar with auto-reminders, payments, and CRM sync.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Multilingual EN / ES Setup</h3>
+            <span class="addon-price">$850</span>
+          </div>
+          <p>Full bilingual site structure with hreflang and translated UI strings.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>CRM Integration</h3>
+            <span class="addon-price">$950</span>
+          </div>
+          <p>HubSpot, Pipedrive, Podio, or custom — leads flow directly into your pipeline.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Email Automation Flows</h3>
+            <span class="addon-price">$1,200</span>
+          </div>
+          <p>Welcome, abandoned cart, and nurture sequences in Klaviyo or Mailchimp.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Conversion Audit &amp; Heatmaps</h3>
+            <span class="addon-price">$750</span>
+          </div>
+          <p>Hotjar / Microsoft Clarity install with a written audit and CRO recommendations.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Custom Landing Page</h3>
+            <span class="addon-price">$550</span>
+          </div>
+          <p>Standalone campaign landing page with split-testing and conversion tracking.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Membership / Gated Content</h3>
+            <span class="addon-price">$1,400</span>
+          </div>
+          <p>Member login, paywall, and content access tiers integrated with your CMS.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Custom Form / Quote Builder</h3>
+            <span class="addon-price">$800</span>
+          </div>
+          <p>Multi-step intake or quote calculator with conditional logic and routing.</p>
+        </article>
+
+        <article class="addon-card">
+          <div class="addon-head">
+            <h3>Photography Day</h3>
+            <span class="addon-price">$1,100</span>
+          </div>
+          <p>Half-day on-location shoot in South Florida with edited deliverables.</p>
+        </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="05 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Not Sure Which Package Is Right?</h2>
+      <p>Schedule a 30-minute consultation and we'll recommend the tier and add-ons that match your goals.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Initialize Calendly inline widget once the script loads -->
+<script>
+  (function(){
+    var el = document.getElementById('calendlyInline');
+    if (!el) return;
+    function init() {
+      if (!window.Calendly) { setTimeout(init, 200); return; }
+      window.Calendly.initInlineWidget({
+        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
+        parentElement: el,
+        prefill: {}, utm: {}
+      });
+      // Mark loaded after a beat
+      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
+    }
+    init();
+  })();
+</script>
+
+<!-- Language switcher -->
+
+<!-- Pricing tab switcher -->
+<script>
+  (function(){
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.price-tab'));
+    var panes = Array.prototype.slice.call(document.querySelectorAll('.tier-pane'));
+    if (!tabs.length) return;
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        var target = tab.getAttribute('data-tab');
+        tabs.forEach(function(t){
+          t.classList.toggle('is-active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        panes.forEach(function(p){
+          var match = p.getAttribute('data-pane') === target;
+          p.classList.toggle('is-active', match);
+          if (match) { p.removeAttribute('hidden'); } else { p.setAttribute('hidden', ''); }
+        });
+      });
+    });
+  })();
+</script>
+</BaseLayout>

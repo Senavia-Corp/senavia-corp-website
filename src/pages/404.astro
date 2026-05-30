@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "404 — Page not found · SENAVIA Corp";
+const description = "404 — Page not found. The page you're looking for has either moved, been renamed, or never existed. Let's get you somewhere useful.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/404"
+  jsonLdType="home"
+  noindex
+  screenLabel="404 Error"
+>
+<main class="err-main" data-screen-label="01 404 Error">
+    <div class="err-card">
+      <h1 class="err-code">404</h1>
+      <span class="err-eyebrow">Lost in South Florida</span>
+      <h2 class="err-title">Page not found</h2>
+      <p class="err-desc">The page you're looking for has either moved, been renamed, or never existed. Let's get you somewhere useful.</p>
+      <div class="err-actions">
+        <a href="/" class="btn">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+          Back to Home
+        </a>
+        <a href="/contact" class="btn-secondary">
+          Contact Us
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <div class="err-foot">
+    SENAVIA Corp · Plantation, FL · <a href="tel:+17542623659">(754) 262-3659</a> · <a href="mailto:info@senaviacorp.com">info@senaviacorp.com</a>
+  </div>
+</BaseLayout>

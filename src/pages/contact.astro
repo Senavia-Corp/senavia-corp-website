@@ -1,0 +1,259 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const title = "Contact Us — SENAVIA Corp · Free Website Consultation in South Florida";
+const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free website consultation — call (754) 262-3659 or message us. Serving Miami-Dade, Broward, and Palm Beach counties.";
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/contact"
+  jsonLdType="home"
+  screenLabel="Contact"
+>
+<main>
+
+  <!-- ============================================================
+       HERO — Compact
+       ============================================================ -->
+  <section class="hero is-compact" data-screen-label="01 Contact Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="eyebrow" style="margin-bottom: 18px;">Plantation, FL · Serving South Florida</div>
+      <h1>Get Your Free Website Consultation</h1>
+      <p>30 minutes, no commitment — we'll review your project, identify the biggest wins, and outline what's possible.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT — Info + Form
+       ============================================================ -->
+  <section class="section" data-screen-label="02 Contact Form">
+    <div class="container">
+      <div class="ct-layout">
+
+        <!-- LEFT: Info -->
+        <div class="ct-col" data-reveal>
+          <div class="eyebrow" style="margin-bottom: 14px;">How to reach us</div>
+          <h2>Contact Info</h2>
+          <p class="ct-intro">Prefer a call, email, or coffee at our Plantation HQ? Use any of the channels below — we typically respond within one business day.</p>
+
+          <div class="ct-info-list">
+            <a class="ct-info-card" href="tel:+17542623659">
+              <span class="ct-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"></path></svg>
+              </span>
+              <div class="ct-info-body">
+                <span class="ct-info-label">Phone</span>
+                <span class="ct-info-value">(754) 262-3659</span>
+                <span class="ct-info-sub">Tap to call · Mon–Fri 8am–6pm ET</span>
+              </div>
+            </a>
+
+            <a class="ct-info-card" href="https://share.google/RlW6eE2rUR6qKw484" target="_blank" rel="noopener">
+              <span class="ct-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </span>
+              <div class="ct-info-body">
+                <span class="ct-info-label">Visit Us</span>
+                <span class="ct-info-value">150 S Pine Island Rd</span>
+                <span class="ct-info-sub">Plantation, FL 33324 · By appointment</span>
+              </div>
+            </a>
+
+            <a class="ct-info-card" href="mailto:info@senaviacorp.com">
+              <span class="ct-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </span>
+              <div class="ct-info-body">
+                <span class="ct-info-label">Email</span>
+                <span class="ct-info-value">info@senaviacorp.com</span>
+                <span class="ct-info-sub">We reply within one business day</span>
+              </div>
+            </a>
+
+            <div class="ct-info-card" style="cursor:default;">
+              <span class="ct-info-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </span>
+              <div class="ct-info-body">
+                <span class="ct-info-label">Hours</span>
+                <span class="ct-info-value">Mon – Fri · 8am – 6pm</span>
+                <span class="ct-info-sub">Eastern Time · Closed weekends &amp; federal holidays</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Calendly CTA card (replaces legacy form) -->
+        <div class="ct-col" data-reveal>
+          <div class="eyebrow" style="margin-bottom: 14px;">
+            <span class="lang-only-en">The fastest way to talk</span>
+            <span class="lang-only-es">La forma más rápida de hablar</span>
+          </div>
+          <h2>
+            <span class="lang-only-en">Book Your Free 30-Minute Call</span>
+            <span class="lang-only-es">Agenda tu Llamada Gratuita de 30 Minutos</span>
+          </h2>
+          <p class="ct-intro">
+            <span class="lang-only-en">Pick a time on our calendar — no form, no back-and-forth. We'll review your project live and outline what's possible.</span>
+            <span class="lang-only-es">Elige una hora en nuestro calendario — sin formularios, sin idas y vueltas. Revisaremos tu proyecto en vivo y delinearemos lo que es posible.</span>
+          </p>
+
+          <div class="ct-form-wrap" style="display:flex;flex-direction:column;gap:18px;align-items:flex-start;">
+            <a
+              href="#"
+              class="btn-submit"
+              style="width:100%;justify-content:center;font-size:16px;"
+              data-calendly-trigger
+              data-track="book_call_click"
+              onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"
+            >
+              <span class="lang-only-en">Book a Free Call</span>
+              <span class="lang-only-es">Agenda una Llamada Gratis</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+
+            <p class="ct-disclaimer" style="text-align:left;margin:0;">
+              <span class="lang-only-en">Prefer a quick call or message? Use any of the contact channels on the left — we typically respond within one business day.</span>
+              <span class="lang-only-es">¿Prefieres llamar o escribir? Usa cualquiera de los canales a la izquierda — respondemos en menos de un día hábil.</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CALENDLY EMBED PLACEHOLDER
+       ============================================================ -->
+  <div class="green-bg">
+    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
+    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
+    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
+
+    <section class="section section-flush" data-screen-label="03 Calendly">
+      <div class="container">
+        <div class="ct-tile-head" data-reveal>
+          <div>
+            <div class="eyebrow">
+              <span class="lang-only-en">Live calendar</span>
+              <span class="lang-only-es">Calendario en vivo</span>
+            </div>
+            <h2>
+              <span class="lang-only-en">Book a Time Right Now</span>
+              <span class="lang-only-es">Agenda una Hora Ahora</span>
+            </h2>
+            <p>
+              <span class="lang-only-en">Pick a 30-minute slot that works for you — no back-and-forth required.</span>
+              <span class="lang-only-es">Elige un espacio de 30 minutos que te funcione — sin idas y vueltas.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="ct-calendly-frame" data-reveal>
+          <!-- Calendly initInlineWidget will mount here once the script loads -->
+          <div id="calendlyInline" role="region" aria-label="Schedule a meeting"></div>
+          <div class="ct-frame-placeholder" id="calendlyFallback">
+            <span class="ph-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </span>
+            <strong>Calendly inline widget</strong>
+            Loading availability calendar — pick a 30-minute slot from the Calendly grid once it appears.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         GOOGLE MAP EMBED PLACEHOLDER
+         ============================================================ -->
+    <section class="section" data-screen-label="04 Find Us Map">
+      <div class="container">
+        <div class="ct-tile-head" data-reveal>
+          <div>
+            <div class="eyebrow">Find us</div>
+            <h2>Visit the SENAVIA HQ</h2>
+            <p>150 S Pine Island Rd, Plantation, FL — just off I-595, 10 minutes from Fort Lauderdale-Hollywood International.</p>
+          </div>
+          <a href="https://share.google/RlW6eE2rUR6qKw484" target="_blank" rel="noopener" class="btn is-secondary is-sm">Open in Google Maps</a>
+        </div>
+
+        <div class="ct-map-frame" data-reveal>
+          <span class="ct-map-pin" aria-hidden="true"></span>
+          <span class="ct-map-pin-label">SENAVIA Corp · Plantation HQ</span>
+          <a href="https://share.google/RlW6eE2rUR6qKw484" target="_blank" rel="noopener" class="ct-map-directions btn is-sm">Get Directions</a>
+          <div class="ct-frame-placeholder" style="z-index:1;">
+            <span class="ph-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </span>
+            <strong>Google Map embed</strong>
+            Embed your &lt;iframe&gt; from Google Maps here to show the live, interactive location.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       CTA
+       ============================================================ -->
+  <section class="cta" data-screen-label="05 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>Or Pick Up the Phone</h2>
+      <p>Sometimes a 5-minute call answers everything. We'd love to hear from you.</p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- Initialize Calendly inline widget once the script loads -->
+<script>
+  (function(){
+    var el = document.getElementById('calendlyInline');
+    if (!el) return;
+    function init() {
+      if (!window.Calendly) { setTimeout(init, 200); return; }
+      window.Calendly.initInlineWidget({
+        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
+        parentElement: el,
+        prefill: {}, utm: {}
+      });
+      // Mark loaded after a beat
+      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
+    }
+    init();
+  })();
+</script>
+
+<!-- Language switcher -->
+
+<!-- Calendly placeholder hide on load -->
+<script>
+  (function(){
+    var el = document.getElementById('calendlyInline');
+    var ph = document.getElementById('calendlyFallback');
+    if (!el || !ph) return;
+    var obs = new MutationObserver(function(){
+      if (el.children.length > 0) {
+        ph.style.display = 'none';
+        obs.disconnect();
+      }
+    });
+    obs.observe(el, { childList: true });
+    setTimeout(function(){ obs.disconnect(); }, 8000);
+  })();
+</script>
+</BaseLayout>

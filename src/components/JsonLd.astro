@@ -1,0 +1,110 @@
+---
+import { SITE, NAP, SOCIAL, GOOGLE_PARTNER_URL } from '@/data/site';
+
+interface Props {
+  type?: 'home' | 'about' | 'service' | 'portfolio' | 'blog' | 'localbusiness' | 'pricing';
+  data?: Record<string, unknown>;
+}
+const { type = 'home', data = {} } = Astro.props;
+
+const organization = {
+  '@type': 'Organization',
+  '@id': `${SITE.url}/#organization`,
+  name: SITE.name,
+  legalName: SITE.legalName,
+  url: SITE.url,
+  logo: `${SITE.url}/images/Logo-Senavia.svg`,
+  description: SITE.description,
+  telephone: NAP.phoneE164,
+  email: NAP.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: NAP.streetAddress,
+    addressLocality: NAP.addressLocality,
+    addressRegion: NAP.addressRegion,
+    postalCode: NAP.postalCode,
+    addressCountry: NAP.addressCountry,
+  },
+  sameAs: [SOCIAL.instagram, SOCIAL.facebook, SOCIAL.youtube, GOOGLE_PARTNER_URL],
+};
+
+const localBusiness = {
+  '@type': 'ProfessionalService',
+  '@id': `${SITE.url}/#localbusiness`,
+  name: SITE.name,
+  url: SITE.url,
+  image: `${SITE.url}/images/Logo-Senavia.svg`,
+  telephone: NAP.phoneE164,
+  email: NAP.email,
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: NAP.streetAddress,
+    addressLocality: NAP.addressLocality,
+    addressRegion: NAP.addressRegion,
+    postalCode: NAP.postalCode,
+    addressCountry: NAP.addressCountry,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: NAP.latitude,
+    longitude: NAP.longitude,
+  },
+  areaServed: NAP.areaServed.map((name) => ({ '@type': 'AdministrativeArea', name })),
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '18:00',
+    },
+  ],
+  sameAs: [SOCIAL.instagram, SOCIAL.facebook, SOCIAL.youtube, GOOGLE_PARTNER_URL],
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${SITE.url}/#website`,
+  url: SITE.url,
+  name: SITE.name,
+  description: SITE.description,
+  publisher: { '@id': `${SITE.url}/#organization` },
+  inLanguage: ['en-US', 'es-US'],
+};
+
+let graph: Array<Record<string, unknown>> = [organization, localBusiness, website];
+
+if (type === 'service') {
+  graph.push({
+    '@type': 'Service',
+    provider: { '@id': `${SITE.url}/#organization` },
+    areaServed: NAP.areaServed.map((name) => ({ '@type': 'AdministrativeArea', name })),
+    ...data,
+  });
+}
+if (type === 'blog' && data.headline) {
+  graph.push({
+    '@type': 'BlogPosting',
+    publisher: { '@id': `${SITE.url}/#organization` },
+    author: { '@id': `${SITE.url}/#organization` },
+    ...data,
+  });
+}
+if (type === 'portfolio' && data.name) {
+  graph.push({
+    '@type': 'CreativeWork',
+    creator: { '@id': `${SITE.url}/#organization` },
+    ...data,
+  });
+}
+if (type === 'pricing' && Array.isArray(data.offers)) {
+  graph.push({
+    '@type': 'OfferCatalog',
+    name: 'SENAVIA Pricing',
+    itemListElement: data.offers,
+  });
+}
+
+const ld = { '@context': 'https://schema.org', '@graph': graph };
+---
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />
