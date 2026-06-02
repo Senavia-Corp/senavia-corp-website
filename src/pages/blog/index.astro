@@ -25,6 +25,9 @@ const description = "Expert insights on web development, SEO, digital marketing,
   @media (max-width: 1080px) {
     .blog-wrap { grid-template-columns: 1fr; gap: 48px; }
   }
+  /* Allow the main column to shrink below its content's min-content width
+     (a plain 1fr track has an implicit auto minimum). Prevents mobile overflow. */
+  .blog-main { min-width: 0; }
 
   /* MAIN — blog grid */
   .blog-toolbar {
@@ -408,7 +411,7 @@ const description = "Expert insights on web development, SEO, digital marketing,
        HERO — Compact
        ============================================================ -->
   <section class="hero is-compact" data-screen-label="01 Blog Hero">
-    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
            poster="/videos/hero-home-poster.jpg">
@@ -658,7 +661,7 @@ const description = "Expert insights on web development, SEO, digital marketing,
        CTA
        ============================================================ -->
   <section class="cta" data-screen-label="03 CTA">
-    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+    <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
            poster="/videos/cta-bg-poster.jpg">
