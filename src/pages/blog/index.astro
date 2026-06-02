@@ -10,13 +10,408 @@ const description = "Expert insights on web development, SEO, digital marketing,
   jsonLdType="home"
   screenLabel="Blog"
 >
+<style is:global data-recovered>
+/* ============================================================
+     BLOG PAGE
+     ============================================================ */
+  .hero.is-compact + .section { padding-top: 4rem; }
+
+  .blog-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 1080px) {
+    .blog-wrap { grid-template-columns: 1fr; gap: 48px; }
+  }
+  /* Allow the main column to shrink below its content's min-content width
+     (a plain 1fr track has an implicit auto minimum). Prevents mobile overflow. */
+  .blog-main { min-width: 0; }
+
+  /* MAIN — blog grid */
+  .blog-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+  }
+  .blog-count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .blog-count .accent { color: var(--primary, #99cc33); font-weight: 600; }
+  .blog-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+  .blog-sort select {
+    appearance: none;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    padding: 7px 32px 7px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 24px;
+  }
+  @media (max-width: 680px) { .blog-grid { grid-template-columns: 1fr; gap: 22px; } }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .25s cubic-bezier(.2,.6,.2,1);
+  }
+  .blog-card:hover { transform: translateY(-3px); }
+  .blog-card .blog-cover {
+    aspect-ratio: 16 / 10;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    background-size: cover;
+    background-position: center;
+    transition: box-shadow .25s ease, border-color .25s ease;
+  }
+  .blog-card:hover .blog-cover {
+    box-shadow: 0 18px 40px rgba(0,0,0,0.36), 0 0 0 1px rgba(153,204,51,0.32);
+  }
+  .blog-card .blog-cover::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,14,38,0.0) 60%, rgba(10,14,38,0.5) 100%);
+  }
+  .blog-cover.bg-1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
+  .blog-cover.bg-2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
+  .blog-cover.bg-3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
+  .blog-cover.bg-4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
+  .blog-cover.bg-5 { background: linear-gradient(135deg, #1E5A82, #99CC33); }
+  .blog-cover.bg-6 { background: linear-gradient(135deg, #4A3F8E, #33CCCC); }
+  .blog-cover.bg-7 { background: linear-gradient(135deg, #B83A6B, #F0A050); }
+  .blog-cover.bg-8 { background: linear-gradient(135deg, #2A6FBD, #7B3FE4); }
+
+  .blog-card .blog-tag {
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(153,204,51,0.14);
+    color: var(--primary, #99cc33);
+    border: 1px solid rgba(153,204,51,0.28);
+  }
+  .blog-tag[data-cat="seo"]         { background: rgba(45,125,184,0.16); color: #79c1ee; border-color: rgba(45,125,184,0.34); }
+  .blog-tag[data-cat="marketing"]   { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
+  .blog-tag[data-cat="development"] { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
+  .blog-tag[data-cat="tips"]        { background: rgba(209,79,140,0.14); color: #f48cb6; border-color: rgba(209,79,140,0.32); }
+
+  .blog-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    line-height: 1.3;
+  }
+  .blog-card:hover h3 { color: var(--primary, #99cc33); }
+  .blog-card .blog-excerpt {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.62);
+    max-width: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .blog-card .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .blog-card .blog-author {
+    width: 26px; height: 26px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .blog-card .blog-author.av1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
+  .blog-card .blog-author.av2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
+  .blog-card .blog-author.av3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
+  .blog-card .blog-author.av4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
+  .blog-card .blog-author-name { color: rgba(255,255,255,0.78); font-weight: 500; }
+  .blog-card .blog-meta .sep { color: rgba(255,255,255,0.25); }
+
+  /* Pagination */
+  .blog-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px dashed rgba(255,255,255,0.08);
+  }
+  .blog-page {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.7);
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    cursor: pointer;
+    font: 500 13px inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease;
+  }
+  .blog-page:hover { color: #fff; border-color: rgba(153,204,51,0.4); }
+  .blog-page.is-active {
+    background: var(--primary, #99cc33);
+    color: #0a0e26;
+    border-color: var(--primary, #99cc33);
+    font-weight: 600;
+  }
+  .blog-page.is-arrow { width: auto; padding: 0 14px; gap: 6px; }
+  .blog-page.is-arrow svg { width: 14px; height: 14px; }
+  .blog-ellipsis { color: rgba(255,255,255,0.4); padding: 0 4px; }
+
+  /* SIDEBAR */
+  .blog-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    position: sticky;
+    top: 100px;
+  }
+  @media (max-width: 1080px) { .blog-sidebar { position: static; } }
+
+  .side-card {
+    padding: 1.5rem;
+    background: rgba(13,18,53,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+  }
+  .side-card h3 {
+    margin: 0 0 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .side-card .side-eyebrow {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-bottom: 8px;
+  }
+
+  /* Subscribe */
+  .sub-card {
+    position: relative;
+    padding: 1.75rem 1.5rem;
+    background:
+      linear-gradient(160deg, rgba(20,38,30,0.7), rgba(11,28,22,0.55)) padding-box,
+      linear-gradient(160deg, #99cc33, rgba(51,204,204,0.5) 60%, transparent) border-box;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .sub-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 180px; height: 180px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(153,204,51,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .sub-card h3 {
+    font-size: 1.125rem;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .sub-card p {
+    margin: 0 0 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.7);
+    max-width: none;
+  }
+  .sub-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .sub-form input {
+    appearance: none;
+    background: rgba(10,14,38,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    width: 100%;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .sub-form input::placeholder { color: rgba(255,255,255,0.4); }
+  .sub-form input:focus {
+    outline: none;
+    border-color: var(--primary, #99cc33);
+    background: rgba(10,14,38,0.8);
+  }
+  .sub-form .btn { width: 100%; justify-content: center; }
+  .sub-note {
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* Categories */
+  .cat-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cat-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-size: 14px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .cat-list a:hover {
+    background: rgba(153,204,51,0.08);
+    color: #fff;
+  }
+  .cat-list .count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.05);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .cat-list a:hover .count { color: var(--primary, #99cc33); background: rgba(153,204,51,0.12); }
+
+  /* Featured articles */
+  .feat-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .feat-item {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 12px;
+    align-items: start;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity .2s ease;
+  }
+  .feat-item:hover { opacity: 0.92; }
+  .feat-item .feat-thumb {
+    width: 56px; height: 56px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .feat-item .feat-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(10,14,38,0.15);
+  }
+  .feat-item .feat-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .feat-item .feat-title {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 500;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .feat-item:hover .feat-title { color: var(--primary, #99cc33); }
+  .feat-item .feat-date {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.04em;
+  }
+</style>
+
 <main>
 
   <!-- ============================================================
        HERO — Compact
        ============================================================ -->
   <section class="hero is-compact" data-screen-label="01 Blog Hero">
-    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
            poster="/videos/hero-home-poster.jpg">
@@ -266,7 +661,7 @@ const description = "Expert insights on web development, SEO, digital marketing,
        CTA
        ============================================================ -->
   <section class="cta" data-screen-label="03 CTA">
-    <video class="cta-video" autoplay muted loop playsinline preload="auto"
+    <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
            poster="/videos/cta-bg-poster.jpg">

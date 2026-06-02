@@ -11,6 +11,138 @@ const description = "404 — Page not found. The page you're looking for has eit
   noindex
   screenLabel="404 Error"
 >
+<style is:global data-recovered>
+/* ERROR PAGES (404 / 401) */
+  body { display: flex; flex-direction: column; min-height: 100vh; }
+  main.err-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Decorative gradient orbs */
+  main.err-main::before, main.err-main::after {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 999px;
+    pointer-events: none;
+    filter: blur(80px);
+    opacity: 0.3;
+    z-index: 0;
+  }
+  main.err-main::before {
+    top: -200px; left: -200px;
+    background: radial-gradient(circle, rgba(153,204,51,0.5) 0%, transparent 70%);
+  }
+  main.err-main::after {
+    bottom: -200px; right: -200px;
+    background: radial-gradient(circle, rgba(51,204,204,0.35) 0%, transparent 70%);
+  }
+  .err-card {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    text-align: center;
+    padding: 3rem;
+  }
+  @media (max-width: 600px) { .err-card { padding: 2rem 1rem; } }
+  .err-code {
+    font-size: clamp(8rem, 22vw, 12rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin: 0 0 1rem;
+    background: linear-gradient(135deg, #99CC33 0%, #c1e15a 50%, #33CCCC 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 60px rgba(153,204,51,0.4);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    animation: errPulse 4s ease-in-out infinite;
+  }
+  @keyframes errPulse {
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 30px rgba(153,204,51,0.3)); }
+    50%      { filter: brightness(1.15) drop-shadow(0 0 50px rgba(153,204,51,0.6)); }
+  }
+  .err-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(153,204,51,0.1);
+    border: 1px solid rgba(153,204,51,0.3);
+    margin-bottom: 1.25rem;
+  }
+  .err-title {
+    margin: 0 0 1rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .err-desc {
+    margin: 0 0 2.25rem;
+    color: rgba(255,255,255,0.65);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .err-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .err-actions .btn-secondary {
+    appearance: none;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 13px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s ease;
+  }
+  .err-actions .btn-secondary:hover {
+    color: #fff;
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+  }
+  .err-actions .btn-secondary svg { width: 14px; height: 14px; }
+
+  /* Footer mini */
+  .err-foot {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .err-foot a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .err-foot a:hover { color: var(--primary, #99cc33); }
+</style>
+
 <main class="err-main" data-screen-label="01 404 Error">
     <div class="err-card">
       <h1 class="err-code">404</h1>

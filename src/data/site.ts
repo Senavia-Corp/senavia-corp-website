@@ -14,7 +14,7 @@ export const NAP = {
   phone: '(754) 262-3659',
   phoneE164: '+17542623659',
   email: 'info@senaviacorp.com',
-  streetAddress: '150 S Pine Island Rd',
+  streetAddress: '150 S Pine Island Rd, Suite 377',
   addressLocality: 'Plantation',
   addressRegion: 'FL',
   postalCode: '33324',
