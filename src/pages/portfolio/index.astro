@@ -10,6 +10,155 @@ const description = "Explore SENAVIA Corp's portfolio of web design, e-commerce,
   jsonLdType="portfolio"
   screenLabel="Portfolio"
 >
+<style is:global data-recovered>
+/* ============================================================
+     PORTFOLIO PAGE
+     ============================================================ */
+  .portfolio-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto 3rem;
+    padding: 6px;
+    max-width: max-content;
+    background: rgba(13,18,53,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+  }
+  .pf-chip {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(255,255,255,0.72);
+    font: 500 14px/1 inherit;
+    letter-spacing: 0.01em;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color .2s ease, background .2s ease, transform .15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pf-chip:hover { color: #fff; }
+  .pf-chip.is-active {
+    color: #0a0e26;
+    background: var(--primary, #99cc33);
+    font-weight: 600;
+  }
+  .pf-chip .pf-count {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    color: inherit;
+  }
+  .pf-chip.is-active .pf-count {
+    background: rgba(10,14,38,0.22);
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 1024px) {
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .portfolio-grid { grid-template-columns: 1fr; gap: 18px; }
+    .portfolio-filter { gap: 4px; }
+    .pf-chip { padding: 9px 14px; font-size: 13px; }
+  }
+
+  /* Filter transitions */
+  .pf-item {
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .pf-item[hidden] {
+    display: none !important;
+  }
+  .pf-item.is-entering {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  /* Tag chip in project body */
+  .pf-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(153,204,51,0.14);
+    color: var(--primary, #99cc33);
+    border: 1px solid rgba(153,204,51,0.28);
+  }
+  .pf-tag[data-tag="ecommerce"] {
+    background: rgba(209,79,140,0.14);
+    color: #f48cb6;
+    border-color: rgba(209,79,140,0.32);
+  }
+  .pf-tag[data-tag="web-app"] {
+    background: rgba(45,125,184,0.16);
+    color: #79c1ee;
+    border-color: rgba(45,125,184,0.34);
+  }
+  .pf-tag[data-tag="marketing"] {
+    background: rgba(240,160,80,0.14);
+    color: #f6b56e;
+    border-color: rgba(240,160,80,0.32);
+  }
+
+  /* Hover overlay on project cover */
+  .project-card .project-cover .pf-hover {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(10,14,38,0.0) 0%, rgba(10,14,38,0.78) 100%);
+    opacity: 0;
+    transition: opacity .25s ease;
+    pointer-events: none;
+  }
+  .project-card:hover .project-cover .pf-hover,
+  .project-card:focus-within .project-cover .pf-hover {
+    opacity: 1;
+  }
+  .project-card .project-cover .pf-hover .btn {
+    transform: translateY(8px);
+    transition: transform .3s ease;
+  }
+  .project-card:hover .project-cover .pf-hover .btn,
+  .project-card:focus-within .project-cover .pf-hover .btn {
+    transform: translateY(0);
+  }
+  /* Push the project-name up when hover overlay shows */
+  .project-card .project-cover .project-name {
+    transition: transform .25s ease;
+  }
+  .project-card:hover .project-cover .project-name {
+    transform: translateY(-22px);
+  }
+
+  .pf-empty {
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    padding: 4rem 1rem;
+    font-size: 15px;
+  }
+
+  /* Compact hero gets a bit of bottom breathing room */
+  .hero.is-compact + .section { padding-top: 4rem; }
+</style>
+
 <main>
 
   <!-- ============================================================

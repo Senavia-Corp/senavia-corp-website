@@ -10,6 +10,291 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
   jsonLdType="pricing"
   screenLabel="Pricing"
 >
+<style is:global data-recovered>
+/* ============================================================
+     PRICING PAGE
+     ============================================================ */
+  .hero.is-compact + .section { padding-top: 4rem; }
+
+  /* Tabs */
+  .price-tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 0 auto 3rem;
+    padding: 6px;
+    max-width: max-content;
+    background: rgba(13,18,53,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+  }
+  .price-tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(255,255,255,0.72);
+    font: 500 14px/1 inherit;
+    letter-spacing: 0.01em;
+    padding: 12px 26px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color .2s ease, background .2s ease;
+  }
+  .price-tab:hover { color: #fff; }
+  .price-tab.is-active {
+    color: #0a0e26;
+    background: var(--primary, #99cc33);
+    font-weight: 600;
+  }
+
+  /* Tier grid */
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    align-items: stretch;
+  }
+  @media (max-width: 1180px) { .tier-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } }
+  @media (max-width: 640px)  { .tier-grid { grid-template-columns: 1fr; } }
+
+  .tier-pane { display: none; }
+  .tier-pane.is-active { display: block; }
+
+  /* Tier card */
+  .tier-card {
+    position: relative;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(13,18,53,0.7), rgba(11,15,35,0.55)) padding-box,
+      linear-gradient(160deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02) 45%, rgba(153,204,51,0.18)) border-box;
+    -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+    padding: 2rem 1.75rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: transform .25s cubic-bezier(.2,.6,.2,1), box-shadow .25s ease;
+  }
+  .tier-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.32);
+  }
+
+  .tier-card.is-featured {
+    background:
+      linear-gradient(180deg, rgba(20,38,30,0.92), rgba(11,28,22,0.85)) padding-box,
+      linear-gradient(160deg, #99cc33, rgba(51,204,204,0.6) 50%, #99cc33) border-box;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(153,204,51,0.2);
+  }
+  .tier-card.is-featured .ribbon {
+    position: absolute;
+    top: -1px;
+    right: 22px;
+    transform: translateY(-50%);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--primary, #99cc33);
+    color: #0a0e26;
+    box-shadow: 0 6px 18px rgba(153,204,51,0.35);
+  }
+
+  .tier-head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+  }
+  .tier-code {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .tier-name {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .tier-tagline {
+    margin: 4px 0 0;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.62);
+    line-height: 1.5;
+    max-width: none;
+  }
+
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .tier-price .amount {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1;
+  }
+  .tier-price .amount.is-custom { font-size: 2rem; }
+  .tier-price .unit {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .tier-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+  .tier-features li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.5;
+  }
+  .tier-features .ic {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(153,204,51,0.2), rgba(51,204,204,0.12));
+    border: 1px solid rgba(153,204,51,0.36);
+    color: var(--primary, #99cc33);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tier-features .ic svg { width: 11px; height: 11px; }
+
+  .tier-card .btn {
+    margin-top: 4px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Included grid */
+  .inc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 28px;
+  }
+  @media (max-width: 700px) { .inc-grid { grid-template-columns: 1fr; } }
+  .inc-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 1.25rem 1.25rem 1.25rem 1.1rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    transition: background .2s ease, border-color .2s ease, transform .25s ease;
+  }
+  .inc-item:hover {
+    background: rgba(153,204,51,0.05);
+    border-color: rgba(153,204,51,0.25);
+    transform: translateY(-2px);
+  }
+  .inc-item .ic {
+    width: 36px; height: 36px;
+    flex: 0 0 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(153,204,51,0.18), rgba(51,204,204,0.1));
+    border: 1px solid rgba(153,204,51,0.3);
+    color: var(--primary, #99cc33);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .inc-item .ic svg { width: 18px; height: 18px; }
+  .inc-item h3 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+    text-transform: none;
+    letter-spacing: -0.005em;
+  }
+  .inc-item p {
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.62);
+    line-height: 1.5;
+    max-width: none;
+  }
+
+  /* Add-ons */
+  .addon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 1080px) { .addon-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px)  { .addon-grid { grid-template-columns: 1fr; } }
+
+  .addon-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1.5rem 1.5rem 1.25rem;
+    background: rgba(13,18,53,0.55);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    transition: transform .25s ease, border-color .2s ease, background .2s ease;
+  }
+  .addon-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(153,204,51,0.32);
+    background: rgba(20,28,60,0.6);
+  }
+  .addon-card .addon-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .addon-card h3 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.005em;
+    text-transform: none;
+  }
+  .addon-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: nowrap;
+  }
+  .addon-card p {
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    max-width: none;
+  }
+</style>
+
 <main>
 
   <!-- ============================================================

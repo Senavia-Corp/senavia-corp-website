@@ -29,3 +29,6 @@ _source/
 .idea/
 *.swp
 *.swo
+
+# Visual QA artifacts (screenshots, reports, logs)
+_qa/
