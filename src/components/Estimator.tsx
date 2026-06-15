@@ -5,32 +5,34 @@ import { CALENDLY_URL } from '@/data/site';
 // ============================================================
 // TYPES
 // ============================================================
+type Lang = 'en' | 'es';
+
 interface SiteType {
   id: string;
-  label: string;
-  sub: string;
+  label: { en: string; es: string };
+  sub: { en: string; es: string };
   base: number;
   basePages: number;
   icon: ReactNode;
 }
 interface Feature {
   id: string;
-  label: string;
+  label: { en: string; es: string };
   price: number;
-  desc: string;
+  desc: { en: string; es: string };
 }
 interface Timeline {
   id: string;
-  label: string;
-  sub: string;
+  label: { en: string; es: string };
+  sub: { en: string; es: string };
   mult: number;
-  badge: string;
+  badge: { en: string; es: string };
   tone: 'warn' | 'mid' | 'good' | 'ok';
 }
 interface Step {
   id: string;
-  short: string;
-  label: string;
+  short: { en: string; es: string };
+  label: { en: string; es: string };
 }
 interface State {
   type: string;
@@ -47,13 +49,19 @@ interface Errors {
 }
 
 // ============================================================
+// I18N HELPERS
+// ============================================================
+const t = (lang: Lang, en: string, es: string) => (lang === 'es' ? es : en);
+const pick = (lang: Lang, v: { en: string; es: string }) => (lang === 'es' ? v.es : v.en);
+
+// ============================================================
 // DATA
 // ============================================================
 const SITE_TYPES: SiteType[] = [
   {
     id: 'business',
-    label: 'Business Site',
-    sub: 'Brand & lead-gen marketing site',
+    label: { en: 'Business Site', es: 'Sitio Empresarial' },
+    sub: { en: 'Brand & lead-gen marketing site', es: 'Sitio de marca y captación de clientes' },
     base: 1500,
     basePages: 5,
     icon: (
@@ -66,8 +74,8 @@ const SITE_TYPES: SiteType[] = [
   },
   {
     id: 'ecommerce',
-    label: 'E-commerce',
-    sub: 'Shopify or Webflow storefront',
+    label: { en: 'E-commerce', es: 'E-Commerce' },
+    sub: { en: 'Shopify or Webflow storefront', es: 'Tienda en Shopify o Webflow' },
     base: 2800,
     basePages: 8,
     icon: (
@@ -80,8 +88,8 @@ const SITE_TYPES: SiteType[] = [
   },
   {
     id: 'webapp',
-    label: 'Web App',
-    sub: 'Custom platform or CRM / portal',
+    label: { en: 'Web App', es: 'Aplicación Web' },
+    sub: { en: 'Custom platform or CRM / portal', es: 'Plataforma a medida o CRM / portal' },
     base: 5000,
     basePages: 6,
     icon: (
@@ -95,8 +103,8 @@ const SITE_TYPES: SiteType[] = [
   },
   {
     id: 'landing',
-    label: 'Landing Page',
-    sub: 'Single-page campaign page',
+    label: { en: 'Landing Page', es: 'Landing Page' },
+    sub: { en: 'Single-page campaign page', es: 'Página de campaña de una sola sección' },
     base: 800,
     basePages: 1,
     icon: (
@@ -111,34 +119,34 @@ const SITE_TYPES: SiteType[] = [
 ];
 
 const FEATURES: Feature[] = [
-  { id: 'blog', label: 'Blog & CMS', price: 400, desc: 'CMS-driven blog with categories & author profiles' },
-  { id: 'contact', label: 'Contact & lead forms', price: 150, desc: 'Multi-step forms with CRM & email routing' },
-  { id: 'booking', label: 'Online booking system', price: 650, desc: 'Calendar embed, reminders, payments' },
-  { id: 'multilingual', label: 'Multilingual (EN / ES)', price: 850, desc: 'Bilingual structure with hreflang setup' },
-  { id: 'ecommerce', label: 'E-commerce store', price: 1200, desc: 'Products, checkout, payments — Shopify or custom' },
-  { id: 'crm', label: 'CRM integration', price: 950, desc: 'HubSpot, Pipedrive, Podio, or custom CRM' },
-  { id: 'membership', label: 'Membership / gated content', price: 1400, desc: 'Member login, paywall, tiered access' },
-  { id: 'automation', label: 'Email automation flows', price: 1200, desc: 'Klaviyo or Mailchimp nurture sequences' },
-  { id: 'analytics', label: 'GA4 & conversion tracking', price: 250, desc: 'Analytics, GTM, conversion goals — verified' },
-  { id: 'seo-advanced', label: 'Advanced SEO & schema', price: 750, desc: 'Schema markup, AEO structure, audit report' },
-  { id: 'forms-custom', label: 'Custom quote builder', price: 800, desc: 'Multi-step intake with conditional logic' },
-  { id: 'photography', label: 'Photography day', price: 1100, desc: 'Half-day on-location shoot, edited deliverables' },
+  { id: 'blog', label: { en: 'Blog & CMS', es: 'Blog y CMS' }, price: 400, desc: { en: 'CMS-driven blog with categories & author profiles', es: 'Blog con CMS, categorías y perfiles de autor' } },
+  { id: 'contact', label: { en: 'Contact & lead forms', es: 'Formularios de contacto y leads' }, price: 150, desc: { en: 'Multi-step forms with CRM & email routing', es: 'Formularios de varios pasos con CRM y enrutamiento de correo' } },
+  { id: 'booking', label: { en: 'Online booking system', es: 'Sistema de reservas en línea' }, price: 650, desc: { en: 'Calendar embed, reminders, payments', es: 'Calendario integrado, recordatorios y pagos' } },
+  { id: 'multilingual', label: { en: 'Multilingual (EN / ES)', es: 'Multilingüe (EN / ES)' }, price: 850, desc: { en: 'Bilingual structure with hreflang setup', es: 'Estructura bilingüe con configuración de hreflang' } },
+  { id: 'ecommerce', label: { en: 'E-commerce store', es: 'Tienda E-Commerce' }, price: 1200, desc: { en: 'Products, checkout, payments — Shopify or custom', es: 'Productos, checkout y pagos — Shopify o a medida' } },
+  { id: 'crm', label: { en: 'CRM integration', es: 'Integración con CRM' }, price: 950, desc: { en: 'HubSpot, Pipedrive, Podio, or custom CRM', es: 'HubSpot, Pipedrive, Podio o CRM a medida' } },
+  { id: 'membership', label: { en: 'Membership / gated content', es: 'Membresías / contenido exclusivo' }, price: 1400, desc: { en: 'Member login, paywall, tiered access', es: 'Acceso de miembros, muro de pago y niveles' } },
+  { id: 'automation', label: { en: 'Email automation flows', es: 'Flujos de automatización de correo' }, price: 1200, desc: { en: 'Klaviyo or Mailchimp nurture sequences', es: 'Secuencias de nutrición en Klaviyo o Mailchimp' } },
+  { id: 'analytics', label: { en: 'GA4 & conversion tracking', es: 'GA4 y seguimiento de conversiones' }, price: 250, desc: { en: 'Analytics, GTM, conversion goals — verified', es: 'Analytics, GTM y metas de conversión — verificadas' } },
+  { id: 'seo-advanced', label: { en: 'Advanced SEO & schema', es: 'SEO avanzado y schema' }, price: 750, desc: { en: 'Schema markup, AEO structure, audit report', es: 'Marcado schema, estructura AEO e informe de auditoría' } },
+  { id: 'forms-custom', label: { en: 'Custom quote builder', es: 'Cotizador a medida' }, price: 800, desc: { en: 'Multi-step intake with conditional logic', es: 'Captura en varios pasos con lógica condicional' } },
+  { id: 'photography', label: { en: 'Photography day', es: 'Día de fotografía' }, price: 1100, desc: { en: 'Half-day on-location shoot, edited deliverables', es: 'Sesión de medio día en locación con entregables editados' } },
 ];
 
 const TIMELINES: Timeline[] = [
-  { id: 'asap', label: 'ASAP', sub: 'Rush · within 3 weeks', mult: 1.25, badge: '+25%', tone: 'warn' },
-  { id: '1mo', label: '1 month', sub: 'Standard fast-track', mult: 1.1, badge: '+10%', tone: 'mid' },
-  { id: '2-3mo', label: '2 – 3 months', sub: 'Recommended pace', mult: 1.0, badge: 'Best fit', tone: 'good' },
-  { id: 'flexible', label: 'Flexible', sub: 'No rush · 4+ months', mult: 0.95, badge: '−5%', tone: 'ok' },
+  { id: 'asap', label: { en: 'ASAP', es: 'Lo Antes Posible' }, sub: { en: 'Rush · within 3 weeks', es: 'Urgente · en menos de 3 semanas' }, mult: 1.25, badge: { en: '+25%', es: '+25%' }, tone: 'warn' },
+  { id: '1mo', label: { en: '1 month', es: '1 mes' }, sub: { en: 'Standard fast-track', es: 'Vía rápida estándar' }, mult: 1.1, badge: { en: '+10%', es: '+10%' }, tone: 'mid' },
+  { id: '2-3mo', label: { en: '2 – 3 months', es: '2 – 3 meses' }, sub: { en: 'Recommended pace', es: 'Ritmo recomendado' }, mult: 1.0, badge: { en: 'Best fit', es: 'Ideal' }, tone: 'good' },
+  { id: 'flexible', label: { en: 'Flexible', es: 'Flexible' }, sub: { en: 'No rush · 4+ months', es: 'Sin prisa · 4+ meses' }, mult: 0.95, badge: { en: '−5%', es: '−5%' }, tone: 'ok' },
 ];
 
 const STEPS: Step[] = [
-  { id: 'type', short: 'Type', label: 'Project type' },
-  { id: 'pages', short: 'Pages', label: 'Page count' },
-  { id: 'features', short: 'Features', label: 'Features' },
-  { id: 'timeline', short: 'Timeline', label: 'Timeline' },
-  { id: 'contact', short: 'You', label: 'Your info' },
-  { id: 'result', short: 'Result', label: 'Your estimate' },
+  { id: 'type', short: { en: 'Type', es: 'Tipo' }, label: { en: 'Project type', es: 'Tipo de proyecto' } },
+  { id: 'pages', short: { en: 'Pages', es: 'Páginas' }, label: { en: 'Page count', es: 'Número de páginas' } },
+  { id: 'features', short: { en: 'Features', es: 'Funciones' }, label: { en: 'Features', es: 'Funcionalidades' } },
+  { id: 'timeline', short: { en: 'Timeline', es: 'Plazo' }, label: { en: 'Timeline', es: 'Plazo' } },
+  { id: 'contact', short: { en: 'You', es: 'Tú' }, label: { en: 'Your info', es: 'Tus datos' } },
+  { id: 'result', short: { en: 'Result', es: 'Resultado' }, label: { en: 'Your estimate', es: 'Tu estimado' } },
 ];
 
 // ============================================================
@@ -146,17 +154,33 @@ const STEPS: Step[] = [
 // ============================================================
 const fmt = (n: number) => '$' + Math.round(n).toLocaleString();
 
-function calc(state: State) {
+interface Breakdown {
+  base: { label: string; amount: number };
+  pages: { label: string; amount: number } | null;
+  features: { label: string; amount: number }[];
+  subtotal: number;
+  timeline: Timeline;
+  tlAdjust: number;
+  total: number;
+}
+
+function calc(state: State, lang: Lang): Breakdown {
   const type = SITE_TYPES.find((t) => t.id === state.type) || SITE_TYPES[0];
   const tl = TIMELINES.find((t) => t.id === state.timeline) || TIMELINES[2];
-  const baseLine = { label: type.label + ' base build', amount: type.base };
+  const baseLine = {
+    label: t(lang, `${pick('en', type.label)} base build`, `Construcción base · ${pick('es', type.label)}`),
+    amount: type.base,
+  };
   const pagesOver = Math.max(0, state.pages - type.basePages);
   const pagesLine = pagesOver > 0
-    ? { label: `Additional pages (${pagesOver} × $150)`, amount: pagesOver * 150 }
+    ? {
+        label: t(lang, `Additional pages (${pagesOver} × $150)`, `Páginas adicionales (${pagesOver} × $150)`),
+        amount: pagesOver * 150,
+      }
     : null;
   const featLines = state.features.map((fid) => {
     const f = FEATURES.find((x) => x.id === fid)!;
-    return { label: f.label, amount: f.price };
+    return { label: pick(lang, f.label), amount: f.price };
   });
   const subtotal =
     baseLine.amount +
@@ -167,18 +191,21 @@ function calc(state: State) {
   return { base: baseLine, pages: pagesLine, features: featLines, subtotal, timeline: tl, tlAdjust, total };
 }
 
-function buildCalendlyUrl(state: State, breakdown: ReturnType<typeof calc>) {
+function buildCalendlyUrl(state: State, breakdown: Breakdown, lang: Lang) {
   const type = SITE_TYPES.find((t) => t.id === state.type);
   const features = state.features
-    .map((id) => FEATURES.find((f) => f.id === id)?.label)
+    .map((id) => {
+      const f = FEATURES.find((x) => x.id === id);
+      return f ? pick(lang, f.label) : undefined;
+    })
     .filter(Boolean)
     .join(', ');
   const summary = [
-    `Project: ${type?.label ?? 'Unknown'}`,
-    `Pages: ${state.pages}`,
-    `Timeline: ${breakdown.timeline.label}`,
-    `Estimated total: ${fmt(breakdown.total)}`,
-    features ? `Features: ${features}` : '',
+    `${t(lang, 'Project', 'Proyecto')}: ${type ? pick(lang, type.label) : t(lang, 'Unknown', 'Desconocido')}`,
+    `${t(lang, 'Pages', 'Páginas')}: ${state.pages}`,
+    `${t(lang, 'Timeline', 'Plazo')}: ${pick(lang, breakdown.timeline.label)}`,
+    `${t(lang, 'Estimated total', 'Total estimado')}: ${fmt(breakdown.total)}`,
+    features ? `${t(lang, 'Features', 'Funcionalidades')}: ${features}` : '',
   ]
     .filter(Boolean)
     .join(' · ');
@@ -207,8 +234,9 @@ interface ProgressProps {
   total: number;
   steps: Step[];
   onJump: (i: number) => void;
+  lang: Lang;
 }
-function Progress({ current, total, steps, onJump }: ProgressProps) {
+function Progress({ current, total, steps, onJump, lang }: ProgressProps) {
   const pct = (current / (total - 1)) * 100;
   return (
     <div className="est-progress">
@@ -225,10 +253,10 @@ function Progress({ current, total, steps, onJump }: ProgressProps) {
               className={`est-step-dot is-${status}`}
               onClick={() => i <= current && onJump(i)}
               disabled={i > current}
-              aria-label={`Step ${i + 1}: ${s.label}`}
+              aria-label={`${t(lang, 'Step', 'Paso')} ${i + 1}: ${pick(lang, s.label)}`}
             >
               <span className="est-step-num">{i + 1}</span>
-              <span className="est-step-label">{s.short}</span>
+              <span className="est-step-label">{pick(lang, s.short)}</span>
             </button>
           );
         })}
@@ -240,27 +268,27 @@ function Progress({ current, total, steps, onJump }: ProgressProps) {
 // ============================================================
 // STEP PANELS
 // ============================================================
-function StepType({ state, set, next }: { state: State; set: (p: Partial<State>) => void; next: () => void }) {
+function StepType({ state, set, next, lang }: { state: State; set: (p: Partial<State>) => void; next: () => void; lang: Lang }) {
   return (
     <div className="est-card">
-      <span className="est-eyebrow">Step 1 · Project type</span>
-      <h2>What type of website do you need?</h2>
-      <p className="est-lede">Pick the option closest to your project — we'll fine-tune the details in the next steps.</p>
+      <span className="est-eyebrow">{t(lang, 'Step 1 · Project type', 'Paso 1 · Tipo de proyecto')}</span>
+      <h2>{t(lang, 'What type of website do you need?', '¿Qué tipo de sitio web necesitas?')}</h2>
+      <p className="est-lede">{t(lang, "Pick the option closest to your project — we'll fine-tune the details in the next steps.", 'Elige la opción más parecida a tu proyecto — afinaremos los detalles en los siguientes pasos.')}</p>
       <div className="est-grid-4">
-        {SITE_TYPES.map((t) => (
+        {SITE_TYPES.map((ty) => (
           <button
-            key={t.id}
+            key={ty.id}
             type="button"
-            className={`est-tile ${state.type === t.id ? 'is-active' : ''}`}
+            className={`est-tile ${state.type === ty.id ? 'is-active' : ''}`}
             onClick={() => {
-              set({ type: t.id, pages: state.pages === 0 ? t.basePages : state.pages });
+              set({ type: ty.id, pages: state.pages === 0 ? ty.basePages : state.pages });
               setTimeout(next, 220);
             }}
           >
-            <span className="est-tile-icon">{t.icon}</span>
-            <span className="est-tile-label">{t.label}</span>
-            <span className="est-tile-sub">{t.sub}</span>
-            <span className="est-tile-price">from {fmt(t.base)}</span>
+            <span className="est-tile-icon">{ty.icon}</span>
+            <span className="est-tile-label">{pick(lang, ty.label)}</span>
+            <span className="est-tile-sub">{pick(lang, ty.sub)}</span>
+            <span className="est-tile-price">{t(lang, 'from', 'desde')} {fmt(ty.base)}</span>
           </button>
         ))}
       </div>
@@ -268,18 +296,18 @@ function StepType({ state, set, next }: { state: State; set: (p: Partial<State>)
   );
 }
 
-function StepPages({ state, set }: { state: State; set: (p: Partial<State>) => void }) {
+function StepPages({ state, set, lang }: { state: State; set: (p: Partial<State>) => void; lang: Lang }) {
   const type = SITE_TYPES.find((t) => t.id === state.type) || SITE_TYPES[0];
   const pages = state.pages || type.basePages;
   const pagesOver = Math.max(0, pages - type.basePages);
   return (
     <div className="est-card">
-      <span className="est-eyebrow">Step 2 · Page count</span>
-      <h2>How many pages?</h2>
-      <p className="est-lede">Includes Home, About, Service, Contact — and any deeper pages your visitors need.</p>
+      <span className="est-eyebrow">{t(lang, 'Step 2 · Page count', 'Paso 2 · Número de páginas')}</span>
+      <h2>{t(lang, 'How many pages?', '¿Cuántas páginas?')}</h2>
+      <p className="est-lede">{t(lang, 'Includes Home, About, Service, Contact — and any deeper pages your visitors need.', 'Incluye Inicio, Nosotros, Servicios, Contacto — y cualquier otra página que tus visitantes necesiten.')}</p>
       <div className="est-pages-display">
         <span className="est-pages-num">{pages}</span>
-        <span className="est-pages-unit">{pages === 1 ? 'page' : 'pages'}</span>
+        <span className="est-pages-unit">{pages === 1 ? t(lang, 'page', 'página') : t(lang, 'pages', 'páginas')}</span>
       </div>
       <input
         type="range"
@@ -289,7 +317,7 @@ function StepPages({ state, set }: { state: State; set: (p: Partial<State>) => v
         value={pages}
         onChange={(e) => set({ pages: parseInt(e.target.value, 10) })}
         className="est-slider"
-        aria-label="Number of pages"
+        aria-label={t(lang, 'Number of pages', 'Número de páginas')}
       />
       <div className="est-slider-scale">
         <span>1</span>
@@ -298,18 +326,18 @@ function StepPages({ state, set }: { state: State; set: (p: Partial<State>) => v
         <span>50</span>
       </div>
       <div className="est-page-meta">
-        <span>{type.basePages} pages included in {type.label} base</span>
+        <span>{t(lang, `${type.basePages} pages included in ${pick('en', type.label)} base`, `${type.basePages} páginas incluidas en la base de ${pick('es', type.label)}`)}</span>
         {pagesOver > 0 ? (
           <span className="accent">+{pagesOver} × $150 = {fmt(pagesOver * 150)}</span>
         ) : (
-          <span className="muted">No additional charge</span>
+          <span className="muted">{t(lang, 'No additional charge', 'Sin cargo adicional')}</span>
         )}
       </div>
     </div>
   );
 }
 
-function StepFeatures({ state, set }: { state: State; set: (p: Partial<State>) => void }) {
+function StepFeatures({ state, set, lang }: { state: State; set: (p: Partial<State>) => void; lang: Lang }) {
   const toggle = (id: string) => {
     const f = state.features.includes(id)
       ? state.features.filter((x) => x !== id)
@@ -318,9 +346,9 @@ function StepFeatures({ state, set }: { state: State; set: (p: Partial<State>) =
   };
   return (
     <div className="est-card">
-      <span className="est-eyebrow">Step 3 · Features</span>
-      <h2>What features should we include?</h2>
-      <p className="est-lede">Pick any combination. Prices are added to your base build below.</p>
+      <span className="est-eyebrow">{t(lang, 'Step 3 · Features', 'Paso 3 · Funcionalidades')}</span>
+      <h2>{t(lang, 'What features should we include?', '¿Qué funcionalidades incluimos?')}</h2>
+      <p className="est-lede">{t(lang, 'Pick any combination. Prices are added to your base build below.', 'Elige cualquier combinación. Los precios se suman a tu construcción base.')}</p>
       <div className="est-feat-grid">
         {FEATURES.map((f) => {
           const on = state.features.includes(f.id);
@@ -339,8 +367,8 @@ function StepFeatures({ state, set }: { state: State; set: (p: Partial<State>) =
                 ) : null}
               </span>
               <span className="est-feat-body">
-                <span className="est-feat-label">{f.label}</span>
-                <span className="est-feat-desc">{f.desc}</span>
+                <span className="est-feat-label">{pick(lang, f.label)}</span>
+                <span className="est-feat-desc">{pick(lang, f.desc)}</span>
               </span>
               <span className="est-feat-price">+{fmt(f.price)}</span>
             </button>
@@ -351,28 +379,28 @@ function StepFeatures({ state, set }: { state: State; set: (p: Partial<State>) =
   );
 }
 
-function StepTimeline({ state, set, next }: { state: State; set: (p: Partial<State>) => void; next: () => void }) {
+function StepTimeline({ state, set, next, lang }: { state: State; set: (p: Partial<State>) => void; next: () => void; lang: Lang }) {
   return (
     <div className="est-card">
-      <span className="est-eyebrow">Step 4 · Timeline</span>
-      <h2>When do you need it live?</h2>
-      <p className="est-lede">Rush projects carry a premium; flexible timelines unlock a small discount.</p>
+      <span className="est-eyebrow">{t(lang, 'Step 4 · Timeline', 'Paso 4 · Plazo')}</span>
+      <h2>{t(lang, 'When do you need it live?', '¿Cuándo lo necesitas en línea?')}</h2>
+      <p className="est-lede">{t(lang, 'Rush projects carry a premium; flexible timelines unlock a small discount.', 'Los proyectos urgentes tienen un recargo; los plazos flexibles obtienen un pequeño descuento.')}</p>
       <div className="est-tl-grid">
-        {TIMELINES.map((t) => {
-          const on = state.timeline === t.id;
+        {TIMELINES.map((tl) => {
+          const on = state.timeline === tl.id;
           return (
             <button
-              key={t.id}
+              key={tl.id}
               type="button"
-              className={`est-tl ${on ? 'is-active' : ''} tone-${t.tone}`}
+              className={`est-tl ${on ? 'is-active' : ''} tone-${tl.tone}`}
               onClick={() => {
-                set({ timeline: t.id });
+                set({ timeline: tl.id });
                 setTimeout(next, 220);
               }}
             >
-              <span className={`est-tl-badge tone-${t.tone}`}>{t.badge}</span>
-              <span className="est-tl-label">{t.label}</span>
-              <span className="est-tl-sub">{t.sub}</span>
+              <span className={`est-tl-badge tone-${tl.tone}`}>{pick(lang, tl.badge)}</span>
+              <span className="est-tl-label">{pick(lang, tl.label)}</span>
+              <span className="est-tl-sub">{pick(lang, tl.sub)}</span>
               <span className="est-tl-radio" aria-hidden="true">{on ? <span /> : null}</span>
             </button>
           );
@@ -382,37 +410,37 @@ function StepTimeline({ state, set, next }: { state: State; set: (p: Partial<Sta
   );
 }
 
-function StepContact({ state, set, errors }: { state: State; set: (p: Partial<State>) => void; errors: Errors }) {
+function StepContact({ state, set, errors, lang }: { state: State; set: (p: Partial<State>) => void; errors: Errors; lang: Lang }) {
   return (
     <div className="est-card">
-      <span className="est-eyebrow">Step 5 · Your info</span>
-      <h2>Where should we send your estimate?</h2>
-      <p className="est-lede">We'll open our calendar pre-filled so you can pick a 30-minute review call. No spam, ever.</p>
+      <span className="est-eyebrow">{t(lang, 'Step 5 · Your info', 'Paso 5 · Tus datos')}</span>
+      <h2>{t(lang, 'Where should we send your estimate?', '¿A dónde enviamos tu estimado?')}</h2>
+      <p className="est-lede">{t(lang, "We'll open our calendar pre-filled so you can pick a 30-minute review call. No spam, ever.", 'Abriremos nuestro calendario prellenado para que elijas una llamada de revisión de 30 minutos. Sin spam, nunca.')}</p>
       <div className="est-form">
         <div className="est-field">
-          <label>Full name <span className="req">*</span></label>
+          <label>{t(lang, 'Full name', 'Nombre Completo')} <span className="req">*</span></label>
           <input
             type="text"
             value={state.name}
             onChange={(e) => set({ name: e.target.value })}
-            placeholder="Jane Rivera"
+            placeholder={t(lang, 'Jane Rivera', 'Juana Rivera')}
             autoComplete="name"
           />
           {errors.name ? <span className="est-err">{errors.name}</span> : null}
         </div>
         <div className="est-field">
-          <label>Email <span className="req">*</span></label>
+          <label>{t(lang, 'Email', 'Correo Electrónico')} <span className="req">*</span></label>
           <input
             type="email"
             value={state.email}
             onChange={(e) => set({ email: e.target.value })}
-            placeholder="jane@business.com"
+            placeholder={t(lang, 'jane@business.com', 'juana@empresa.com')}
             autoComplete="email"
           />
           {errors.email ? <span className="est-err">{errors.email}</span> : null}
         </div>
         <div className="est-field full">
-          <label>Phone <span className="muted-label">(optional)</span></label>
+          <label>{t(lang, 'Phone', 'Teléfono')} <span className="muted-label">{t(lang, '(optional)', '(opcional)')}</span></label>
           <input
             type="tel"
             value={state.phone}
@@ -426,21 +454,22 @@ function StepContact({ state, set, errors }: { state: State; set: (p: Partial<St
   );
 }
 
-function StepResult({ state, breakdown, onSend, sent }: {
+function StepResult({ state, breakdown, onSend, sent, lang }: {
   state: State;
-  breakdown: ReturnType<typeof calc>;
+  breakdown: Breakdown;
   onSend: () => void;
   sent: boolean;
+  lang: Lang;
 }) {
   const tlGood = breakdown.timeline.mult <= 1;
   return (
     <div className="est-card est-result">
-      <span className="est-eyebrow">Step 6 · Your estimate</span>
-      <h2>Here's your ballpark estimate</h2>
-      <p className="est-lede">Based on your selections, here's what a project like this typically runs at SENAVIA. Final pricing is locked in after a 30-minute scope call.</p>
+      <span className="est-eyebrow">{t(lang, 'Step 6 · Your estimate', 'Paso 6 · Tu estimado')}</span>
+      <h2>{t(lang, "Here's your ballpark estimate", 'Aquí está tu estimado aproximado')}</h2>
+      <p className="est-lede">{t(lang, "Based on your selections, here's what a project like this typically runs at SENAVIA. Final pricing is locked in after a 30-minute scope call.", 'Según tus selecciones, esto es lo que normalmente cuesta un proyecto así en SENAVIA. El precio final se define tras una llamada de alcance de 30 minutos.')}</p>
       <div className="est-result-grid">
         <div className="est-bd">
-          <h3>Cost breakdown</h3>
+          <h3>{t(lang, 'Cost breakdown', 'Desglose de costos')}</h3>
           <ul className="est-bd-list">
             <li>
               <span>{breakdown.base.label}</span>
@@ -459,19 +488,19 @@ function StepResult({ state, breakdown, onSend, sent }: {
               </li>
             ))}
             <li className="subtotal">
-              <span>Subtotal</span>
+              <span>{t(lang, 'Subtotal', 'Subtotal')}</span>
               <span className="amt">{fmt(breakdown.subtotal)}</span>
             </li>
             <li className={tlGood ? '' : 'rush'}>
-              <span>Timeline · {breakdown.timeline.label} <span className="tag">{breakdown.timeline.badge}</span></span>
+              <span>{t(lang, 'Timeline', 'Plazo')} · {pick(lang, breakdown.timeline.label)} <span className="tag">{pick(lang, breakdown.timeline.badge)}</span></span>
               <span className="amt">{breakdown.tlAdjust >= 0 ? '+' : ''}{fmt(breakdown.tlAdjust)}</span>
             </li>
           </ul>
         </div>
         <div className="est-total">
-          <span className="est-total-label">Estimated total</span>
+          <span className="est-total-label">{t(lang, 'Estimated total', 'Costo Estimado')}</span>
           <span className="est-total-amount">{fmt(breakdown.total)}</span>
-          <span className="est-total-note">Includes hosting setup, training, and 30-day post-launch optimization</span>
+          <span className="est-total-note">{t(lang, 'Includes hosting setup, training, and 30-day post-launch optimization', 'Incluye configuración de hosting, capacitación y 30 días de optimización post-lanzamiento')}</span>
           {sent ? (
             <div className="est-sent">
               <span className="est-sent-icon" aria-hidden="true">
@@ -479,19 +508,19 @@ function StepResult({ state, breakdown, onSend, sent }: {
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
               </span>
-              <strong>Calendar opened for {state.email}</strong>
-              <span>Pick a 30-minute slot from the Calendly grid — we'll have your estimate context ready.</span>
+              <strong>{t(lang, `Calendar opened for ${state.email}`, `Calendario abierto para ${state.email}`)}</strong>
+              <span>{t(lang, "Pick a 30-minute slot from the Calendly grid — we'll have your estimate context ready.", 'Elige un horario de 30 minutos en el calendario de Calendly — tendremos listo el contexto de tu estimado.')}</span>
             </div>
           ) : (
             <button type="button" className="est-send" onClick={onSend}>
-              Book my scope call
+              {t(lang, 'Book my scope call', 'Agenda mi llamada de alcance')}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
               </svg>
             </button>
           )}
-          <a href="tel:+17542623659" className="est-call">Or call us · (754) 262-3659</a>
+          <a href="tel:+17542623659" className="est-call">{t(lang, 'Or call us · (754) 262-3659', 'O llámanos · (754) 262-3659')}</a>
         </div>
       </div>
     </div>
@@ -502,6 +531,7 @@ function StepResult({ state, breakdown, onSend, sent }: {
 // MAIN APP
 // ============================================================
 export default function Estimator() {
+  const [lang, setLang] = useState<Lang>('en');
   const [step, setStep] = useState(0);
   const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
@@ -515,8 +545,23 @@ export default function Estimator() {
     phone: '',
   });
 
+  // Sync language with the site-wide switcher (class on <html> + languagechange event).
+  useEffect(() => {
+    if (typeof document !== 'undefined' && document.documentElement.classList.contains('lang-es')) {
+      setLang('es');
+    }
+    const onLangChange = (e: Event) => {
+      const detail = (e as CustomEvent<{ lang?: string }>).detail;
+      if (detail?.lang === 'es' || detail?.lang === 'en') {
+        setLang(detail.lang);
+      }
+    };
+    window.addEventListener('languagechange', onLangChange as EventListener);
+    return () => window.removeEventListener('languagechange', onLangChange as EventListener);
+  }, []);
+
   const set = (patch: Partial<State>) => setState((prev) => ({ ...prev, ...patch }));
-  const breakdown = useMemo(() => (state.type ? calc(state) : null), [state]);
+  const breakdown = useMemo(() => (state.type ? calc(state, lang) : null), [state, lang]);
 
   const validate = (): boolean => {
     if (step === 0) return !!state.type;
@@ -525,9 +570,9 @@ export default function Estimator() {
     if (step === 3) return !!state.timeline;
     if (step === 4) {
       const errs: Errors = {};
-      if (!state.name.trim()) errs.name = 'Name is required';
+      if (!state.name.trim()) errs.name = t(lang, 'Name is required', 'El nombre es requerido');
       const emailOk = /^\S+@\S+\.\S+$/.test(state.email);
-      if (!emailOk) errs.email = 'Enter a valid email';
+      if (!emailOk) errs.email = t(lang, 'Enter a valid email', 'Ingresa un correo válido');
       setErrors(errs);
       return Object.keys(errs).length === 0;
     }
@@ -543,7 +588,7 @@ export default function Estimator() {
 
   const send = () => {
     if (!breakdown) return;
-    const url = buildCalendlyUrl(state, breakdown);
+    const url = buildCalendlyUrl(state, breakdown, lang);
     if (typeof window.plausible === 'function') {
       window.plausible('estimator_complete', {
         props: { type: state.type, timeline: state.timeline, total: String(Math.round(breakdown.total)) },
@@ -569,29 +614,29 @@ export default function Estimator() {
 
   return (
     <div className="est-wrap" ref={wrapRef}>
-      <Progress current={step} total={STEPS.length} steps={STEPS} onJump={jump} />
+      <Progress current={step} total={STEPS.length} steps={STEPS} onJump={jump} lang={lang} />
       <div className="est-stage" key={step}>
-        {step === 0 && <StepType state={state} set={set} next={next} />}
-        {step === 1 && <StepPages state={state} set={set} />}
-        {step === 2 && <StepFeatures state={state} set={set} />}
-        {step === 3 && <StepTimeline state={state} set={set} next={next} />}
-        {step === 4 && <StepContact state={state} set={set} errors={errors} />}
-        {step === 5 && breakdown && <StepResult state={state} breakdown={breakdown} onSend={send} sent={sent} />}
+        {step === 0 && <StepType state={state} set={set} next={next} lang={lang} />}
+        {step === 1 && <StepPages state={state} set={set} lang={lang} />}
+        {step === 2 && <StepFeatures state={state} set={set} lang={lang} />}
+        {step === 3 && <StepTimeline state={state} set={set} next={next} lang={lang} />}
+        {step === 4 && <StepContact state={state} set={set} errors={errors} lang={lang} />}
+        {step === 5 && breakdown && <StepResult state={state} breakdown={breakdown} onSend={send} sent={sent} lang={lang} />}
       </div>
       {step < STEPS.length - 1 && (
         <div className="est-nav">
           <button type="button" className="est-back" onClick={back} disabled={step === 0}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
-            Back
+            {t(lang, 'Back', 'Atrás')}
           </button>
           {showLiveBar && breakdown && (
             <div className="est-live">
-              <span className="est-live-label">Running total</span>
+              <span className="est-live-label">{t(lang, 'Running total', 'Total acumulado')}</span>
               <span className="est-live-amount">{fmt(breakdown.total)}</span>
             </div>
           )}
           <button type="button" className="est-next" onClick={next}>
-            {step === STEPS.length - 2 ? 'Get my estimate' : 'Continue'}
+            {step === STEPS.length - 2 ? t(lang, 'Get my estimate', 'Obtener mi Estimado') : t(lang, 'Continue', 'Continuar')}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
           </button>
         </div>

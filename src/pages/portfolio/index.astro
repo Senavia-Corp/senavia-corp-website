@@ -1,7 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 const title = "Portfolio — SENAVIA Corp · Web Design, Apps & Marketing Projects in South Florida";
 const description = "Explore SENAVIA Corp's portfolio of web design, e-commerce, custom web apps, and digital marketing projects across South Florida.";
+
+const projects = (await getCollection('portfolio'))
+  .filter((e) => !e.data.draft)
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 <BaseLayout
   title={title}
@@ -172,196 +177,62 @@ const description = "Explore SENAVIA Corp's portfolio of web design, e-commerce,
       <source src="/videos/hero-home.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
-      <div class="eyebrow" style="margin-bottom: 18px;">Selected work · 2021 – 2025</div>
-      <h1>Web Design Portfolio</h1>
-      <p>Explore our recent projects across South Florida.</p>
+      <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Selected work · 2021 – 2025</span><span class="lang-only-es">Trabajos Seleccionados · 2021 – 2025</span></div>
+      <h1><span class="lang-only-en">Web Design Portfolio</span><span class="lang-only-es">Portafolio de Diseño Web</span></h1>
+      <p><span class="lang-only-en">Explore our recent projects across South Florida.</span><span class="lang-only-es">Explora nuestros proyectos recientes en todo el Sur de Florida.</span></p>
     </div>
   </section>
 
   <!-- ============================================================
        PORTFOLIO GRID + FILTER
        ============================================================ -->
-  <section class="section" data-screen-label="02 Portfolio Grid">
+  <section class="section section--band" data-screen-label="02 Portfolio Grid">
     <div class="container">
       <div class="portfolio-filter" role="tablist" aria-label="Filter projects by category" data-reveal>
         <button class="pf-chip is-active" type="button" role="tab" aria-selected="true" data-filter="all">
-          All <span class="pf-count" data-count-for="all"></span>
+          <span class="lang-only-en">All</span><span class="lang-only-es">Todos</span> <span class="pf-count" data-count-for="all"></span>
         </button>
         <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="web-design">
-          Web Design <span class="pf-count" data-count-for="web-design"></span>
+          <span class="lang-only-en">Web Design</span><span class="lang-only-es">Diseño Web</span> <span class="pf-count" data-count-for="web-design"></span>
         </button>
         <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="ecommerce">
-          E-commerce <span class="pf-count" data-count-for="ecommerce"></span>
+          <span class="lang-only-en">E-commerce</span><span class="lang-only-es">E-commerce</span> <span class="pf-count" data-count-for="ecommerce"></span>
         </button>
         <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="web-app">
-          Web App <span class="pf-count" data-count-for="web-app"></span>
+          <span class="lang-only-en">Web App</span><span class="lang-only-es">Aplicación Web</span> <span class="pf-count" data-count-for="web-app"></span>
         </button>
         <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="marketing">
-          Marketing <span class="pf-count" data-count-for="marketing"></span>
+          <span class="lang-only-en">Marketing</span><span class="lang-only-es">Marketing</span> <span class="pf-count" data-count-for="marketing"></span>
         </button>
       </div>
 
       <div class="portfolio-grid" data-reveal-children>
 
-        <article class="project-card pf-item" data-category="web-design">
-          <a href="#" class="project-cover ph-1" aria-label="Pergola Plus Florida — Outdoor Living">
-            <span class="project-name">Pergola Plus Florida</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-design">Web Design</span></p>
-            <p>Outdoor living brand site with quote request flow, gallery, and local SEO across South Florida.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-design">
-          <a href="#" class="project-cover ph-2" aria-label="Lake Scaping LLC">
-            <span class="project-name">Lake Scaping LLC</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-design">Web Design</span></p>
-            <p>Landscaping company site with service-area pages, before/after gallery, and CRM-bound lead workflow.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-design">
-          <a href="#" class="project-cover ph-3" aria-label="AB Aluminum & Screens">
-            <span class="project-name">AB Aluminum &amp; Screens</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-design">Web Design</span></p>
-            <p>Home improvement contractor site with product showcase, financing CTA, and Google Ads landing pages.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="ecommerce">
-          <a href="#" class="project-cover ph-4" aria-label="ANGELE GLOW Skincare">
-            <span class="project-name">ANGELE GLOW</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="ecommerce">E-commerce</span></p>
-            <p>Shopify skincare store with custom UI, subscription bundles, and a wholesale portal for spa partners.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-design">
-          <a href="#" class="project-cover ph-5" aria-label="Mr. & Mrs. Outdoor Living">
-            <span class="project-name">Mr. &amp; Mrs. Outdoor Living</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-design">Web Design</span></p>
-            <p>Service-area site with itemized quote tool, Broward project map, and integrated booking calendar.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-app">
-          <a href="#" class="project-cover ph-6" aria-label="GQM Inc. Custom Admin Panel">
-            <span class="project-name">GQM Inc.</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-app">Web App</span></p>
-            <p>Custom admin panel for internal operations: project tracking, client billing, and reporting dashboards.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="ecommerce">
-          <a href="#" class="project-cover ph-1" aria-label="Costa Bay Provisions">
-            <span class="project-name">Costa Bay Provisions</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="ecommerce">E-commerce</span></p>
-            <p>Coastal grocery brand on Shopify with bilingual checkout, loyalty rewards, and curbside pickup flow.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="marketing">
-          <a href="#" class="project-cover ph-2" aria-label="Solé Roofing Group — Google Ads">
-            <span class="project-name">Solé Roofing Group</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="marketing">Marketing</span></p>
-            <p>Google Ads + landing-page system that lowered CPA by 38% and doubled monthly qualified leads.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-app">
-          <a href="#" class="project-cover ph-3" aria-label="Mariner Marine — Service CRM">
-            <span class="project-name">Mariner Marine</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-app">Web App</span></p>
-            <p>Service-CRM for boat detailing: dispatch board, recurring contracts, and QuickBooks invoicing sync.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="marketing">
-          <a href="#" class="project-cover ph-4" aria-label="Casa Lumière Interiors — SEO">
-            <span class="project-name">Casa Lumière Interiors</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="marketing">Marketing</span></p>
-            <p>Local SEO program that ranked the studio in the Miami map pack for 14 high-intent design queries.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-design">
-          <a href="#" class="project-cover ph-5" aria-label="Verde Aluminum & Glass">
-            <span class="project-name">Verde Aluminum &amp; Glass</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-design">Web Design</span></p>
-            <p>Contractor site with project gallery, financing modal, and bilingual EN/ES estimate request flow.</p>
-          </div>
-        </article>
-
-        <article class="project-card pf-item" data-category="web-app">
-          <a href="#" class="project-cover ph-6" aria-label="Atlas Logistics — Operations Portal">
-            <span class="project-name">Atlas Logistics</span>
-            <span class="pf-hover">
-              <span class="btn is-secondary is-sm">Preview Website</span>
-            </span>
-          </a>
-          <div class="project-body">
-            <p class="project-sector"><span class="pf-tag" data-tag="web-app">Web App</span></p>
-            <p>Operations portal with driver dispatch, document scanning, and live load-tracking dashboards.</p>
-          </div>
-        </article>
+        {projects.map((p) => (
+          <article class="project-card pf-item" data-category={p.data.category}>
+            <a href={`/portfolio/${p.id}`} class={`project-cover ${p.data.coverClass}`} aria-label={p.data.title}>
+              <span class="project-name">{p.data.title}</span>
+              <span class="pf-hover">
+                <span class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Proyecto</span></span>
+              </span>
+            </a>
+            <div class="project-body">
+              <p class="project-sector">
+                <span class="pf-tag" data-tag={p.data.category}>
+                  <span class="lang-only-en">{p.data.categoryLabel_en}</span><span class="lang-only-es">{p.data.categoryLabel_es}</span>
+                </span>
+              </p>
+              <p><span class="lang-only-en">{p.data.summary_en}</span><span class="lang-only-es">{p.data.summary_es}</span></p>
+            </div>
+          </article>
+        ))}
 
       </div>
 
-      <p class="pf-empty" hidden role="status">No projects match this filter yet — check back soon.</p>
+      <p class="pf-empty" hidden role="status">
+        <span class="lang-only-en">No projects match this filter yet — check back soon.</span>
+        <span class="lang-only-es">Aún no hay proyectos en este filtro — vuelve pronto.</span>
+      </p>
     </div>
   </section>
 
@@ -376,8 +247,11 @@ const description = "Explore SENAVIA Corp's portfolio of web design, e-commerce,
       <source src="/videos/cta-bg.mp4" type="video/mp4">
     </video>
     <div class="container">
-      <h2>Have a Project In Mind?</h2>
-      <p>Schedule your free consultation and let's design, build, or market your next digital success story.</p>
+      <h2><span class="lang-only-en">Have a Project In Mind?</span><span class="lang-only-es">¿Tienes un Proyecto en Mente?</span></h2>
+      <p>
+        <span class="lang-only-en">Schedule your free consultation and let's design, build, or market your next digital success story.</span>
+        <span class="lang-only-es">Agenda tu consulta gratuita y diseñemos, construyamos o promocionemos tu próxima historia de éxito digital.</span>
+      </p>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>

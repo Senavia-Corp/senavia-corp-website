@@ -22,6 +22,7 @@ export const NAP = {
   latitude: 26.1224,
   longitude: -80.2806,
   hours: 'Mon – Fri · 8:00am – 6:00pm',
+  hoursEs: 'Lun – Vie · 8:00am – 6:00pm',
   hoursSchema: 'Mo-Fr 08:00-18:00',
   googleMapsUrl: 'https://share.google/RlW6eE2rUR6qKw484',
   areaServed: ['Miami-Dade County', 'Broward County', 'Palm Beach County'],

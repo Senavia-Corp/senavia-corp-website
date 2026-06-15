@@ -1,0 +1,473 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('serviceAreas'))
+    .filter((e) => !e.data.draft)
+    .sort((a, b) => a.data.order - b.data.order);
+
+  return all.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+
+// Real Google Maps embed centered on the city + ", FL"
+const mapQuery = encodeURIComponent(`${d.city}, FL`);
+const mapSrc = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
+
+const STAR = `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+
+// Local services grid — bilingual, links to the service detail pages
+const services = [
+  {
+    href: '/services/web-design',
+    icon: '/images/Web-Design-Icon.svg',
+    iconClass: '',
+    title_en: 'Web Design',
+    title_es: 'Diseño Web',
+    body_en: `Conversion-focused websites built for how ${d.city} buyers browse and decide — bold, mobile-first, and bilingual-ready, with brand polish that lands on first scroll.`,
+    body_es: `Sitios web enfocados en la conversión, diseñados para cómo navegan y deciden los clientes de ${d.city} — audaces, mobile-first y listos en dos idiomas, con un acabado de marca que impacta al primer scroll.`,
+    more_en: 'Explore Web Design',
+    more_es: 'Ver Diseño Web',
+  },
+  {
+    href: '/services/digital-marketing',
+    icon: '/images/Marketing-Icon.svg',
+    iconClass: 'is-cyan',
+    title_en: 'Digital Marketing',
+    title_es: 'Marketing Digital',
+    body_en: `Local SEO and paid campaigns engineered for ${d.city} and ${d.countyLabel}. Geo-targeted content, Google Business Profile optimization, and EN/ES ad copy that reaches buyers where they search.`,
+    body_es: `SEO local y campañas pagas diseñadas para ${d.city} y ${d.countyLabel}. Contenido geolocalizado, optimización del Google Business Profile y textos de anuncios en EN/ES que llegan a los compradores donde buscan.`,
+    more_en: 'Explore Marketing',
+    more_es: 'Ver Marketing',
+  },
+  {
+    href: '/services/web-development',
+    icon: '/images/Development-Icon.svg',
+    iconClass: 'is-green',
+    title_en: 'Web Development',
+    title_es: 'Desarrollo Web',
+    body_en: `Fast, scalable builds on Webflow, Shopify, and custom stacks. From storefronts to booking systems and CRM integrations — engineered for Core Web Vitals and ready to grow with your ${d.city} business.`,
+    body_es: `Desarrollos rápidos y escalables en Webflow, Shopify y stacks a medida. Desde tiendas en línea hasta sistemas de reservas e integraciones de CRM — optimizados para Core Web Vitals y listos para crecer con tu negocio en ${d.city}.`,
+    more_en: 'Explore Development',
+    more_es: 'Ver Desarrollo',
+  },
+];
+---
+<BaseLayout
+  title={d.seoTitle}
+  description={d.description}
+  canonical={`/service-areas/${entry.id}`}
+  jsonLdType="localbusiness"
+  screenLabel={`Service Area · ${d.city}`}
+>
+<style is:global data-recovered>
+/* ============================================================
+     SERVICE AREA DETAIL — page-specific components
+     ============================================================ */
+
+  /* Hero breadcrumb */
+  .sa-crumb {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 18px;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.04em;
+    flex-wrap: wrap;
+  }
+  .sa-crumb a { color: rgba(255,255,255,0.6); transition: color .15s ease; }
+  .sa-crumb a:hover { color: var(--primary); }
+  .sa-crumb .sep { opacity: .45; }
+  .sa-crumb .here { color: var(--primary); }
+
+  /* --- Local services grid --- */
+  .loc-svc {
+    display: flex; flex-direction: column; gap: 14px;
+    text-decoration: none; color: inherit;
+    height: 100%;
+  }
+  .loc-svc .svc-head { display: flex; align-items: center; gap: 14px; }
+  .loc-svc h3 {
+    margin: 0;
+    font-size: 1.25rem; font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .loc-svc p {
+    margin: 0;
+    font-size: 14.5px;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.55;
+  }
+  .loc-svc .more {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: auto; padding-top: 6px;
+    color: var(--primary); font-size: 14px; font-weight: 600;
+    transition: color .2s ease;
+  }
+  .loc-svc .more::after {
+    content:''; width: 15px; height: 11px;
+    background-color: currentColor;
+    -webkit-mask: url('/images/Arrow.svg') center/contain no-repeat;
+            mask: url('/images/Arrow.svg') center/contain no-repeat;
+    transition: transform .2s ease;
+  }
+  .loc-svc:hover .more::after { transform: translateX(3px); }
+  .loc-svc:hover .more { color: var(--white); }
+
+  /* --- Map + stats block --- */
+  .sa-mapstats {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) { .sa-mapstats { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* Real Google Maps embed */
+  .map-embed {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 460px;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: var(--shadow-soft);
+    background: linear-gradient(160deg, #12173f 0%, #0c1030 100%);
+  }
+  .map-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    filter: saturate(0.9) contrast(1.02);
+  }
+  /* business card lower-left, like a real maps pin popup */
+  .map-card {
+    position: absolute; left: 22px; bottom: 22px; right: 22px;
+    max-width: 320px; z-index: 4;
+    background: rgba(13,18,53,0.86);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 4px;
+    pointer-events: none;
+  }
+  .map-card .map-card-link { pointer-events: auto; }
+  .map-card .name { font-size: 15px; font-weight: 600; color: #fff; }
+  .map-card .addr { font-size: 13px; color: rgba(255,255,255,0.66); line-height: 1.4; }
+  .map-card .rating {
+    display: inline-flex; align-items: center; gap: 7px;
+    margin-top: 6px; font-size: 13px; color: rgba(255,255,255,0.82);
+  }
+  .map-card .rating .stars { display: inline-flex; gap: 1px; color: #FFC83D; }
+  .map-card .rating .stars svg { width: 13px; height: 13px; }
+  .map-card .map-card-link {
+    margin-top: 10px;
+    font-size: 13px; font-weight: 600;
+    color: var(--primary, #99cc33);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .sa-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 540px) { .sa-stats { grid-template-columns: 1fr; } }
+  .sa-stats .stat-card { padding: 1.75rem 1.5rem; }
+
+  /* neighborhood chips under the stats */
+  .sa-hoods { margin-top: 1.5rem; }
+  .sa-hoods .lbl {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(255,255,255,0.5);
+    margin: 0 0 12px;
+  }
+</style>
+
+<main>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero" data-screen-label="01 Local Hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/hero-home-poster.jpg">
+      <source src="/videos/hero-home.mp4" type="video/mp4">
+    </video>
+    <div class="hero-inner">
+      <div class="sa-crumb">
+        <a href="/service-areas">
+          <span class="lang-only-en">Service Areas</span>
+          <span class="lang-only-es">Áreas de Servicio</span>
+        </a>
+        <span class="sep">/</span>
+        <span>{d.countyLabel}</span>
+        <span class="sep">/</span>
+        <span class="here">{d.city}</span>
+      </div>
+      <h1>
+        <span class="lang-only-en">Web Design Services in {d.city}, FL</span>
+        <span class="lang-only-es">Servicios de Diseño Web en {d.city}, FL</span>
+      </h1>
+      <p>
+        <span class="lang-only-en">Expert web design and digital marketing for businesses in {d.city} — Google Partner-certified and fully bilingual.</span>
+        <span class="lang-only-es">Diseño web y marketing digital de expertos para negocios en {d.city} — certificados por Google Partner y totalmente bilingües.</span>
+      </p>
+      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
+        <span class="lang-only-en">Book a Free Call</span>
+        <span class="lang-only-es">Agenda tu Llamada Gratis</span>
+      </a>
+      <div class="metric-strip" aria-label="Key metrics">
+        {d.population && (
+          <>
+            <div class="metric">
+              <span class="metric-value">{d.population}</span>
+              <span class="metric-label">
+                <span class="lang-only-en">{d.city} residents</span>
+                <span class="lang-only-es">Residentes en {d.city}</span>
+              </span>
+            </div>
+            <span class="divider"></span>
+          </>
+        )}
+        <div class="metric">
+          <span class="metric-value">100+</span>
+          <span class="metric-label">
+            <span class="lang-only-en">Sites launched</span>
+            <span class="lang-only-es">Sitios lanzados</span>
+          </span>
+        </div>
+        <span class="divider"></span>
+        <div class="metric">
+          <span class="metric-value">5.0 ★</span>
+          <span class="metric-label">
+            <span class="lang-only-en">Google reviews</span>
+            <span class="lang-only-es">Reseñas de Google</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WHY BUSINESSES CHOOSE SENAVIA
+       ============================================================ -->
+  <section class="section section--band" data-screen-label="02 Why Local">
+    <div class="container">
+      <div class="split" data-reveal>
+        <div class="split-copy">
+          <div class="eyebrow">
+            <span class="lang-only-en">Why {d.city} chooses us</span>
+            <span class="lang-only-es">Por qué {d.city} nos elige</span>
+          </div>
+          <h2>
+            <span class="lang-only-en">Why {d.city} Businesses Choose SENAVIA</span>
+            <span class="lang-only-es">Por Qué los Negocios de {d.city} Eligen a SENAVIA</span>
+          </h2>
+          <p>
+            <span class="lang-only-en">{d.intro_en}</span>
+            <span class="lang-only-es">{d.intro_es}</span>
+          </p>
+          <div class="chip-row">
+            <span class="chip"><span class="dot"></span>Google Partner Certified</span>
+            <span class="chip"><span class="dot"></span>
+              <span class="lang-only-en">Bilingual EN / ES</span>
+              <span class="lang-only-es">Bilingüe EN / ES</span>
+            </span>
+            <span class="chip"><span class="dot"></span>
+              <span class="lang-only-en">Local {d.countyLabel} SEO</span>
+              <span class="lang-only-es">SEO Local de {d.countyLabel}</span>
+            </span>
+            <span class="chip"><span class="dot"></span>Webflow &amp; Shopify</span>
+          </div>
+          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
+            <span class="lang-only-en">Book a Free Call</span>
+            <span class="lang-only-es">Agenda tu Llamada Gratis</span>
+          </a>
+        </div>
+        <div class="split-media">
+          <div style={`aspect-ratio: 5 / 4; border-radius: 18px; background: ${d.heroGradient}; position: relative; overflow: hidden; box-shadow: var(--shadow-soft);`}>
+            <span class="badge-overlay">
+              <span class="lang-only-en">Serving {d.countyLabel}</span>
+              <span class="lang-only-es">Atendiendo {d.countyLabel}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LOCAL SERVICES GRID
+       ============================================================ -->
+  <section class="section" data-screen-label="03 Local Services">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">
+          <span class="lang-only-en">What we do in {d.city}</span>
+          <span class="lang-only-es">Qué hacemos en {d.city}</span>
+        </div>
+        <h2>
+          <span class="lang-only-en">Digital Services Built for {d.city} Businesses</span>
+          <span class="lang-only-es">Servicios Digitales para Negocios de {d.city}</span>
+        </h2>
+        <p>
+          <span class="lang-only-en">Three core capabilities, each tuned to how {d.city} buyers search, scroll, and decide.</span>
+          <span class="lang-only-es">Tres capacidades clave, cada una ajustada a cómo los compradores de {d.city} buscan, navegan y deciden.</span>
+        </p>
+      </div>
+      <div class="grid-3" data-reveal-children>
+        {services.map((svc) => (
+          <a href={svc.href} class="card-solid loc-svc">
+            <div class="svc-head">
+              <span class={`svc-icon ${svc.iconClass}`}><img src={svc.icon} alt=""></span>
+              <h3>
+                <span class="lang-only-en">{svc.title_en}</span>
+                <span class="lang-only-es">{svc.title_es}</span>
+              </h3>
+            </div>
+            <p>
+              <span class="lang-only-en">{svc.body_en}</span>
+              <span class="lang-only-es">{svc.body_es}</span>
+            </p>
+            <span class="more">
+              <span class="lang-only-en">{svc.more_en}</span>
+              <span class="lang-only-es">{svc.more_es}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MAP + LOCAL DETAILS
+       ============================================================ -->
+  <section class="section section--band" data-screen-label="04 Map & Area">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">
+          <span class="lang-only-en">On the ground in {d.city}</span>
+          <span class="lang-only-es">Presentes en {d.city}</span>
+        </div>
+        <h2>
+          <span class="lang-only-en">Serving {d.city} &amp; {d.countyLabel}</span>
+          <span class="lang-only-es">Atendiendo {d.city} y {d.countyLabel}</span>
+        </h2>
+        <p>
+          <span class="lang-only-en">Headquartered in Plantation and active across {d.countyLabel} — here's our local footprint.</span>
+          <span class="lang-only-es">Con sede en Plantation y activos en {d.countyLabel} — esta es nuestra presencia local.</span>
+        </p>
+      </div>
+
+      <div class="sa-mapstats" data-reveal>
+        <!-- Real Google Maps embed -->
+        <div class="map-embed">
+          <iframe
+            src={mapSrc}
+            title={`Map of ${d.city}, FL service area`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+          <div class="map-card">
+            <span class="name">SENAVIA Corp — {d.city}</span>
+            <span class="addr">
+              <span class="lang-only-en">Serving {d.city} &amp; greater {d.countyLabel} · HQ in Plantation, FL</span>
+              <span class="lang-only-es">Atendiendo {d.city} y el área de {d.countyLabel} · Sede en Plantation, FL</span>
+            </span>
+            <span class="rating">
+              <span class="stars" aria-hidden="true" set:html={STAR.repeat(5)}></span>
+              <span class="lang-only-en">5.0 · Google reviews</span>
+              <span class="lang-only-es">5.0 · Reseñas de Google</span>
+            </span>
+            <a class="map-card-link" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent('150 S Pine Island Rd Suite 377, Plantation FL 33324')}`} target="_blank" rel="noopener">
+              <span class="lang-only-en">Get Directions</span>
+              <span class="lang-only-es">Cómo Llegar</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Local details -->
+        <div>
+          <div class="sa-stats">
+            {d.population && (
+              <article class="stat-card">
+                <span class="stat-value">{d.population}</span>
+                <span class="stat-label">
+                  <span class="lang-only-en">Residents in {d.city} and the surrounding area.</span>
+                  <span class="lang-only-es">Residentes en {d.city} y sus alrededores.</span>
+                </span>
+              </article>
+            )}
+            <article class="stat-card">
+              <span class="stat-value">100+</span>
+              <span class="stat-label">
+                <span class="lang-only-en">Websites launched for South Florida businesses.</span>
+                <span class="lang-only-es">Sitios web lanzados para negocios del Sur de Florida.</span>
+              </span>
+            </article>
+            <article class="stat-card">
+              <span class="stat-value">EN / ES</span>
+              <span class="stat-label">
+                <span class="lang-only-en">Fully bilingual team — your market, in both languages.</span>
+                <span class="lang-only-es">Equipo totalmente bilingüe — tu mercado, en ambos idiomas.</span>
+              </span>
+            </article>
+            <article class="stat-card">
+              <span class="stat-value">5.0 ★</span>
+              <span class="stat-label">
+                <span class="lang-only-en">Average rating from verified Google reviews.</span>
+                <span class="lang-only-es">Calificación promedio de reseñas verificadas en Google.</span>
+              </span>
+            </article>
+          </div>
+          {d.nearbyCities.length > 0 && (
+            <div class="sa-hoods">
+              <p class="lbl">
+                <span class="lang-only-en">Nearby cities we serve</span>
+                <span class="lang-only-es">Ciudades Cercanas que Atendemos</span>
+              </p>
+              <div class="chip-row" style="margin-top:0;">
+                {d.nearbyCities.map((c) => (
+                  <span class="chip"><span class="dot"></span>{c}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FINAL CTA
+       ============================================================ -->
+  <section class="cta cta--glow" data-screen-label="05 CTA">
+    <video class="cta-video" autoplay muted loop playsinline preload="metadata"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback"
+           poster="/videos/cta-bg-poster.jpg">
+      <source src="/videos/cta-bg.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <h2>
+        <span class="lang-only-en">Ready to Grow Your {d.city} Business Online?</span>
+        <span class="lang-only-es">¿Listo para Hacer Crecer tu Negocio de {d.city} en Línea?</span>
+      </h2>
+      <p>
+        <span class="lang-only-en">Schedule your free web design &amp; SEO consultation and get a custom strategy to increase traffic, leads, and conversions across {d.countyLabel}.</span>
+        <span class="lang-only-es">Agenda tu consulta gratuita de diseño web y SEO, y obtén una estrategia a medida para aumentar tráfico, clientes potenciales y conversiones en {d.countyLabel}.</span>
+      </p>
+      <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
+    </div>
+  </section>
+
+</main>
+</BaseLayout>

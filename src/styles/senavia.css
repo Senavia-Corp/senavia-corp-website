@@ -53,13 +53,68 @@ body {
   line-height: 1.3;
   color: var(--white);
   background-color: var(--secondary);
-  background-image: url('/images/bg.webp');
-  background-position: 50% 0;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* ---------- Global background system (branded, CSS-only) ----------
+   Viewport-pinned decor layer rendered as the first child of <body>.
+   Replaces the flat fixed bg.webp: deep navy base + large soft brand
+   glows (lime / cyan / violet) for depth, plus an ultra-subtle grid.
+   position:fixed (NOT background-attachment:fixed) — GPU-cheap, no
+   repaint on scroll, behaves correctly on mobile. Heroes & CTAs render
+   their own opaque video + navy base, so they occlude this naturally. */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background-color: var(--secondary);
+  background-image:
+    radial-gradient(58rem 46rem at 8% -6%,   rgba(153,204,51,0.16), transparent 60%),
+    radial-gradient(52rem 52rem at 102% 22%, rgba(51,204,204,0.12), transparent 58%),
+    radial-gradient(60rem 58rem at -8% 96%,  rgba(123,63,228,0.14), transparent 60%),
+    radial-gradient(46rem 40rem at 88% 104%, rgba(153,204,51,0.08), transparent 60%);
+}
+.site-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(120% 120% at 50% 0%, #000 35%, transparent 90%);
+  -webkit-mask-image: radial-gradient(120% 120% at 50% 0%, #000 35%, transparent 90%);
+  opacity: 0.6;
+}
+@media (max-width: 480px) {
+  .site-bg::after { display: none; }   /* save a paint layer on small phones */
+}
+
+/* Section rhythm — opt-in band (subtle lift + hairline top edge).
+   Applied to alternating content sections; safe inside is:global blocks. */
+.section--band {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.020) 0%, rgba(255,255,255,0) 78%);
+}
+.section--band::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+}
+
+/* CTA-zone lime glow — opt-in halo behind primary call-to-action blocks. */
+.cta--glow { position: relative; }
+.cta--glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(52% 62% at 50% 100%, rgba(153,204,51,0.18), transparent 72%);
 }
 img { max-width:100%; display:block; }
 a { color: inherit; text-decoration: none; }
@@ -733,7 +788,7 @@ body.nav-locked { overflow: hidden; }
   border-bottom: var(--border-faint);
 }
 .footer-col h3 {
-  font-size: 1rem; font-weight: 600; text-transform: capitalize;
+  font-size: 1rem; font-weight: 600;
   margin: 0 0 18px; color: var(--white);
   letter-spacing: 0.02em;
 }
@@ -1511,8 +1566,10 @@ html.js .hero-inner > * {
 /* Fix iteración 2 — Hero overlay aligerado para que el video sea visible */
 .hero::before {
   background:
-    radial-gradient(120% 80% at 50% 100%, rgba(10,14,38,0.7) 0%, rgba(10,14,38,0.25) 55%, rgba(10,14,38,0) 100%),
-    linear-gradient(180deg, rgba(10,14,38,0.25) 0%, rgba(10,14,38,0) 40%, rgba(10,14,38,0) 60%, rgba(10,14,38,0.55) 100%) !important;
+    radial-gradient(55% 45% at 88% 4%, rgba(51,204,204,0.10) 0%, transparent 55%),
+    radial-gradient(50% 40% at 6% 96%, rgba(153,204,51,0.08) 0%, transparent 55%),
+    radial-gradient(110% 80% at 50% 42%, rgba(10,14,38,0.55) 0%, rgba(10,14,38,0.30) 55%, rgba(10,14,38,0.12) 100%),
+    linear-gradient(180deg, rgba(10,14,38,0.45) 0%, rgba(10,14,38,0.22) 45%, rgba(10,14,38,0.32) 70%, rgba(10,14,38,0.72) 100%) !important;
 }
 /* Subtle dark vignette around the edges helps text contrast without
    killing the video visibility */

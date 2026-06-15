@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE, NAP } from '@/data/site';
+const title = 'Terms & Conditions — SENAVIA Corp';
+const description = 'The terms and conditions governing the use of the SENAVIA Corp website and our web design, development, and digital marketing services in South Florida.';
+const updated = 'June 2026';
+---
+<BaseLayout title={title} description={description} canonical="/terms" jsonLdType="about" screenLabel="Terms & Conditions" noindex={true}>
+  <style is:global>
+    .legal-hero { padding: 8rem 0 2rem; }
+    .legal-hero .eyebrow { margin-bottom: 12px; }
+    .legal-hero h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -0.02em; }
+    .legal-hero .updated { color: rgba(255,255,255,0.55); font-size: 14px; margin-top: 8px; }
+    .legal-body { padding: 2rem 0 6rem; }
+    .legal-body .container { max-width: 820px; }
+    .legal-body h2 { font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
+    .legal-body h2:first-child { margin-top: 0; }
+    .legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.78); max-width: 70ch; }
+    .legal-body ul { margin: 0.5rem 0 1rem; padding-left: 1.25rem; }
+    .legal-body li { margin-bottom: 0.4rem; }
+    .legal-body a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+  </style>
+
+  <main>
+    <section class="hero is-compact legal-hero section--band" data-screen-label="01 Terms Hero">
+      <div class="container">
+        <div class="eyebrow">
+          <span class="lang-only-en">Legal</span><span class="lang-only-es">Legal</span>
+        </div>
+        <h1>
+          <span class="lang-only-en">Terms &amp; Conditions</span>
+          <span class="lang-only-es">Términos y Condiciones</span>
+        </h1>
+        <p class="updated">
+          <span class="lang-only-en">Last updated: {updated}</span>
+          <span class="lang-only-es">Última actualización: junio de 2026</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="section legal-body" data-screen-label="02 Terms Body">
+      <div class="container">
+        <h2><span class="lang-only-en">1. Acceptance of terms</span><span class="lang-only-es">1. Aceptación de los términos</span></h2>
+        <p>
+          <span class="lang-only-en">By accessing or using the {SITE.name} website, you agree to be bound by these Terms &amp; Conditions. If you do not agree, please do not use this site. These terms apply to all visitors and clients.</span>
+          <span class="lang-only-es">Al acceder o usar el sitio web de {SITE.name}, usted acepta quedar sujeto a estos Términos y Condiciones. Si no está de acuerdo, por favor no utilice este sitio. Estos términos aplican a todos los visitantes y clientes.</span>
+        </p>
+
+        <h2><span class="lang-only-en">2. Our services</span><span class="lang-only-es">2. Nuestros servicios</span></h2>
+        <p>
+          <span class="lang-only-en">{SITE.name} provides web design, web development, and digital marketing services. The scope, deliverables, timeline, and fees for any engagement are defined in a separate written proposal or agreement. Content on this website is for general information only and does not constitute a binding offer.</span>
+          <span class="lang-only-es">{SITE.name} ofrece servicios de diseño web, desarrollo web y marketing digital. El alcance, los entregables, los plazos y los honorarios de cada proyecto se definen en una propuesta o contrato escrito por separado. El contenido de este sitio es solo informativo y no constituye una oferta vinculante.</span>
+        </p>
+
+        <h2><span class="lang-only-en">3. Intellectual property</span><span class="lang-only-es">3. Propiedad intelectual</span></h2>
+        <p>
+          <span class="lang-only-en">All content on this site — including text, graphics, logos, and code — is the property of {SITE.legalName} or its licensors and is protected by applicable intellectual-property laws. You may not reproduce or redistribute it without written permission. Ownership of deliverables produced for clients transfers as specified in the applicable project agreement.</span>
+          <span class="lang-only-es">Todo el contenido de este sitio — incluyendo textos, gráficos, logotipos y código — es propiedad de {SITE.legalName} o de sus licenciantes y está protegido por las leyes de propiedad intelectual aplicables. No puede reproducirlo ni redistribuirlo sin autorización escrita. La titularidad de los entregables creados para clientes se transfiere según lo especificado en el contrato del proyecto correspondiente.</span>
+        </p>
+
+        <h2><span class="lang-only-en">4. Third-party links &amp; tools</span><span class="lang-only-es">4. Enlaces y herramientas de terceros</span></h2>
+        <p>
+          <span class="lang-only-en">This site may link to or embed third-party services (such as scheduling tools and maps). We are not responsible for the content, policies, or availability of third-party services.</span>
+          <span class="lang-only-es">Este sitio puede enlazar o integrar servicios de terceros (como herramientas de agendamiento y mapas). No somos responsables del contenido, las políticas ni la disponibilidad de los servicios de terceros.</span>
+        </p>
+
+        <h2><span class="lang-only-en">5. Limitation of liability</span><span class="lang-only-es">5. Limitación de responsabilidad</span></h2>
+        <p>
+          <span class="lang-only-en">This website is provided "as is" without warranties of any kind. To the fullest extent permitted by law, {SITE.legalName} is not liable for any indirect or consequential damages arising from your use of this site.</span>
+          <span class="lang-only-es">Este sitio web se proporciona "tal cual", sin garantías de ningún tipo. En la máxima medida permitida por la ley, {SITE.legalName} no será responsable de daños indirectos o derivados que surjan del uso de este sitio.</span>
+        </p>
+
+        <h2><span class="lang-only-en">6. Governing law</span><span class="lang-only-es">6. Ley aplicable</span></h2>
+        <p>
+          <span class="lang-only-en">These terms are governed by the laws of the State of Florida, United States, without regard to conflict-of-law principles.</span>
+          <span class="lang-only-es">Estos términos se rigen por las leyes del Estado de Florida, Estados Unidos, sin consideración a los principios de conflicto de leyes.</span>
+        </p>
+
+        <h2><span class="lang-only-en">7. Contact</span><span class="lang-only-es">7. Contacto</span></h2>
+        <p>
+          <span class="lang-only-en">Questions about these terms? Email <a href={`mailto:${NAP.email}`}>{NAP.email}</a> or call <a href={`tel:${NAP.phoneE164}`}>{NAP.phone}</a>. {NAP.streetAddress}, {NAP.addressLocality}, {NAP.addressRegion} {NAP.postalCode}.</span>
+          <span class="lang-only-es">¿Preguntas sobre estos términos? Escriba a <a href={`mailto:${NAP.email}`}>{NAP.email}</a> o llame al <a href={`tel:${NAP.phoneE164}`}>{NAP.phone}</a>. {NAP.streetAddress}, {NAP.addressLocality}, {NAP.addressRegion} {NAP.postalCode}.</span>
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

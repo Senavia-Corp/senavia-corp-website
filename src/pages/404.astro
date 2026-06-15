@@ -13,13 +13,12 @@ const description = "404 — Page not found. The page you're looking for has eit
 >
 <style is:global data-recovered>
 /* ERROR PAGES (404 / 401) */
-  body { display: flex; flex-direction: column; min-height: 100vh; }
   main.err-main {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 1.5rem;
+    padding: 7rem 1.5rem 4.5rem;
+    min-height: 62vh;
     position: relative;
     overflow: hidden;
   }
@@ -129,6 +128,20 @@ const description = "404 — Page not found. The page you're looking for has eit
   }
   .err-actions .btn-secondary svg { width: 14px; height: 14px; }
 
+  /* Quick links */
+  .err-links {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 18px;
+    font-size: 14px;
+  }
+  .err-links-label { color: rgba(255,255,255,0.5); letter-spacing: 0.02em; }
+  .err-links a { color: rgba(255,255,255,0.8); text-decoration: none; border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease; }
+  .err-links a:hover { color: var(--primary, #99cc33); border-bottom-color: rgba(153,204,51,0.5); }
+
   /* Footer mini */
   .err-foot {
     position: relative;
@@ -136,33 +149,37 @@ const description = "404 — Page not found. The page you're looking for has eit
     padding: 1.5rem 1rem;
     text-align: center;
     font-size: 12px;
-    color: rgba(255,255,255,0.4);
-    border-top: 1px solid rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.72);
+    border-top: 1px solid rgba(255,255,255,0.08);
   }
-  .err-foot a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .err-foot a { color: rgba(255,255,255,0.85); text-decoration: none; }
   .err-foot a:hover { color: var(--primary, #99cc33); }
 </style>
 
 <main class="err-main" data-screen-label="01 404 Error">
     <div class="err-card">
       <h1 class="err-code">404</h1>
-      <span class="err-eyebrow">Lost in South Florida</span>
-      <h2 class="err-title">Page not found</h2>
-      <p class="err-desc">The page you're looking for has either moved, been renamed, or never existed. Let's get you somewhere useful.</p>
+      <span class="err-eyebrow"><span class="lang-only-en">Lost in South Florida</span><span class="lang-only-es">Perdido en el Sur de Florida</span></span>
+      <h2 class="err-title"><span class="lang-only-en">Page not found</span><span class="lang-only-es">Página no encontrada</span></h2>
+      <p class="err-desc"><span class="lang-only-en">The page you're looking for has either moved, been renamed, or never existed. Let's get you somewhere useful.</span><span class="lang-only-es">La página que buscas se movió, cambió de nombre o nunca existió. Te llevamos a un lugar útil.</span></p>
       <div class="err-actions">
         <a href="/" class="btn">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
-          Back to Home
+          <span class="lang-only-en">Back to Home</span><span class="lang-only-es">Volver al Inicio</span>
         </a>
         <a href="/contact" class="btn-secondary">
-          Contact Us
+          <span class="lang-only-en">Contact Us</span><span class="lang-only-es">Contáctanos</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
       </div>
+      <nav class="err-links" aria-label="Helpful links">
+        <span class="err-links-label"><span class="lang-only-en">Or jump to:</span><span class="lang-only-es">O ve a:</span></span>
+        <a href="/services"><span class="lang-only-en">Services</span><span class="lang-only-es">Servicios</span></a>
+        <a href="/portfolio"><span class="lang-only-en">Portfolio</span><span class="lang-only-es">Portafolio</span></a>
+        <a href="/pricing"><span class="lang-only-en">Pricing</span><span class="lang-only-es">Precios</span></a>
+        <a href="/blog"><span class="lang-only-en">Blog</span><span class="lang-only-es">Blog</span></a>
+        <a href="/service-areas"><span class="lang-only-en">Service Areas</span><span class="lang-only-es">Áreas de Servicio</span></a>
+      </nav>
     </div>
   </main>
-
-  <div class="err-foot">
-    SENAVIA Corp · Plantation, FL · <a href="tel:+17542623659">(754) 262-3659</a> · <a href="mailto:info@senaviacorp.com">info@senaviacorp.com</a>
-  </div>
 </BaseLayout>
