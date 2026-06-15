@@ -1,0 +1,92 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE, NAP } from '@/data/site';
+const title = 'Privacy Policy — SENAVIA Corp';
+const description = 'How SENAVIA Corp collects, uses, and protects your information when you use our website and book a consultation in South Florida.';
+const updated = 'June 2026';
+---
+<BaseLayout title={title} description={description} canonical="/privacy" jsonLdType="about" screenLabel="Privacy Policy" noindex={true}>
+  <style is:global>
+    .legal-hero { padding: 8rem 0 2rem; }
+    .legal-hero .eyebrow { margin-bottom: 12px; }
+    .legal-hero h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -0.02em; }
+    .legal-hero .updated { color: rgba(255,255,255,0.55); font-size: 14px; margin-top: 8px; }
+    .legal-body { padding: 2rem 0 6rem; }
+    .legal-body .container { max-width: 820px; }
+    .legal-body h2 { font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
+    .legal-body h2:first-child { margin-top: 0; }
+    .legal-body p, .legal-body li { font-size: 16.5px; line-height: 1.7; color: rgba(255,255,255,0.78); max-width: 70ch; }
+    .legal-body ul { margin: 0.5rem 0 1rem; padding-left: 1.25rem; }
+    .legal-body li { margin-bottom: 0.4rem; }
+    .legal-body a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+  </style>
+
+  <main>
+    <section class="hero is-compact legal-hero section--band" data-screen-label="01 Privacy Hero">
+      <div class="container">
+        <div class="eyebrow">
+          <span class="lang-only-en">Legal</span><span class="lang-only-es">Legal</span>
+        </div>
+        <h1>
+          <span class="lang-only-en">Privacy Policy</span>
+          <span class="lang-only-es">Política de Privacidad</span>
+        </h1>
+        <p class="updated">
+          <span class="lang-only-en">Last updated: {updated}</span>
+          <span class="lang-only-es">Última actualización: junio de 2026</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="section legal-body" data-screen-label="02 Privacy Body">
+      <div class="container">
+        <h2><span class="lang-only-en">1. Information we collect</span><span class="lang-only-es">1. Información que recopilamos</span></h2>
+        <p>
+          <span class="lang-only-en">When you contact us or book a consultation, you may provide your name, email, phone number, and details about your project. We also collect anonymous, aggregated analytics about how visitors use this site (such as pages viewed) to improve it.</span>
+          <span class="lang-only-es">Cuando nos contacta o agenda una consulta, puede proporcionar su nombre, correo electrónico, número de teléfono y detalles sobre su proyecto. También recopilamos datos analíticos anónimos y agregados sobre cómo los visitantes usan este sitio (como las páginas vistas) para mejorarlo.</span>
+        </p>
+
+        <h2><span class="lang-only-en">2. How we use your information</span><span class="lang-only-es">2. Cómo usamos su información</span></h2>
+        <ul>
+          <li><span class="lang-only-en">To respond to your inquiry and schedule consultations.</span><span class="lang-only-es">Para responder a su consulta y agendar reuniones.</span></li>
+          <li><span class="lang-only-en">To provide and improve our services and this website.</span><span class="lang-only-es">Para brindar y mejorar nuestros servicios y este sitio web.</span></li>
+          <li><span class="lang-only-en">To send relevant communications you have requested.</span><span class="lang-only-es">Para enviar comunicaciones relevantes que usted haya solicitado.</span></li>
+        </ul>
+        <p>
+          <span class="lang-only-en">We do not sell your personal information.</span>
+          <span class="lang-only-es">No vendemos su información personal.</span>
+        </p>
+
+        <h2><span class="lang-only-en">3. Third-party services</span><span class="lang-only-es">3. Servicios de terceros</span></h2>
+        <p>
+          <span class="lang-only-en">We use Calendly for scheduling, Google Maps for our location, and privacy-friendly analytics. These providers process limited data under their own privacy policies. Booking a call takes you to Calendly's hosted scheduler.</span>
+          <span class="lang-only-es">Usamos Calendly para el agendamiento, Google Maps para nuestra ubicación y analítica respetuosa con la privacidad. Estos proveedores procesan datos limitados bajo sus propias políticas de privacidad. Al agendar una llamada, accede al calendario alojado de Calendly.</span>
+        </p>
+
+        <h2><span class="lang-only-en">4. Cookies</span><span class="lang-only-es">4. Cookies</span></h2>
+        <p>
+          <span class="lang-only-en">This site uses minimal cookies and local storage (for example, to remember your language preference). You can clear or block these in your browser settings.</span>
+          <span class="lang-only-es">Este sitio usa cookies y almacenamiento local mínimos (por ejemplo, para recordar su preferencia de idioma). Puede borrarlos o bloquearlos en la configuración de su navegador.</span>
+        </p>
+
+        <h2><span class="lang-only-en">5. Data security &amp; retention</span><span class="lang-only-es">5. Seguridad y retención de datos</span></h2>
+        <p>
+          <span class="lang-only-en">We take reasonable measures to protect your information and retain it only as long as necessary to provide our services and meet legal obligations.</span>
+          <span class="lang-only-es">Tomamos medidas razonables para proteger su información y la conservamos solo durante el tiempo necesario para prestar nuestros servicios y cumplir con las obligaciones legales.</span>
+        </p>
+
+        <h2><span class="lang-only-en">6. Your rights</span><span class="lang-only-es">6. Sus derechos</span></h2>
+        <p>
+          <span class="lang-only-en">You may request access to, correction of, or deletion of your personal information at any time by contacting us.</span>
+          <span class="lang-only-es">Puede solicitar acceso, corrección o eliminación de su información personal en cualquier momento contactándonos.</span>
+        </p>
+
+        <h2><span class="lang-only-en">7. Contact</span><span class="lang-only-es">7. Contacto</span></h2>
+        <p>
+          <span class="lang-only-en">For any privacy question, email <a href={`mailto:${NAP.email}`}>{NAP.email}</a> or call <a href={`tel:${NAP.phoneE164}`}>{NAP.phone}</a>. {SITE.legalName}, {NAP.streetAddress}, {NAP.addressLocality}, {NAP.addressRegion} {NAP.postalCode}.</span>
+          <span class="lang-only-es">Para cualquier pregunta sobre privacidad, escriba a <a href={`mailto:${NAP.email}`}>{NAP.email}</a> o llame al <a href={`tel:${NAP.phoneE164}`}>{NAP.phone}</a>. {SITE.legalName}, {NAP.streetAddress}, {NAP.addressLocality}, {NAP.addressRegion} {NAP.postalCode}.</span>
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
