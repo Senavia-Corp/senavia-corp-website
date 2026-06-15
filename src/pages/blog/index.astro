@@ -22,6 +22,8 @@ const esByKey = new Map(
 const fmtEn = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 const fmtEs = (d: Date) => d.toLocaleDateString('es-US', { year: 'numeric', month: 'short', day: 'numeric' });
 const catSlug = (c?: string) => (c ?? '').toLowerCase().replace(/\s+/g, '-');
+const catEs = (c: string) =>
+  ({ 'Web Design': 'Diseño Web', Marketing: 'Marketing', SEO: 'SEO', Development: 'Desarrollo', Tips: 'Consejos' } as Record<string, string>)[c] ?? c;
 
 const initials = (name: string) =>
   name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
@@ -488,8 +490,11 @@ const total = cards.length;
             <label class="blog-sort">
               <span class="lang-only-en">Sort by</span>
               <span class="lang-only-es">Ordenar por</span>
-              <select aria-label="Sort articles">
+              <select class="lang-only-en" aria-label="Sort articles">
                 <option>Newest first</option>
+              </select>
+              <select class="lang-only-es" aria-label="Sort articles">
+                <option>Más recientes primero</option>
               </select>
             </label>
           </div>
@@ -507,7 +512,7 @@ const total = cards.length;
                 <div class={`blog-cover ${card.cover}`}></div>
                 <span class="blog-tag" data-cat={catSlug(card.catEn)}>
                   <span class="lang-only-en">{card.catEn}</span>
-                  <span class="lang-only-es">{card.catEs}</span>
+                  <span class="lang-only-es">{catEs(card.catEn)}</span>
                 </span>
                 <h3>
                   <span class="lang-only-en">{card.titleEn}</span>
@@ -575,7 +580,10 @@ const total = cards.length;
                 {categories.map((c) => (
                   <li>
                     <div class="cat-row">
-                      <span>{c.name}</span>
+                      <span>
+                        <span class="lang-only-en">{c.name}</span>
+                        <span class="lang-only-es">{catEs(c.name)}</span>
+                      </span>
                       <span class="count">{c.count}</span>
                     </div>
                   </li>

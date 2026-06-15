@@ -45,6 +45,8 @@ const dateEn = fmtDate(en.data.pubDate, 'en-US');
 const dateEs = fmtDate((es ?? en).data.pubDate, 'es-US');
 
 const catSlug = (en.data.category ?? '').toLowerCase().replace(/\s+/g, '-');
+const catEs = (c: string) =>
+  ({ 'Web Design': 'Diseño Web', Marketing: 'Marketing', SEO: 'SEO', Development: 'Desarrollo', Tips: 'Consejos' } as Record<string, string>)[c] ?? c;
 
 // Author initials for the avatar chip.
 const initials = (en.data.author || 'SENAVIA Editorial')
@@ -321,7 +323,7 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
       {en.data.category && (
         <span class="article-cat" data-cat={catSlug}>
           <span class="lang-only-en">{en.data.category}</span>
-          <span class="lang-only-es">{(es?.data.category) ?? en.data.category}</span>
+          <span class="lang-only-es">{catEs(en.data.category)}</span>
         </span>
       )}
 
