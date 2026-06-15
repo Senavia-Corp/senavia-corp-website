@@ -13,6 +13,10 @@
     <linearGradient id="Degradado_sin_nombre_54-2" data-name="Degradado sin nombre 54" x1="0" y1="14.46" x2="29.42" y2="14.46" xlink:href="#Degradado_sin_nombre_54"></linearGradient>
     <linearGradient id="Degradado_sin_nombre_54-3" data-name="Degradado sin nombre 54" x1="12.93" y1="25.11" x2="41.59" y2="25.11" xlink:href="#Degradado_sin_nombre_54"></linearGradient>
     <linearGradient id="Degradado_sin_nombre_54-4" data-name="Degradado sin nombre 54" x1="12.68" y1="24.98" x2="42.1" y2="24.98" xlink:href="#Degradado_sin_nombre_54"></linearGradient>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-5 { fill: url(#Degradado_sin_nombre_54); }
+      .cls-4 { fill: #ffffff; }
+    </style>
   </defs>
   <g id="Layer_1" data-name="Layer 1">
     <g>
