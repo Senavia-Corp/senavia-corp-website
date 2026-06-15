@@ -337,13 +337,7 @@ function StepPages({ state, set, lang }: { state: State; set: (p: Partial<State>
   );
 }
 
-function StepFeatures({ state, set, lang }: { state: State; set: (p: Partial<State>) => void; lang: Lang }) {
-  const toggle = (id: string) => {
-    const f = state.features.includes(id)
-      ? state.features.filter((x) => x !== id)
-      : [...state.features, id];
-    set({ features: f });
-  };
+function StepFeatures({ state, toggle, lang }: { state: State; toggle: (id: string) => void; lang: Lang }) {
   return (
     <div className="est-card">
       <span className="est-eyebrow">{t(lang, 'Step 3 · Features', 'Paso 3 · Funcionalidades')}</span>
@@ -583,6 +577,18 @@ export default function Estimator() {
     if (!validate()) return;
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   };
+  // Closure-safe advance for tile auto-advance (selecting a tile is itself the
+  // validation for that step). Uses a functional update so it never reads stale
+  // step/state captured by the setTimeout in StepType/StepTimeline.
+  const advance = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
+  // Functional feature toggle — robust against rapid clicks (no stale read).
+  const toggleFeature = (id: string) =>
+    setState((prev) => ({
+      ...prev,
+      features: prev.features.includes(id)
+        ? prev.features.filter((x) => x !== id)
+        : [...prev.features, id],
+    }));
   const back = () => setStep((s) => Math.max(s - 1, 0));
   const jump = (i: number) => setStep(i);
 
@@ -616,10 +622,10 @@ export default function Estimator() {
     <div className="est-wrap" ref={wrapRef}>
       <Progress current={step} total={STEPS.length} steps={STEPS} onJump={jump} lang={lang} />
       <div className="est-stage" key={step}>
-        {step === 0 && <StepType state={state} set={set} next={next} lang={lang} />}
+        {step === 0 && <StepType state={state} set={set} next={advance} lang={lang} />}
         {step === 1 && <StepPages state={state} set={set} lang={lang} />}
-        {step === 2 && <StepFeatures state={state} set={set} lang={lang} />}
-        {step === 3 && <StepTimeline state={state} set={set} next={next} lang={lang} />}
+        {step === 2 && <StepFeatures state={state} toggle={toggleFeature} lang={lang} />}
+        {step === 3 && <StepTimeline state={state} set={set} next={advance} lang={lang} />}
         {step === 4 && <StepContact state={state} set={set} errors={errors} lang={lang} />}
         {step === 5 && breakdown && <StepResult state={state} breakdown={breakdown} onSend={send} sent={sent} lang={lang} />}
       </div>
