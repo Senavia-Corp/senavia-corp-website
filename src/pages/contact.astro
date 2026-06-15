@@ -340,6 +340,17 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
     right: 18px;
     z-index: 4;
   }
+  /* Real Google Maps embed — fills the frame, sits above the decorative
+     grid (::before) but below the Get Directions overlay button. */
+  .ct-map-embed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    z-index: 1;
+    filter: saturate(0.95) contrast(1.02);
+  }
 </style>
 
 <main>
@@ -505,7 +516,7 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
     <!-- ============================================================
          GOOGLE MAP EMBED PLACEHOLDER
          ============================================================ -->
-    <section class="section" data-screen-label="04 Find Us Map">
+    <section class="section section--band" data-screen-label="04 Find Us Map">
       <div class="container">
         <div class="ct-tile-head" data-reveal>
           <div>
@@ -517,16 +528,16 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
         </div>
 
         <div class="ct-map-frame" data-reveal>
-          <span class="ct-map-pin" aria-hidden="true"></span>
-          <span class="ct-map-pin-label">SENAVIA Corp · Plantation HQ</span>
-          <a href="https://share.google/RlW6eE2rUR6qKw484" target="_blank" rel="noopener" class="ct-map-directions btn is-sm">Get Directions</a>
-          <div class="ct-frame-placeholder" style="z-index:1;">
-            <span class="ph-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            </span>
-            <strong>Google Map embed</strong>
-            Embed your &lt;iframe&gt; from Google Maps here to show the live, interactive location.
-          </div>
+          <a href="https://share.google/RlW6eE2rUR6qKw484" target="_blank" rel="noopener" class="ct-map-directions btn is-sm">
+            <span class="lang-only-en">Get Directions</span><span class="lang-only-es">Cómo Llegar</span>
+          </a>
+          <iframe
+            class="ct-map-embed"
+            src="https://www.google.com/maps?q=150+S+Pine+Island+Rd+Suite+377+Plantation+FL+33324&output=embed"
+            title="SENAVIA Corp — 150 S Pine Island Rd, Suite 377, Plantation, FL 33324"
+            width="100%" height="100%" style="border:0; display:block;"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+          ></iframe>
         </div>
       </div>
     </section>
