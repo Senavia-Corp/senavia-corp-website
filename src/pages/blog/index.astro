@@ -1,71 +1,56 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { prettyName } from '@/lib/cms';
 
 const title = "Blog &amp; Tips — SENAVIA Corp · Web, SEO &amp; Marketing Insights";
 const description = "Expert insights on web development, SEO, digital marketing, and automation — from the SENAVIA Corp team in South Florida.";
 
 /* ------------------------------------------------------------------ *
- *  Data — one card per translationKey, driven by the EN entry.
- *  Each language is a separate collection entry; we list the EN ones
- *  and render bilingual chrome via lang-only-* spans.
+ *  Data — real Webflow CMS (English only). Render CMS field values
+ *  as-is; keep page chrome bilingual via lang-only-* spans.
  * ------------------------------------------------------------------ */
-const all = (await getCollection('blog')).filter((e) => !e.data.draft);
-const enEntries = all
-  .filter((e) => e.data.lang === 'en')
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-
-const esByKey = new Map(
-  all.filter((e) => e.data.lang === 'es').map((e) => [e.data.translationKey, e]),
+const posts = (await getCollection('blog')).sort(
+  (a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0),
 );
 
-const fmtEn = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-const fmtEs = (d: Date) => d.toLocaleDateString('es-US', { year: 'numeric', month: 'short', day: 'numeric' });
-const catSlug = (c?: string) => (c ?? '').toLowerCase().replace(/\s+/g, '-');
-const catEs = (c: string) =>
-  ({ 'Web Design': 'Diseño Web', Marketing: 'Marketing', SEO: 'SEO', Development: 'Desarrollo', Tips: 'Consejos' } as Record<string, string>)[c] ?? c;
+const featured = posts.filter((p) => p.data.featured);
+
+// English category label → Spanish label (chrome localization).
+const CAT_ES: Record<string, string> = {
+  'web-design': 'Diseño Web',
+  'web-development': 'Desarrollo Web',
+  'digital-marketing': 'Marketing Digital',
+};
+// English category slug → English display label.
+const CAT_EN: Record<string, string> = {
+  'web-design': 'Web Design',
+  'web-development': 'Web Development',
+  'digital-marketing': 'Digital Marketing',
+};
+const catEn = (slug: string) => CAT_EN[slug] ?? slug;
+const catEs = (slug: string) => CAT_ES[slug] ?? slug;
+
+const fmtEn = (d?: Date) => (d ? d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '');
+const fmtEs = (d?: Date) => (d ? d.toLocaleDateString('es-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '');
 
 const initials = (name: string) =>
   name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 const avatarPalette = ['av1', 'av2', 'av3', 'av4'];
-const coverPalette = ['bg-1', 'bg-2', 'bg-3', 'bg-4', 'bg-5', 'bg-6', 'bg-7', 'bg-8'];
+const avatarFor = (slug: string) => avatarPalette[slug.length % avatarPalette.length];
 
-const cards = enEntries.map((en, i) => {
-  const es = esByKey.get(en.data.translationKey);
-  return {
-    href: `/blog/${en.id}`,
-    cover: en.data.coverClass ?? coverPalette[i % coverPalette.length],
-    catEn: en.data.category ?? 'Tips',
-    catEs: es?.data.category ?? en.data.category ?? 'Tips',
-    titleEn: en.data.title,
-    titleEs: es?.data.title ?? en.data.title,
-    descEn: en.data.description,
-    descEs: es?.data.description ?? en.data.description,
-    authorEn: en.data.author,
-    authorEs: es?.data.author ?? en.data.author,
-    avatar: avatarPalette[i % avatarPalette.length],
-    initials: initials(en.data.author),
-    dateEn: fmtEn(en.data.pubDate),
-    dateEs: fmtEs((es ?? en).data.pubDate),
-    readEn: en.data.readingTime,
-    readEs: es?.data.readingTime ?? en.data.readingTime,
-  };
-});
-
-// Featured = real featured EN entries, newest first.
-const featured = enEntries.filter((e) => e.data.featured);
-
-// Real category counts (EN entries only), keep only non-zero, sorted by count.
+// Real category counts, ordered by count desc.
 const catCounts = new Map<string, number>();
-for (const e of enEntries) {
-  const c = e.data.category ?? 'Tips';
+for (const p of posts) {
+  const c = p.data.category;
+  if (!c) continue;
   catCounts.set(c, (catCounts.get(c) ?? 0) + 1);
 }
 const categories = [...catCounts.entries()]
   .sort((a, b) => b[1] - a[1])
-  .map(([name, count]) => ({ name, count }));
+  .map(([slug, count]) => ({ slug, count }));
 
-const total = cards.length;
+const total = posts.length;
 ---
 <BaseLayout
   title={title}
@@ -74,7 +59,7 @@ const total = cards.length;
   jsonLdType="blog"
   screenLabel="Blog"
 >
-<style is:global data-recovered>
+<style is:global data-blog-index>
 /* ============================================================
      BLOG PAGE
      ============================================================ */
@@ -89,9 +74,65 @@ const total = cards.length;
   @media (max-width: 1080px) {
     .blog-wrap { grid-template-columns: 1fr; gap: 48px; }
   }
-  /* Allow the main column to shrink below its content's min-content width
-     (a plain 1fr track has an implicit auto minimum). Prevents mobile overflow. */
   .blog-main { min-width: 0; }
+
+  /* ---------- FEATURED ROW ---------- */
+  .featured-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .featured-head .side-eyebrow { margin: 0; }
+  .featured-head h2 { margin: 0; font-size: 1.4rem; letter-spacing: -0.01em; }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 680px) { .featured-grid { grid-template-columns: 1fr; gap: 22px; } }
+
+  .featured-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 280px;
+    padding: 1.5rem;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+    transition: transform .25s cubic-bezier(.2,.6,.2,1), box-shadow .25s ease;
+  }
+  .featured-card:hover { transform: translateY(-3px); box-shadow: 0 20px 46px rgba(0,0,0,0.4), 0 0 0 1px rgba(153,204,51,0.32); }
+  .featured-card img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  .featured-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(10,14,38,0.15) 0%, rgba(10,14,38,0.55) 50%, rgba(10,14,38,0.92) 100%);
+  }
+  .featured-card .blog-tag { margin-bottom: 12px; }
+  .featured-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .featured-card:hover h3 { color: var(--primary, #99cc33); }
+  .featured-card .blog-meta { color: rgba(255,255,255,0.7); }
 
   /* MAIN — blog grid */
   .blog-toolbar {
@@ -112,27 +153,6 @@ const total = cards.length;
     text-transform: uppercase;
   }
   .blog-count .accent { color: var(--primary, #99cc33); font-weight: 600; }
-  .blog-sort {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-  }
-  .blog-sort select {
-    appearance: none;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #fff;
-    font: inherit;
-    font-size: 13px;
-    padding: 7px 32px 7px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-  }
 
   .blog-grid {
     display: grid;
@@ -157,28 +177,24 @@ const total = cards.length;
     position: relative;
     border: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 12px 28px rgba(0,0,0,0.28);
-    background-size: cover;
-    background-position: center;
+    background: rgba(13,18,53,0.55);
     transition: box-shadow .25s ease, border-color .25s ease;
   }
   .blog-card:hover .blog-cover {
     box-shadow: 0 18px 40px rgba(0,0,0,0.36), 0 0 0 1px rgba(153,204,51,0.32);
+  }
+  .blog-card .blog-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .blog-card .blog-cover::after {
     content: '';
     position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(10,14,38,0.0) 60%, rgba(10,14,38,0.5) 100%);
   }
-  .blog-cover.bg-1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
-  .blog-cover.bg-2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
-  .blog-cover.bg-3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
-  .blog-cover.bg-4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
-  .blog-cover.bg-5 { background: linear-gradient(135deg, #1E5A82, #99CC33); }
-  .blog-cover.bg-6 { background: linear-gradient(135deg, #4A3F8E, #33CCCC); }
-  .blog-cover.bg-7 { background: linear-gradient(135deg, #B83A6B, #F0A050); }
-  .blog-cover.bg-8 { background: linear-gradient(135deg, #2A6FBD, #7B3FE4); }
 
-  .blog-card .blog-tag {
+  .blog-tag {
     align-self: flex-start;
     font-size: 11px;
     font-weight: 600;
@@ -190,10 +206,9 @@ const total = cards.length;
     color: var(--primary, #99cc33);
     border: 1px solid rgba(153,204,51,0.28);
   }
-  .blog-tag[data-cat="seo"]         { background: rgba(45,125,184,0.16); color: #79c1ee; border-color: rgba(45,125,184,0.34); }
-  .blog-tag[data-cat="marketing"]   { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
-  .blog-tag[data-cat="development"] { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
-  .blog-tag[data-cat="tips"]        { background: rgba(209,79,140,0.14); color: #f48cb6; border-color: rgba(209,79,140,0.32); }
+  .blog-tag[data-cat="web-design"]        { background: rgba(153,204,51,0.14); color: #b6e06a; border-color: rgba(153,204,51,0.3); }
+  .blog-tag[data-cat="web-development"]   { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
+  .blog-tag[data-cat="digital-marketing"] { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
 
   .blog-card h3 {
     margin: 0;
@@ -216,7 +231,7 @@ const total = cards.length;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .blog-card .blog-meta {
+  .blog-meta {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -224,7 +239,7 @@ const total = cards.length;
     font-size: 12px;
     color: rgba(255,255,255,0.5);
   }
-  .blog-card .blog-author {
+  .blog-meta .blog-author {
     width: 26px; height: 26px;
     border-radius: 999px;
     display: inline-flex;
@@ -234,12 +249,12 @@ const total = cards.length;
     font-weight: 600;
     color: #fff;
   }
-  .blog-card .blog-author.av1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
-  .blog-card .blog-author.av2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
-  .blog-card .blog-author.av3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
-  .blog-card .blog-author.av4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
-  .blog-card .blog-author-name { color: rgba(255,255,255,0.78); font-weight: 500; }
-  .blog-card .blog-meta .sep { color: rgba(255,255,255,0.25); }
+  .blog-author.av1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
+  .blog-author.av2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
+  .blog-author.av3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
+  .blog-author.av4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
+  .blog-meta .blog-author-name { color: rgba(255,255,255,0.78); font-weight: 500; }
+  .blog-meta .sep { color: rgba(255,255,255,0.25); }
 
   /* Empty state */
   .blog-empty {
@@ -276,7 +291,7 @@ const total = cards.length;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-  .side-card .side-eyebrow {
+  .side-eyebrow {
     display: block;
     font-size: 11px;
     font-weight: 600;
@@ -380,7 +395,7 @@ const total = cards.length;
     border-radius: 999px;
   }
 
-  /* Featured articles */
+  /* Featured articles (sidebar) */
   .feat-list {
     list-style: none;
     margin: 0;
@@ -402,23 +417,14 @@ const total = cards.length;
   .feat-item .feat-thumb {
     width: 56px; height: 56px;
     border-radius: 10px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
     overflow: hidden;
+    position: relative;
+    background: rgba(255,255,255,0.06);
   }
-  .feat-thumb.bg-1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
-  .feat-thumb.bg-2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
-  .feat-thumb.bg-3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
-  .feat-thumb.bg-4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
-  .feat-thumb.bg-5 { background: linear-gradient(135deg, #1E5A82, #99CC33); }
-  .feat-thumb.bg-6 { background: linear-gradient(135deg, #4A3F8E, #33CCCC); }
-  .feat-thumb.bg-7 { background: linear-gradient(135deg, #B83A6B, #F0A050); }
-  .feat-thumb.bg-8 { background: linear-gradient(135deg, #2A6FBD, #7B3FE4); }
-  .feat-item .feat-thumb::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: rgba(10,14,38,0.15);
+  .feat-item .feat-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .feat-item .feat-body {
     min-width: 0;
@@ -482,59 +488,87 @@ const total = cards.length;
 
         <!-- MAIN -->
         <div class="blog-main">
+
+          {featured.length > 0 && (
+            <div class="blog-featured">
+              <div class="featured-head" data-reveal>
+                <span class="side-eyebrow">
+                  <span class="lang-only-en">Featured</span>
+                  <span class="lang-only-es">Destacados</span>
+                </span>
+                <h2>
+                  <span class="lang-only-en">Editor's Picks</span>
+                  <span class="lang-only-es">Selección del Editor</span>
+                </h2>
+              </div>
+              <div class="featured-grid" data-reveal-children>
+                {featured.map((post) => (
+                  <a href={`/blog/${post.id}`} class="featured-card">
+                    <img
+                      src={post.data.mainImage || post.data.thumbnail}
+                      alt={post.data.altImage}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span class="blog-tag" data-cat={post.data.category}>
+                      <span class="lang-only-en">{catEn(post.data.category)}</span>
+                      <span class="lang-only-es">{catEs(post.data.category)}</span>
+                    </span>
+                    <h3>{post.data.title}</h3>
+                    <div class="blog-meta">
+                      <span class={`blog-author ${avatarFor(post.data.author)}`} aria-hidden="true">{initials(prettyName(post.data.author))}</span>
+                      <span class="blog-author-name">{prettyName(post.data.author)}</span>
+                      <span class="sep">·</span>
+                      <span class="lang-only-en">{fmtEn(post.data.pubDate)}</span>
+                      <span class="lang-only-es">{fmtEs(post.data.pubDate)}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div class="blog-toolbar" data-reveal>
             <span class="blog-count">
               <span class="lang-only-en">Showing <span class="accent">{total}</span> {total === 1 ? 'article' : 'articles'}</span>
               <span class="lang-only-es">Mostrando <span class="accent">{total}</span> {total === 1 ? 'artículo' : 'artículos'}</span>
             </span>
-            <label class="blog-sort">
-              <span class="lang-only-en">Sort by</span>
-              <span class="lang-only-es">Ordenar por</span>
-              <select class="lang-only-en" aria-label="Sort articles">
-                <option>Newest first</option>
-              </select>
-              <select class="lang-only-es" aria-label="Sort articles">
-                <option>Más recientes primero</option>
-              </select>
-            </label>
+            <span class="blog-count">
+              <span class="lang-only-en">Newest first</span>
+              <span class="lang-only-es">Más recientes primero</span>
+            </span>
           </div>
 
           <div class="blog-grid" data-reveal-children>
-            {cards.length === 0 && (
+            {posts.length === 0 && (
               <div class="blog-empty">
                 <span class="lang-only-en">No articles published yet. Check back soon.</span>
                 <span class="lang-only-es">Aún no hay artículos publicados. Vuelve pronto.</span>
               </div>
             )}
 
-            {cards.map((card) => (
-              <a href={card.href} class="blog-card">
-                <div class={`blog-cover ${card.cover}`}></div>
-                <span class="blog-tag" data-cat={catSlug(card.catEn)}>
-                  <span class="lang-only-en">{card.catEn}</span>
-                  <span class="lang-only-es">{catEs(card.catEn)}</span>
+            {posts.map((post) => (
+              <a href={`/blog/${post.id}`} class="blog-card">
+                <div class="blog-cover">
+                  <img
+                    src={post.data.thumbnail || post.data.mainImage}
+                    alt={post.data.altImage}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <span class="blog-tag" data-cat={post.data.category}>
+                  <span class="lang-only-en">{catEn(post.data.category)}</span>
+                  <span class="lang-only-es">{catEs(post.data.category)}</span>
                 </span>
-                <h3>
-                  <span class="lang-only-en">{card.titleEn}</span>
-                  <span class="lang-only-es">{card.titleEs}</span>
-                </h3>
-                <p class="blog-excerpt">
-                  <span class="lang-only-en">{card.descEn}</span>
-                  <span class="lang-only-es">{card.descEs}</span>
-                </p>
+                <h3>{post.data.title}</h3>
+                <p class="blog-excerpt">{post.data.summary}</p>
                 <div class="blog-meta">
-                  <span class={`blog-author ${card.avatar}`} aria-hidden="true">{card.initials}</span>
-                  <span class="blog-author-name">{card.authorEn}</span>
+                  <span class={`blog-author ${avatarFor(post.data.author)}`} aria-hidden="true">{initials(prettyName(post.data.author))}</span>
+                  <span class="blog-author-name">{prettyName(post.data.author)}</span>
                   <span class="sep">·</span>
-                  <span class="lang-only-en">{card.dateEn}</span>
-                  <span class="lang-only-es">{card.dateEs}</span>
-                  {card.readEn && (
-                    <>
-                      <span class="sep">·</span>
-                      <span class="lang-only-en">{card.readEn}</span>
-                      <span class="lang-only-es">{card.readEs}</span>
-                    </>
-                  )}
+                  <span class="lang-only-en">{fmtEn(post.data.pubDate)}</span>
+                  <span class="lang-only-es">{fmtEs(post.data.pubDate)}</span>
                 </div>
               </a>
             ))}
@@ -581,8 +615,8 @@ const total = cards.length;
                   <li>
                     <div class="cat-row">
                       <span>
-                        <span class="lang-only-en">{c.name}</span>
-                        <span class="lang-only-es">{catEs(c.name)}</span>
+                        <span class="lang-only-en">{catEn(c.slug)}</span>
+                        <span class="lang-only-es">{catEs(c.slug)}</span>
                       </span>
                       <span class="count">{c.count}</span>
                     </div>
@@ -599,15 +633,19 @@ const total = cards.length;
                 <span class="lang-only-es">Artículos Destacados</span>
               </h3>
               <ul class="feat-list">
-                {featured.map((post, i) => (
+                {featured.map((post) => (
                   <li>
                     <a href={`/blog/${post.id}`} class="feat-item">
-                      <span class={`feat-thumb ${post.data.coverClass ?? coverPalette[i % coverPalette.length]}`}></span>
+                      <span class="feat-thumb">
+                        <img
+                          src={post.data.thumbnail || post.data.mainImage}
+                          alt={post.data.altImage}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
                       <span class="feat-body">
-                        <span class="feat-title">
-                          <span class="lang-only-en">{post.data.title}</span>
-                          <span class="lang-only-es">{esByKey.get(post.data.translationKey)?.data.title ?? post.data.title}</span>
-                        </span>
+                        <span class="feat-title">{post.data.title}</span>
                         <span class="feat-date">
                           <span class="lang-only-en">{fmtEn(post.data.pubDate)}</span>
                           <span class="lang-only-es">{fmtEs(post.data.pubDate)}</span>
@@ -650,3 +688,5 @@ const total = cards.length;
 
 </main>
 </BaseLayout>
+</content>
+</invoke>

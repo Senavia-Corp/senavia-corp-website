@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const all = (await getCollection('serviceAreas'))
-    .filter((e) => !e.data.draft)
     .sort((a, b) => a.data.order - b.data.order);
 
   return all.map((entry) => ({
@@ -16,52 +15,35 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const d = entry.data;
 
-// Real Google Maps embed centered on the city + ", FL"
-const mapQuery = encodeURIComponent(`${d.city}, FL`);
-const mapSrc = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
+// Real Google Maps embed centered on the city (city already includes ", FL").
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`${d.city}, FL`)}&output=embed`;
+
+// Section registry — render only the heading/paragraph pairs that exist.
+// Paragraphs go through set:html (CMS values may carry inline HTML).
+const sections = [
+  { key: 'intro',     heading: d.headingIntro,     paragraph: d.paragraphIntro },
+  { key: 'services',  heading: d.headingServices,  paragraph: d.paragraphServices },
+  { key: 'portfolio', heading: d.headingPortfolio, paragraph: d.paragraphPortfolio },
+  { key: 'process',   heading: d.headingProcess,   paragraph: d.paragraphProcess },
+  { key: 'reviews',   heading: d.headingReviews,   paragraph: d.paragraphReviews },
+  { key: 'blog',      heading: d.headingBlog,      paragraph: d.paragraphBlog },
+].filter((s) => (s.heading && s.heading.trim()) || (s.paragraph && s.paragraph.trim()));
+
+// Bilingual eyebrow chrome per section (page chrome, NOT CMS data).
+const eyebrows: Record<string, { en: string; es: string }> = {
+  intro:     { en: 'Local web design', es: 'Diseño web local' },
+  services:  { en: 'What we do',        es: 'Lo que hacemos' },
+  portfolio: { en: 'Our work',          es: 'Nuestro trabajo' },
+  process:   { en: 'How we work',       es: 'Cómo trabajamos' },
+  reviews:   { en: 'Client reviews',    es: 'Reseñas de clientes' },
+  blog:      { en: 'Insights',          es: 'Recursos' },
+};
 
 const STAR = `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
-
-// Local services grid — bilingual, links to the service detail pages
-const services = [
-  {
-    href: '/services/web-design',
-    icon: '/images/Web-Design-Icon.svg',
-    iconClass: '',
-    title_en: 'Web Design',
-    title_es: 'Diseño Web',
-    body_en: `Conversion-focused websites built for how ${d.city} buyers browse and decide — bold, mobile-first, and bilingual-ready, with brand polish that lands on first scroll.`,
-    body_es: `Sitios web enfocados en la conversión, diseñados para cómo navegan y deciden los clientes de ${d.city} — audaces, mobile-first y listos en dos idiomas, con un acabado de marca que impacta al primer scroll.`,
-    more_en: 'Explore Web Design',
-    more_es: 'Ver Diseño Web',
-  },
-  {
-    href: '/services/digital-marketing',
-    icon: '/images/Marketing-Icon.svg',
-    iconClass: 'is-cyan',
-    title_en: 'Digital Marketing',
-    title_es: 'Marketing Digital',
-    body_en: `Local SEO and paid campaigns engineered for ${d.city} and ${d.countyLabel}. Geo-targeted content, Google Business Profile optimization, and EN/ES ad copy that reaches buyers where they search.`,
-    body_es: `SEO local y campañas pagas diseñadas para ${d.city} y ${d.countyLabel}. Contenido geolocalizado, optimización del Google Business Profile y textos de anuncios en EN/ES que llegan a los compradores donde buscan.`,
-    more_en: 'Explore Marketing',
-    more_es: 'Ver Marketing',
-  },
-  {
-    href: '/services/web-development',
-    icon: '/images/Development-Icon.svg',
-    iconClass: 'is-green',
-    title_en: 'Web Development',
-    title_es: 'Desarrollo Web',
-    body_en: `Fast, scalable builds on Webflow, Shopify, and custom stacks. From storefronts to booking systems and CRM integrations — engineered for Core Web Vitals and ready to grow with your ${d.city} business.`,
-    body_es: `Desarrollos rápidos y escalables en Webflow, Shopify y stacks a medida. Desde tiendas en línea hasta sistemas de reservas e integraciones de CRM — optimizados para Core Web Vitals y listos para crecer con tu negocio en ${d.city}.`,
-    more_en: 'Explore Development',
-    more_es: 'Ver Desarrollo',
-  },
-];
 ---
 <BaseLayout
   title={d.seoTitle}
-  description={d.description}
+  description={d.seoDescription}
   canonical={`/service-areas/${entry.id}`}
   jsonLdType="localbusiness"
   screenLabel={`Service Area · ${d.city}`}
@@ -86,41 +68,51 @@ const services = [
   .sa-crumb .sep { opacity: .45; }
   .sa-crumb .here { color: var(--primary); }
 
-  /* --- Local services grid --- */
-  .loc-svc {
-    display: flex; flex-direction: column; gap: 14px;
-    text-decoration: none; color: inherit;
-    height: 100%;
-  }
-  .loc-svc .svc-head { display: flex; align-items: center; gap: 14px; }
-  .loc-svc h3 {
-    margin: 0;
-    font-size: 1.25rem; font-weight: 500;
-    letter-spacing: -0.005em;
-  }
-  .loc-svc p {
-    margin: 0;
-    font-size: 14.5px;
-    color: rgba(255,255,255,0.72);
-    line-height: 1.55;
-  }
-  .loc-svc .more {
+  /* "Serving {county}" pill */
+  .sa-pill {
     display: inline-flex; align-items: center; gap: 8px;
-    margin-top: auto; padding-top: 6px;
-    color: var(--primary); font-size: 14px; font-weight: 600;
-    transition: color .2s ease;
+    margin-top: 22px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--primary, #99cc33);
+    background: rgba(153,204,51,0.12);
+    border: 1px solid rgba(153,204,51,0.34);
   }
-  .loc-svc .more::after {
-    content:''; width: 15px; height: 11px;
-    background-color: currentColor;
-    -webkit-mask: url('/images/Arrow.svg') center/contain no-repeat;
-            mask: url('/images/Arrow.svg') center/contain no-repeat;
-    transition: transform .2s ease;
+  .sa-pill .dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--primary, #99cc33);
+    box-shadow: 0 0 10px rgba(153,204,51,0.8);
   }
-  .loc-svc:hover .more::after { transform: translateX(3px); }
-  .loc-svc:hover .more { color: var(--white); }
 
-  /* --- Map + stats block --- */
+  /* CMS rich-text / paragraph rendering */
+  .cms-prose {
+    color: rgba(255,255,255,0.74);
+    line-height: 1.7;
+    font-size: 1.0625rem;
+    max-width: 760px;
+  }
+  .cms-prose > :first-child { margin-top: 0; }
+  .cms-prose > :last-child { margin-bottom: 0; }
+  .cms-prose p { margin: 0 0 1rem; }
+  .cms-prose a { color: var(--primary, #99cc33); text-decoration: underline; text-underline-offset: 2px; }
+  .cms-prose ul, .cms-prose ol { margin: 0 0 1rem 1.1rem; padding: 0; }
+  .cms-prose li { margin: 0 0 0.45rem; }
+  .cms-prose h2, .cms-prose h3, .cms-prose h4 { color: #fff; margin: 1.5rem 0 0.6rem; }
+  .cms-prose strong { color: #fff; }
+
+  /* numbered section index marker */
+  .sa-sec-num {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-bottom: 8px;
+  }
+
+  /* --- Map block --- */
   .sa-mapstats {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -160,7 +152,6 @@ const services = [
     display: flex; flex-direction: column; gap: 4px;
     pointer-events: none;
   }
-  .map-card .map-card-link { pointer-events: auto; }
   .map-card .name { font-size: 15px; font-weight: 600; color: #fff; }
   .map-card .addr { font-size: 13px; color: rgba(255,255,255,0.66); line-height: 1.4; }
   .map-card .rating {
@@ -170,23 +161,17 @@ const services = [
   .map-card .rating .stars { display: inline-flex; gap: 1px; color: #FFC83D; }
   .map-card .rating .stars svg { width: 13px; height: 13px; }
   .map-card .map-card-link {
+    pointer-events: auto;
     margin-top: 10px;
     font-size: 13px; font-weight: 600;
     color: var(--primary, #99cc33);
     display: inline-flex; align-items: center; gap: 6px;
   }
 
+  /* map-side trust stats */
   .sa-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   @media (max-width: 540px) { .sa-stats { grid-template-columns: 1fr; } }
   .sa-stats .stat-card { padding: 1.75rem 1.5rem; }
-
-  /* neighborhood chips under the stats */
-  .sa-hoods { margin-top: 1.5rem; }
-  .sa-hoods .lbl {
-    font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: rgba(255,255,255,0.5);
-    margin: 0 0 12px;
-  }
 </style>
 
 <main>
@@ -208,149 +193,49 @@ const services = [
           <span class="lang-only-es">Áreas de Servicio</span>
         </a>
         <span class="sep">/</span>
-        <span>{d.countyLabel}</span>
+        <span>{d.county}</span>
         <span class="sep">/</span>
         <span class="here">{d.city}</span>
       </div>
-      <h1>
-        <span class="lang-only-en">Web Design Services in {d.city}, FL</span>
-        <span class="lang-only-es">Servicios de Diseño Web en {d.city}, FL</span>
-      </h1>
-      <p>
-        <span class="lang-only-en">Expert web design and digital marketing for businesses in {d.city} — Google Partner-certified and fully bilingual.</span>
-        <span class="lang-only-es">Diseño web y marketing digital de expertos para negocios en {d.city} — certificados por Google Partner y totalmente bilingües.</span>
-      </p>
-      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
-        <span class="lang-only-en">Book a Free Call</span>
-        <span class="lang-only-es">Agenda tu Llamada Gratis</span>
-      </a>
-      <div class="metric-strip" aria-label="Key metrics">
-        {d.population && (
-          <>
-            <div class="metric">
-              <span class="metric-value">{d.population}</span>
-              <span class="metric-label">
-                <span class="lang-only-en">{d.city} residents</span>
-                <span class="lang-only-es">Residentes en {d.city}</span>
-              </span>
-            </div>
-            <span class="divider"></span>
-          </>
-        )}
-        <div class="metric">
-          <span class="metric-value">100+</span>
-          <span class="metric-label">
-            <span class="lang-only-en">Sites launched</span>
-            <span class="lang-only-es">Sitios lanzados</span>
-          </span>
-        </div>
-        <span class="divider"></span>
-        <div class="metric">
-          <span class="metric-value">5.0 ★</span>
-          <span class="metric-label">
-            <span class="lang-only-en">Google reviews</span>
-            <span class="lang-only-es">Reseñas de Google</span>
-          </span>
-        </div>
+      <h1>{d.titlePage}</h1>
+      {d.summaryPage && <p>{d.summaryPage}</p>}
+      <span class="sa-pill">
+        <span class="dot"></span>
+        <span class="lang-only-en">Serving {d.county}</span>
+        <span class="lang-only-es">Atendiendo {d.county}</span>
+      </span>
+      <div style="margin-top: 28px;">
+        <a href="#" class="btn cta--glow" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
+          <span class="lang-only-en">Book a Free Call</span>
+          <span class="lang-only-es">Agenda tu Llamada Gratis</span>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-       WHY BUSINESSES CHOOSE SENAVIA
+       CONTENT SECTIONS — one per non-empty heading/paragraph pair
        ============================================================ -->
-  <section class="section section--band" data-screen-label="02 Why Local">
-    <div class="container">
-      <div class="split" data-reveal>
-        <div class="split-copy">
+  {sections.map((s, i) => (
+    <section class={`section${i % 2 === 0 ? ' section--band' : ''}`} data-screen-label={`Section · ${s.key}`}>
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="sa-sec-num">{String(i + 1).padStart(2, '0')}</span>
           <div class="eyebrow">
-            <span class="lang-only-en">Why {d.city} chooses us</span>
-            <span class="lang-only-es">Por qué {d.city} nos elige</span>
+            <span class="lang-only-en">{eyebrows[s.key].en}</span>
+            <span class="lang-only-es">{eyebrows[s.key].es}</span>
           </div>
-          <h2>
-            <span class="lang-only-en">Why {d.city} Businesses Choose SENAVIA</span>
-            <span class="lang-only-es">Por Qué los Negocios de {d.city} Eligen a SENAVIA</span>
-          </h2>
-          <p>
-            <span class="lang-only-en">{d.intro_en}</span>
-            <span class="lang-only-es">{d.intro_es}</span>
-          </p>
-          <div class="chip-row">
-            <span class="chip"><span class="dot"></span>Google Partner Certified</span>
-            <span class="chip"><span class="dot"></span>
-              <span class="lang-only-en">Bilingual EN / ES</span>
-              <span class="lang-only-es">Bilingüe EN / ES</span>
-            </span>
-            <span class="chip"><span class="dot"></span>
-              <span class="lang-only-en">Local {d.countyLabel} SEO</span>
-              <span class="lang-only-es">SEO Local de {d.countyLabel}</span>
-            </span>
-            <span class="chip"><span class="dot"></span>Webflow &amp; Shopify</span>
-          </div>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
-            <span class="lang-only-en">Book a Free Call</span>
-            <span class="lang-only-es">Agenda tu Llamada Gratis</span>
-          </a>
+          {s.heading && <h2>{s.heading}</h2>}
         </div>
-        <div class="split-media">
-          <div style={`aspect-ratio: 5 / 4; border-radius: 18px; background: ${d.heroGradient}; position: relative; overflow: hidden; box-shadow: var(--shadow-soft);`}>
-            <span class="badge-overlay">
-              <span class="lang-only-en">Serving {d.countyLabel}</span>
-              <span class="lang-only-es">Atendiendo {d.countyLabel}</span>
-            </span>
-          </div>
-        </div>
+        {s.paragraph && <div class="cms-prose" data-reveal set:html={s.paragraph} />}
       </div>
-    </div>
-  </section>
+    </section>
+  ))}
 
   <!-- ============================================================
-       LOCAL SERVICES GRID
+       MAP + LOCAL TRUST
        ============================================================ -->
-  <section class="section" data-screen-label="03 Local Services">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <div class="eyebrow">
-          <span class="lang-only-en">What we do in {d.city}</span>
-          <span class="lang-only-es">Qué hacemos en {d.city}</span>
-        </div>
-        <h2>
-          <span class="lang-only-en">Digital Services Built for {d.city} Businesses</span>
-          <span class="lang-only-es">Servicios Digitales para Negocios de {d.city}</span>
-        </h2>
-        <p>
-          <span class="lang-only-en">Three core capabilities, each tuned to how {d.city} buyers search, scroll, and decide.</span>
-          <span class="lang-only-es">Tres capacidades clave, cada una ajustada a cómo los compradores de {d.city} buscan, navegan y deciden.</span>
-        </p>
-      </div>
-      <div class="grid-3" data-reveal-children>
-        {services.map((svc) => (
-          <a href={svc.href} class="card-solid loc-svc">
-            <div class="svc-head">
-              <span class={`svc-icon ${svc.iconClass}`}><img src={svc.icon} alt=""></span>
-              <h3>
-                <span class="lang-only-en">{svc.title_en}</span>
-                <span class="lang-only-es">{svc.title_es}</span>
-              </h3>
-            </div>
-            <p>
-              <span class="lang-only-en">{svc.body_en}</span>
-              <span class="lang-only-es">{svc.body_es}</span>
-            </p>
-            <span class="more">
-              <span class="lang-only-en">{svc.more_en}</span>
-              <span class="lang-only-es">{svc.more_es}</span>
-            </span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       MAP + LOCAL DETAILS
-       ============================================================ -->
-  <section class="section section--band" data-screen-label="04 Map & Area">
+  <section class={`section${sections.length % 2 === 0 ? ' section--band' : ''}`} data-screen-label="Map & Area">
     <div class="container">
       <div class="section-head" data-reveal>
         <div class="eyebrow">
@@ -358,12 +243,12 @@ const services = [
           <span class="lang-only-es">Presentes en {d.city}</span>
         </div>
         <h2>
-          <span class="lang-only-en">Serving {d.city} &amp; {d.countyLabel}</span>
-          <span class="lang-only-es">Atendiendo {d.city} y {d.countyLabel}</span>
+          <span class="lang-only-en">Serving {d.city} &amp; {d.county} County</span>
+          <span class="lang-only-es">Atendiendo {d.city} y el Condado de {d.county}</span>
         </h2>
         <p>
-          <span class="lang-only-en">Headquartered in Plantation and active across {d.countyLabel} — here's our local footprint.</span>
-          <span class="lang-only-es">Con sede en Plantation y activos en {d.countyLabel} — esta es nuestra presencia local.</span>
+          <span class="lang-only-en">Headquartered in Plantation and active across {d.county} — here's our local footprint.</span>
+          <span class="lang-only-es">Con sede en Plantation y activos en {d.county} — esta es nuestra presencia local.</span>
         </p>
       </div>
 
@@ -379,8 +264,8 @@ const services = [
           <div class="map-card">
             <span class="name">SENAVIA Corp — {d.city}</span>
             <span class="addr">
-              <span class="lang-only-en">Serving {d.city} &amp; greater {d.countyLabel} · HQ in Plantation, FL</span>
-              <span class="lang-only-es">Atendiendo {d.city} y el área de {d.countyLabel} · Sede en Plantation, FL</span>
+              <span class="lang-only-en">Serving {d.city} &amp; greater {d.county} · HQ in Plantation, FL</span>
+              <span class="lang-only-es">Atendiendo {d.city} y el área de {d.county} · Sede en Plantation, FL</span>
             </span>
             <span class="rating">
               <span class="stars" aria-hidden="true" set:html={STAR.repeat(5)}></span>
@@ -394,18 +279,9 @@ const services = [
           </div>
         </div>
 
-        <!-- Local details -->
+        <!-- Local trust stats -->
         <div>
           <div class="sa-stats">
-            {d.population && (
-              <article class="stat-card">
-                <span class="stat-value">{d.population}</span>
-                <span class="stat-label">
-                  <span class="lang-only-en">Residents in {d.city} and the surrounding area.</span>
-                  <span class="lang-only-es">Residentes en {d.city} y sus alrededores.</span>
-                </span>
-              </article>
-            )}
             <article class="stat-card">
               <span class="stat-value">100+</span>
               <span class="stat-label">
@@ -427,20 +303,14 @@ const services = [
                 <span class="lang-only-es">Calificación promedio de reseñas verificadas en Google.</span>
               </span>
             </article>
+            <article class="stat-card">
+              <span class="stat-value">Google</span>
+              <span class="stat-label">
+                <span class="lang-only-en">Partner-certified for Ads &amp; local search.</span>
+                <span class="lang-only-es">Certificados como Partner para Ads y búsqueda local.</span>
+              </span>
+            </article>
           </div>
-          {d.nearbyCities.length > 0 && (
-            <div class="sa-hoods">
-              <p class="lbl">
-                <span class="lang-only-en">Nearby cities we serve</span>
-                <span class="lang-only-es">Ciudades Cercanas que Atendemos</span>
-              </p>
-              <div class="chip-row" style="margin-top:0;">
-                {d.nearbyCities.map((c) => (
-                  <span class="chip"><span class="dot"></span>{c}</span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
@@ -449,7 +319,7 @@ const services = [
   <!-- ============================================================
        FINAL CTA
        ============================================================ -->
-  <section class="cta cta--glow" data-screen-label="05 CTA">
+  <section class="cta cta--glow" data-screen-label="CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
@@ -462,12 +332,18 @@ const services = [
         <span class="lang-only-es">¿Listo para Hacer Crecer tu Negocio de {d.city} en Línea?</span>
       </h2>
       <p>
-        <span class="lang-only-en">Schedule your free web design &amp; SEO consultation and get a custom strategy to increase traffic, leads, and conversions across {d.countyLabel}.</span>
-        <span class="lang-only-es">Agenda tu consulta gratuita de diseño web y SEO, y obtén una estrategia a medida para aumentar tráfico, clientes potenciales y conversiones en {d.countyLabel}.</span>
+        <span class="lang-only-en">Schedule your free web design &amp; SEO consultation and get a custom strategy to increase traffic, leads, and conversions across {d.county}.</span>
+        <span class="lang-only-es">Agenda tu consulta gratuita de diseño web y SEO, y obtén una estrategia a medida para aumentar tráfico, clientes potenciales y conversiones en {d.county}.</span>
       </p>
+      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
+        <span class="lang-only-en">Book a Free Call</span>
+        <span class="lang-only-es">Agenda tu Llamada Gratis</span>
+      </a>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>
 
 </main>
 </BaseLayout>
+</content>
+</invoke>

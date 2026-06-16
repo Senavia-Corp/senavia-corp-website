@@ -1,7 +1,32 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
 const title = "Pricing — SENAVIA Corp · Web Design &amp; E-Commerce Packages";
-const description = "Transparent pricing for SENAVIA Corp web design and e-commerce packages. Choose the tier that matches your stage — Starter, Growth, Pro, or Enterprise.";
+const description = "Transparent pricing for SENAVIA Corp web design and e-commerce packages. Choose the tier that matches your stage — from a launch landing page to a full omnichannel commerce platform.";
+
+const CAL = "https://calendly.com/leads-senaviacorp/30-minute-meeting-clon";
+const fmt = (n: number) => '$' + Math.round(n).toLocaleString();
+
+// Load real packages from the local Webflow CMS
+const allPackages = await getCollection('packages');
+
+const byCategory = (cat: string) =>
+  allPackages
+    .filter((p) => p.data.category === cat)
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const businessTiers = byCategory('Business Website');
+const ecommerceTiers = byCategory('E-Commerce Website');
+
+// Badge label translations (CMS values vary in casing)
+const badgeEs = (label: string) => {
+  const k = label.trim().toLowerCase();
+  if (k === 'most popular') return 'Más popular';
+  if (k === 'best value') return 'Mejor valor';
+  return label;
+};
+const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popular';
 ---
 <BaseLayout
   title={title}
@@ -88,7 +113,7 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
       linear-gradient(160deg, #99cc33, rgba(51,204,204,0.6) 50%, #99cc33) border-box;
     box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(153,204,51,0.2);
   }
-  .tier-card.is-featured .ribbon {
+  .tier-card .ribbon {
     position: absolute;
     top: -1px;
     right: 22px;
@@ -102,6 +127,11 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
     background: var(--primary, #99cc33);
     color: #0a0e26;
     box-shadow: 0 6px 18px rgba(153,204,51,0.35);
+    white-space: nowrap;
+  }
+  /* "Best value" (non-featured) ribbon reads as a softer accent */
+  .tier-card:not(.is-featured) .ribbon.is-value {
+    background: linear-gradient(135deg, rgba(51,204,204,0.95), rgba(153,204,51,0.95));
   }
 
   .tier-head {
@@ -137,7 +167,15 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
   .tier-price {
     display: flex;
     align-items: baseline;
+    flex-wrap: wrap;
     gap: 6px;
+  }
+  .tier-price .from {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    width: 100%;
   }
   .tier-price .amount {
     font-size: 2.5rem;
@@ -146,43 +184,75 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
     color: #fff;
     line-height: 1;
   }
-  .tier-price .amount.is-custom { font-size: 2rem; }
   .tier-price .unit {
     font-size: 13px;
     color: rgba(255,255,255,0.5);
   }
 
-  .tier-features {
+  .tier-desc {
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.55;
+    max-width: none;
+  }
+
+  /* Meta row */
+  .tier-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tier-meta .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.7);
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .tier-meta .chip .ico { width: 13px; height: 13px; color: var(--primary, #99cc33); flex: 0 0 13px; }
+
+  /* Include list (CMS rich text → <ul>) */
+  .tier-include {
+    flex: 1;
+  }
+  .tier-include ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    flex: 1;
+    gap: 11px;
   }
-  .tier-features li {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    font-size: 14px;
+  .tier-include li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 13.5px;
     color: rgba(255,255,255,0.78);
     line-height: 1.5;
   }
-  .tier-features .ic {
-    flex: 0 0 18px;
-    width: 18px;
-    height: 18px;
-    margin-top: 2px;
+  .tier-include li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    width: 16px;
+    height: 16px;
     border-radius: 999px;
-    background: linear-gradient(135deg, rgba(153,204,51,0.2), rgba(51,204,204,0.12));
+    background:
+      linear-gradient(135deg, rgba(153,204,51,0.2), rgba(51,204,204,0.12)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2399cc33' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 10px no-repeat;
     border: 1px solid rgba(153,204,51,0.36);
-    color: var(--primary, #99cc33);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
   }
-  .tier-features .ic svg { width: 11px; height: 11px; }
+  .tier-include li em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--primary, #99cc33);
+  }
 
   .tier-card .btn {
     margin-top: 4px;
@@ -240,59 +310,6 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
     line-height: 1.5;
     max-width: none;
   }
-
-  /* Add-ons */
-  .addon-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  @media (max-width: 1080px) { .addon-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px)  { .addon-grid { grid-template-columns: 1fr; } }
-
-  .addon-card {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 1.5rem 1.5rem 1.25rem;
-    background: rgba(13,18,53,0.55);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 14px;
-    transition: transform .25s ease, border-color .2s ease, background .2s ease;
-  }
-  .addon-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(153,204,51,0.32);
-    background: rgba(20,28,60,0.6);
-  }
-  .addon-card .addon-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-  }
-  .addon-card h3 {
-    margin: 0;
-    font-size: 1.0625rem;
-    font-weight: 500;
-    color: #fff;
-    letter-spacing: -0.005em;
-    text-transform: none;
-  }
-  .addon-price {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--primary, #99cc33);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    white-space: nowrap;
-  }
-  .addon-card p {
-    margin: 0;
-    font-size: 13.5px;
-    color: rgba(255,255,255,0.6);
-    line-height: 1.5;
-    max-width: none;
-  }
 </style>
 
 <main>
@@ -327,179 +344,99 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
 
       <div class="tier-pane is-active" id="pane-bw" role="tabpanel" data-pane="bw">
         <div class="tier-grid" data-reveal-children>
-          
-        <article class="tier-card">
-          
-          <div class="tier-head">
-            <span class="tier-code">BW-1</span>
-            <h3 class="tier-name">Starter</h3>
-            <p class="tier-tagline"><span class="lang-only-en">A clean, mobile-first launchpad for new businesses.</span><span class="lang-only-es">Un punto de partida limpio y mobile-first para nuevos negocios.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount">$1,500</span>
-            <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Up to 5 pages</span><span class="lang-only-es">Hasta 5 páginas</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Fully mobile-responsive design</span><span class="lang-only-es">Diseño totalmente adaptable a móviles</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Basic on-page SEO setup</span><span class="lang-only-es">Configuración básica de SEO on-page</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Contact form &amp; Google Maps embed</span><span class="lang-only-es">Formulario de contacto y mapa de Google integrado</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">SSL, hosting setup, domain config</span><span class="lang-only-es">SSL, configuración de hosting y dominio</span></li>
-          </ul>
-          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Get Started</span><span class="lang-only-es">Empezar</span></a>
-        </article>
-
-        <article class="tier-card">
-          
-          <div class="tier-head">
-            <span class="tier-code">BW-2</span>
-            <h3 class="tier-name">Growth</h3>
-            <p class="tier-tagline"><span class="lang-only-en">For growing brands that need content + analytics.</span><span class="lang-only-es">Para marcas en crecimiento que necesitan contenido + analítica.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount">$3,500</span>
-            <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Up to 10 pages</span><span class="lang-only-es">Hasta 10 páginas</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Advanced SEO &amp; schema markup</span><span class="lang-only-es">SEO avanzado y marcado schema</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Blog setup with CMS</span><span class="lang-only-es">Blog configurado con CMS</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">GA4 + GTM tracking installed</span><span class="lang-only-es">Seguimiento GA4 + GTM instalado</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Lead capture &amp; email integration</span><span class="lang-only-es">Captación de leads e integración de correo</span></li>
-          </ul>
-          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Get Started</span><span class="lang-only-es">Empezar</span></a>
-        </article>
-
-        <article class="tier-card is-featured">
-          <span class="ribbon"><span class="lang-only-en">Most Popular</span><span class="lang-only-es">Más Popular</span></span>
-          <div class="tier-head">
-            <span class="tier-code">BW-3</span>
-            <h3 class="tier-name">Pro</h3>
-            <p class="tier-tagline"><span class="lang-only-en">A conversion engine for established service businesses.</span><span class="lang-only-es">Un motor de conversión para negocios de servicios consolidados.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount">$6,500</span>
-            <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Up to 20 pages</span><span class="lang-only-es">Hasta 20 páginas</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Custom CMS &amp; dynamic content</span><span class="lang-only-es">CMS a medida y contenido dinámico</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Conversion optimization &amp; A/B testing</span><span class="lang-only-es">Optimización de conversión y pruebas A/B</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Advanced schema &amp; AEO structure</span><span class="lang-only-es">Schema avanzado y estructura AEO</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Bilingual EN/ES setup ready</span><span class="lang-only-es">Configuración bilingüe EN/ES lista</span></li>
-          </ul>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Get Started</span><span class="lang-only-es">Empezar</span></a>
-        </article>
-
-        <article class="tier-card">
-          
-          <div class="tier-head">
-            <span class="tier-code">BW-4</span>
-            <h3 class="tier-name">Enterprise</h3>
-            <p class="tier-tagline"><span class="lang-only-en">Tailored architecture, integrations, and continuous lift.</span><span class="lang-only-es">Arquitectura a medida, integraciones y mejora continua.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount is-custom"><span class="lang-only-en">Custom</span><span class="lang-only-es">A Medida</span></span>
-
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Custom information architecture</span><span class="lang-only-es">Arquitectura de información a medida</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">CRM &amp; ERP integrations</span><span class="lang-only-es">Integraciones con CRM y ERP</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Headless / hybrid CMS stacks</span><span class="lang-only-es">Arquitecturas CMS headless / híbridas</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Dedicated SLA &amp; retainer</span><span class="lang-only-es">SLA dedicado y plan de retención</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Ongoing optimization &amp; reporting</span><span class="lang-only-es">Optimización continua e informes</span></li>
-          </ul>
-          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Talk to Sales</span><span class="lang-only-es">Hablar con Ventas</span></a>
-        </article>
+          {businessTiers.map((pkg, i) => {
+            const featured = isFeatured(pkg.data.badge);
+            const value = pkg.data.badge.trim().toLowerCase() === 'best value';
+            return (
+            <article class={`tier-card${featured ? ' is-featured' : ''}`}>
+              {pkg.data.badge && (
+                <span class={`ribbon${value ? ' is-value' : ''}`}><span class="lang-only-en">{pkg.data.badge}</span><span class="lang-only-es">{badgeEs(pkg.data.badge)}</span></span>
+              )}
+              <div class="tier-head">
+                <span class="tier-code">BW-{i + 1}</span>
+                <h3 class="tier-name">{pkg.data.name}</h3>
+                <p class="tier-tagline">{pkg.data.tagline}</p>
+              </div>
+              <div class="tier-price">
+                <span class="from"><span class="lang-only-en">from</span><span class="lang-only-es">desde</span></span>
+                <span class="amount">{fmt(pkg.data.price)}</span>
+                <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
+              </div>
+              <p class="tier-desc">{pkg.data.description}</p>
+              <div class="tier-meta">
+                {pkg.data.deliveryTime && (
+                  <span class="chip">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
+                    <span><span class="lang-only-en">Delivery:</span><span class="lang-only-es">Entrega:</span> {pkg.data.deliveryTime}</span>
+                  </span>
+                )}
+                {pkg.data.revisionRounds && (
+                  <span class="chip">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    <span><span class="lang-only-en">{pkg.data.revisionRounds} revision rounds</span><span class="lang-only-es">{pkg.data.revisionRounds} rondas de revisión</span></span>
+                  </span>
+                )}
+                {pkg.data.paymentInstallments > 0 && (
+                  <span class="chip">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span><span class="lang-only-en">Up to {pkg.data.paymentInstallments} installments</span><span class="lang-only-es">Hasta {pkg.data.paymentInstallments} cuotas</span></span>
+                  </span>
+                )}
+              </div>
+              <div class="tier-include" set:html={pkg.data.include} />
+              <a href="#" class={`btn${featured ? '' : ' is-secondary'}`} onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Consultation</span><span class="lang-only-es">Agendar Consulta</span></a>
+            </article>
+            );
+          })}
         </div>
       </div>
 
       <div class="tier-pane" id="pane-ec" role="tabpanel" data-pane="ec" hidden>
         <div class="tier-grid" data-reveal-children>
-          
-        <article class="tier-card">
-          
-          <div class="tier-head">
-            <span class="tier-code">EC-1</span>
-            <h3 class="tier-name">Storefront</h3>
-            <p class="tier-tagline"><span class="lang-only-en">Get selling fast with a clean Shopify or Webflow store.</span><span class="lang-only-es">Empieza a vender rápido con una tienda limpia en Shopify o Webflow.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount">$2,800</span>
-            <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Up to 30 products</span><span class="lang-only-es">Hasta 30 productos</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Shopify / Webflow E-commerce</span><span class="lang-only-es">E-Commerce en Shopify / Webflow</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Mobile checkout optimization</span><span class="lang-only-es">Optimización del checkout móvil</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Stripe &amp; PayPal setup</span><span class="lang-only-es">Configuración de Stripe y PayPal</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Tax &amp; shipping zones configured</span><span class="lang-only-es">Zonas de impuestos y envío configuradas</span></li>
-          </ul>
-          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Get Started</span><span class="lang-only-es">Empezar</span></a>
-        </article>
-
-        <article class="tier-card">
-          
-          <div class="tier-head">
-            <span class="tier-code">EC-2</span>
-            <h3 class="tier-name">Brand</h3>
-            <p class="tier-tagline"><span class="lang-only-en">Full brand commerce site with content &amp; reviews.</span><span class="lang-only-es">Sitio de comercio de marca completo con contenido y reseñas.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount">$5,500</span>
-            <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Up to 100 products</span><span class="lang-only-es">Hasta 100 productos</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Custom product templates</span><span class="lang-only-es">Plantillas de producto a medida</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Blog &amp; editorial pages</span><span class="lang-only-es">Blog y páginas editoriales</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Reviews &amp; UGC integration</span><span class="lang-only-es">Integración de reseñas y contenido de usuarios</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">GA4 + Meta pixel + CAPI</span><span class="lang-only-es">GA4 + píxel de Meta + CAPI</span></li>
-          </ul>
-          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Get Started</span><span class="lang-only-es">Empezar</span></a>
-        </article>
-
-        <article class="tier-card is-featured">
-          <span class="ribbon"><span class="lang-only-en">Most Popular</span><span class="lang-only-es">Más Popular</span></span>
-          <div class="tier-head">
-            <span class="tier-code">EC-3</span>
-            <h3 class="tier-name">Pro</h3>
-            <p class="tier-tagline"><span class="lang-only-en">Subscription-ready commerce engineered for ROAS.</span><span class="lang-only-es">Comercio listo para suscripciones, diseñado para el ROAS.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount">$9,500</span>
-            <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Unlimited products</span><span class="lang-only-es">Productos ilimitados</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Subscription &amp; loyalty modules</span><span class="lang-only-es">Módulos de suscripción y fidelización</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Conversion-optimized PDPs</span><span class="lang-only-es">Páginas de producto optimizadas para conversión</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Klaviyo / email automation flows</span><span class="lang-only-es">Flujos de automatización de correo / Klaviyo</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Headless options available</span><span class="lang-only-es">Opciones headless disponibles</span></li>
-          </ul>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Get Started</span><span class="lang-only-es">Empezar</span></a>
-        </article>
-
-        <article class="tier-card">
-          
-          <div class="tier-head">
-            <span class="tier-code">EC-4</span>
-            <h3 class="tier-name">Enterprise</h3>
-            <p class="tier-tagline"><span class="lang-only-en">Multi-region commerce with deep integrations.</span><span class="lang-only-es">Comercio multirregión con integraciones profundas.</span></p>
-          </div>
-          <div class="tier-price">
-            <span class="amount is-custom"><span class="lang-only-en">Custom</span><span class="lang-only-es">A Medida</span></span>
-
-          </div>
-          <ul class="tier-features">
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Custom storefront architecture</span><span class="lang-only-es">Arquitectura de tienda a medida</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">ERP / inventory integrations</span><span class="lang-only-es">Integraciones de ERP / inventario</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Multi-currency &amp; localization</span><span class="lang-only-es">Multimoneda y localización</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">B2B / wholesale portals</span><span class="lang-only-es">Portales B2B / mayoristas</span></li>
-            <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="lang-only-en">Dedicated retainer &amp; SLAs</span><span class="lang-only-es">Plan de retención dedicado y SLAs</span></li>
-          </ul>
-          <a href="#" class="btn is-secondary" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Talk to Sales</span><span class="lang-only-es">Hablar con Ventas</span></a>
-        </article>
+          {ecommerceTiers.map((pkg, i) => {
+            const featured = isFeatured(pkg.data.badge);
+            const value = pkg.data.badge.trim().toLowerCase() === 'best value';
+            return (
+            <article class={`tier-card${featured ? ' is-featured' : ''}`}>
+              {pkg.data.badge && (
+                <span class={`ribbon${value ? ' is-value' : ''}`}><span class="lang-only-en">{pkg.data.badge}</span><span class="lang-only-es">{badgeEs(pkg.data.badge)}</span></span>
+              )}
+              <div class="tier-head">
+                <span class="tier-code">EC-{i + 1}</span>
+                <h3 class="tier-name">{pkg.data.name}</h3>
+                <p class="tier-tagline">{pkg.data.tagline}</p>
+              </div>
+              <div class="tier-price">
+                <span class="from"><span class="lang-only-en">from</span><span class="lang-only-es">desde</span></span>
+                <span class="amount">{fmt(pkg.data.price)}</span>
+                <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
+              </div>
+              <p class="tier-desc">{pkg.data.description}</p>
+              <div class="tier-meta">
+                {pkg.data.deliveryTime && (
+                  <span class="chip">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
+                    <span><span class="lang-only-en">Delivery:</span><span class="lang-only-es">Entrega:</span> {pkg.data.deliveryTime}</span>
+                  </span>
+                )}
+                {pkg.data.revisionRounds && (
+                  <span class="chip">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    <span><span class="lang-only-en">{pkg.data.revisionRounds} revision rounds</span><span class="lang-only-es">{pkg.data.revisionRounds} rondas de revisión</span></span>
+                  </span>
+                )}
+                {pkg.data.paymentInstallments > 0 && (
+                  <span class="chip">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span><span class="lang-only-en">Up to {pkg.data.paymentInstallments} installments</span><span class="lang-only-es">Hasta {pkg.data.paymentInstallments} cuotas</span></span>
+                  </span>
+                )}
+              </div>
+              <div class="tier-include" set:html={pkg.data.include} />
+              <a href="#" class={`btn${featured ? '' : ' is-secondary'}`} onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Consultation</span><span class="lang-only-es">Agendar Consulta</span></a>
+            </article>
+            );
+          })}
         </div>
       </div>
 
@@ -519,10 +456,10 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
         <div class="section-head" data-reveal>
           <div class="eyebrow"><span class="lang-only-en">No surprises</span><span class="lang-only-es">Sin sorpresas</span></div>
           <h2><span class="lang-only-en">What's Included in Every Package</span><span class="lang-only-es">Qué Incluye Cada Paquete</span></h2>
-          <p><span class="lang-only-en">Eight foundations shipped with every SENAVIA build — whether you're on the Starter tier or a custom enterprise engagement.</span><span class="lang-only-es">Ocho bases que vienen con cada proyecto de SENAVIA — ya sea que estés en el plan Starter o en un proyecto enterprise a medida.</span></p>
+          <p><span class="lang-only-en">Eight foundations shipped with every SENAVIA build — whether you're on the launch landing page or a custom enterprise engagement.</span><span class="lang-only-es">Ocho bases que vienen con cada proyecto de SENAVIA — ya sea que estés en la landing de lanzamiento o en un proyecto enterprise a medida.</span></p>
         </div>
         <div class="inc-grid" data-reveal-children>
-          
+
         <article class="inc-item">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
           <div>
@@ -589,99 +526,12 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
         </div>
       </div>
     </section>
-
-    <!-- ============================================================
-         ADD-ONS / WEB COMPONENTS
-         ============================================================ -->
-    <section class="section section--band" data-screen-label="04 Add-ons">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <div class="eyebrow"><span class="lang-only-en">Optional modules</span><span class="lang-only-es">Módulos opcionales</span></div>
-          <h2><span class="lang-only-en">Add-Ons &amp; Web Components</span><span class="lang-only-es">Complementos y Componentes Web</span></h2>
-          <p><span class="lang-only-en">Bolt-on components to extend any package. Bundle multiple add-ons and ask about combined pricing.</span><span class="lang-only-es">Componentes adicionales para ampliar cualquier paquete. Combina varios complementos y pregunta por el precio en conjunto.</span></p>
-        </div>
-        <div class="addon-grid" data-reveal-children>
-          
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Online Booking System</span><span class="lang-only-es">Sistema de Reservas en Línea</span></h3>
-            <span class="addon-price">$650</span>
-          </div>
-          <p><span class="lang-only-en">Embedded calendar with auto-reminders, payments, and CRM sync.</span><span class="lang-only-es">Calendario integrado con recordatorios automáticos, pagos y sincronización con CRM.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Multilingual EN / ES Setup</span><span class="lang-only-es">Configuración Multilingüe EN / ES</span></h3>
-            <span class="addon-price">$850</span>
-          </div>
-          <p><span class="lang-only-en">Full bilingual site structure with hreflang and translated UI strings.</span><span class="lang-only-es">Estructura de sitio totalmente bilingüe con hreflang y textos de interfaz traducidos.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">CRM Integration</span><span class="lang-only-es">Integración con CRM</span></h3>
-            <span class="addon-price">$950</span>
-          </div>
-          <p><span class="lang-only-en">HubSpot, Pipedrive, Podio, or custom — leads flow directly into your pipeline.</span><span class="lang-only-es">HubSpot, Pipedrive, Podio o a medida — los leads entran directo a tu pipeline.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Email Automation Flows</span><span class="lang-only-es">Flujos de Automatización de Correo</span></h3>
-            <span class="addon-price">$1,200</span>
-          </div>
-          <p><span class="lang-only-en">Welcome, abandoned cart, and nurture sequences in Klaviyo or Mailchimp.</span><span class="lang-only-es">Secuencias de bienvenida, carrito abandonado y nutrición en Klaviyo o Mailchimp.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Conversion Audit &amp; Heatmaps</span><span class="lang-only-es">Auditoría de Conversión y Mapas de Calor</span></h3>
-            <span class="addon-price">$750</span>
-          </div>
-          <p><span class="lang-only-en">Hotjar / Microsoft Clarity install with a written audit and CRO recommendations.</span><span class="lang-only-es">Instalación de Hotjar / Microsoft Clarity con auditoría escrita y recomendaciones de CRO.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Custom Landing Page</span><span class="lang-only-es">Landing Page a Medida</span></h3>
-            <span class="addon-price">$550</span>
-          </div>
-          <p><span class="lang-only-en">Standalone campaign landing page with split-testing and conversion tracking.</span><span class="lang-only-es">Landing page de campaña independiente con pruebas A/B y seguimiento de conversiones.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Membership / Gated Content</span><span class="lang-only-es">Membresías / Contenido Exclusivo</span></h3>
-            <span class="addon-price">$1,400</span>
-          </div>
-          <p><span class="lang-only-en">Member login, paywall, and content access tiers integrated with your CMS.</span><span class="lang-only-es">Acceso de miembros, muro de pago y niveles de contenido integrados con tu CMS.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Custom Form / Quote Builder</span><span class="lang-only-es">Formulario / Cotizador a Medida</span></h3>
-            <span class="addon-price">$800</span>
-          </div>
-          <p><span class="lang-only-en">Multi-step intake or quote calculator with conditional logic and routing.</span><span class="lang-only-es">Captura en varios pasos o cotizador con lógica condicional y enrutamiento.</span></p>
-        </article>
-
-        <article class="addon-card">
-          <div class="addon-head">
-            <h3><span class="lang-only-en">Photography Day</span><span class="lang-only-es">Día de Fotografía</span></h3>
-            <span class="addon-price">$1,100</span>
-          </div>
-          <p><span class="lang-only-en">Half-day on-location shoot in South Florida with edited deliverables.</span><span class="lang-only-es">Sesión de medio día en locación en el sur de Florida con entregables editados.</span></p>
-        </article>
-        </div>
-      </div>
-    </section>
   </div>
 
   <!-- ============================================================
        CTA
        ============================================================ -->
-  <section class="cta" data-screen-label="05 CTA">
+  <section class="cta" data-screen-label="04 CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
@@ -690,33 +540,13 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
     </video>
     <div class="container">
       <h2><span class="lang-only-en">Not Sure Which Package Is Right?</span><span class="lang-only-es">¿No Sabes Cuál Paquete Te Conviene?</span></h2>
-      <p><span class="lang-only-en">Schedule a 30-minute consultation and we'll recommend the tier and add-ons that match your goals.</span><span class="lang-only-es">Agenda una consulta de 30 minutos y te recomendaremos el plan y los complementos que se ajusten a tus objetivos.</span></p>
+      <p><span class="lang-only-en">Schedule a 30-minute consultation and we'll recommend the tier and integrations that match your goals.</span><span class="lang-only-es">Agenda una consulta de 30 minutos y te recomendaremos el plan y las integraciones que se ajusten a tus objetivos.</span></p>
+      <a href="#" class="btn cta--glow" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Free Consultation</span><span class="lang-only-es">Agendar Consulta Gratis</span></a>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>
 
 </main>
-
-<!-- Initialize Calendly inline widget once the script loads -->
-<script>
-  (function(){
-    var el = document.getElementById('calendlyInline');
-    if (!el) return;
-    function init() {
-      if (!window.Calendly) { setTimeout(init, 200); return; }
-      window.Calendly.initInlineWidget({
-        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
-        parentElement: el,
-        prefill: {}, utm: {}
-      });
-      // Mark loaded after a beat
-      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
-    }
-    init();
-  })();
-</script>
-
-<!-- Language switcher -->
 
 <!-- Pricing tab switcher -->
 <script>
@@ -741,3 +571,5 @@ const description = "Transparent pricing for SENAVIA Corp web design and e-comme
   })();
 </script>
 </BaseLayout>
+</content>
+</invoke>

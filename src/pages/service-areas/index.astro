@@ -6,63 +6,58 @@ const title = "Service Areas — SENAVIA Corp · Web Design & Marketing Across S
 const description = "SENAVIA Corp serves businesses across Miami-Dade, Broward, and Palm Beach counties. Web design, development, and marketing for South Florida.";
 
 const areas = (await getCollection('serviceAreas'))
-  .filter((e) => !e.data.draft)
   .sort((a, b) => a.data.order - b.data.order);
 
-// County metadata + grouping (only counties that have entries get a section)
-type CountyKey = 'miami-dade' | 'broward' | 'palm-beach';
+// County metadata + grouping. Keys MATCH the CMS `county` values exactly
+// ("Miami Dade" | "Broward" | "Palm Beach"). Page chrome stays bilingual.
+type CountyKey = 'Miami Dade' | 'Broward' | 'Palm Beach';
 const countyMeta: Record<CountyKey, {
   num: string; label_en: string; label_es: string; pop: string; pop_es: string;
-  art: string; h2_en: string; h2_es: string; lead_en: string; lead_es: string;
-  body_en: string; body_es: string;
+  art: string; lead_en: string; lead_es: string;
 }> = {
-  'miami-dade': {
+  'Miami Dade': {
     num: 'County · 01',
     label_en: 'Miami-Dade County',
     label_es: 'Condado de Miami-Dade',
     pop: '2.7M residents · 1,946 sq mi',
     pop_es: '2.7M residentes · 1,946 mi²',
     art: 'art-dade',
-    h2_en: 'Web Design Services Across Miami-Dade',
-    h2_es: 'Servicios de Diseño Web en Miami-Dade',
     lead_en: "From Miami's skyline to Doral's industrial corridor, we build conversion-focused websites for South Florida's most competitive market.",
     lead_es: 'Desde el horizonte de Miami hasta el corredor industrial de Doral, construimos sitios web enfocados en la conversión para el mercado más competitivo del Sur de Florida.',
-    body_en: 'Miami-Dade is where SENAVIA does its sharpest work — high-pressure verticals, bilingual EN/ES audiences, and buyers who decide in seconds. Our local-SEO playbook is tuned to the map pack, and our design system carries the brand polish that Miami buyers expect from day one.',
-    body_es: 'Miami-Dade es donde SENAVIA hace su mejor trabajo: sectores de alta presión, audiencias bilingües EN/ES y compradores que deciden en segundos. Nuestra estrategia de SEO local está ajustada al map pack y nuestro sistema de diseño aporta el acabado de marca que los compradores de Miami esperan desde el primer día.',
   },
-  'broward': {
+  'Broward': {
     num: 'County · 02',
     label_en: 'Broward County',
     label_es: 'Condado de Broward',
     pop: '1.95M residents · 1,323 sq mi',
     pop_es: '1.95M residentes · 1,323 mi²',
     art: 'art-broward',
-    h2_en: 'Web Design Services Across Broward',
-    h2_es: 'Servicios de Diseño Web en Broward',
     lead_en: "SENAVIA Corp is headquartered in Plantation. Broward is home — and it's where our retainer client base is strongest.",
     lead_es: 'SENAVIA Corp tiene su sede en Plantation. Broward es nuestra casa, y es donde nuestra base de clientes con contrato es más sólida.',
-    body_en: "From Fort Lauderdale's coastal commerce to Pembroke Pines' suburban service economy, Broward businesses operate in a tight, networked market. We help local contractors, retailers, and professional firms own their corner of it.",
-    body_es: 'Desde el comercio costero de Fort Lauderdale hasta la economía de servicios suburbana de Pembroke Pines, los negocios de Broward operan en un mercado compacto y conectado. Ayudamos a contratistas, comercios y firmas profesionales locales a dominar su rincón.',
   },
-  'palm-beach': {
+  'Palm Beach': {
     num: 'County · 03',
     label_en: 'Palm Beach County',
     label_es: 'Condado de Palm Beach',
     pop: '1.5M residents · 1,969 sq mi',
     pop_es: '1.5M residentes · 1,969 mi²',
     art: 'art-palmbeach',
-    h2_en: 'Web Design Services Across Palm Beach',
-    h2_es: 'Servicios de Diseño Web en Palm Beach',
     lead_en: "Palm Beach's premium buyer profile demands premium presentation. We deliver brand-first sites that earn trust on first scroll.",
     lead_es: 'El perfil de comprador premium de Palm Beach exige una presentación premium. Ofrecemos sitios centrados en la marca que ganan confianza al primer scroll.',
-    body_en: "Whether you're serving West Palm Beach's urban core or Boca Raton's affluent corridors, Palm Beach businesses compete on quality of presentation as much as quality of work. Our design and content systems are built for that bar.",
-    body_es: 'Ya sea que atiendas el núcleo urbano de West Palm Beach o los corredores acomodados de Boca Raton, los negocios de Palm Beach compiten tanto por la calidad de su presentación como por la de su trabajo. Nuestros sistemas de diseño y contenido están hechos para ese estándar.',
   },
 };
 
-const countyOrder: CountyKey[] = ['miami-dade', 'broward', 'palm-beach'];
+const countyOrder: CountyKey[] = ['Miami Dade', 'Broward', 'Palm Beach'];
+// Anchor-friendly slug for each county (cards jump to the matching section).
+const countySlug = (k: string) => k.toLowerCase().replace(/\s+/g, '-');
+
 const grouped = countyOrder
-  .map((key) => ({ key, meta: countyMeta[key], cities: areas.filter((a) => a.data.county === key) }))
+  .map((key) => ({
+    key,
+    slug: countySlug(key),
+    meta: countyMeta[key],
+    cities: areas.filter((a) => a.data.county === key),
+  }))
   .filter((g) => g.cities.length > 0);
 
 const totalCities = areas.length;
@@ -428,7 +423,7 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
             <text x="362" y="250" class="sa-ocean-label" transform="rotate(90 362 250)" text-anchor="middle">ATLANTIC OCEAN</text>
 
             <!-- Palm Beach County (north, top) -->
-            <path class="sa-county-shape" data-county="palm-beach"
+            <path class="sa-county-shape" data-county="Palm Beach"
                   d="M 50 50 L 320 50 L 320 175 L 270 175 L 220 165 L 170 175 L 120 170 L 80 180 L 50 165 Z"/>
             <text class="sa-county-label" x="180" y="105" text-anchor="middle">PALM BEACH</text>
             <text class="sa-county-sub" x="180" y="125" text-anchor="middle">COUNTY · 01</text>
@@ -443,7 +438,7 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
             </g>
 
             <!-- Broward County (middle) -->
-            <path class="sa-county-shape" data-county="broward"
+            <path class="sa-county-shape" data-county="Broward"
                   d="M 50 175 L 80 180 L 120 170 L 170 175 L 220 165 L 270 175 L 320 175 L 320 290 L 280 295 L 230 285 L 180 295 L 130 285 L 80 295 L 50 280 Z"/>
             <text class="sa-county-label" x="180" y="220" text-anchor="middle">BROWARD</text>
             <text class="sa-county-sub" x="180" y="240" text-anchor="middle">COUNTY · 02</text>
@@ -462,7 +457,7 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
             </g>
 
             <!-- Miami-Dade County (south, bottom) -->
-            <path class="sa-county-shape" data-county="miami-dade"
+            <path class="sa-county-shape" data-county="Miami Dade"
                   d="M 50 290 L 80 295 L 130 285 L 180 295 L 230 285 L 280 295 L 320 290 L 320 450 L 240 450 L 180 460 L 130 455 L 80 450 L 50 440 Z"/>
             <text class="sa-county-label" x="180" y="345" text-anchor="middle">MIAMI-DADE</text>
             <text class="sa-county-sub" x="180" y="365" text-anchor="middle">COUNTY · 03</text>
@@ -503,7 +498,7 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
 
         <div class="sa-counties">
           {grouped.map((g) => (
-            <a class="sa-county-card" href={`#${g.key}`} data-county={g.key}>
+            <a class="sa-county-card" href={`#${g.slug}`} data-county={g.key}>
               <div class="sa-county-card-head">
                 <span class="sa-county-dot"></span>
                 <h3>
@@ -531,7 +526,7 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
        ============================================================ -->
   {grouped.map((g) => (
     <Fragment>
-      <a id={g.key}></a>
+      <a id={g.slug}></a>
       <section class="section" data-screen-label={`County · ${g.meta.label_en}`}>
         <div class="container">
           <div class="sa-split" data-reveal>
@@ -539,8 +534,8 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
               <div class="sa-section-head">
                 <span class="county-num">{g.meta.num}</span>
                 <h2>
-                  <span class="lang-only-en">{g.meta.h2_en}</span>
-                  <span class="lang-only-es">{g.meta.h2_es}</span>
+                  <span class="lang-only-en">Web Design Services Across {g.meta.label_en}</span>
+                  <span class="lang-only-es">Servicios de Diseño Web en {g.meta.label_es}</span>
                 </h2>
               </div>
               <h3>
@@ -548,8 +543,8 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
                 <span class="lang-only-es">{g.meta.lead_es}</span>
               </h3>
               <p>
-                <span class="lang-only-en">{g.meta.body_en}</span>
-                <span class="lang-only-es">{g.meta.body_es}</span>
+                <span class="lang-only-en">{g.cities.length} {g.cities.length === 1 ? 'city' : 'cities'} below — choose your market to see a local landing page built for it.</span>
+                <span class="lang-only-es">{g.cities.length} {g.cities.length === 1 ? 'ciudad' : 'ciudades'} abajo — elige tu mercado para ver una página local hecha a su medida.</span>
               </p>
             </div>
             <div class={`sa-split-art ${g.meta.art}`}>
@@ -629,3 +624,5 @@ const ARROW = `<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="curren
   })();
 </script>
 </BaseLayout>
+</content>
+</invoke>

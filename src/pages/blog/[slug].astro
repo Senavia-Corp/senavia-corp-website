@@ -1,68 +1,54 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { CALENDLY_URL } from '@/data/site';
+import { prettyName } from '@/lib/cms';
 
 /* ------------------------------------------------------------------ *
- *  Each language is a separate collection entry, paired by
- *  `translationKey`. We generate ONE path per translationKey using the
- *  EN entry as the canonical slug, then render the EN body inside
- *  .lang-only-en and the ES partner body inside .lang-only-es so the
- *  active language class on <html> shows the correct version.
+ *  Real Webflow CMS (English only). One path per post (param = slug).
+ *  Render CMS values as-is; keep page chrome bilingual.
  * ------------------------------------------------------------------ */
 export async function getStaticPaths() {
-  const all = (await getCollection('blog')).filter((e) => !e.data.draft);
-  const enEntries = all.filter((e) => e.data.lang === 'en');
+  const posts = await getCollection('blog');
 
-  return enEntries.map((en) => {
-    const es = all.find(
-      (e) => e.data.lang === 'es' && e.data.translationKey === en.data.translationKey,
-    );
-    // Related = other EN posts, prefer same category, by recency.
-    const related = enEntries
-      .filter((e) => e.id !== en.id)
-      .sort((a, b) => {
-        const sameA = a.data.category === en.data.category ? 0 : 1;
-        const sameB = b.data.category === en.data.category ? 0 : 1;
-        if (sameA !== sameB) return sameA - sameB;
-        return b.data.pubDate.getTime() - a.data.pubDate.getTime();
-      })
+  return posts.map((entry) => {
+    const related = posts
+      .filter((p) => p.id !== entry.id && p.data.category === entry.data.category)
+      .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
       .slice(0, 3);
 
-    return { params: { slug: en.id }, props: { en, es, related } };
+    return { params: { slug: entry.id }, props: { entry, related } };
   });
 }
 
-const { en, es, related } = Astro.props;
+const { entry, related } = Astro.props;
+const { data } = entry;
 
-const { Content: ContentEn } = await render(en);
-const ContentEs = es ? (await render(es)).Content : null;
+const CAT_ES: Record<string, string> = {
+  'web-design': 'Diseño Web',
+  'web-development': 'Desarrollo Web',
+  'digital-marketing': 'Marketing Digital',
+};
+const CAT_EN: Record<string, string> = {
+  'web-design': 'Web Design',
+  'web-development': 'Web Development',
+  'digital-marketing': 'Digital Marketing',
+};
+const catEn = (slug: string) => CAT_EN[slug] ?? slug;
+const catEs = (slug: string) => CAT_ES[slug] ?? slug;
 
-const fmtDate = (d: Date, locale: string) =>
-  d.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
+const fmtEn = (d?: Date) => (d ? d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '');
+const fmtEs = (d?: Date) => (d ? d.toLocaleDateString('es-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '');
 
-const dateEn = fmtDate(en.data.pubDate, 'en-US');
-const dateEs = fmtDate((es ?? en).data.pubDate, 'es-US');
-
-const catSlug = (en.data.category ?? '').toLowerCase().replace(/\s+/g, '-');
-const catEs = (c: string) =>
-  ({ 'Web Design': 'Diseño Web', Marketing: 'Marketing', SEO: 'SEO', Development: 'Desarrollo', Tips: 'Consejos' } as Record<string, string>)[c] ?? c;
-
-// Author initials for the avatar chip.
-const initials = (en.data.author || 'SENAVIA Editorial')
-  .split(' ')
-  .map((w) => w[0])
-  .slice(0, 2)
-  .join('')
-  .toUpperCase();
-
+const authorName = prettyName(data.author);
+const initials = authorName.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 const avatarPalette = ['av1', 'av2', 'av3', 'av4'];
-const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
+const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
 ---
 <BaseLayout
-  title={`${en.data.title} — SENAVIA Corp Blog`}
-  description={en.data.description}
-  canonical={`/blog/${en.id}`}
+  title={data.seoTitle || data.title}
+  description={data.seoDescription || data.summary}
+  canonical={`/blog/${entry.id}`}
   ogType="article"
   jsonLdType="blog"
   screenLabel="Blog Article"
@@ -76,21 +62,14 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
     padding: 7.5rem 0 3rem;
     overflow: hidden;
   }
-  .article-hero::before {
-    content: '';
+  .article-hero .hero-bg {
     position: absolute;
     inset: 0;
-    z-index: -1;
-    opacity: 0.85;
+    z-index: -2;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.55;
   }
-  .article-hero.bg-1::before { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
-  .article-hero.bg-2::before { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
-  .article-hero.bg-3::before { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
-  .article-hero.bg-4::before { background: linear-gradient(135deg, #D14F8C, #F0A050); }
-  .article-hero.bg-5::before { background: linear-gradient(135deg, #1E5A82, #99CC33); }
-  .article-hero.bg-6::before { background: linear-gradient(135deg, #4A3F8E, #33CCCC); }
-  .article-hero.bg-7::before { background: linear-gradient(135deg, #B83A6B, #F0A050); }
-  .article-hero.bg-8::before { background: linear-gradient(135deg, #2A6FBD, #7B3FE4); }
   .article-hero::after {
     content: '';
     position: absolute;
@@ -108,6 +87,7 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
     color: rgba(255,255,255,0.7);
     margin-bottom: 1.5rem;
     transition: color .2s ease;
+    text-decoration: none;
   }
   .article-back:hover { color: var(--primary, #99cc33); }
   .article-back svg { width: 15px; height: 15px; }
@@ -125,10 +105,9 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
     border: 1px solid rgba(153,204,51,0.3);
     margin-bottom: 1.25rem;
   }
-  .article-cat[data-cat="seo"]         { background: rgba(45,125,184,0.16); color: #79c1ee; border-color: rgba(45,125,184,0.34); }
-  .article-cat[data-cat="marketing"]   { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
-  .article-cat[data-cat="development"] { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
-  .article-cat[data-cat="tips"]        { background: rgba(209,79,140,0.14); color: #f48cb6; border-color: rgba(209,79,140,0.32); }
+  .article-cat[data-cat="web-design"]        { background: rgba(153,204,51,0.16); color: #b6e06a; border-color: rgba(153,204,51,0.32); }
+  .article-cat[data-cat="web-development"]   { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
+  .article-cat[data-cat="digital-marketing"] { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
 
   .article-hero h1 {
     font-size: clamp(2rem, 4vw, 3.25rem);
@@ -172,24 +151,72 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
   .article-body-wrap { padding: 3.5rem 0 4rem; }
   .article-body-wrap .container { max-width: 760px; }
 
-  .article-body { font-size: 1.0625rem; line-height: 1.75; color: rgba(255,255,255,0.82); }
-  .article-body > * { max-width: none; }
-  .article-body p { font-size: 1.0625rem; font-weight: 300; line-height: 1.75; margin: 0 0 1.4rem; max-width: none; }
-  .article-body h2 {
+  /* ---------- CMS PROSE (rich-text HTML from Webflow) ---------- */
+  .cms-prose {
+    max-width: 70ch;
+    font-size: 1.0625rem;
+    line-height: 1.78;
+    color: rgba(255,255,255,0.82);
+  }
+  .cms-prose > :first-child { margin-top: 0; }
+  .cms-prose > :last-child { margin-bottom: 0; }
+  .cms-prose p {
+    font-size: 1.0625rem;
+    font-weight: 300;
+    line-height: 1.78;
+    margin: 0 0 1.4rem;
+    max-width: none;
+  }
+  .cms-prose h2 {
     font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
     margin: 2.6rem 0 1rem;
     letter-spacing: -0.01em;
+    line-height: 1.25;
   }
-  .article-body h3 {
+  .cms-prose h3 {
     font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
     margin: 2rem 0 0.8rem;
+    line-height: 1.3;
   }
-  .article-body ul, .article-body ol { margin: 0 0 1.5rem; padding-left: 1.4rem; }
-  .article-body li { margin: 0 0 0.65rem; line-height: 1.65; }
-  .article-body li::marker { color: var(--primary, #99cc33); }
-  .article-body a { color: var(--primary, #99cc33); text-decoration: underline; text-underline-offset: 3px; }
-  .article-body strong { color: #fff; font-weight: 600; }
-  .article-body blockquote {
+  .cms-prose h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 1.75rem 0 0.7rem;
+  }
+  .cms-prose ul, .cms-prose ol { margin: 0 0 1.5rem; padding-left: 1.4rem; }
+  .cms-prose li { margin: 0 0 0.65rem; line-height: 1.7; }
+  .cms-prose li::marker { color: var(--primary, #99cc33); }
+  .cms-prose ul ul, .cms-prose ol ol, .cms-prose ul ol, .cms-prose ol ul { margin: 0.5rem 0 0.5rem; }
+  .cms-prose a {
+    color: var(--primary, #99cc33);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity .15s ease;
+  }
+  .cms-prose a:hover { opacity: 0.8; }
+  .cms-prose strong, .cms-prose b { color: #fff; font-weight: 600; }
+  .cms-prose em, .cms-prose i { font-style: italic; }
+  .cms-prose img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    margin: 2rem 0;
+  }
+  .cms-prose figure { margin: 2rem 0; }
+  .cms-prose figcaption {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    margin-top: 0.6rem;
+  }
+  .cms-prose blockquote {
     margin: 0 0 2rem;
     padding: 1.25rem 1.5rem;
     border-left: 3px solid var(--primary, #99cc33);
@@ -198,8 +225,31 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
     font-size: 1.0625rem;
     color: rgba(255,255,255,0.9);
   }
-  .article-body blockquote p { margin: 0; }
-  .article-body blockquote strong { color: var(--primary, #99cc33); }
+  .cms-prose blockquote p { margin: 0; }
+  .cms-prose blockquote strong { color: var(--primary, #99cc33); }
+  .cms-prose hr {
+    border: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 2.5rem 0;
+  }
+  .cms-prose code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.92em;
+    background: rgba(255,255,255,0.07);
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: #d6e9b0;
+  }
+  .cms-prose pre {
+    background: rgba(10,14,38,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+    margin: 0 0 1.5rem;
+  }
+  .cms-prose pre code { background: none; padding: 0; color: rgba(255,255,255,0.85); }
 
   /* AUTHOR FOOTER */
   .article-author-card {
@@ -264,21 +314,20 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
   .related-card .related-cover {
     aspect-ratio: 16 / 10;
     border-radius: 14px;
+    overflow: hidden;
     border: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    background: rgba(13,18,53,0.55);
     transition: box-shadow .25s ease;
   }
   .related-card:hover .related-cover {
     box-shadow: 0 18px 40px rgba(0,0,0,0.36), 0 0 0 1px rgba(153,204,51,0.32);
   }
-  .related-cover.bg-1 { background: linear-gradient(135deg, #7B3FE4, #C13B8A); }
-  .related-cover.bg-2 { background: linear-gradient(135deg, #2A7B4F, #99CC33); }
-  .related-cover.bg-3 { background: linear-gradient(135deg, #2D7DB8, #33CCCC); }
-  .related-cover.bg-4 { background: linear-gradient(135deg, #D14F8C, #F0A050); }
-  .related-cover.bg-5 { background: linear-gradient(135deg, #1E5A82, #99CC33); }
-  .related-cover.bg-6 { background: linear-gradient(135deg, #4A3F8E, #33CCCC); }
-  .related-cover.bg-7 { background: linear-gradient(135deg, #B83A6B, #F0A050); }
-  .related-cover.bg-8 { background: linear-gradient(135deg, #2A6FBD, #7B3FE4); }
+  .related-card .related-cover img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .related-card h3 {
     font-size: 1.05rem;
     font-weight: 500;
@@ -312,7 +361,10 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
   <!-- ============================================================
        ARTICLE HERO
        ============================================================ -->
-  <header class={`article-hero ${en.data.coverClass ?? 'bg-1'}`} data-screen-label="01 Article Hero">
+  <header class="article-hero" data-screen-label="01 Article Hero">
+    {data.mainImage && (
+      <img class="hero-bg" src={data.mainImage} alt={data.altImage} loading="eager" decoding="async" />
+    )}
     <div class="container">
       <a href="/blog" class="article-back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
@@ -320,39 +372,26 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
         <span class="lang-only-es">Volver al Blog</span>
       </a>
 
-      {en.data.category && (
-        <span class="article-cat" data-cat={catSlug}>
-          <span class="lang-only-en">{en.data.category}</span>
-          <span class="lang-only-es">{catEs(en.data.category)}</span>
+      {data.category && (
+        <span class="article-cat" data-cat={data.category}>
+          <span class="lang-only-en">{catEn(data.category)}</span>
+          <span class="lang-only-es">{catEs(data.category)}</span>
         </span>
       )}
 
-      <h1>
-        <span class="lang-only-en">{en.data.title}</span>
-        <span class="lang-only-es">{es?.data.title ?? en.data.title}</span>
-      </h1>
+      <h1>{data.title}</h1>
 
-      <p class="article-dek">
-        <span class="lang-only-en">{en.data.description}</span>
-        <span class="lang-only-es">{es?.data.description ?? en.data.description}</span>
-      </p>
+      {data.summary && <p class="article-dek">{data.summary}</p>}
 
       <div class="article-meta">
         <span class={`avatar ${avatarClass}`} aria-hidden="true">{initials}</span>
         <span class="author-name">
-          <span class="lang-only-en">By {en.data.author}</span>
-          <span class="lang-only-es">Por {es?.data.author ?? en.data.author}</span>
+          <span class="lang-only-en">By {authorName}</span>
+          <span class="lang-only-es">Por {authorName}</span>
         </span>
         <span class="sep">·</span>
-        <span class="lang-only-en">{dateEn}</span>
-        <span class="lang-only-es">{dateEs}</span>
-        {en.data.readingTime && (
-          <>
-            <span class="sep">·</span>
-            <span class="lang-only-en">{en.data.readingTime}</span>
-            <span class="lang-only-es">{es?.data.readingTime ?? en.data.readingTime}</span>
-          </>
-        )}
+        <span class="lang-only-en">{fmtEn(data.pubDate)}</span>
+        <span class="lang-only-es">{fmtEs(data.pubDate)}</span>
       </div>
     </div>
   </header>
@@ -362,12 +401,7 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
        ============================================================ -->
   <article class="article-body-wrap section--band" data-screen-label="02 Article Body">
     <div class="container">
-      <div class="article-body" data-reveal>
-        <div class="lang-only-en"><ContentEn /></div>
-        {ContentEs
-          ? <div class="lang-only-es"><ContentEs /></div>
-          : <div class="lang-only-es"><ContentEn /></div>}
-      </div>
+      <div class="cms-prose" data-reveal set:html={data.body} />
 
       <!-- Author footer -->
       <div class="article-author-card" data-reveal>
@@ -377,10 +411,10 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
             <span class="lang-only-en">Written by</span>
             <span class="lang-only-es">Escrito por</span>
           </div>
-          <div class="author-name">{en.data.author}</div>
+          <div class="author-name">{authorName}</div>
           <p class="author-bio">
-            <span class="lang-only-en">The SENAVIA editorial team writes about web design, SEO, and digital marketing for South Florida businesses.</span>
-            <span class="lang-only-es">El equipo editorial de SENAVIA escribe sobre diseño web, SEO y marketing digital para negocios del Sur de Florida.</span>
+            <span class="lang-only-en">The SENAVIA team writes about web design, SEO, and digital marketing for South Florida businesses.</span>
+            <span class="lang-only-es">El equipo de SENAVIA escribe sobre diseño web, SEO y marketing digital para negocios del Sur de Florida.</span>
           </p>
         </div>
       </div>
@@ -402,12 +436,19 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
         <div class="related-grid" data-reveal-children>
           {related.map((post) => (
             <a href={`/blog/${post.id}`} class="related-card">
-              <div class={`related-cover ${post.data.coverClass ?? 'bg-1'}`}></div>
-              <h3>
-                <span class="lang-only-en">{post.data.title}</span>
-                <span class="lang-only-es">{post.data.title}</span>
-              </h3>
-              <span class="related-date">{fmtDate(post.data.pubDate, 'en-US')}</span>
+              <div class="related-cover">
+                <img
+                  src={post.data.thumbnail || post.data.mainImage}
+                  alt={post.data.altImage}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <h3>{post.data.title}</h3>
+              <span class="related-date">
+                <span class="lang-only-en">{fmtEn(post.data.pubDate)}</span>
+                <span class="lang-only-es">{fmtEs(post.data.pubDate)}</span>
+              </span>
             </a>
           ))}
         </div>
@@ -444,3 +485,5 @@ const avatarClass = avatarPalette[en.id.length % avatarPalette.length];
   </section>
 </main>
 </BaseLayout>
+</content>
+</invoke>

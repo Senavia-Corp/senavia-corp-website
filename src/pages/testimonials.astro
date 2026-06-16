@@ -8,6 +8,11 @@ const description = "Hear from South Florida business owners SENAVIA Corp has wo
 const testimonials = (await getCollection('testimonials'))
   .sort((a, b) => Number(b.data.rating) - Number(a.data.rating));
 
+// Real video testimonials from the CMS (YouTube)
+const videos = (await getCollection('videos'))
+  .filter((v) => v.data.youtubeId)
+  .sort((a, b) => a.data.order - b.data.order);
+
 const count = testimonials.length;
 const avgRating = count
   ? (testimonials.reduce((s, t) => s + Number(t.data.rating), 0) / count)
@@ -243,6 +248,48 @@ const STAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><p
     font-size: 13px;
   }
   .gr-footer svg { width: 18px; height: 18px; }
+
+  /* ===== Video testimonials ===== */
+  .vt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 900px) { .vt-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 620px) { .vt-grid { grid-template-columns: 1fr; } }
+  .vt-card {
+    background: rgba(13,18,53,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .vt-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(153,204,51,0.35);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+  .vt-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+  .vt-frame iframe {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    border: 0; display: block;
+  }
+  .vt-body { padding: 1.1rem 1.25rem 1.4rem; }
+  .vt-name {
+    margin: 0 0 .4rem;
+    font-size: 1.05rem; font-weight: 600; color: #fff; letter-spacing: -0.005em;
+  }
+  .vt-summary {
+    margin: 0;
+    font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.65);
+    display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+  }
 </style>
 
 <main>
@@ -365,10 +412,41 @@ const STAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><p
     </section>
   </div>
 
+  {videos.length > 0 && (
+  <section class="section section--band vt-section" data-screen-label="03 Video Testimonials">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow"><span class="lang-only-en">In their words</span><span class="lang-only-es">En sus palabras</span></div>
+        <h2><span class="lang-only-en">Video Testimonials</span><span class="lang-only-es">Testimonios en Video</span></h2>
+        <p><span class="lang-only-en">Real South Florida business owners on what it was like to work with SENAVIA.</span><span class="lang-only-es">Dueños de negocios reales del Sur de Florida sobre cómo fue trabajar con SENAVIA.</span></p>
+      </div>
+      <div class="vt-grid" data-reveal-children>
+        {videos.map((v) => (
+          <article class="vt-card">
+            <div class="vt-frame">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${v.data.youtubeId}?rel=0`}
+                title={v.data.name}
+                loading="lazy"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="vt-body">
+              <h3 class="vt-name">{v.data.name}</h3>
+              {v.data.summary && <p class="vt-summary">{v.data.summary}</p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  )}
+
   <!-- ============================================================
        CTA
        ============================================================ -->
-  <section class="cta cta--glow" data-screen-label="03 CTA">
+  <section class="cta cta--glow" data-screen-label="04 CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"

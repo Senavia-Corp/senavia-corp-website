@@ -1,86 +1,206 @@
 import { defineCollection, z } from 'astro:content';
-import { glob, file } from 'astro/loaders';
+import { file } from 'astro/loaders';
+import { readCsv, bool, numOr, youtubeId } from '@/lib/cms';
 
-/* ------------------------------------------------------------------ *
- *  BLOG — long-form prose (mdx). One entry per (post × language),
- *  paired across languages by `translationKey`. The index/[slug]
- *  templates filter by the active language class via lang-only-* wrappers.
- * ------------------------------------------------------------------ */
+/* ============================================================
+ *  Collections backed by the local Webflow CSV export
+ *  (cms-colletions/). Inline loaders map each CSV row → entry.
+ *  Swap readCsv() for a backend fetch later — schemas/templates
+ *  stay the same.
+ * ============================================================ */
+
+/* ---------- BLOG ---------- */
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  loader: async () =>
+    readCsv('Blog Posts').map((r) => ({
+      id: r['Slug'],
+      title: r['Name'],
+      summary: r['Post Summary'] || '',
+      body: r['Post Body'] || '',
+      category: r['Category'] || '',
+      author: r['Author'] || 'sebastian-navia',
+      featured: bool(r['Featured?']),
+      mainImage: r['Main Image'] || '',
+      thumbnail: r['Thumbnail image'] || r['Main Image'] || '',
+      altImage: r['ALT image SEO'] || r['Name'] || '',
+      seoTitle: r['Title SEO'] || r['Name'],
+      seoDescription: r['Metadescription SEO'] || r['Post Summary'] || '',
+      pubDate: r['Published On'] || r['Created On'] || '',
+    })),
   schema: z.object({
     title: z.string(),
-    description: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    author: z.string().default('SENAVIA Editorial'),
-    category: z.string().optional(),
-    tags: z.array(z.string()).default([]),
-    heroImage: z.string().optional(),
-    coverClass: z.string().optional(),     // 'bg-1'..'bg-8' fallback gradient
-    readingTime: z.string().optional(),    // "8 min read"
+    summary: z.string().default(''),
+    body: z.string().default(''),
+    category: z.string().default(''),
+    author: z.string().default('sebastian-navia'),
     featured: z.boolean().default(false),
-    lang: z.enum(['en', 'es']).default('en'),
-    translationKey: z.string(),            // links the en/es pair
-    draft: z.boolean().default(false),
+    mainImage: z.string().default(''),
+    thumbnail: z.string().default(''),
+    altImage: z.string().default(''),
+    seoTitle: z.string().default(''),
+    seoDescription: z.string().default(''),
+    pubDate: z.coerce.date().optional(),
   }),
 });
 
-/* ------------------------------------------------------------------ *
- *  PORTFOLIO — case studies (mdx). Bilingual short fields live as
- *  *_en / *_es siblings; the template emits both in lang-only-* spans.
- *  Schema mirrors the existing hand-built detail pages
- *  (pergola-plus-florida, angele-glow).
- * ------------------------------------------------------------------ */
+/* ---------- PORTFOLIO (Projects) ---------- */
 const portfolio = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/portfolio' }),
+  loader: async () =>
+    readCsv('Projects').map((r, i) => ({
+      id: r['Slug'],
+      title: r['Name'],
+      summary: r['Project Summary'] || '',
+      mainImage: r['Main Project Image'] || '',
+      imageAlt: r['Metadata Main Project Image'] || r['Name'] || '',
+      details: r['Project Details'] || '',
+      services: r['Services Rendered'] || '',
+      featured: bool(r['Featured Project?']),
+      order: i,
+    })),
   schema: z.object({
-    title: z.string(),                       // "Pergola Plus Florida"
-    seoTitle: z.string(),
-    description: z.string(),
-    client: z.string(),
-    category: z.enum(['web-design', 'ecommerce', 'web-app', 'marketing']),
-    categoryLabel_en: z.string(),            // "Web Design · Outdoor Living"
-    categoryLabel_es: z.string(),
-    year: z.string(),
-    stack: z.string(),
-    liveUrl: z.string().url().optional(),
-    summary_en: z.string(),                  // card blurb
-    summary_es: z.string(),
-    heroGradient: z.string().default('linear-gradient(135deg, #2D7DB8 0%, #33CCCC 50%, #99CC33 100%)'),
-    coverClass: z.string().default('ph-1'),  // index-card cover gradient
-    overviewHeading_en: z.string(),
-    overviewHeading_es: z.string(),
-    overviewBody_en: z.array(z.string()),
-    overviewBody_es: z.array(z.string()),
-    metrics: z.array(z.object({
-      num: z.string(),
-      label_en: z.string(),
-      label_es: z.string(),
-    })).default([]),
-    csr: z.object({
-      challenge: z.object({ heading_en: z.string(), heading_es: z.string(), body_en: z.array(z.string()), body_es: z.array(z.string()) }),
-      solution:  z.object({ heading_en: z.string(), heading_es: z.string(), body_en: z.array(z.string()), body_es: z.array(z.string()) }),
-      result:    z.object({ heading_en: z.string(), heading_es: z.string(), body_en: z.array(z.string()), body_es: z.array(z.string()) }),
-    }),
-    gallery: z.array(z.object({
-      label_en: z.string(),
-      label_es: z.string(),
-      bg: z.string(),                        // 'bg-1'..'bg-6'
-      full: z.boolean().default(false),
-    })).default([]),
-    tech: z.array(z.string()).default([]),   // ['Webflow','Figma','GA4',...]
-    testimonialQuote_en: z.string().optional(),
-    testimonialQuote_es: z.string().optional(),
+    title: z.string(),
+    summary: z.string().default(''),
+    mainImage: z.string().default(''),
+    imageAlt: z.string().default(''),
+    details: z.string().default(''),
+    services: z.string().default(''),
+    featured: z.boolean().default(false),
     order: z.number().default(0),
-    draft: z.boolean().default(false),
   }),
 });
 
-/* ------------------------------------------------------------------ *
- *  TESTIMONIALS — structured records (json). Easiest format for the
- *  client to paste real CMS rows into later.
- * ------------------------------------------------------------------ */
+/* ---------- SERVICE AREAS ---------- */
+const serviceAreas = defineCollection({
+  loader: async () =>
+    readCsv('Service Areas').map((r, i) => ({
+      id: r['Slug'],
+      city: r['Name'],
+      county: r['Country'] || '',
+      heroMeta: r['Metadata Img Hero'] || '',
+      titlePage: r['Title Page'] || r['Name'],
+      summaryPage: r['Summary Page'] || '',
+      headingIntro: r['Heading Intro'] || '',
+      paragraphIntro: r['Paragraph Intro'] || '',
+      headingServices: r['Heading Services'] || '',
+      paragraphServices: r['Paragraph Services'] || '',
+      headingPortfolio: r['Heading Portfolio'] || '',
+      paragraphPortfolio: r['Paragraph Portfolio'] || '',
+      headingProcess: r['Heading Process'] || '',
+      paragraphProcess: r['Paragraph Process'] || '',
+      headingReviews: r['Heading Reviews'] || '',
+      paragraphReviews: r['Paragraph Reviews'] || '',
+      headingBlog: r['Heading Blog'] || '',
+      paragraphBlog: r['Paragraph Blog'] || '',
+      seoTitle: r['Title SEO'] || r['Name'],
+      seoDescription: r['Metadescription SEO'] || r['Summary Page'] || '',
+      order: i,
+    })),
+  schema: z.object({
+    city: z.string(),
+    county: z.string().default(''),
+    heroMeta: z.string().default(''),
+    titlePage: z.string().default(''),
+    summaryPage: z.string().default(''),
+    headingIntro: z.string().default(''),
+    paragraphIntro: z.string().default(''),
+    headingServices: z.string().default(''),
+    paragraphServices: z.string().default(''),
+    headingPortfolio: z.string().default(''),
+    paragraphPortfolio: z.string().default(''),
+    headingProcess: z.string().default(''),
+    paragraphProcess: z.string().default(''),
+    headingReviews: z.string().default(''),
+    paragraphReviews: z.string().default(''),
+    headingBlog: z.string().default(''),
+    paragraphBlog: z.string().default(''),
+    seoTitle: z.string().default(''),
+    seoDescription: z.string().default(''),
+    order: z.number().default(0),
+  }),
+});
+
+/* ---------- WEBSITE PACKAGES (pricing) ---------- */
+const packages = defineCollection({
+  loader: async () =>
+    readCsv('Website Packages').map((r) => ({
+      id: r['Slug'],
+      name: r['Name'],
+      category: r['Category'] || '',
+      tagline: r['Tagline'] || '',
+      description: r['Description'] || '',
+      include: r['Include'] || '',
+      price: numOr(r['Price']),
+      deliveryTime: r['Delivery Time'] || '',
+      revisionRounds: r['Revision Rounds'] || '',
+      supportDays: r['Support Days'] || '',
+      hostingIncluded: r['Hosting Included'] || '',
+      cmsTraining: r['CMS Training Included'] || '',
+      maintenanceAddon: r['Maintenance Add-on'] || '',
+      badge: r['Badge Label'] || '',
+      sortOrder: numOr(r['Sort Order']),
+      paymentInstallments: numOr(r['Payment Installments']),
+      components: (r['Included Components'] || '')
+        .split(';')
+        .map((s) => s.trim())
+        .filter(Boolean),
+    })),
+  schema: z.object({
+    name: z.string(),
+    category: z.string().default(''),
+    tagline: z.string().default(''),
+    description: z.string().default(''),
+    include: z.string().default(''),
+    price: z.number().default(0),
+    deliveryTime: z.string().default(''),
+    revisionRounds: z.string().default(''),
+    supportDays: z.string().default(''),
+    hostingIncluded: z.string().default(''),
+    cmsTraining: z.string().default(''),
+    maintenanceAddon: z.string().default(''),
+    badge: z.string().default(''),
+    sortOrder: z.number().default(0),
+    paymentInstallments: z.number().default(0),
+    components: z.array(z.string()).default([]),
+  }),
+});
+
+/* ---------- LOGOS (tools / integrations) ---------- */
+const logos = defineCollection({
+  loader: async () =>
+    readCsv('Logos').map((r, i) => ({
+      id: r['Slug'],
+      name: r['Name'],
+      logo: r['Logo'] || '',
+      order: i,
+    })),
+  schema: z.object({
+    name: z.string(),
+    logo: z.string().default(''),
+    order: z.number().default(0),
+  }),
+});
+
+/* ---------- VIDEOS (video testimonials / showcases) ---------- */
+const videos = defineCollection({
+  loader: async () =>
+    readCsv('Videos').map((r, i) => ({
+      id: r['Slug'],
+      name: r['Name'],
+      summary: r['Summary'] || '',
+      link: r['Link Video'] || '',
+      youtubeId: youtubeId(r['Link Video']),
+      order: i,
+    })),
+  schema: z.object({
+    name: z.string(),
+    summary: z.string().default(''),
+    link: z.string().default(''),
+    youtubeId: z.string().default(''),
+    order: z.number().default(0),
+  }),
+});
+
+/* ---------- TESTIMONIALS (text reviews — local JSON, no CMS export yet) ---------- */
 const testimonials = defineCollection({
   loader: file('./src/content/testimonials.json'),
   schema: z.object({
@@ -91,35 +211,13 @@ const testimonials = defineCollection({
     rating: z.number().min(1).max(5).default(5),
     quote_en: z.string(),
     quote_es: z.string(),
-    date: z.string(),                        // display string ("2 weeks ago" / "Mar 2026")
-    avatarClass: z.string().optional(),      // 'a1'..'a6'
+    date: z.string(),
+    avatarClass: z.string().optional(),
     videoType: z.enum(['youtube', 'none']).default('none'),
     videoId: z.string().optional(),
-    thumbClass: z.string().optional(),       // 'bg-1'..'bg-8'
+    thumbClass: z.string().optional(),
     duration: z.string().optional(),
   }),
 });
 
-/* ------------------------------------------------------------------ *
- *  SERVICE AREAS — local landing pages (mdx). Bilingual via *_en/_es.
- *  `miami` migrates here; the rest are seeded as test data.
- * ------------------------------------------------------------------ */
-const serviceAreas = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/service-areas' }),
-  schema: z.object({
-    city: z.string(),                        // "Miami"
-    county: z.enum(['miami-dade', 'broward', 'palm-beach']),
-    countyLabel: z.string(),                 // "Miami-Dade County"
-    seoTitle: z.string(),
-    description: z.string(),
-    intro_en: z.string(),
-    intro_es: z.string(),
-    population: z.string().optional(),
-    nearbyCities: z.array(z.string()).default([]),
-    heroGradient: z.string().default('linear-gradient(135deg, #2D7DB8 0%, #33CCCC 50%, #99CC33 100%)'),
-    order: z.number().default(0),
-    draft: z.boolean().default(false),
-  }),
-});
-
-export const collections = { blog, portfolio, testimonials, serviceAreas };
+export const collections = { blog, portfolio, serviceAreas, packages, logos, videos, testimonials };

@@ -1,7 +1,16 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 const title = "Web Design Agency in Miami — SENAVIA Corp · Conversion-Focused Websites";
 const description = "Web design agency in Miami building modern, conversion-focused websites. Webflow, custom design, SEO-ready, mobile-first — for South Florida businesses.";
+
+/* First 3 projects: featured first, then CMS order */
+const projects = (await getCollection('portfolio'))
+  .sort(
+    (a, b) =>
+      Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order,
+  )
+  .slice(0, 3);
 ---
 <BaseLayout
   title={title}
@@ -230,72 +239,18 @@ const description = "Web design agency in Miami building modern, conversion-focu
         </div>
         <div class="carousel-viewport">
           <div class="carousel-track" role="list">
-          <article class="project-card" role="listitem">
-            <a href="/../portfolio/pergola-plus-florida" class="project-cover ph-1" aria-label="Pergola Plus Florida — Outdoor Living / Vida al Aire Libre">
-              <span class="project-name">Pergola Plus Florida</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Outdoor Living · Service Site</span><span class="lang-only-es">Vida al Aire Libre · Sitio de Servicios</span></p>
-              <p class="lang-only-en">Outdoor living brand site with quote request flow, gallery, and local SEO — built to capture pergola buyers across South Florida.</p>
-              <p class="lang-only-es">Sitio de marca de vida al aire libre con flujo de solicitud de cotización, galería y SEO local — creado para captar compradores de pérgolas en todo el Sur de Florida.</p>
-              <a href="/../portfolio/pergola-plus-florida" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/../portfolio/lake-scaping" class="project-cover ph-2" aria-label="Lake Scaping LLC">
-              <span class="project-name">Lake Scaping LLC</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Landscaping · Lead Generation</span><span class="lang-only-es">Paisajismo · Generación de Leads</span></p>
-              <p class="lang-only-en">Landscaping company website with service area pages, before/after gallery, and an automated lead-to-CRM workflow.</p>
-              <p class="lang-only-es">Sitio web de empresa de paisajismo con páginas de áreas de servicio, galería de antes/después y un flujo automatizado de leads al CRM.</p>
-              <a href="/../portfolio/lake-scaping" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/../portfolio/ab-aluminum" class="project-cover ph-3" aria-label="AB Aluminum & Screens">
-              <span class="project-name">AB Aluminum &amp; Screens</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Home Improvement · Webflow</span><span class="lang-only-es">Mejoras del Hogar · Webflow</span></p>
-              <p class="lang-only-en">Home improvement contractor site with screen-enclosure product showcase, financing CTA, and Google Ads landing pages.</p>
-              <p class="lang-only-es">Sitio de contratista de mejoras del hogar con vitrina de productos de cerramientos, CTA de financiamiento y páginas de aterrizaje para Google Ads.</p>
-              <a href="/../portfolio/ab-aluminum" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/../portfolio/angele-glow" class="project-cover ph-4" aria-label="ANGELE GLOW Skincare / Cuidado de la Piel">
-              <span class="project-name">ANGELE GLOW</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Skincare · Shopify E-commerce</span><span class="lang-only-es">Cuidado de la Piel · E-commerce en Shopify</span></p>
-              <p class="lang-only-en">Skincare e-commerce on Shopify with custom UI, subscription bundles, and a wholesale portal for spa partners.</p>
-              <p class="lang-only-es">E-commerce de cuidado de la piel en Shopify con UI personalizada, paquetes de suscripción y un portal mayorista para spas asociados.</p>
-              <a href="/../portfolio/angele-glow" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/../portfolio/mr-mrs-outdoor" class="project-cover ph-5" aria-label="Mr. & Mrs. Outdoor Living">
-              <span class="project-name">Mr. &amp; Mrs. Outdoor Living</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Outdoor · Service & Booking</span><span class="lang-only-es">Exteriores · Servicio &amp; Reservas</span></p>
-              <p class="lang-only-en">Service-area website with itemized quote tool, project map across Broward, and integrated booking calendar.</p>
-              <p class="lang-only-es">Sitio de áreas de servicio con herramienta de cotización detallada, mapa de proyectos en Broward y calendario de reservas integrado.</p>
-              <a href="/../portfolio/mr-mrs-outdoor" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/../portfolio/gqm-inc" class="project-cover ph-6" aria-label="GQM Inc. Custom Admin Panel / Panel Administrativo a la Medida">
-              <span class="project-name">GQM Inc.</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Internal Tool · Custom Admin Panel</span><span class="lang-only-es">Herramienta Interna · Panel Administrativo a la Medida</span></p>
-              <p class="lang-only-en">Custom admin panel for internal operations: project tracking, client billing, and reporting dashboards.</p>
-              <p class="lang-only-es">Panel administrativo a la medida para operaciones internas: seguimiento de proyectos, facturación de clientes y tableros de reportes.</p>
-              <a href="/../portfolio/gqm-inc" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-            </div>
-          </article>
+          {projects.map((p) => (
+            <article class="project-card" role="listitem">
+              <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
+                <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />
+                <span class="project-name">{p.data.title}</span>
+              </a>
+              <div class="project-body">
+                <p>{p.data.summary}</p>
+                <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
+              </div>
+            </article>
+          ))}
         </div>
         </div>
         <div class="carousel-scrollbar" role="presentation">
@@ -304,7 +259,7 @@ const description = "Web design agency in Miami building modern, conversion-focu
       </div>
 
       <div class="center-cta">
-        <a href="/../portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
+        <a href="/portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
       </div>
     </div>
   </section>
@@ -486,6 +441,26 @@ const description = "Web design agency in Miami building modern, conversion-focu
   </section>
 
 </main>
+
+<style is:global>
+  /* ---- Project card cover: real CMS image fills the frame ---- */
+  .project-cover.has-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .project-cover.has-img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,14,38,0.05) 0%, rgba(10,14,38,0.55) 100%);
+    z-index: 1;
+  }
+  .project-cover.has-img .project-name { z-index: 2; }
+</style>
 
 <!-- Initialize Calendly inline widget once the script loads -->
 <script>

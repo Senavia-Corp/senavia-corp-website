@@ -5,8 +5,9 @@ const title = "Portfolio — SENAVIA Corp · Web Design, Apps & Marketing Projec
 const description = "Explore SENAVIA Corp's portfolio of web design, e-commerce, custom web apps, and digital marketing projects across South Florida.";
 
 const projects = (await getCollection('portfolio'))
-  .filter((e) => !e.data.draft)
-  .sort((a, b) => a.data.order - b.data.order);
+  .sort((a, b) =>
+    (Number(b.data.featured) - Number(a.data.featured)) || (a.data.order - b.data.order),
+  );
 ---
 <BaseLayout
   title={title}
@@ -19,52 +20,6 @@ const projects = (await getCollection('portfolio'))
 /* ============================================================
      PORTFOLIO PAGE
      ============================================================ */
-  .portfolio-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin: 0 auto 3rem;
-    padding: 6px;
-    max-width: max-content;
-    background: rgba(13,18,53,0.55);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 999px;
-    backdrop-filter: blur(8px);
-  }
-  .pf-chip {
-    appearance: none;
-    border: 0;
-    background: transparent;
-    color: rgba(255,255,255,0.72);
-    font: 500 14px/1 inherit;
-    letter-spacing: 0.01em;
-    padding: 10px 18px;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: color .2s ease, background .2s ease, transform .15s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .pf-chip:hover { color: #fff; }
-  .pf-chip.is-active {
-    color: #0a0e26;
-    background: var(--primary, #99cc33);
-    font-weight: 600;
-  }
-  .pf-chip .pf-count {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.1);
-    color: inherit;
-  }
-  .pf-chip.is-active .pf-count {
-    background: rgba(10,14,38,0.22);
-  }
-
   .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -75,90 +30,137 @@ const projects = (await getCollection('portfolio'))
   }
   @media (max-width: 640px) {
     .portfolio-grid { grid-template-columns: 1fr; gap: 18px; }
-    .portfolio-filter { gap: 4px; }
-    .pf-chip { padding: 9px 14px; font-size: 13px; }
   }
 
-  /* Filter transitions */
-  .pf-item {
-    transition: opacity .35s ease, transform .35s ease;
+  /* Project card */
+  .pf-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(13,18,53,0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .3s cubic-bezier(.2,.6,.2,1), border-color .25s ease, box-shadow .25s ease;
+    position: relative;
   }
-  .pf-item[hidden] {
-    display: none !important;
-  }
-  .pf-item.is-entering {
-    opacity: 0;
-    transform: translateY(6px);
+  .pf-card:hover,
+  .pf-card:focus-visible {
+    transform: translateY(-5px);
+    border-color: rgba(153,204,51,0.4);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    outline: none;
   }
 
-  /* Tag chip in project body */
-  .pf-tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+  .pf-cover {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1f44 0%, #0d1235 100%);
+  }
+  .pf-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s cubic-bezier(.2,.6,.2,1);
+  }
+  .pf-card:hover .pf-cover img,
+  .pf-card:focus-within .pf-cover img { transform: scale(1.06); }
+
+  /* Featured ribbon */
+  .pf-featured {
+    position: absolute;
+    top: 14px; left: 14px;
+    z-index: 2;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding: 4px 10px;
+    color: #0a0e26;
+    padding: 5px 11px;
     border-radius: 999px;
-    background: rgba(153,204,51,0.14);
-    color: var(--primary, #99cc33);
-    border: 1px solid rgba(153,204,51,0.28);
-  }
-  .pf-tag[data-tag="ecommerce"] {
-    background: rgba(209,79,140,0.14);
-    color: #f48cb6;
-    border-color: rgba(209,79,140,0.32);
-  }
-  .pf-tag[data-tag="web-app"] {
-    background: rgba(45,125,184,0.16);
-    color: #79c1ee;
-    border-color: rgba(45,125,184,0.34);
-  }
-  .pf-tag[data-tag="marketing"] {
-    background: rgba(240,160,80,0.14);
-    color: #f6b56e;
-    border-color: rgba(240,160,80,0.32);
+    background: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    box-shadow: 0 6px 18px rgba(153,204,51,0.35);
   }
 
-  /* Hover overlay on project cover */
-  .project-card .project-cover .pf-hover {
+  /* Hover overlay CTA */
+  .pf-hover {
     position: absolute;
     inset: 0;
     z-index: 3;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(10,14,38,0.0) 0%, rgba(10,14,38,0.78) 100%);
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(10,14,38,0) 35%, rgba(10,14,38,0.78) 100%);
     opacity: 0;
     transition: opacity .25s ease;
     pointer-events: none;
   }
-  .project-card:hover .project-cover .pf-hover,
-  .project-card:focus-within .project-cover .pf-hover {
-    opacity: 1;
-  }
-  .project-card .project-cover .pf-hover .btn {
+  .pf-card:hover .pf-hover,
+  .pf-card:focus-within .pf-hover { opacity: 1; }
+  .pf-hover .pf-hover-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #fff;
     transform: translateY(8px);
     transition: transform .3s ease;
   }
-  .project-card:hover .project-cover .pf-hover .btn,
-  .project-card:focus-within .project-cover .pf-hover .btn {
-    transform: translateY(0);
-  }
-  /* Push the project-name up when hover overlay shows */
-  .project-card .project-cover .project-name {
-    transition: transform .25s ease;
-  }
-  .project-card:hover .project-cover .project-name {
-    transform: translateY(-22px);
-  }
+  .pf-card:hover .pf-hover .pf-hover-btn,
+  .pf-card:focus-within .pf-hover .pf-hover-btn { transform: translateY(0); }
+  .pf-hover .pf-hover-btn svg { width: 15px; height: 15px; }
 
-  .pf-empty {
-    text-align: center;
-    color: rgba(255,255,255,0.6);
-    padding: 4rem 1rem;
-    font-size: 15px;
+  .pf-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1.5rem 1.5rem 1.65rem;
+    flex: 1;
   }
+  .pf-body h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: #fff;
+    text-transform: none;
+  }
+  .pf-card:hover .pf-body h3,
+  .pf-card:focus-within .pf-body h3 { color: var(--primary, #99cc33); }
+  .pf-body p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.7);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pf-view {
+    margin-top: auto;
+    padding-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .pf-view svg { width: 14px; height: 14px; transition: transform .2s ease; }
+  .pf-card:hover .pf-view svg,
+  .pf-card:focus-within .pf-view svg { transform: translateX(4px); }
 
   /* Compact hero gets a bit of bottom breathing room */
   .hero.is-compact + .section { padding-top: 4rem; }
@@ -184,55 +186,38 @@ const projects = (await getCollection('portfolio'))
   </section>
 
   <!-- ============================================================
-       PORTFOLIO GRID + FILTER
+       PORTFOLIO GRID
        ============================================================ -->
   <section class="section section--band" data-screen-label="02 Portfolio Grid">
     <div class="container">
-      <div class="portfolio-filter" role="tablist" aria-label="Filter projects by category" data-reveal>
-        <button class="pf-chip is-active" type="button" role="tab" aria-selected="true" data-filter="all">
-          <span class="lang-only-en">All</span><span class="lang-only-es">Todos</span> <span class="pf-count" data-count-for="all"></span>
-        </button>
-        <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="web-design">
-          <span class="lang-only-en">Web Design</span><span class="lang-only-es">Diseño Web</span> <span class="pf-count" data-count-for="web-design"></span>
-        </button>
-        <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="ecommerce">
-          <span class="lang-only-en">E-commerce</span><span class="lang-only-es">E-commerce</span> <span class="pf-count" data-count-for="ecommerce"></span>
-        </button>
-        <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="web-app">
-          <span class="lang-only-en">Web App</span><span class="lang-only-es">Aplicación Web</span> <span class="pf-count" data-count-for="web-app"></span>
-        </button>
-        <button class="pf-chip" type="button" role="tab" aria-selected="false" data-filter="marketing">
-          <span class="lang-only-en">Marketing</span><span class="lang-only-es">Marketing</span> <span class="pf-count" data-count-for="marketing"></span>
-        </button>
-      </div>
-
       <div class="portfolio-grid" data-reveal-children>
 
         {projects.map((p) => (
-          <article class="project-card pf-item" data-category={p.data.category}>
-            <a href={`/portfolio/${p.id}`} class={`project-cover ${p.data.coverClass}`} aria-label={p.data.title}>
-              <span class="project-name">{p.data.title}</span>
+          <a href={`/portfolio/${p.id}`} class="pf-card" aria-label={p.data.title}>
+            <span class="pf-cover">
+              {p.data.featured && (
+                <span class="pf-featured"><span class="lang-only-en">Featured</span><span class="lang-only-es">Destacado</span></span>
+              )}
+              <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />
               <span class="pf-hover">
-                <span class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Proyecto</span></span>
-              </span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector">
-                <span class="pf-tag" data-tag={p.data.category}>
-                  <span class="lang-only-en">{p.data.categoryLabel_en}</span><span class="lang-only-es">{p.data.categoryLabel_es}</span>
+                <span class="pf-hover-btn">
+                  <span class="lang-only-en">View project</span><span class="lang-only-es">Ver proyecto</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </span>
-              </p>
-              <p><span class="lang-only-en">{p.data.summary_en}</span><span class="lang-only-es">{p.data.summary_es}</span></p>
+              </span>
+            </span>
+            <div class="pf-body">
+              <h3>{p.data.title}</h3>
+              <p>{p.data.summary}</p>
+              <span class="pf-view">
+                <span class="lang-only-en">View case study</span><span class="lang-only-es">Ver caso</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+              </span>
             </div>
-          </article>
+          </a>
         ))}
 
       </div>
-
-      <p class="pf-empty" hidden role="status">
-        <span class="lang-only-en">No projects match this filter yet — check back soon.</span>
-        <span class="lang-only-es">Aún no hay proyectos en este filtro — vuelve pronto.</span>
-      </p>
     </div>
   </section>
 
@@ -257,76 +242,4 @@ const projects = (await getCollection('portfolio'))
   </section>
 
 </main>
-
-<!-- Initialize Calendly inline widget once the script loads -->
-<script>
-  (function(){
-    var el = document.getElementById('calendlyInline');
-    if (!el) return;
-    function init() {
-      if (!window.Calendly) { setTimeout(init, 200); return; }
-      window.Calendly.initInlineWidget({
-        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
-        parentElement: el,
-        prefill: {}, utm: {}
-      });
-      // Mark loaded after a beat
-      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
-    }
-    init();
-  })();
-</script>
-
-<!-- Language switcher -->
-
-<!-- Portfolio filter -->
-<script>
-  (function(){
-    var items = Array.prototype.slice.call(document.querySelectorAll('.pf-item'));
-    var chips = Array.prototype.slice.call(document.querySelectorAll('.pf-chip'));
-    var empty = document.querySelector('.pf-empty');
-    if (!items.length || !chips.length) return;
-
-    // Counts per category
-    var counts = { all: items.length };
-    items.forEach(function(el){
-      var c = el.getAttribute('data-category');
-      counts[c] = (counts[c] || 0) + 1;
-    });
-    document.querySelectorAll('.pf-count').forEach(function(el){
-      var k = el.getAttribute('data-count-for');
-      el.textContent = counts[k] || 0;
-    });
-
-    function applyFilter(filter){
-      var visible = 0;
-      items.forEach(function(el){
-        var match = (filter === 'all') || (el.getAttribute('data-category') === filter);
-        if (match) {
-          el.hidden = false;
-          el.classList.add('is-entering');
-          requestAnimationFrame(function(){
-            requestAnimationFrame(function(){ el.classList.remove('is-entering'); });
-          });
-          visible++;
-        } else {
-          el.hidden = true;
-        }
-      });
-      if (empty) empty.hidden = visible > 0;
-    }
-
-    chips.forEach(function(chip){
-      chip.addEventListener('click', function(){
-        chips.forEach(function(c){
-          c.classList.remove('is-active');
-          c.setAttribute('aria-selected', 'false');
-        });
-        chip.classList.add('is-active');
-        chip.setAttribute('aria-selected', 'true');
-        applyFilter(chip.getAttribute('data-filter'));
-      });
-    });
-  })();
-</script>
 </BaseLayout>

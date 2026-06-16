@@ -116,6 +116,19 @@ body {
   pointer-events: none;
   background: radial-gradient(52% 62% at 50% 100%, rgba(153,204,51,0.18), transparent 72%);
 }
+
+/* CMS rich-text (set:html) safety — wide/embedded content must never break
+   the page layout (tables, code blocks, images from the Webflow CMS). */
+.cms-prose { overflow-wrap: anywhere; }
+.cms-prose img, .cms-prose video, .cms-prose iframe { max-width: 100%; height: auto; }
+.cms-prose pre { max-width: 100%; overflow-x: auto; }
+.cms-prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
 img { max-width:100%; display:block; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; }

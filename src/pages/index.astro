@@ -1,7 +1,30 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
 const title = "SENAVIA Corp — Web Design & Digital Marketing Agency in South Florida";
 const description = "Google Partner-certified digital agency in Plantation, FL. Custom web design, SEO, and digital marketing for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
+
+/* Tool / integration logos for the hero marquee */
+const logos = (await getCollection('logos')).sort((a, b) => a.data.order - b.data.order);
+
+/* First 3 projects: featured first, then CMS order */
+const projects = (await getCollection('portfolio'))
+  .sort(
+    (a, b) =>
+      Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order,
+  )
+  .slice(0, 3);
+
+/* 2 most recent blog posts by publish date */
+const posts = (await getCollection('blog'))
+  .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
+  .slice(0, 2);
+
+const fmtEn = (d?: Date) =>
+  d ? d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+const fmtEs = (d?: Date) =>
+  d ? d.toLocaleDateString('es-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
 ---
 <BaseLayout
   title={title}
@@ -29,14 +52,12 @@ const description = "Google Partner-certified digital agency in Plantation, FL. 
     </div>
     <div class="marquee" aria-hidden="true">
       <div class="marquee-track">
-        <div class="ph-logo">Pergola Plus</div>
-        <div class="ph-logo">Lake Scaping</div>
-        <div class="ph-logo">AB Aluminum</div>
-        <div class="ph-logo">ANGELE GLOW</div>
-        <div class="ph-logo">Mr. &amp; Mrs.</div>
-        <div class="ph-logo">GQM Inc.</div>
-        <div class="ph-logo">Orchid Roofing</div>
-        <div class="ph-logo">Sunline Pools</div>
+        {logos.map((l) => (
+          <img class="marquee-logo" src={l.data.logo} alt={l.data.name} loading="lazy" decoding="async" />
+        ))}
+        {logos.map((l) => (
+          <img class="marquee-logo" src={l.data.logo} alt={l.data.name} loading="lazy" decoding="async" />
+        ))}
       </div>
     </div>
   </section>
@@ -124,66 +145,18 @@ const description = "Google Partner-certified digital agency in Plantation, FL. 
         </div>
         <div class="carousel-viewport">
           <div class="carousel-track" role="list">
-          <article class="project-card" role="listitem">
-            <a href="/portfolio/pergola-plus-florida" class="project-cover ph-1" aria-label="Pergola Plus Florida — Outdoor Living">
-              <span class="project-name">Pergola Plus Florida</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Outdoor Living · Service Site</span><span class="lang-only-es">Espacios Exteriores · Sitio de Servicios</span></p>
-              <p><span class="lang-only-en">Outdoor living brand site with quote request flow, gallery, and local SEO — built to capture pergola buyers across South Florida.</span><span class="lang-only-es">Sitio de marca de espacios exteriores con flujo de solicitud de cotización, galería y SEO local — creado para captar compradores de pérgolas en todo el Sur de Florida.</span></p>
-              <a href="/portfolio/pergola-plus-florida" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/portfolio/lake-scaping" class="project-cover ph-2" aria-label="Lake Scaping LLC">
-              <span class="project-name">Lake Scaping LLC</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Landscaping · Lead Generation</span><span class="lang-only-es">Paisajismo · Generación de Prospectos</span></p>
-              <p><span class="lang-only-en">Landscaping company website with service area pages, before/after gallery, and an automated lead-to-CRM workflow.</span><span class="lang-only-es">Sitio web de empresa de paisajismo con páginas por área de servicio, galería de antes/después y un flujo automatizado de prospectos al CRM.</span></p>
-              <a href="/portfolio/lake-scaping" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/portfolio/ab-aluminum" class="project-cover ph-3" aria-label="AB Aluminum & Screens">
-              <span class="project-name">AB Aluminum &amp; Screens</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Home Improvement · Webflow</span><span class="lang-only-es">Mejoras para el Hogar · Webflow</span></p>
-              <p><span class="lang-only-en">Home improvement contractor site with screen-enclosure product showcase, financing CTA, and Google Ads landing pages.</span><span class="lang-only-es">Sitio de contratista de mejoras para el hogar con vitrina de productos de cerramientos, llamado a financiamiento y páginas de aterrizaje para Google Ads.</span></p>
-              <a href="/portfolio/ab-aluminum" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/portfolio/angele-glow" class="project-cover ph-4" aria-label="ANGELE GLOW Skincare">
-              <span class="project-name">ANGELE GLOW</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Skincare · Shopify E-commerce</span><span class="lang-only-es">Cuidado de la Piel · E-commerce en Shopify</span></p>
-              <p><span class="lang-only-en">Skincare e-commerce on Shopify with custom UI, subscription bundles, and a wholesale portal for spa partners.</span><span class="lang-only-es">E-commerce de cuidado de la piel en Shopify con interfaz a la medida, paquetes por suscripción y un portal mayorista para socios de spa.</span></p>
-              <a href="/portfolio/angele-glow" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/portfolio/mr-mrs-outdoor" class="project-cover ph-5" aria-label="Mr. & Mrs. Outdoor Living">
-              <span class="project-name">Mr. &amp; Mrs. Outdoor Living</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Outdoor · Service & Booking</span><span class="lang-only-es">Exteriores · Servicio y Reservas</span></p>
-              <p><span class="lang-only-en">Service-area website with itemized quote tool, project map across Broward, and integrated booking calendar.</span><span class="lang-only-es">Sitio web por áreas de servicio con herramienta de cotización detallada, mapa de proyectos en Broward y calendario de reservas integrado.</span></p>
-              <a href="/portfolio/mr-mrs-outdoor" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
-          <article class="project-card" role="listitem">
-            <a href="/portfolio/gqm-inc" class="project-cover ph-6" aria-label="GQM Inc. Custom Admin Panel">
-              <span class="project-name">GQM Inc.</span>
-            </a>
-            <div class="project-body">
-              <p class="project-sector"><span class="lang-only-en">Internal Tool · Custom Admin Panel</span><span class="lang-only-es">Herramienta Interna · Panel de Administración a la Medida</span></p>
-              <p><span class="lang-only-en">Custom admin panel for internal operations: project tracking, client billing, and reporting dashboards.</span><span class="lang-only-es">Panel de administración a la medida para operaciones internas: seguimiento de proyectos, facturación de clientes y tableros de reportes.</span></p>
-              <a href="/portfolio/gqm-inc" class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
+          {projects.map((p) => (
+            <article class="project-card" role="listitem">
+              <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
+                <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />
+                <span class="project-name">{p.data.title}</span>
+              </a>
+              <div class="project-body">
+                <p>{p.data.summary}</p>
+                <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
+              </div>
+            </article>
+          ))}
         </div>
         </div>
         <div class="carousel-scrollbar" role="presentation">
@@ -367,46 +340,21 @@ const description = "Google Partner-certified digital agency in Plantation, FL. 
         </div>
         <div class="carousel-viewport">
           <div class="carousel-track" role="list">
-          <article class="blog-card" role="listitem">
-            <h3><span class="lang-only-en">How to Choose a Web Design Agency in Miami (2026 Guide)</span><span class="lang-only-es">Cómo Elegir una Agencia de Diseño Web en Miami (Guía 2026)</span></h3>
-            <p class="excerpt"><span class="lang-only-en">Vetting an agency goes beyond portfolio screenshots. Here's the framework we use with new South Florida clients to make sure design, SEO, and growth all align.</span><span class="lang-only-es">Evaluar una agencia va más allá de las capturas de su portafolio. Este es el marco que usamos con los nuevos clientes del Sur de Florida para asegurar que el diseño, el SEO y el crecimiento estén alineados.</span></p>
-            <div class="cover"></div>
-            <div class="meta">
-              <span><span class="lang-only-en">Aug 14, 2025</span><span class="lang-only-es">14 ago 2025</span></span><span class="dot"></span><span><span class="lang-only-en">5 min read</span><span class="lang-only-es">5 min de lectura</span></span>
-            </div>
-          </article>
-          <article class="blog-card" role="listitem">
-            <h3><span class="lang-only-en">Local SEO Strategy for South Florida Contractors</span><span class="lang-only-es">Estrategia de SEO Local para Contratistas del Sur de Florida</span></h3>
-            <p class="excerpt"><span class="lang-only-en">From service-area pages to Google Business Profile optimization — the tactics that move contractors into the local 3-pack for high-intent queries.</span><span class="lang-only-es">Desde páginas por área de servicio hasta la optimización del Perfil de Empresa en Google — las tácticas que llevan a los contratistas al 3-pack local en búsquedas de alta intención.</span></p>
-            <div class="cover"></div>
-            <div class="meta">
-              <span><span class="lang-only-en">Jul 30, 2025</span><span class="lang-only-es">30 jul 2025</span></span><span class="dot"></span><span><span class="lang-only-en">7 min read</span><span class="lang-only-es">7 min de lectura</span></span>
-            </div>
-          </article>
-          <article class="blog-card" role="listitem">
-            <h3><span class="lang-only-en">Google Ads vs Meta Ads: Which Drives More Leads in 2026?</span><span class="lang-only-es">Google Ads vs Meta Ads: ¿Cuál Genera Más Prospectos en 2026?</span></h3>
-            <p class="excerpt"><span class="lang-only-en">We pulled twelve months of campaign data across our clients to find the real winner per industry — and where you should split your spend.</span><span class="lang-only-es">Analizamos doce meses de datos de campañas de nuestros clientes para encontrar al verdadero ganador por industria — y dónde deberías repartir tu inversión.</span></p>
-            <div class="cover"></div>
-            <div class="meta">
-              <span><span class="lang-only-en">Jul 18, 2025</span><span class="lang-only-es">18 jul 2025</span></span><span class="dot"></span><span><span class="lang-only-en">6 min read</span><span class="lang-only-es">6 min de lectura</span></span>
-            </div>
-          </article>
-          <article class="blog-card" role="listitem">
-            <h3><span class="lang-only-en">Core Web Vitals: What Every Business Owner Should Know</span><span class="lang-only-es">Core Web Vitals: Lo Que Todo Dueño de Negocio Debe Saber</span></h3>
-            <p class="excerpt"><span class="lang-only-en">A non-technical breakdown of LCP, INP, and CLS — what they measure, why Google ranks on them, and how to fix the most common issues.</span><span class="lang-only-es">Una explicación sin tecnicismos de LCP, INP y CLS — qué miden, por qué Google los considera para el ranking y cómo resolver los problemas más comunes.</span></p>
-            <div class="cover"></div>
-            <div class="meta">
-              <span><span class="lang-only-en">Jun 28, 2025</span><span class="lang-only-es">28 jun 2025</span></span><span class="dot"></span><span><span class="lang-only-en">4 min read</span><span class="lang-only-es">4 min de lectura</span></span>
-            </div>
-          </article>
-          <article class="blog-card" role="listitem">
-            <h3><span class="lang-only-en">AEO &amp; GEO — Ranking in AI Search Engines</span><span class="lang-only-es">AEO y GEO — Posicionarse en Motores de Búsqueda con IA</span></h3>
-            <p class="excerpt"><span class="lang-only-en">Answer Engine Optimization is the new SEO frontier. Here's how to structure content so ChatGPT, Perplexity, and Google AI Overviews cite your business.</span><span class="lang-only-es">La Optimización para Motores de Respuesta es la nueva frontera del SEO. Aprende a estructurar tu contenido para que ChatGPT, Perplexity y las Vistas Generales de IA de Google citen tu negocio.</span></p>
-            <div class="cover"></div>
-            <div class="meta">
-              <span><span class="lang-only-en">Jun 12, 2025</span><span class="lang-only-es">12 jun 2025</span></span><span class="dot"></span><span><span class="lang-only-en">8 min read</span><span class="lang-only-es">8 min de lectura</span></span>
-            </div>
-          </article>
+          {posts.map((post) => (
+            <a class="blog-card" role="listitem" href={`/blog/${post.id}`}>
+              <div class="cover">
+                {post.data.thumbnail && (
+                  <img src={post.data.thumbnail} alt={post.data.altImage} loading="lazy" decoding="async" />
+                )}
+              </div>
+              <h3>{post.data.title}</h3>
+              <p class="excerpt">{post.data.summary}</p>
+              <div class="meta">
+                <span><span class="lang-only-en">{fmtEn(post.data.pubDate)}</span><span class="lang-only-es">{fmtEs(post.data.pubDate)}</span></span>
+                {post.data.category && (<><span class="dot"></span><span>{post.data.category}</span></>)}
+              </div>
+            </a>
+          ))}
         </div>
         </div>
         <div class="carousel-scrollbar" role="presentation">
@@ -438,4 +386,42 @@ const description = "Google Partner-certified digital agency in Plantation, FL. 
   </section>
 
 </main>
+
+<style is:global>
+  /* ---- Hero marquee: real colored tool logos on navy ---- */
+  .marquee-track img.marquee-logo {
+    height: 30px;
+    width: auto;
+    flex: 0 0 auto;
+    opacity: 0.85;
+    filter: none;                 /* keep brand color of SVG logos */
+    object-fit: contain;
+  }
+  @media (max-width: 700px) {
+    .marquee-track img.marquee-logo { height: 26px; }
+  }
+
+  /* ---- Project card cover: real CMS image fills the frame ---- */
+  .project-cover.has-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Readability scrim so the project name stays legible over photos */
+  .project-cover.has-img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,14,38,0.05) 0%, rgba(10,14,38,0.55) 100%);
+    z-index: 1;
+  }
+  .project-cover.has-img .project-name { z-index: 2; }
+
+  /* ---- Blog card rendered as a link ---- */
+  a.blog-card { text-decoration: none; color: inherit; }
+  a.blog-card:hover { text-decoration: none; }
+</style>
 </BaseLayout>
