@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-const title = "Web Development Agency in Miami — SENAVIA Corp · Custom Admin Panels, CRM &amp; ERP";
+const title = "Web Development Agency in Miami — SENAVIA Corp · Custom Admin Panels, CRM & ERP";
 const description = "Web development agency in Miami. Custom admin panels, CRM/ERP systems, and workflow automation built to scale your operations across South Florida.";
 
 /* First 3 projects: featured first, then CMS order */
@@ -17,6 +17,11 @@ const projects = (await getCollection('portfolio'))
   description={description}
   canonical="/services/web-development"
   jsonLdType="service"
+  jsonLdData={{
+    name: 'Web Development',
+    serviceType: 'Web Development',
+    description: 'Custom admin panels, dashboards, CRM/ERP portals, and workflow automation engineered for South Florida businesses.',
+  }}
   screenLabel="Web Development Service"
 >
 <main>
@@ -58,12 +63,20 @@ const projects = (await getCollection('portfolio'))
           <h2><span class="lang-only-en">Premier Web Development Agency in South Florida</span><span class="lang-only-es">La Mejor Agencia de Desarrollo Web en el Sur de Florida</span></h2>
           <p class="lang-only-en">SENAVIA Corp builds the systems that run South Florida businesses behind the scenes. We engineer custom admin panels, CRM/ERP platforms, and integration workflows for contractors, service operators, and e-commerce teams — the tools that take operations from spreadsheets and email threads to a single source of truth.</p>
           <p class="lang-only-es">SENAVIA Corp construye los sistemas que hacen funcionar a los negocios del Sur de Florida tras bambalinas. Desarrollamos paneles administrativos a la medida, plataformas CRM/ERP y flujos de integración para contratistas, operadores de servicios y equipos de e-commerce — las herramientas que llevan las operaciones de las hojas de cálculo y los correos a una sola fuente de verdad.</p>
-          <p class="lang-only-en">Every engagement starts with how your team actually works — jobs, quotes, billing, dispatch, reporting — and ends with a platform engineered around it. Modern stacks, clean APIs, and integrations with the tools you already use: Podio, QuickBooks, Buildertrend, Zapier, and more.</p>
-          <p class="lang-only-es">Cada proyecto comienza con la forma en que su equipo realmente trabaja — trabajos, cotizaciones, facturación, despacho, reportes — y termina con una plataforma diseñada en torno a ello. Stacks modernos, APIs limpias e integraciones con las herramientas que ya usa: Podio, QuickBooks, Buildertrend, Zapier y más.</p>
+          <p class="lang-only-en">We turn complex designs into robust, fast, secure platforms — the infrastructure and business logic your team needs to operate efficiently. Every engagement starts with how your team actually works — jobs, quotes, billing, dispatch, reporting — and ends with a platform engineered around it. Modern stacks, clean APIs, and integrations with the tools you already use: QuickBooks, Salesforce, HubSpot, Buildertrend, Notion, and more.</p>
+          <p class="lang-only-es">Convertimos diseños complejos en plataformas robustas, rápidas y seguras — la infraestructura y la lógica de negocio que su equipo necesita para operar con eficiencia. Cada proyecto comienza con la forma en que su equipo realmente trabaja — trabajos, cotizaciones, facturación, despacho, reportes — y termina con una plataforma diseñada en torno a ello. Stacks modernos, APIs limpias e integraciones con las herramientas que ya usa: QuickBooks, Salesforce, HubSpot, Buildertrend, Notion y más.</p>
           <a href="#consultation" class="btn"><span class="lang-only-en">Schedule a Free Consultation</span><span class="lang-only-es">Agenda una Consulta Gratis</span></a>
         </div>
         <div class="split-media">
-          <img src="/images/services/web-development-showcase.png" alt="Custom admin panels, dashboards, and web applications built by SENAVIA Corp" loading="lazy">
+          <div class="video-embed">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/QDpIO4MqW1U?rel=0"
+              title="SENAVIA Corp web development — custom platforms, dashboards &amp; automation"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+          </div>
           <span class="badge-overlay"><span class="lang-only-en">Google Partner Certified</span><span class="lang-only-es">Certificado Google Partner</span></span>
         </div>
       </div>
@@ -71,13 +84,13 @@ const projects = (await getCollection('portfolio'))
   </section>
 
   <!-- ============================================================
-       CAPABILITIES — 3 cards
+       SUB-PILLARS — 3 cards (Web Development)
        ============================================================ -->
-  <section class="section section--band" data-screen-label="03 Dev Capabilities">
+  <section class="section section--band" data-screen-label="03 Web Development Sub-Pillars">
     <div class="container">
       <div class="section-head" data-reveal>
-        <div class="eyebrow"><span class="lang-only-en">What we deliver</span><span class="lang-only-es">Qué entregamos</span></div>
-        <h2><span class="lang-only-en">Custom Software That Runs And Automates Your Business</span><span class="lang-only-es">Software a la Medida Que Opera Y Automatiza su Negocio</span></h2>
+        <div class="eyebrow"><span class="lang-only-en">What we build</span><span class="lang-only-es">Qué construimos</span></div>
+        <h2><span class="lang-only-en">Web Development Built Around Your Business Logic</span><span class="lang-only-es">Desarrollo Web Construido en Torno a su Lógica de Negocio</span></h2>
         <p class="lang-only-en">Three core capabilities cover the systems behind the business — the dashboards your team uses, the portals your clients log into, and the integrations that tie them together.</p>
         <p class="lang-only-es">Tres capacidades centrales cubren los sistemas detrás del negocio — los tableros que usa su equipo, los portales donde inician sesión sus clientes y las integraciones que los conectan.</p>
       </div>
@@ -85,20 +98,20 @@ const projects = (await getCollection('portfolio'))
         <article class="cap-card">
           <span class="cap-num">01 · <span class="lang-only-en">Dashboards</span><span class="lang-only-es">Tableros</span></span>
           <h3><span class="lang-only-en">Admin Panels &amp; Business Dashboards</span><span class="lang-only-es">Paneles Administrativos &amp; Tableros de Negocio</span></h3>
-          <p class="lang-only-en">Custom internal tools to manage operations. Job tracking, billing, dispatch, inventory, and reporting — designed around how your team actually works, not a generic SaaS template.</p>
-          <p class="lang-only-es">Herramientas internas a la medida para gestionar operaciones. Seguimiento de trabajos, facturación, despacho, inventario y reportes — diseñados en torno a cómo trabaja realmente su equipo, no una plantilla SaaS genérica.</p>
+          <p class="lang-only-en">Manage users, finances, inventory, and KPIs in real time from one unified dashboard — secure, custom-built, and tailored to your business logic.</p>
+          <p class="lang-only-es">Gestione usuarios, finanzas, inventario y KPIs en tiempo real desde un único tablero unificado — seguro, hecho a la medida y adaptado a la lógica de su negocio.</p>
         </article>
         <article class="cap-card">
-          <span class="cap-num">02 · <span class="lang-only-en">Platforms</span><span class="lang-only-es">Plataformas</span></span>
+          <span class="cap-num">02 · <span class="lang-only-en">Portals</span><span class="lang-only-es">Portales</span></span>
           <h3><span class="lang-only-en">Custom Portals &amp; CRM / ERP Systems</span><span class="lang-only-es">Portales a la Medida &amp; Sistemas CRM / ERP</span></h3>
-          <p class="lang-only-en">Tailored client and operational portals. Lead pipelines, project workflows, document handoffs, and role-based access — a single system of record that replaces the spreadsheet stack.</p>
-          <p class="lang-only-es">Portales operativos y para clientes hechos a la medida. Embudos de leads, flujos de proyectos, entregas de documentos y acceso por roles — un único sistema de registro que reemplaza el conjunto de hojas de cálculo.</p>
+          <p class="lang-only-en">Role-based portals for internal teams or external clients — streamline approvals, track pipelines, and automate the workflows that eat your team's time.</p>
+          <p class="lang-only-es">Portales por roles para equipos internos o clientes externos — agilice aprobaciones, dé seguimiento a sus embudos y automatice los flujos de trabajo que consumen el tiempo de su equipo.</p>
         </article>
         <article class="cap-card">
           <span class="cap-num">03 · <span class="lang-only-en">Automation</span><span class="lang-only-es">Automatización</span></span>
           <h3><span class="lang-only-en">Integrations &amp; Workflow Automation</span><span class="lang-only-es">Integraciones &amp; Automatización de Flujos</span></h3>
-          <p class="lang-only-en">Connect Podio, QuickBooks, Buildertrend, Zapier, and APIs. We wire the tools you already pay for into one workflow — so data flows automatically and your team stops re-keying.</p>
-          <p class="lang-only-es">Conecte Podio, QuickBooks, Buildertrend, Zapier y APIs. Integramos las herramientas que ya paga en un solo flujo de trabajo — para que los datos circulen automáticamente y su equipo deje de reescribir información.</p>
+          <p class="lang-only-en">Connect QuickBooks, Salesforce, HubSpot, Buildertrend, Notion, and more — without manual data entry.</p>
+          <p class="lang-only-es">Conecte QuickBooks, Salesforce, HubSpot, Buildertrend, Notion y más — sin entrada manual de datos.</p>
         </article>
       </div>
     </div>
@@ -443,6 +456,26 @@ const projects = (await getCollection('portfolio'))
 </main>
 
 <style is:global>
+  /* ---- Responsive 16:9 YouTube embed (intro) ---- */
+  .video-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(153, 204, 51, 0.22);
+    box-shadow: 0 24px 60px rgba(5, 8, 24, 0.45);
+    background: #060914;
+  }
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
   /* ---- Project card cover: real CMS image fills the frame ---- */
   .project-cover.has-img img {
     position: absolute;

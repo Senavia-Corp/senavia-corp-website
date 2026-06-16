@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-const title = "Web Design Agency in Miami — SENAVIA Corp · Conversion-Focused Websites";
-const description = "Web design agency in Miami building modern, conversion-focused websites. Webflow, custom design, SEO-ready, mobile-first — for South Florida businesses.";
+const title = "Custom Web Design in Miami — SENAVIA Corp · 100% Custom, Conversion-Focused Websites";
+const description = "Custom web design in Miami & South Florida. 100% custom, conversion-focused websites with advanced UX/UI, mobile-first design, and SEO architecture — never prebuilt templates.";
 
 /* First 3 projects: featured first, then CMS order */
 const projects = (await getCollection('portfolio'))
@@ -17,14 +17,19 @@ const projects = (await getCollection('portfolio'))
   description={description}
   canonical="/services/web-design"
   jsonLdType="service"
-  screenLabel="Web Design Service"
+  jsonLdData={{
+    name: 'Custom Web Design',
+    serviceType: 'Custom Web Design',
+    description: '100% custom, conversion-focused websites with advanced UX/UI, mobile-first design, and SEO architecture for Miami and South Florida businesses.',
+  }}
+  screenLabel="Custom Web Design Service"
 >
 <main>
 
   <!-- ============================================================
        HERO — Full viewport
        ============================================================ -->
-  <section class="hero" data-screen-label="01 Web Design Hero">
+  <section class="hero" data-screen-label="01 Custom Web Design Hero">
     <video class="hero-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
@@ -32,10 +37,10 @@ const projects = (await getCollection('portfolio'))
       <source src="/videos/hero-web-design.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
-      <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Web Design · Miami</span><span class="lang-only-es">Diseño Web · Miami</span></div>
-      <h1><span class="lang-only-en">Web Design Agency in Miami That Converts</span><span class="lang-only-es">Agencia de Diseño Web en Miami Que Convierte</span></h1>
-      <p class="lang-only-en">SENAVIA builds modern, conversion-focused websites for South Florida businesses. Webflow development, custom design, SEO-ready, mobile-first.</p>
-      <p class="lang-only-es">SENAVIA crea sitios web modernos y enfocados en la conversión para negocios del Sur de Florida. Desarrollo en Webflow, diseño a la medida, listo para SEO y mobile-first.</p>
+      <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Custom Web Design · Miami</span><span class="lang-only-es">Diseño Web Personalizado · Miami</span></div>
+      <h1><span class="lang-only-en">Custom Web Design That Captures Your Brand &amp; Converts</span><span class="lang-only-es">Diseño Web Personalizado que Captura su Marca y Convierte</span></h1>
+      <p class="lang-only-en">SENAVIA designs 100% custom, conversion-focused visual experiences for South Florida businesses — never prebuilt templates. Advanced UX/UI, mobile-first, and SEO architecture that guide visitors to convert.</p>
+      <p class="lang-only-es">SENAVIA diseña experiencias visuales 100% personalizadas y enfocadas en la conversión para negocios del Sur de Florida — nunca plantillas prediseñadas. UX/UI avanzado, mobile-first y arquitectura SEO que guían al visitante a convertir.</p>
       <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
       <div class="metric-strip" aria-label="Key metrics / Métricas clave">
         <div class="metric"><span class="metric-value">100+</span><span class="metric-label"><span class="lang-only-en">Sites launched</span><span class="lang-only-es">Sitios lanzados</span></span></div>
@@ -50,55 +55,63 @@ const projects = (await getCollection('portfolio'))
   <!-- ============================================================
        INTRO SPLIT — Miami's Leading Web Design Agency
        ============================================================ -->
-  <section class="section" data-screen-label="02 Miami Leading">
+  <section class="section" data-screen-label="02 Custom By Design">
     <div class="container">
       <div class="split is-reversed" data-reveal>
         <div class="split-copy">
-          <div class="eyebrow"><span class="lang-only-en">Why Miami trusts us</span><span class="lang-only-es">Por qué Miami confía en nosotros</span></div>
-          <h2><span class="lang-only-en">Miami's Leading Web Design &amp; Digital Marketing Agency</span><span class="lang-only-es">La Agencia Líder de Diseño Web &amp; Marketing Digital en Miami</span></h2>
-          <p class="lang-only-en">SENAVIA Corp is a Google Partner-certified team building high-performance websites for contractors, e-commerce brands, and service businesses across South Florida. Every project starts with strategy and ends with measurable growth — not just a launch.</p>
-          <p class="lang-only-es">SENAVIA Corp es un equipo certificado como Google Partner que construye sitios web de alto rendimiento para contratistas, marcas de e-commerce y negocios de servicios en todo el Sur de Florida. Cada proyecto comienza con estrategia y termina con crecimiento medible — no solo con un lanzamiento.</p>
-          <p class="lang-only-en">We design and build in Webflow, Shopify, and custom stacks — combining bold UI, technical SEO, and conversion architecture into sites that load fast, rank well, and turn traffic into pipeline. Our bilingual EN/ES team gives you a partner that speaks your market, not a vendor with a template.</p>
-          <p class="lang-only-es">Diseñamos y construimos en Webflow, Shopify y stacks personalizados — combinando una UI llamativa, SEO técnico y arquitectura de conversión en sitios que cargan rápido, posicionan bien y convierten el tráfico en oportunidades. Nuestro equipo bilingüe EN/ES le ofrece un socio que habla el idioma de su mercado, no un proveedor con una plantilla.</p>
+          <div class="eyebrow"><span class="lang-only-en">Custom by design</span><span class="lang-only-es">Personalizado por diseño</span></div>
+          <h2><span class="lang-only-en">Custom Web Design Built Around Your Brand &amp; Your Buyers</span><span class="lang-only-es">Diseño Web Personalizado Construido en Torno a su Marca y sus Compradores</span></h2>
+          <p class="lang-only-en">SENAVIA Corp is a Google Partner-certified team that designs 100% custom websites for contractors, e-commerce brands, and service businesses across South Florida. No prebuilt themes, no recycled layouts — every screen is crafted around how your customers actually decide and convert.</p>
+          <p class="lang-only-es">SENAVIA Corp es un equipo certificado como Google Partner que diseña sitios web 100% personalizados para contratistas, marcas de e-commerce y negocios de servicios en todo el Sur de Florida. Sin temas prediseñados ni plantillas recicladas — cada pantalla se crea en torno a cómo deciden y convierten realmente sus clientes.</p>
+          <p class="lang-only-en">We combine advanced UX/UI, mobile-first design, and SEO architecture into visual experiences that capture your brand at a premium level and guide visitors toward action. Our bilingual EN/ES team gives you a design partner that speaks your market — not a vendor handing you a template.</p>
+          <p class="lang-only-es">Combinamos UX/UI avanzado, diseño mobile-first y arquitectura SEO en experiencias visuales que capturan su marca a un nivel premium y guían al visitante hacia la acción. Nuestro equipo bilingüe EN/ES le ofrece un socio de diseño que habla el idioma de su mercado — no un proveedor que le entrega una plantilla.</p>
           <a href="#consultation" class="btn"><span class="lang-only-en">Schedule a Free Consultation</span><span class="lang-only-es">Agenda una Consulta Gratis</span></a>
         </div>
         <div class="split-media">
-          <img src="/images/services/web-design-showcase.png" alt="Collage of modern, responsive websites SENAVIA Corp has designed for South Florida businesses" loading="lazy">
-          <span class="badge-overlay"><span class="lang-only-en">Google Partner Certified</span><span class="lang-only-es">Certificado Google Partner</span></span>
+          <div class="video-embed">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/qOOyCUcOKfM?rel=0"
+              title="SENAVIA Corp custom web design showcase / Muestra de diseño web personalizado de SENAVIA Corp"
+              loading="lazy"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+          <span class="badge-overlay"><span class="lang-only-en">100% Custom · No Templates</span><span class="lang-only-es">100% Personalizado · Sin Plantillas</span></span>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-       CAPABILITIES — 3 cards
+       SUB-PILLARS — 3 cards (Custom Web Design)
        ============================================================ -->
-  <section class="section section--band" data-screen-label="03 Web Design Capabilities">
+  <section class="section section--band" data-screen-label="03 Web Design Sub-Pillars">
     <div class="container">
       <div class="section-head" data-reveal>
-        <div class="eyebrow"><span class="lang-only-en">What we deliver</span><span class="lang-only-es">Qué entregamos</span></div>
-        <h2><span class="lang-only-en">Professional Web Design &amp; Development Services in Miami</span><span class="lang-only-es">Servicios Profesionales de Diseño Web &amp; Desarrollo en Miami</span></h2>
-        <p class="lang-only-en">Three core capabilities cover the full spectrum — from branded marketing sites to revenue-driving storefronts and CMS-backed content engines.</p>
-        <p class="lang-only-es">Tres capacidades centrales cubren todo el espectro — desde sitios de marketing de marca hasta tiendas que generan ingresos y motores de contenido respaldados por CMS.</p>
+        <div class="eyebrow"><span class="lang-only-en">What's inside custom web design</span><span class="lang-only-es">Qué incluye el diseño web personalizado</span></div>
+        <h2><span class="lang-only-en">Three Ways We Bring Custom Web Design to Life</span><span class="lang-only-es">Tres Formas en que Damos Vida al Diseño Web Personalizado</span></h2>
+        <p class="lang-only-en">From premium brand websites to scalable CMS platforms and revenue-driven storefronts — every build is 100% custom and engineered to convert.</p>
+        <p class="lang-only-es">Desde sitios web de marca premium hasta plataformas CMS escalables y tiendas que generan ingresos — cada desarrollo es 100% personalizado y diseñado para convertir.</p>
       </div>
       <div class="grid-3" data-reveal-children>
         <article class="cap-card">
           <span class="cap-num">01 · <span class="lang-only-en">Design</span><span class="lang-only-es">Diseño</span></span>
-          <h3><span class="lang-only-en">Custom Website Design</span><span class="lang-only-es">Diseño de Sitios Web a la Medida</span></h3>
-          <p class="lang-only-en">Tailored designs, brand-aligned, conversion-focused. Information architecture, UX flows, and high-fidelity UI — built around how your buyers actually decide.</p>
-          <p class="lang-only-es">Diseños a la medida, alineados con la marca y enfocados en la conversión. Arquitectura de información, flujos UX y UI de alta fidelidad — construidos en torno a cómo deciden realmente sus compradores.</p>
+          <h3><span class="lang-only-en">Custom Website Design</span><span class="lang-only-es">Diseño de Sitios Web Personalizado</span></h3>
+          <p class="lang-only-en">100% custom, conversion-focused websites with advanced UX/UI, mobile-first design, and SEO architecture to attract high-value leads and reflect your brand at a premium level.</p>
+          <p class="lang-only-es">Sitios web 100% personalizados y enfocados en la conversión, con UX/UI avanzado, diseño mobile-first y arquitectura SEO para atraer clientes potenciales de alto valor y reflejar su marca a un nivel premium.</p>
         </article>
         <article class="cap-card">
           <span class="cap-num">02 · CMS</span>
           <h3><span class="lang-only-en">CMS Web Development</span><span class="lang-only-es">Desarrollo Web con CMS</span></h3>
-          <p class="lang-only-en">Webflow, WordPress, and headless CMS expertise. Your team gets a content engine they can ship from — without breaking the design or losing performance.</p>
-          <p class="lang-only-es">Experiencia en Webflow, WordPress y CMS headless. Su equipo obtiene un motor de contenido desde el cual publicar — sin romper el diseño ni perder rendimiento.</p>
+          <p class="lang-only-en">Scalable, SEO-ready CMS solutions; manage content easily, expand service pages, and keep high performance as you grow.</p>
+          <p class="lang-only-es">Soluciones CMS escalables y listas para SEO; gestione el contenido con facilidad, amplíe sus páginas de servicios y mantenga un alto rendimiento a medida que crece.</p>
         </article>
         <article class="cap-card">
           <span class="cap-num">03 · E-commerce</span>
-          <h3><span class="lang-only-en">E-commerce Website Design</span><span class="lang-only-es">Diseño de Sitios E-commerce</span></h3>
-          <p class="lang-only-en">Shopify and custom storefronts that sell. Product UX, checkout optimization, integrations, and subscription models — engineered for conversion at every step.</p>
-          <p class="lang-only-es">Tiendas en Shopify y personalizadas que venden. UX de producto, optimización del checkout, integraciones y modelos de suscripción — diseñados para la conversión en cada paso.</p>
+          <h3><span class="lang-only-en">E-Commerce Website Design</span><span class="lang-only-es">Diseño de Sitios E-Commerce</span></h3>
+          <p class="lang-only-en">Revenue-driven e-commerce: fast performance, mobile optimization, secure payments, and conversion-focused shopping experiences.</p>
+          <p class="lang-only-es">E-commerce orientado a los ingresos: rendimiento rápido, optimización móvil, pagos seguros y experiencias de compra enfocadas en la conversión.</p>
         </article>
       </div>
     </div>
@@ -220,12 +233,12 @@ const projects = (await getCollection('portfolio'))
 <!-- ============================================================
        PORTFOLIO carousel
        ============================================================ -->
-  <section id="portfolio" class="section" data-screen-label="04 Portfolio">
+  <section id="portfolio" class="section" data-screen-label="06 Portfolio">
     <div class="container">
       <div class="section-head" data-reveal>
-        <h2><span class="lang-only-en">Web Design, Development &amp; Marketing Projects</span><span class="lang-only-es">Proyectos de Diseño Web, Desarrollo &amp; Marketing</span></h2>
-        <p class="lang-only-en">Explore our web design projects across South Florida — custom digital experiences built to elevate UX, boost conversions, and increase visibility.</p>
-        <p class="lang-only-es">Explore nuestros proyectos de diseño web en todo el Sur de Florida — experiencias digitales a la medida creadas para elevar la UX, impulsar las conversiones y aumentar la visibilidad.</p>
+        <h2><span class="lang-only-en">Custom Web Design Projects</span><span class="lang-only-es">Proyectos de Diseño Web Personalizado</span></h2>
+        <p class="lang-only-en">Explore our custom web design work across South Florida — 100% bespoke digital experiences built to elevate UX, capture each brand, and turn visitors into customers.</p>
+        <p class="lang-only-es">Explore nuestro trabajo de diseño web personalizado en todo el Sur de Florida — experiencias digitales 100% a la medida creadas para elevar la UX, capturar cada marca y convertir visitantes en clientes.</p>
       </div>
 
       <div class="carousel" data-carousel="portfolio">
@@ -433,9 +446,9 @@ const projects = (await getCollection('portfolio'))
       <source src="/videos/cta-bg.mp4" type="video/mp4">
     </video>
     <div class="container">
-      <h2><span class="lang-only-en">Let's Build Your Next Digital Success Story</span><span class="lang-only-es">Construyamos su Próxima Historia de Éxito Digital</span></h2>
-      <p class="lang-only-en">Schedule your free web design &amp; SEO consultation and get a custom strategy to increase traffic, leads, and conversions.</p>
-      <p class="lang-only-es">Agende su consulta gratuita de diseño web &amp; SEO y obtenga una estrategia personalizada para aumentar el tráfico, los clientes potenciales y las conversiones.</p>
+      <h2><span class="lang-only-en">Let's Design a Website Built to Convert</span><span class="lang-only-es">Diseñemos un Sitio Web Hecho para Convertir</span></h2>
+      <p class="lang-only-en">Schedule your free custom web design consultation and get a tailored plan to capture your brand and turn visitors into customers.</p>
+      <p class="lang-only-es">Agende su consulta gratuita de diseño web personalizado y obtenga un plan a la medida para capturar su marca y convertir visitantes en clientes.</p>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>
@@ -443,6 +456,25 @@ const projects = (await getCollection('portfolio'))
 </main>
 
 <style is:global>
+  /* ---- Responsive 16:9 YouTube embed (custom web design showcase) ---- */
+  .video-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #0a0e26;
+    box-shadow: 0 24px 60px rgba(10, 14, 38, 0.35);
+  }
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
   /* ---- Project card cover: real CMS image fills the frame ---- */
   .project-cover.has-img img {
     position: absolute;
