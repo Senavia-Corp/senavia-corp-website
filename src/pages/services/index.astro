@@ -1,13 +1,18 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-const title = "Services — SENAVIA Corp · Web Design, Digital Marketing & Development";
-const description = "End-to-end digital agency services for South Florida businesses — custom web design, SEO-driven marketing, and scalable web development.";
+const title = "Services — SENAVIA Corp · Custom Web Design, Web Development & Traffic Generation";
+const description = "Three focused services for South Florida businesses — custom web design, web development, and traffic generation (SEO, SEM & GEO). Based in Plantation, serving Miami-Dade, Broward & Palm Beach.";
 ---
 <BaseLayout
   title={title}
   description={description}
   canonical="/services"
   jsonLdType="service"
+  jsonLdData={{
+    name: 'Custom Web Design, Web Development & Traffic Generation',
+    serviceType: 'Custom Web Design, Web Development & Traffic Generation',
+    description: 'Conversion-focused custom web design, web development, and traffic generation (SEO, SEM & GEO) for South Florida businesses.',
+  }}
   screenLabel="Services"
 >
 <main>
@@ -25,8 +30,8 @@ const description = "End-to-end digital agency services for South Florida busine
     <div class="hero-inner">
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">What we do</span><span class="lang-only-es">Qué hacemos</span></div>
       <h1><span class="lang-only-en">Digital Agency Services Built for Business Growth</span><span class="lang-only-es">Servicios de Agencia Digital Creados para el Crecimiento de tu Negocio</span></h1>
-      <p class="lang-only-en">Three connected practices — Web Design, Digital Marketing, and Web Development — combined into a single growth system. We build the site, drive the traffic, and engineer the systems that scale your South Florida business.</p>
-      <p class="lang-only-es">Tres prácticas conectadas — Diseño Web, Marketing Digital y Desarrollo Web — combinadas en un solo sistema de crecimiento. Construimos el sitio, atraemos el tráfico y diseñamos los sistemas que escalan su negocio en el Sur de Florida.</p>
+      <p class="lang-only-en">Three connected practices — Custom Web Design, Web Development, and Traffic Generation — combined into a single growth system. We design the site, build the systems, and drive the traffic that scales your South Florida business.</p>
+      <p class="lang-only-es">Tres prácticas conectadas — Diseño Web Personalizado, Desarrollo Web y Generación de Tráfico — combinadas en un solo sistema de crecimiento. Diseñamos el sitio, construimos los sistemas y atraemos el tráfico que escala su negocio en el Sur de Florida.</p>
       <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
     </div>
   </section>
@@ -39,56 +44,32 @@ const description = "End-to-end digital agency services for South Florida busine
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">The 3 pillars</span><span class="lang-only-es">Los 3 pilares</span></div>
         <h2><span class="lang-only-en">Digital Services Designed To Grow Your Business In South Florida</span><span class="lang-only-es">Servicios Digitales Diseñados Para Hacer Crecer su Negocio en el Sur de Florida</span></h2>
-        <p class="lang-only-en">From custom web design to digital marketing and custom software development — SENAVIA Corp delivers end-to-end digital solutions that help South Florida businesses attract more customers, rank higher on Google, and scale revenue faster.</p>
-        <p class="lang-only-es">Desde diseño web a la medida hasta marketing digital y desarrollo de software personalizado — SENAVIA Corp ofrece soluciones digitales integrales que ayudan a los negocios del Sur de Florida a atraer más clientes, posicionarse mejor en Google y escalar sus ingresos más rápido.</p>
+        <p class="lang-only-en">From custom web design to web development and traffic generation — SENAVIA Corp delivers end-to-end digital solutions that help South Florida businesses attract more customers, rank higher on Google, and scale revenue faster.</p>
+        <p class="lang-only-es">Desde diseño web personalizado hasta desarrollo web y generación de tráfico — SENAVIA Corp ofrece soluciones digitales integrales que ayudan a los negocios del Sur de Florida a atraer más clientes, posicionarse mejor en Google y escalar sus ingresos más rápido.</p>
       </div>
       <div class="grid-3 services-detailed" data-reveal-children>
 
         <article class="card-border is-purple">
           <a class="card-glass service-link" href="/services/web-design">
             <span class="svc-icon"><img src="/images/Web-Design-Icon.svg" alt=""></span>
-            <h3><span class="lang-only-en">Web Design</span><span class="lang-only-es">Diseño Web</span></h3>
-            <p class="svc-tagline lang-only-en">Modern, responsive, SEO-optimized websites that convert visitors into customers and strengthen brand authority across South Florida.</p>
-            <p class="svc-tagline lang-only-es">Sitios web modernos, responsivos y optimizados para SEO que convierten visitantes en clientes y fortalecen la autoridad de marca en todo el Sur de Florida.</p>
+            <h3><span class="lang-only-en">Custom Web Design</span><span class="lang-only-es">Diseño Web Personalizado</span></h3>
+            <p class="svc-tagline lang-only-en">Conversion-focused custom sites, CMS &amp; e-commerce that turn visitors into customers and strengthen brand authority across South Florida.</p>
+            <p class="svc-tagline lang-only-es">Sitios personalizados enfocados en conversión, CMS y e-commerce que convierten visitantes en clientes y fortalecen la autoridad de marca en todo el Sur de Florida.</p>
             <ul class="svc-list lang-only-en">
               <li>Custom UX &amp; UI design</li>
-              <li>Webflow &amp; CMS builds</li>
-              <li>E-commerce on Shopify</li>
+              <li>CMS-driven websites</li>
+              <li>E-commerce stores</li>
               <li>Core Web Vitals tuning</li>
               <li>Conversion-rate optimization</li>
             </ul>
             <ul class="svc-list lang-only-es">
               <li>Diseño UX &amp; UI a la medida</li>
-              <li>Desarrollos en Webflow &amp; CMS</li>
-              <li>E-commerce en Shopify</li>
+              <li>Sitios web con CMS</li>
+              <li>Tiendas e-commerce</li>
               <li>Optimización de Core Web Vitals</li>
               <li>Optimización de la tasa de conversión</li>
             </ul>
-            <span class="more"><span class="lang-only-en">Explore Web Design</span><span class="lang-only-es">Explora Diseño Web</span></span>
-          </a>
-        </article>
-
-        <article class="card-border is-cyan">
-          <a class="card-glass service-link" href="/services/digital-marketing">
-            <span class="svc-icon is-cyan"><img src="/images/Marketing-Icon.svg" alt=""></span>
-            <h3><span class="lang-only-en">Digital Marketing</span><span class="lang-only-es">Marketing Digital</span></h3>
-            <p class="svc-tagline lang-only-en">SEO, Google Ads, and data-driven marketing strategies that attract qualified traffic and generate leads for local businesses.</p>
-            <p class="svc-tagline lang-only-es">SEO, Google Ads y estrategias de marketing basadas en datos que atraen tráfico calificado y generan clientes potenciales para negocios locales.</p>
-            <ul class="svc-list lang-only-en">
-              <li>Local SEO &amp; Google Business Profile</li>
-              <li>Google Ads &amp; Meta Ads</li>
-              <li>Technical SEO &amp; schema</li>
-              <li>Content &amp; AEO strategy</li>
-              <li>Analytics &amp; attribution</li>
-            </ul>
-            <ul class="svc-list lang-only-es">
-              <li>SEO local &amp; Perfil de Negocio de Google</li>
-              <li>Google Ads &amp; Meta Ads</li>
-              <li>SEO técnico &amp; schema</li>
-              <li>Estrategia de contenido &amp; AEO</li>
-              <li>Analítica &amp; atribución</li>
-            </ul>
-            <span class="more"><span class="lang-only-en">Explore Marketing</span><span class="lang-only-es">Explora Marketing</span></span>
+            <span class="more"><span class="lang-only-en">Explore Custom Web Design</span><span class="lang-only-es">Explora Diseño Web Personalizado</span></span>
           </a>
         </article>
 
@@ -96,23 +77,47 @@ const description = "End-to-end digital agency services for South Florida busine
           <a class="card-glass service-link" href="/services/web-development">
             <span class="svc-icon is-green"><img src="/images/Development-Icon.svg" alt=""></span>
             <h3><span class="lang-only-en">Web Development</span><span class="lang-only-es">Desarrollo Web</span></h3>
-            <p class="svc-tagline lang-only-en">Scalable web solutions in Webflow, Shopify, and custom systems — engineered for performance, conversion, and growth.</p>
-            <p class="svc-tagline lang-only-es">Soluciones web escalables en Webflow, Shopify y sistemas personalizados — diseñadas para el rendimiento, la conversión y el crecimiento.</p>
+            <p class="svc-tagline lang-only-en">Admin panels, CRM/ERP portals &amp; workflow automation — scalable systems engineered for performance, conversion, and growth.</p>
+            <p class="svc-tagline lang-only-es">Paneles administrativos, portales CRM/ERP y automatización de flujos de trabajo — sistemas escalables diseñados para el rendimiento, la conversión y el crecimiento.</p>
             <ul class="svc-list lang-only-en">
               <li>Custom web applications</li>
-              <li>API &amp; CRM integrations</li>
+              <li>API &amp; CRM/ERP integrations</li>
               <li>Internal admin panels</li>
               <li>Automation &amp; workflows</li>
               <li>Headless CMS architectures</li>
             </ul>
             <ul class="svc-list lang-only-es">
               <li>Aplicaciones web a la medida</li>
-              <li>Integraciones de API &amp; CRM</li>
+              <li>Integraciones de API &amp; CRM/ERP</li>
               <li>Paneles administrativos internos</li>
               <li>Automatización &amp; flujos de trabajo</li>
               <li>Arquitecturas headless CMS</li>
             </ul>
-            <span class="more"><span class="lang-only-en">Explore Development</span><span class="lang-only-es">Explora Desarrollo</span></span>
+            <span class="more"><span class="lang-only-en">Explore Web Development</span><span class="lang-only-es">Explora Desarrollo Web</span></span>
+          </a>
+        </article>
+
+        <article class="card-border is-cyan">
+          <a class="card-glass service-link" href="/services/traffic-generation">
+            <span class="svc-icon is-cyan"><img src="/images/Marketing-Icon.svg" alt=""></span>
+            <h3><span class="lang-only-en">Traffic Generation</span><span class="lang-only-es">Generación de Tráfico</span></h3>
+            <p class="svc-tagline lang-only-en">SEO, SEM &amp; GEO to capture organic, paid &amp; AI traffic — data-driven strategies that attract qualified visitors and generate leads.</p>
+            <p class="svc-tagline lang-only-es">SEO, SEM y GEO para captar tráfico orgánico, pago y de IA — estrategias basadas en datos que atraen visitantes calificados y generan clientes potenciales.</p>
+            <ul class="svc-list lang-only-en">
+              <li>Local SEO &amp; Google Business Profile</li>
+              <li>Google Ads &amp; Meta Ads (SEM)</li>
+              <li>Technical SEO &amp; schema</li>
+              <li>GEO &amp; AI search optimization</li>
+              <li>Analytics &amp; attribution</li>
+            </ul>
+            <ul class="svc-list lang-only-es">
+              <li>SEO local &amp; Perfil de Negocio de Google</li>
+              <li>Google Ads &amp; Meta Ads (SEM)</li>
+              <li>SEO técnico &amp; schema</li>
+              <li>GEO &amp; optimización para búsqueda con IA</li>
+              <li>Analítica &amp; atribución</li>
+            </ul>
+            <span class="more"><span class="lang-only-en">Explore Traffic Generation</span><span class="lang-only-es">Explora Generación de Tráfico</span></span>
           </a>
         </article>
 

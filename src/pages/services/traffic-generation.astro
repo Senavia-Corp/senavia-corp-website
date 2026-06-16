@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-const title = "Digital Marketing Agency in Miami — SENAVIA Corp · SEO, Google Ads &amp; Meta Ads";
-const description = "Digital marketing agency in Miami. SEO, Google Ads, and data-driven campaigns to grow traffic, leads, and revenue across South Florida.";
+const title = "Traffic Generation Agency in Miami — SENAVIA Corp · SEO, SEM &amp; GEO";
+const description = "Traffic generation agency in Miami. We combine SEO, paid SEM, and Generative Engine Optimization (GEO) to send qualified visitors to your site across South Florida.";
 
 /* First 3 projects: featured first, then CMS order */
 const projects = (await getCollection('portfolio'))
@@ -15,16 +15,21 @@ const projects = (await getCollection('portfolio'))
 <BaseLayout
   title={title}
   description={description}
-  canonical="/services/digital-marketing"
+  canonical="/services/traffic-generation"
   jsonLdType="service"
-  screenLabel="Digital Marketing Service"
+  jsonLdData={{
+    name: 'Traffic Generation',
+    serviceType: 'Traffic Generation',
+    description: 'Integral traffic generation combining SEO, paid SEM, and Generative Engine Optimization (GEO) to drive qualified visitors for South Florida businesses.',
+  }}
+  screenLabel="Traffic Generation Service"
 >
 <main>
 
   <!-- ============================================================
        HERO — Full viewport
        ============================================================ -->
-  <section class="hero" data-screen-label="01 Digital Marketing Hero">
+  <section class="hero" data-screen-label="01 Traffic Generation Hero">
     <video class="hero-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
@@ -32,38 +37,45 @@ const projects = (await getCollection('portfolio'))
       <source src="/videos/hero-digital-marketing.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
-      <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Digital Marketing · Miami</span><span class="lang-only-es">Marketing Digital · Miami</span></div>
-      <h1><span class="lang-only-en">Digital Marketing Agency in Miami</span><span class="lang-only-es">Agencia de Marketing Digital en Miami</span></h1>
-      <p class="lang-only-en">SEO, Google Ads, and data-driven campaigns to grow your traffic, leads, and revenue across South Florida.</p>
-      <p class="lang-only-es">SEO, Google Ads y campañas basadas en datos para aumentar tu tráfico, prospectos e ingresos en todo el Sur de Florida.</p>
+      <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Traffic Generation · Miami</span><span class="lang-only-es">Generación de Tráfico · Miami</span></div>
+      <h1><span class="lang-only-en">A Great Website Means Nothing Without the Right Visitors.</span><span class="lang-only-es">Un Gran Sitio Web No Sirve de Nada Sin los Visitantes Correctos.</span></h1>
+      <p class="lang-only-en">An advanced ecosystem that captures customers by combining organic, paid, and AI-driven channels — SEO, SEM, and GEO working as one engine.</p>
+      <p class="lang-only-es">Un ecosistema avanzado que captura clientes combinando canales orgánicos, pagados y de inteligencia artificial — SEO, SEM y GEO funcionando como un solo motor.</p>
       <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
       <div class="metric-strip" aria-label="Key metrics">
         <div class="metric"><span class="metric-value">$12M+</span><span class="metric-label"><span class="lang-only-en">Ad spend managed</span><span class="lang-only-es">Inversión publicitaria gestionada</span></span></div>
         <span class="divider"></span>
         <div class="metric"><span class="metric-value">3.8×</span><span class="metric-label"><span class="lang-only-en">Avg. ROAS lift</span><span class="lang-only-es">Aumento promedio de ROAS</span></span></div>
         <span class="divider"></span>
-        <div class="metric"><span class="metric-value">5.0 ★</span><span class="metric-label"><span class="lang-only-en">Google reviews</span><span class="lang-only-es">Reseñas en Google</span></span></div>
+        <div class="metric"><span class="metric-value">5.0 ★</span><span class="metric-label"><span class="lang-only-en">Google reviews</span><span class="lang-only-es">Reseñas de Google</span></span></div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-       INTRO SPLIT — Miami's Leading Web Design Agency
+       INTRO SPLIT — Premier Traffic Generation Agency + video
        ============================================================ -->
   <section class="section section--band" data-screen-label="02 Premier Agency">
     <div class="container">
       <div class="split is-reversed" data-reveal>
         <div class="split-copy">
           <div class="eyebrow"><span class="lang-only-en">Why Miami trusts us</span><span class="lang-only-es">Por qué Miami confía en nosotros</span></div>
-          <h2><span class="lang-only-en">Premier Digital Marketing Agency in South Florida</span><span class="lang-only-es">Agencia Líder de Marketing Digital en el Sur de Florida</span></h2>
-          <p class="lang-only-en">SENAVIA Corp is a Google Partner-certified team running performance marketing for contractors, e-commerce brands, and service businesses across Miami-Dade, Broward, and Palm Beach. Every campaign starts with a strategy session and ends with measurable pipeline — not vanity metrics.</p>
-          <p class="lang-only-es">SENAVIA Corp es un equipo certificado como Google Partner que ejecuta marketing de rendimiento para contratistas, marcas de e-commerce y negocios de servicios en Miami-Dade, Broward y Palm Beach. Cada campaña comienza con una sesión de estrategia y termina con un flujo de ventas medible, no con métricas de vanidad.</p>
-          <p class="lang-only-en">We blend paid search, paid social, and technical SEO into a single revenue engine: budgets allocated by intent, creative built around offers, and reporting tied directly to leads and sales in your CRM. Our bilingual EN/ES team gives you a partner that speaks your market — and the ad platforms that serve it.</p>
-          <p class="lang-only-es">Combinamos búsqueda pagada, redes sociales pagadas y SEO técnico en un solo motor de ingresos: presupuestos asignados por intención, creatividades construidas en torno a ofertas y reportes vinculados directamente a los prospectos y ventas en tu CRM. Nuestro equipo bilingüe EN/ES te brinda un socio que habla el idioma de tu mercado y de las plataformas publicitarias que lo atienden.</p>
+          <h2><span class="lang-only-en">Premier Traffic Generation Agency in South Florida</span><span class="lang-only-es">Agencia Líder en Generación de Tráfico en el Sur de Florida</span></h2>
+          <p class="lang-only-en">A beautiful website is only the first step — without the right visitors, it generates no results. SENAVIA Corp builds an advanced traffic ecosystem for contractors, e-commerce brands, and service businesses across Miami-Dade, Broward, and Palm Beach, capturing customers across every channel that matters today.</p>
+          <p class="lang-only-es">Un sitio web atractivo es solo el primer paso — sin los visitantes correctos, no genera resultados. SENAVIA Corp construye un ecosistema avanzado de tráfico para contratistas, marcas de e-commerce y negocios de servicios en Miami-Dade, Broward y Palm Beach, capturando clientes en cada canal que hoy importa.</p>
+          <p class="lang-only-en">We combine organic, paid, and AI channels into a single revenue engine: durable SEO authority, high-intent paid campaigns, and content engineered so AI assistants recommend your brand. Our bilingual EN/ES team gives you a partner that speaks your market — and the platforms that serve it.</p>
+          <p class="lang-only-es">Combinamos canales orgánicos, pagados y de IA en un solo motor de ingresos: autoridad SEO duradera, campañas pagadas de alta intención y contenido diseñado para que los asistentes de IA recomienden tu marca. Nuestro equipo bilingüe EN/ES te brinda un socio que habla el idioma de tu mercado y de las plataformas que lo atienden.</p>
           <a href="#consultation" class="btn"><span class="lang-only-en">Schedule a Free Consultation</span><span class="lang-only-es">Agenda una Consulta Gratis</span></a>
         </div>
         <div class="split-media">
-          <img src="/images/services/digital-marketing-showcase.png" alt="Google Ads, Meta Ads, and analytics dashboards managed by SENAVIA Corp" loading="lazy">
+          <div class="video-embed">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/Le_xjWf1JMM?rel=0"
+              title="SENAVIA Corp — Traffic Generation overview / Generación de Tráfico"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
           <span class="badge-overlay"><span class="lang-only-en">Google Partner Certified</span><span class="lang-only-es">Certificado Google Partner</span></span>
         </div>
       </div>
@@ -71,34 +83,113 @@ const projects = (await getCollection('portfolio'))
   </section>
 
   <!-- ============================================================
+       SUB-PILLARS — SEO · SEM · GEO (Strategy · Purpose · Impact)
+       ============================================================ -->
+  <section class="section" data-screen-label="03 Traffic Pillars">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow"><span class="lang-only-en">The traffic ecosystem</span><span class="lang-only-es">El ecosistema de tráfico</span></div>
+        <h2><span class="lang-only-en">Three Engines: SEO, SEM &amp; GEO</span><span class="lang-only-es">Tres Motores: SEO, SEM y GEO</span></h2>
+        <p class="lang-only-en">Each channel plays a distinct role across strategy, purpose, and impact — combined, they capture demand from search engines, paid platforms, and AI assistants alike.</p>
+        <p class="lang-only-es">Cada canal cumple un rol distinto en estrategia, propósito e impacto — combinados, capturan demanda de los motores de búsqueda, las plataformas pagadas y los asistentes de IA por igual.</p>
+      </div>
+      <div class="grid-3 pillars-grid" data-reveal-children>
+        <article class="pillar-card">
+          <span class="pillar-tag">SEO</span>
+          <h3><span class="lang-only-en">Search Engine Optimization</span><span class="lang-only-es">Optimización para Motores de Búsqueda</span></h3>
+          <div class="pillar-rows">
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Strategy</span><span class="lang-only-es">Estrategia</span></span>
+              <p class="lang-only-en">Organic channel — long-term semantic optimization.</p>
+              <p class="lang-only-es">Canal orgánico — optimización semántica a largo plazo.</p>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Purpose</span><span class="lang-only-es">Propósito</span></span>
+              <p class="lang-only-en">Build digital authority and durable, long-term semantic optimization across your site.</p>
+              <p class="lang-only-es">Construir autoridad digital y una optimización semántica duradera y a largo plazo en todo tu sitio.</p>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Impact</span><span class="lang-only-es">Impacto</span></span>
+              <p class="lang-only-en">Steady, sustainable qualified organic traffic that lowers customer acquisition cost over time.</p>
+              <p class="lang-only-es">Tráfico orgánico calificado, constante y sostenible que reduce el costo de adquisición de clientes con el tiempo.</p>
+            </div>
+          </div>
+        </article>
+        <article class="pillar-card">
+          <span class="pillar-tag">SEM</span>
+          <h3><span class="lang-only-en">Search Engine Marketing</span><span class="lang-only-es">Marketing en Motores de Búsqueda</span></h3>
+          <div class="pillar-rows">
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Strategy</span><span class="lang-only-es">Estrategia</span></span>
+              <p class="lang-only-en">Paid channel — high-intent PPC campaigns.</p>
+              <p class="lang-only-es">Canal pagado — campañas PPC de alta intención.</p>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Purpose</span><span class="lang-only-es">Propósito</span></span>
+              <p class="lang-only-en">Run high-intent paid PPC campaigns on Google Ads and Meta Ads.</p>
+              <p class="lang-only-es">Ejecutar campañas PPC pagadas de alta intención en Google Ads y Meta Ads.</p>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Impact</span><span class="lang-only-es">Impacto</span></span>
+              <p class="lang-only-en">Instant traffic and revenue while organic consolidates, plus fast keyword validation.</p>
+              <p class="lang-only-es">Tráfico e ingresos inmediatos mientras lo orgánico se consolida, además de validación rápida de palabras clave.</p>
+            </div>
+          </div>
+        </article>
+        <article class="pillar-card">
+          <span class="pillar-tag">GEO</span>
+          <h3><span class="lang-only-en">Generative Engine Optimization</span><span class="lang-only-es">Optimización para Motores Generativos</span></h3>
+          <div class="pillar-rows">
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Strategy</span><span class="lang-only-es">Estrategia</span></span>
+              <p class="lang-only-en">AI channel — content and data prepared for LLMs.</p>
+              <p class="lang-only-es">Canal de IA — contenido y datos preparados para LLMs.</p>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Purpose</span><span class="lang-only-es">Propósito</span></span>
+              <p class="lang-only-en">Prepare content and structured data so large language models understand your brand.</p>
+              <p class="lang-only-es">Preparar el contenido y los datos estructurados para que los modelos de lenguaje entiendan tu marca.</p>
+            </div>
+            <div class="pillar-row">
+              <span class="pillar-label"><span class="lang-only-en">Impact</span><span class="lang-only-es">Impacto</span></span>
+              <p class="lang-only-en">Your brand gets recommended as a direct answer in ChatGPT, Gemini, and Perplexity.</p>
+              <p class="lang-only-es">Tu marca es recomendada como respuesta directa en ChatGPT, Gemini y Perplexity.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        CAPABILITIES — 3 cards
        ============================================================ -->
-  <section class="section" data-screen-label="03 Marketing Capabilities">
+  <section class="section section--band" data-screen-label="04 Traffic Capabilities">
     <div class="container">
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">What we deliver</span><span class="lang-only-es">Qué entregamos</span></div>
-        <h2><span class="lang-only-en">Take Your Business To The Next Level With High Marketing</span><span class="lang-only-es">Lleva tu Negocio al Siguiente Nivel con Marketing de Alto Impacto</span></h2>
-        <p class="lang-only-en">Three core capabilities cover the full funnel — from high-intent paid search to social demand capture and durable organic visibility.</p>
-        <p class="lang-only-es">Tres capacidades clave que cubren todo el embudo: desde la búsqueda pagada de alta intención hasta la captación de demanda en redes sociales y una visibilidad orgánica duradera.</p>
+        <h2><span class="lang-only-en">Send the Right Visitors To Your Website, Every Day</span><span class="lang-only-es">Lleva los Visitantes Correctos a tu Sitio Web, Todos los Días</span></h2>
+        <p class="lang-only-en">Three core capabilities cover the full funnel — high-intent paid search, social demand capture, and durable organic visibility — all feeding one traffic engine.</p>
+        <p class="lang-only-es">Tres capacidades clave que cubren todo el embudo: búsqueda pagada de alta intención, captación de demanda en redes sociales y visibilidad orgánica duradera — todas alimentando un solo motor de tráfico.</p>
       </div>
       <div class="grid-3" data-reveal-children>
         <article class="cap-card">
-          <span class="cap-num">01 · Paid Search</span>
+          <span class="cap-num">01 · <span class="lang-only-en">Paid Search</span><span class="lang-only-es">Búsqueda Pagada</span></span>
           <h3><span class="lang-only-en">Google Ads &amp; Paid Search</span><span class="lang-only-es">Google Ads y Búsqueda Pagada</span></h3>
           <p class="lang-only-en">Performance campaigns engineered to lower CPA and increase ROAS. Keyword strategy, ad copy, landing-page alignment, and conversion tracking — managed by Google-certified specialists.</p>
           <p class="lang-only-es">Campañas de rendimiento diseñadas para reducir el CPA y aumentar el ROAS. Estrategia de palabras clave, redacción de anuncios, alineación de la página de destino y seguimiento de conversiones, gestionado por especialistas certificados por Google.</p>
         </article>
         <article class="cap-card">
-          <span class="cap-num">02 · Paid Social</span>
+          <span class="cap-num">02 · <span class="lang-only-en">Paid Social</span><span class="lang-only-es">Redes Pagadas</span></span>
           <h3><span class="lang-only-en">Meta Ads &amp; Paid Advertising</span><span class="lang-only-es">Meta Ads y Publicidad Pagada</span></h3>
           <p class="lang-only-en">Facebook &amp; Instagram funnels that drive qualified leads. Audience research, creative production, retargeting flows, and pixel/CAPI setup — built for measurable pipeline.</p>
           <p class="lang-only-es">Embudos de Facebook e Instagram que generan prospectos calificados. Investigación de audiencias, producción creativa, flujos de retargeting y configuración de píxel/CAPI, construidos para un flujo de ventas medible.</p>
         </article>
         <article class="cap-card">
-          <span class="cap-num">03 · SEO</span>
-          <h3><span class="lang-only-en">SEO &amp; Local Business Positioning</span><span class="lang-only-es">SEO y Posicionamiento Local de Negocios</span></h3>
-          <p class="lang-only-en">Local SEO, technical SEO, and Google Business Profile optimization. Map pack visibility, service-area schema, and content that earns rankings for the searches your buyers actually make.</p>
-          <p class="lang-only-es">SEO local, SEO técnico y optimización del Perfil de Empresa en Google. Visibilidad en el paquete de mapas, schema de áreas de servicio y contenido que gana posiciones para las búsquedas que realmente hacen tus clientes.</p>
+          <span class="cap-num">03 · <span class="lang-only-en">Organic &amp; AI</span><span class="lang-only-es">Orgánico e IA</span></span>
+          <h3><span class="lang-only-en">SEO, Local &amp; GEO Positioning</span><span class="lang-only-es">SEO, Local y Posicionamiento GEO</span></h3>
+          <p class="lang-only-en">Local SEO, technical SEO, Google Business Profile optimization, and GEO so AI assistants recommend you. Map pack visibility, service-area schema, and content that earns rankings — and answers.</p>
+          <p class="lang-only-es">SEO local, SEO técnico, optimización del Perfil de Empresa en Google y GEO para que los asistentes de IA te recomienden. Visibilidad en el paquete de mapas, schema de áreas de servicio y contenido que gana posiciones — y respuestas.</p>
         </article>
       </div>
     </div>
@@ -107,11 +198,11 @@ const projects = (await getCollection('portfolio'))
   <!-- ============================================================
        REASONS — 6-up grid with check icons
        ============================================================ -->
-  <section class="section section--band" data-screen-label="04 Why Choose Senavia">
+  <section class="section" data-screen-label="05 Why Choose Senavia">
     <div class="container">
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">Why SENAVIA</span><span class="lang-only-es">Por Qué SENAVIA</span></div>
-        <h2><span class="lang-only-en">Why Choose SENAVIA As Your Digital Marketing Agency In Miami</span><span class="lang-only-es">Por Qué Elegir a SENAVIA Como Tu Agencia de Marketing Digital en Miami</span></h2>
+        <h2><span class="lang-only-en">Why Choose SENAVIA For Traffic Generation In Miami</span><span class="lang-only-es">Por Qué Elegir a SENAVIA Para Generar Tráfico en Miami</span></h2>
         <p class="lang-only-en">Six concrete reasons South Florida businesses pick us over the freelancer down the street and the out-of-state agency upstairs.</p>
         <p class="lang-only-es">Seis razones concretas por las que los negocios del Sur de Florida nos eligen por encima del freelancer de la esquina y de la agencia de otro estado.</p>
       </div>
@@ -152,8 +243,8 @@ const projects = (await getCollection('portfolio'))
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Transparent reporting &amp; KPIs</span><span class="lang-only-es">Reportes transparentes y KPIs</span></h3>
-            <p class="lang-only-en">Live dashboards tied to leads and revenue — not just clicks. You always know what each dollar of ad spend is returning.</p>
-            <p class="lang-only-es">Paneles en vivo vinculados a prospectos e ingresos, no solo a clics. Siempre sabes qué retorno genera cada dólar invertido en publicidad.</p>
+            <p class="lang-only-en">Live dashboards tied to traffic, leads, and revenue — not just clicks. You always know what each channel is returning.</p>
+            <p class="lang-only-es">Paneles en vivo vinculados al tráfico, los prospectos y los ingresos, no solo a clics. Siempre sabes qué retorno genera cada canal.</p>
           </div>
         </article>
         <article class="reason-item">
@@ -161,9 +252,9 @@ const projects = (await getCollection('portfolio'))
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </span>
           <div class="reason-body">
-            <h3><span class="lang-only-en">Full-funnel campaign strategy</span><span class="lang-only-es">Estrategia de campañas de embudo completo</span></h3>
-            <p class="lang-only-en">Search, social, and SEO orchestrated together — capturing demand at every stage from cold awareness to bottom-of-funnel intent.</p>
-            <p class="lang-only-es">Búsqueda, redes sociales y SEO orquestados en conjunto, captando la demanda en cada etapa, desde el reconocimiento inicial hasta la intención de compra al final del embudo.</p>
+            <h3><span class="lang-only-en">Organic + paid + AI in one engine</span><span class="lang-only-es">Orgánico + pagado + IA en un solo motor</span></h3>
+            <p class="lang-only-en">SEO, SEM, and GEO orchestrated together — capturing demand at every stage, from cold awareness to bottom-of-funnel intent and AI-driven answers.</p>
+            <p class="lang-only-es">SEO, SEM y GEO orquestados en conjunto, captando la demanda en cada etapa, desde el reconocimiento inicial hasta la intención de compra y las respuestas generadas por IA.</p>
           </div>
         </article>
         <article class="reason-item">
@@ -183,13 +274,13 @@ const projects = (await getCollection('portfolio'))
   <!-- ============================================================
        CONSULTATION — Calendly inline embed
        ============================================================ -->
-  <section id="consultation" class="section" data-screen-label="05 Consultation">
+  <section id="consultation" class="section section--band" data-screen-label="06 Consultation">
     <div class="container">
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">Free consultation</span><span class="lang-only-es">Consulta gratuita</span></div>
-        <h2><span class="lang-only-en">Schedule Your Free Digital Marketing Consultation</span><span class="lang-only-es">Agenda tu Consulta Gratuita de Marketing Digital</span></h2>
-        <p class="lang-only-en">30 minutes, no commitment. We'll review your current marketing, identify the biggest wins, and outline what a SENAVIA-managed campaign would look like for your business.</p>
-        <p class="lang-only-es">30 minutos, sin compromiso. Revisaremos tu marketing actual, identificaremos las mayores oportunidades y trazaremos cómo se vería una campaña gestionada por SENAVIA para tu negocio.</p>
+        <h2><span class="lang-only-en">Schedule Your Free Traffic Generation Consultation</span><span class="lang-only-es">Agenda tu Consulta Gratuita de Generación de Tráfico</span></h2>
+        <p class="lang-only-en">30 minutes, no commitment. We'll review where your traffic comes from today, identify the biggest wins across SEO, SEM, and GEO, and outline what a SENAVIA-managed engine would look like for your business.</p>
+        <p class="lang-only-es">30 minutos, sin compromiso. Revisaremos de dónde proviene tu tráfico hoy, identificaremos las mayores oportunidades en SEO, SEM y GEO, y trazaremos cómo se vería un motor gestionado por SENAVIA para tu negocio.</p>
       </div>
       <div class="calendly-block" data-reveal>
         <div class="calendly-copy">
@@ -197,8 +288,8 @@ const projects = (await getCollection('portfolio'))
           <p class="lang-only-en">A focused conversation tailored to your business goals — actionable next steps you can use whether we work together or not.</p>
           <p class="lang-only-es">Una conversación enfocada y adaptada a los objetivos de tu negocio: pasos prácticos que puedes aplicar, trabajemos juntos o no.</p>
           <ul class="calendly-perks">
-            <li><span class="lang-only-en">Quick audit of your current ad accounts &amp; SEO</span><span class="lang-only-es">Auditoría rápida de tus cuentas publicitarias actuales y SEO</span></li>
-            <li><span class="lang-only-en">Specific recommendations to lift ROAS and lead quality</span><span class="lang-only-es">Recomendaciones específicas para mejorar el ROAS y la calidad de los prospectos</span></li>
+            <li><span class="lang-only-en">Quick audit of your current traffic, ad accounts &amp; SEO</span><span class="lang-only-es">Auditoría rápida de tu tráfico, cuentas publicitarias y SEO actuales</span></li>
+            <li><span class="lang-only-en">Specific recommendations across SEO, SEM &amp; GEO</span><span class="lang-only-es">Recomendaciones específicas en SEO, SEM y GEO</span></li>
             <li><span class="lang-only-en">Ballpark budget &amp; channel mix if you'd like to move forward</span><span class="lang-only-es">Presupuesto aproximado y combinación de canales si decides avanzar</span></li>
             <li><span class="lang-only-en">No sales pitch — just expert eyes on your funnel</span><span class="lang-only-es">Sin discurso de ventas: solo ojos expertos en tu embudo</span></li>
           </ul>
@@ -209,12 +300,9 @@ const projects = (await getCollection('portfolio'))
   </section>
 
   <!-- ============================================================
-       PORTFOLIO carousel (reuse)
-       ============================================================ -->
-<!-- ============================================================
        PORTFOLIO carousel
        ============================================================ -->
-  <section id="portfolio" class="section section--band" data-screen-label="04 Portfolio">
+  <section id="portfolio" class="section" data-screen-label="07 Portfolio">
     <div class="container">
       <div class="section-head" data-reveal>
         <h2><span class="lang-only-en">Portfolio &amp; Success Cases</span><span class="lang-only-es">Portafolio y Casos de Éxito</span></h2>
@@ -224,10 +312,10 @@ const projects = (await getCollection('portfolio'))
 
       <div class="carousel" data-carousel="portfolio">
         <div class="carousel-arrows">
-          <button class="carousel-arrow prev" aria-label="Previous projects" type="button">
+          <button class="carousel-arrow prev" aria-label="Previous projects / Proyectos anteriores" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
           </button>
-          <button class="carousel-arrow next" aria-label="Next projects" type="button">
+          <button class="carousel-arrow next" aria-label="Next projects / Proyectos siguientes" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
           </button>
         </div>
@@ -259,9 +347,6 @@ const projects = (await getCollection('portfolio'))
   </section>
 
   <!-- ============================================================
-       PROCESS + REVIEWS (reuse)
-       ============================================================ -->
-<!-- ============================================================
        PROCESS + REVIEWS (inside .green-bg)
        ============================================================ -->
   <div class="green-bg">
@@ -270,12 +355,12 @@ const projects = (await getCollection('portfolio'))
     <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
 
     <!-- PROCESS -->
-    <section id="process" class="section section-flush" data-screen-label="05 Process">
+    <section id="process" class="section section-flush" data-screen-label="08 Process">
       <div class="container">
         <div class="section-head" data-reveal>
           <h2><span class="lang-only-en">Our Process</span><span class="lang-only-es">Nuestro Proceso</span></h2>
-          <p class="lang-only-en">We understand your goals and challenges, create a tailored plan with clear estimates, and build a custom solution designed for your success.</p>
-          <p class="lang-only-es">Entendemos tus objetivos y desafíos, creamos un plan a la medida con estimaciones claras y construimos una solución personalizada diseñada para tu éxito.</p>
+          <p class="lang-only-en">We understand your goals and challenges, create a tailored plan with clear estimates, and build a custom traffic engine designed for your success.</p>
+          <p class="lang-only-es">Entendemos tus objetivos y desafíos, creamos un plan a la medida con estimaciones claras y construimos un motor de tráfico personalizado diseñado para tu éxito.</p>
         </div>
         <div class="grid-4" data-reveal-children>
           <article class="process-block">
@@ -284,46 +369,46 @@ const projects = (await getCollection('portfolio'))
             <div class="process-content">
               <div class="process-header">
                 <h3><span class="lang-only-en">1. Explore</span><span class="lang-only-es">1. Explorar</span></h3>
-                <h4><span class="lang-only-en">Digital Strategy &amp; Market Discovery</span><span class="lang-only-es">Estrategia Digital y Descubrimiento de Mercado</span></h4>
+                <h4><span class="lang-only-en">Traffic Audit &amp; Market Discovery</span><span class="lang-only-es">Auditoría de Tráfico y Descubrimiento de Mercado</span></h4>
               </div>
-              <p class="lang-only-en">We analyze goals, audience, and market to uncover growth opportunities across South Florida.</p>
-              <p class="lang-only-es">Analizamos objetivos, audiencia y mercado para descubrir oportunidades de crecimiento en todo el Sur de Florida.</p>
+              <p class="lang-only-en">We analyze where your traffic comes from today and uncover growth opportunities across South Florida.</p>
+              <p class="lang-only-es">Analizamos de dónde proviene tu tráfico hoy y descubrimos oportunidades de crecimiento en todo el Sur de Florida.</p>
             </div>
           </article>
           <article class="process-block">
-            <img class="process-img" src="/images/process/estimate.avif" alt="Project planning and strategic roadmap for a web project" loading="lazy">
+            <img class="process-img" src="/images/process/estimate.avif" alt="Channel planning and strategic roadmap for SEO, SEM, and GEO" loading="lazy">
             <div class="process-glass"></div>
             <div class="process-content">
               <div class="process-header">
                 <h3><span class="lang-only-en">2. Estimate</span><span class="lang-only-es">2. Estimar</span></h3>
-                <h4><span class="lang-only-en">Project Planning &amp; Strategic Roadmap</span><span class="lang-only-es">Planificación del Proyecto y Hoja de Ruta Estratégica</span></h4>
+                <h4><span class="lang-only-en">Channel Planning &amp; Strategic Roadmap</span><span class="lang-only-es">Planificación de Canales y Hoja de Ruta Estratégica</span></h4>
               </div>
-              <p class="lang-only-en">We define a clear project plan aligned with your budget, timeline, and objectives.</p>
-              <p class="lang-only-es">Definimos un plan de proyecto claro, alineado con tu presupuesto, cronograma y objetivos.</p>
+              <p class="lang-only-en">We define a clear channel mix across SEO, SEM, and GEO aligned with your budget and objectives.</p>
+              <p class="lang-only-es">Definimos una combinación clara de canales en SEO, SEM y GEO, alineada con tu presupuesto y objetivos.</p>
             </div>
           </article>
           <article class="process-block">
-            <img class="process-img" src="/images/process/development.avif" alt="Custom web development and SEO build in progress" loading="lazy">
+            <img class="process-img" src="/images/process/development.avif" alt="Campaign build and SEO optimization in progress" loading="lazy">
             <div class="process-glass"></div>
             <div class="process-content">
               <div class="process-header">
-                <h3><span class="lang-only-en">3. Development</span><span class="lang-only-es">3. Desarrollo</span></h3>
-                <h4><span class="lang-only-en">Custom Web Development &amp; SEO</span><span class="lang-only-es">Desarrollo Web a Medida y SEO</span></h4>
+                <h3><span class="lang-only-en">3. Launch</span><span class="lang-only-es">3. Lanzamiento</span></h3>
+                <h4><span class="lang-only-en">Campaign Build &amp; Channel Activation</span><span class="lang-only-es">Construcción de Campañas y Activación de Canales</span></h4>
               </div>
-              <p class="lang-only-en">We build high-performance websites and platforms optimized for SEO and conversions.</p>
-              <p class="lang-only-es">Construimos sitios web y plataformas de alto rendimiento optimizados para SEO y conversiones.</p>
+              <p class="lang-only-en">We launch high-performance campaigns and optimize content for SEO, SEM, and GEO.</p>
+              <p class="lang-only-es">Lanzamos campañas de alto rendimiento y optimizamos el contenido para SEO, SEM y GEO.</p>
             </div>
           </article>
           <article class="process-block">
-            <img class="process-img" src="/images/process/delivery.avif" alt="Website launch and ongoing optimization in Plantation, FL" loading="lazy">
+            <img class="process-img" src="/images/process/delivery.avif" alt="Traffic scaling and ongoing optimization in Plantation, FL" loading="lazy">
             <div class="process-glass"></div>
             <div class="process-content">
               <div class="process-header">
-                <h3><span class="lang-only-en">4. Delivery</span><span class="lang-only-es">4. Entrega</span></h3>
-                <h4><span class="lang-only-en">Website Launch &amp; Ongoing Optimization</span><span class="lang-only-es">Lanzamiento del Sitio Web y Optimización Continua</span></h4>
+                <h3><span class="lang-only-en">4. Scale</span><span class="lang-only-es">4. Escalar</span></h3>
+                <h4><span class="lang-only-en">Traffic Scaling &amp; Ongoing Optimization</span><span class="lang-only-es">Escalado de Tráfico y Optimización Continua</span></h4>
               </div>
-              <p class="lang-only-en">We launch and optimize your digital presence from Plantation, serving South Florida.</p>
-              <p class="lang-only-es">Lanzamos y optimizamos tu presencia digital desde Plantation, al servicio del Sur de Florida.</p>
+              <p class="lang-only-en">We scale what works and keep optimizing your traffic engine from Plantation, serving South Florida.</p>
+              <p class="lang-only-es">Escalamos lo que funciona y seguimos optimizando tu motor de tráfico desde Plantation, al servicio del Sur de Florida.</p>
             </div>
           </article>
         </div>
@@ -334,13 +419,13 @@ const projects = (await getCollection('portfolio'))
     </section>
 
     <!-- GOOGLE REVIEWS -->
-    <section id="reviews" class="section" data-screen-label="06 Google Reviews">
+    <section id="reviews" class="section" data-screen-label="09 Google Reviews">
       <div class="container">
         <div class="reviews-grid">
           <div class="reviews-left" data-reveal>
             <h2><span class="lang-only-en">Google Reviews</span><span class="lang-only-es">Reseñas de Google</span></h2>
-            <p class="lang-only-en">Based in Plantation, we deliver custom web design and SEO that help South Florida companies grow. Hear what our clients say about working with the SENAVIA team.</p>
-            <p class="lang-only-es">Con sede en Plantation, ofrecemos diseño web a medida y SEO que ayudan a las empresas del Sur de Florida a crecer. Escucha lo que dicen nuestros clientes sobre trabajar con el equipo de SENAVIA.</p>
+            <p class="lang-only-en">Based in Plantation, we deliver traffic generation across SEO, SEM, and GEO that helps South Florida companies grow. Hear what our clients say about working with the SENAVIA team.</p>
+            <p class="lang-only-es">Con sede en Plantation, ofrecemos generación de tráfico en SEO, SEM y GEO que ayuda a las empresas del Sur de Florida a crecer. Escucha lo que dicen nuestros clientes sobre trabajar con el equipo de SENAVIA.</p>
             <div class="reviews-rating">
               <span class="score">
                 5.0
@@ -419,7 +504,7 @@ const projects = (await getCollection('portfolio'))
   <!-- ============================================================
        CTA
        ============================================================ -->
-  <section class="cta" data-screen-label="09 CTA">
+  <section class="cta" data-screen-label="10 CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
@@ -427,9 +512,9 @@ const projects = (await getCollection('portfolio'))
       <source src="/videos/cta-bg.mp4" type="video/mp4">
     </video>
     <div class="container">
-      <h2><span class="lang-only-en">Let's Build Your Next Digital Success Story</span><span class="lang-only-es">Construyamos tu Próxima Historia de Éxito Digital</span></h2>
-      <p class="lang-only-en">Schedule your free digital marketing consultation and get a custom strategy to increase traffic, leads, and revenue.</p>
-      <p class="lang-only-es">Agenda tu consulta gratuita de marketing digital y obtén una estrategia personalizada para aumentar tu tráfico, prospectos e ingresos.</p>
+      <h2><span class="lang-only-en">Let's Send the Right Visitors to Your Website</span><span class="lang-only-es">Llevemos los Visitantes Correctos a tu Sitio Web</span></h2>
+      <p class="lang-only-en">Schedule your free traffic generation consultation and get a custom strategy across SEO, SEM, and GEO to increase qualified traffic, leads, and revenue.</p>
+      <p class="lang-only-es">Agenda tu consulta gratuita de generación de tráfico y obtén una estrategia personalizada en SEO, SEM y GEO para aumentar tu tráfico calificado, prospectos e ingresos.</p>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>
@@ -454,6 +539,81 @@ const projects = (await getCollection('portfolio'))
     z-index: 1;
   }
   .project-cover.has-img .project-name { z-index: 2; }
+
+  /* ---- Responsive 16:9 YouTube embed in the intro split ---- */
+  .video-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -24px rgba(10, 14, 38, 0.55);
+    background: #0a0e26;
+  }
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  /* ---- SEO · SEM · GEO sub-pillars ---- */
+  .pillars-grid .pillar-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.75rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(153, 204, 51, 0.18);
+    box-shadow: 0 24px 60px -32px rgba(10, 14, 38, 0.6);
+  }
+  .pillar-card .pillar-tag {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    color: #0a0e26;
+    background: #99cc33;
+    margin-bottom: 1rem;
+  }
+  .pillar-card h3 {
+    margin: 0 0 1.25rem;
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+  .pillar-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .pillar-row {
+    padding-top: 1.1rem;
+    border-top: 1px solid rgba(153, 204, 51, 0.16);
+  }
+  .pillar-row:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .pillar-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #99cc33;
+    margin-bottom: 0.4rem;
+  }
+  .pillar-row p {
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.55;
+  }
 </style>
 
 <!-- Initialize Calendly inline widget once the script loads -->

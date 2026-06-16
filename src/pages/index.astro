@@ -2,8 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const title = "SENAVIA Corp — Web Design & Digital Marketing Agency in South Florida";
-const description = "Google Partner-certified digital agency in Plantation, FL. Custom web design, SEO, and digital marketing for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
+const title = "SENAVIA Corp — Custom Web Design & Web Development Agency in South Florida";
+const description = "Google Partner-certified digital agency in Plantation, FL. Custom web design, web development, and traffic generation (SEO, SEM & GEO) for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
 
 /* Tool / integration logos for the hero marquee */
 const logos = (await getCollection('logos')).sort((a, b) => a.data.order - b.data.order);
@@ -46,8 +46,8 @@ const fmtEs = (d?: Date) =>
       <source src="/videos/hero-home.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
-      <h1><span class="lang-only-en">Web Design &amp; Digital Marketing Agency in South Florida</span><span class="lang-only-es">Agencia de Diseño Web y Marketing Digital en el Sur de Florida</span></h1>
-      <p><span class="lang-only-en">We build high-performing websites and SEO-driven marketing systems for businesses across Miami-Dade, Broward, and Palm Beach counties. Based in Plantation, Florida, we help brands rank higher, convert more traffic, and scale faster.</span><span class="lang-only-es">Creamos sitios web de alto rendimiento y sistemas de marketing impulsados por SEO para empresas en los condados de Miami-Dade, Broward y Palm Beach. Desde Plantation, Florida, ayudamos a las marcas a posicionarse mejor, convertir más tráfico y crecer más rápido.</span></p>
+      <h1><span class="lang-only-en">Custom Web Design &amp; Web Development Agency in South Florida</span><span class="lang-only-es">Agencia de Diseño Web Personalizado y Desarrollo Web en el Sur de Florida</span></h1>
+      <p><span class="lang-only-en">We design high-performing websites, build custom systems, and generate the traffic that grows businesses across Miami-Dade, Broward, and Palm Beach counties. Based in Plantation, Florida, we help brands rank higher, convert more traffic, and scale faster.</span><span class="lang-only-es">Diseñamos sitios web de alto rendimiento, construimos sistemas personalizados y generamos el tráfico que hace crecer a las empresas en los condados de Miami-Dade, Broward y Palm Beach. Desde Plantation, Florida, ayudamos a las marcas a posicionarse mejor, convertir más tráfico y crecer más rápido.</span></p>
       <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
     </div>
     <div class="marquee" aria-hidden="true">
@@ -74,8 +74,8 @@ const fmtEs = (d?: Date) =>
     </video>
     <div class="container">
       <div class="section-head" data-reveal>
-        <h2><span class="lang-only-en">Premier Web Design &amp; Marketing Agency in South Florida</span><span class="lang-only-es">Agencia Líder de Diseño Web y Marketing en el Sur de Florida</span></h2>
-        <p><span class="lang-only-en">We are a web design and digital marketing agency based in Miami, offering responsive websites, e-commerce solutions, and SEO strategies designed to drive growth.</span><span class="lang-only-es">Somos una agencia de diseño web y marketing digital con base en Miami, que ofrece sitios web responsivos, soluciones de e-commerce y estrategias de SEO diseñadas para impulsar el crecimiento.</span></p>
+        <h2><span class="lang-only-en">Premier Custom Web Design &amp; Development Agency in South Florida</span><span class="lang-only-es">Agencia Líder de Diseño Web Personalizado y Desarrollo en el Sur de Florida</span></h2>
+        <p><span class="lang-only-en">We are a custom web design and development agency based in South Florida, delivering conversion-focused websites, custom systems, and traffic generation (SEO, SEM &amp; GEO) designed to drive growth.</span><span class="lang-only-es">Somos una agencia de diseño web personalizado y desarrollo con base en el Sur de Florida, que ofrece sitios web enfocados en conversión, sistemas personalizados y generación de tráfico (SEO, SEM y GEO) diseñados para impulsar el crecimiento.</span></p>
       </div>
       <div class="video-frame" data-reveal>
         <iframe src="https://www.youtube.com/embed/T2MHMFoFvbk?rel=0" title="SENAVIA Corp — Agency reel"
@@ -93,22 +93,14 @@ const fmtEs = (d?: Date) =>
     <div class="container">
       <div class="section-head" data-reveal>
         <h2><span class="lang-only-en">Digital Services Designed To Grow Your Business In South Florida</span><span class="lang-only-es">Servicios Digitales Diseñados Para Hacer Crecer tu Negocio en el Sur de Florida</span></h2>
-        <p><span class="lang-only-en">From custom web design to digital marketing and custom software development — SENAVIA Corp delivers end-to-end digital solutions that help South Florida businesses attract more customers, rank higher on Google, and scale revenue faster.</span><span class="lang-only-es">Desde diseño web a la medida hasta marketing digital y desarrollo de software personalizado — SENAVIA Corp ofrece soluciones digitales integrales que ayudan a las empresas del Sur de Florida a atraer más clientes, posicionarse mejor en Google y aumentar sus ingresos más rápido.</span></p>
+        <p><span class="lang-only-en">From custom web design to web development and traffic generation — SENAVIA Corp delivers end-to-end digital solutions that help South Florida businesses attract more customers, rank higher on Google, and scale revenue faster.</span><span class="lang-only-es">Desde diseño web personalizado hasta desarrollo web y generación de tráfico — SENAVIA Corp ofrece soluciones digitales integrales que ayudan a las empresas del Sur de Florida a atraer más clientes, posicionarse mejor en Google y aumentar sus ingresos más rápido.</span></p>
       </div>
       <div class="grid-3" data-reveal-children>
         <article class="card-border is-purple">
           <a class="card-glass service-link" href="/services/web-design">
             <span class="svc-icon"><img src="/images/Web-Design-Icon.svg" alt=""></span>
-            <h3 style="margin-top:18px;"><span class="lang-only-en">Web Design</span><span class="lang-only-es">Diseño Web</span></h3>
-            <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">Modern, responsive, SEO-optimized websites that convert visitors into customers and strengthen your brand authority across South Florida.</span><span class="lang-only-es">Sitios web modernos, responsivos y optimizados para SEO que convierten visitantes en clientes y fortalecen la autoridad de tu marca en todo el Sur de Florida.</span></p>
-            <span class="more"><span class="lang-only-en">See More</span><span class="lang-only-es">Ver Más</span></span>
-          </a>
-        </article>
-        <article class="card-border is-cyan">
-          <a class="card-glass service-link" href="/services/digital-marketing">
-            <span class="svc-icon is-cyan"><img src="/images/Marketing-Icon.svg" alt=""></span>
-            <h3 style="margin-top:18px;"><span class="lang-only-en">Digital Marketing</span><span class="lang-only-es">Marketing Digital</span></h3>
-            <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">SEO, Google Ads, and data-driven marketing strategies that attract qualified traffic and generate leads for local businesses.</span><span class="lang-only-es">SEO, Google Ads y estrategias de marketing basadas en datos que atraen tráfico calificado y generan prospectos para negocios locales.</span></p>
+            <h3 style="margin-top:18px;"><span class="lang-only-en">Custom Web Design</span><span class="lang-only-es">Diseño Web Personalizado</span></h3>
+            <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">Conversion-focused custom sites, CMS &amp; e-commerce that turn visitors into customers and strengthen your brand authority across South Florida.</span><span class="lang-only-es">Sitios personalizados enfocados en conversión, CMS y e-commerce que convierten visitantes en clientes y fortalecen la autoridad de tu marca en todo el Sur de Florida.</span></p>
             <span class="more"><span class="lang-only-en">See More</span><span class="lang-only-es">Ver Más</span></span>
           </a>
         </article>
@@ -116,7 +108,15 @@ const fmtEs = (d?: Date) =>
           <a class="card-glass service-link" href="/services/web-development">
             <span class="svc-icon is-green"><img src="/images/Development-Icon.svg" alt=""></span>
             <h3 style="margin-top:18px;"><span class="lang-only-en">Web Development</span><span class="lang-only-es">Desarrollo Web</span></h3>
-            <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">Scalable web solutions in Webflow, Shopify, and custom systems — engineered for performance, conversion, and growth.</span><span class="lang-only-es">Soluciones web escalables en Webflow, Shopify y sistemas a la medida — diseñadas para el rendimiento, la conversión y el crecimiento.</span></p>
+            <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">Admin panels, CRM/ERP portals &amp; workflow automation — scalable systems engineered for performance, conversion, and growth.</span><span class="lang-only-es">Paneles administrativos, portales CRM/ERP y automatización de flujos de trabajo — sistemas escalables diseñados para el rendimiento, la conversión y el crecimiento.</span></p>
+            <span class="more"><span class="lang-only-en">See More</span><span class="lang-only-es">Ver Más</span></span>
+          </a>
+        </article>
+        <article class="card-border is-cyan">
+          <a class="card-glass service-link" href="/services/traffic-generation">
+            <span class="svc-icon is-cyan"><img src="/images/Marketing-Icon.svg" alt=""></span>
+            <h3 style="margin-top:18px;"><span class="lang-only-en">Traffic Generation</span><span class="lang-only-es">Generación de Tráfico</span></h3>
+            <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">SEO, SEM &amp; GEO to capture organic, paid &amp; AI traffic — data-driven strategies that attract qualified visitors and generate leads.</span><span class="lang-only-es">SEO, SEM y GEO para captar tráfico orgánico, pago y de IA — estrategias basadas en datos que atraen visitantes calificados y generan clientes potenciales.</span></p>
             <span class="more"><span class="lang-only-en">See More</span><span class="lang-only-es">Ver Más</span></span>
           </a>
         </article>

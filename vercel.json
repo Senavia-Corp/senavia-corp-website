@@ -9,7 +9,8 @@
     { "source": "/Brand-Foundation.html", "destination": "/", "permanent": true },
     { "source": "/401.html", "destination": "/404", "permanent": true },
     { "source": "/401", "destination": "/404", "permanent": true },
-    { "source": "/index.html", "destination": "/", "permanent": true }
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/services/digital-marketing", "destination": "/services/traffic-generation", "permanent": true }
   ],
   "headers": [
     {

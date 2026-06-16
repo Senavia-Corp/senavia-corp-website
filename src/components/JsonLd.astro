@@ -60,6 +60,15 @@ const localBusiness = {
     },
   ],
   sameAs: [SOCIAL.instagram, SOCIAL.facebook, SOCIAL.youtube, GOOGLE_PARTNER_URL],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Digital Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Custom Web Design', url: `${SITE.url}/services/web-design` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Web Development', url: `${SITE.url}/services/web-development` } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Traffic Generation', url: `${SITE.url}/services/traffic-generation` } },
+    ],
+  },
 };
 
 const website = {

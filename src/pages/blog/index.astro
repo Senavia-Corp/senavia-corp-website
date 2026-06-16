@@ -20,13 +20,13 @@ const featured = posts.filter((p) => p.data.featured);
 const CAT_ES: Record<string, string> = {
   'web-design': 'Diseño Web',
   'web-development': 'Desarrollo Web',
-  'digital-marketing': 'Marketing Digital',
+  'digital-marketing': 'Generación de Tráfico',
 };
 // English category slug → English display label.
 const CAT_EN: Record<string, string> = {
   'web-design': 'Web Design',
   'web-development': 'Web Development',
-  'digital-marketing': 'Digital Marketing',
+  'digital-marketing': 'Traffic Generation',
 };
 const catEn = (slug: string) => CAT_EN[slug] ?? slug;
 const catEs = (slug: string) => CAT_ES[slug] ?? slug;
