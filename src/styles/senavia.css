@@ -1390,6 +1390,10 @@ video::-webkit-media-controls-volume-slider {
 /* --- Section spacing helpers --- */
 .section.section-flush { padding-bottom: 0; }
 .section.section-flush + .section { padding-top: 0; }
+/* A flush section that is the LAST section inside its .green-bg has nothing
+   after it to provide spacing (e.g. /pricing) — restore its bottom padding
+   so it never sits flush against the next block (the CTA). */
+.green-bg > .section.section-flush:last-of-type { padding-bottom: var(--section-pad-y); }
 
 /* --- Scroll-reveal animations --- */
 @media (prefers-reduced-motion: no-preference) {
