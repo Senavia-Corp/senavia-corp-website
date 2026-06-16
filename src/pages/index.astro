@@ -388,23 +388,19 @@ const fmtEs = (d?: Date) =>
 </main>
 
 <style is:global>
-  /* ---- Hero marquee: real colored tool logos on white chips ---- */
-  .marquee .marquee-track { gap: 2.25rem; }
+  /* ---- Hero marquee: real colored tool logos on a full-width white band ---- */
+  .marquee .marquee-track { gap: 4rem; }
   .marquee-track img.marquee-logo {
-    height: 60px;                 /* chip height (border-box); logo ~36px inside */
+    height: 40px;
     width: auto;
     flex: 0 0 auto;
     opacity: 1;
-    filter: none;                 /* keep brand color of the SVG logos */
+    filter: none;                 /* keep brand color of the logos */
     object-fit: contain;
-    background: #fff;
-    padding: 12px 26px;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.30);
   }
   @media (max-width: 700px) {
-    .marquee .marquee-track { gap: 1.5rem; }
-    .marquee-track img.marquee-logo { height: 48px; padding: 10px 18px; }
+    .marquee .marquee-track { gap: 2.5rem; }
+    .marquee-track img.marquee-logo { height: 32px; }
   }
 
   /* ---- Project card cover: real CMS image fills the frame ---- */
