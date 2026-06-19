@@ -1,32 +1,34 @@
 import { defineCollection, z } from 'astro:content';
-import { file } from 'astro/loaders';
-import { readCsv, bool, numOr, youtubeId } from '@/lib/cms';
+import { fetchSanity } from '@/lib/sanity';
+
+function extractYoutubeId(url: string): string {
+  if (!url) return '';
+  const m = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
 
 /* ============================================================
- *  Collections backed by the local Webflow CSV export
- *  (cms-colletions/). Inline loaders map each CSV row → entry.
- *  Swap readCsv() for a backend fetch later — schemas/templates
- *  stay the same.
+ *  Collections backed by Sanity CMS (project: zx255dw6)
+ *  GROQ queries fetch published documents at build time.
  * ============================================================ */
 
-/* ---------- BLOG ---------- */
 const blog = defineCollection({
   loader: async () =>
-    readCsv('Blog Posts').map((r) => ({
-      id: r['Slug'],
-      title: r['Name'],
-      summary: r['Post Summary'] || '',
-      body: r['Post Body'] || '',
-      category: r['Category'] || '',
-      author: r['Author'] || 'sebastian-navia',
-      featured: bool(r['Featured?']),
-      mainImage: r['Main Image'] || '',
-      thumbnail: r['Thumbnail image'] || r['Main Image'] || '',
-      altImage: r['ALT image SEO'] || r['Name'] || '',
-      seoTitle: r['Title SEO'] || r['Name'],
-      seoDescription: r['Metadescription SEO'] || r['Post Summary'] || '',
-      pubDate: r['Published On'] || r['Created On'] || '',
-    })),
+    fetchSanity<any[]>(`*[_type == "blogPost"] | order(pubDate desc) {
+      "id": slug.current,
+      title,
+      "summary": coalesce(summary, ''),
+      "body": coalesce(body, ''),
+      "category": coalesce(category, ''),
+      "author": coalesce(author, 'sebastian-navia'),
+      "featured": coalesce(featured, false),
+      "mainImage": coalesce(mainImage, ''),
+      "thumbnail": coalesce(thumbnail, mainImage, ''),
+      "altImage": coalesce(altImage, title, ''),
+      "seoTitle": coalesce(seoTitle, title, ''),
+      "seoDescription": coalesce(seoDescription, summary, ''),
+      pubDate
+    }`),
   schema: z.object({
     title: z.string(),
     summary: z.string().default(''),
@@ -43,20 +45,19 @@ const blog = defineCollection({
   }),
 });
 
-/* ---------- PORTFOLIO (Projects) ---------- */
 const portfolio = defineCollection({
   loader: async () =>
-    readCsv('Projects').map((r, i) => ({
-      id: r['Slug'],
-      title: r['Name'],
-      summary: r['Project Summary'] || '',
-      mainImage: r['Main Project Image'] || '',
-      imageAlt: r['Metadata Main Project Image'] || r['Name'] || '',
-      details: r['Project Details'] || '',
-      services: r['Services Rendered'] || '',
-      featured: bool(r['Featured Project?']),
-      order: i,
-    })),
+    fetchSanity<any[]>(`*[_type == "project"] | order(order asc) {
+      "id": slug.current,
+      title,
+      "summary": coalesce(summary, ''),
+      "mainImage": coalesce(mainImage, ''),
+      "imageAlt": coalesce(imageAlt, title, ''),
+      "details": coalesce(details, ''),
+      "services": coalesce(services, ''),
+      "featured": coalesce(featured, false),
+      "order": coalesce(order, 0)
+    }`),
   schema: z.object({
     title: z.string(),
     summary: z.string().default(''),
@@ -69,32 +70,31 @@ const portfolio = defineCollection({
   }),
 });
 
-/* ---------- SERVICE AREAS ---------- */
 const serviceAreas = defineCollection({
   loader: async () =>
-    readCsv('Service Areas').map((r, i) => ({
-      id: r['Slug'],
-      city: r['Name'],
-      county: r['Country'] || '',
-      heroMeta: r['Metadata Img Hero'] || '',
-      titlePage: r['Title Page'] || r['Name'],
-      summaryPage: r['Summary Page'] || '',
-      headingIntro: r['Heading Intro'] || '',
-      paragraphIntro: r['Paragraph Intro'] || '',
-      headingServices: r['Heading Services'] || '',
-      paragraphServices: r['Paragraph Services'] || '',
-      headingPortfolio: r['Heading Portfolio'] || '',
-      paragraphPortfolio: r['Paragraph Portfolio'] || '',
-      headingProcess: r['Heading Process'] || '',
-      paragraphProcess: r['Paragraph Process'] || '',
-      headingReviews: r['Heading Reviews'] || '',
-      paragraphReviews: r['Paragraph Reviews'] || '',
-      headingBlog: r['Heading Blog'] || '',
-      paragraphBlog: r['Paragraph Blog'] || '',
-      seoTitle: r['Title SEO'] || r['Name'],
-      seoDescription: r['Metadescription SEO'] || r['Summary Page'] || '',
-      order: i,
-    })),
+    fetchSanity<any[]>(`*[_type == "serviceArea"] | order(order asc) {
+      "id": slug.current,
+      city,
+      "county": coalesce(county, ''),
+      "heroMeta": coalesce(heroMeta, ''),
+      "titlePage": coalesce(titlePage, city, ''),
+      "summaryPage": coalesce(summaryPage, ''),
+      "headingIntro": coalesce(headingIntro, ''),
+      "paragraphIntro": coalesce(paragraphIntro, ''),
+      "headingServices": coalesce(headingServices, ''),
+      "paragraphServices": coalesce(paragraphServices, ''),
+      "headingPortfolio": coalesce(headingPortfolio, ''),
+      "paragraphPortfolio": coalesce(paragraphPortfolio, ''),
+      "headingProcess": coalesce(headingProcess, ''),
+      "paragraphProcess": coalesce(paragraphProcess, ''),
+      "headingReviews": coalesce(headingReviews, ''),
+      "paragraphReviews": coalesce(paragraphReviews, ''),
+      "headingBlog": coalesce(headingBlog, ''),
+      "paragraphBlog": coalesce(paragraphBlog, ''),
+      "seoTitle": coalesce(seoTitle, city, ''),
+      "seoDescription": coalesce(seoDescription, summaryPage, ''),
+      "order": coalesce(order, 0)
+    }`),
   schema: z.object({
     city: z.string(),
     county: z.string().default(''),
@@ -119,60 +119,14 @@ const serviceAreas = defineCollection({
   }),
 });
 
-/* ---------- WEBSITE PACKAGES (pricing) ---------- */
-const packages = defineCollection({
-  loader: async () =>
-    readCsv('Website Packages').map((r) => ({
-      id: r['Slug'],
-      name: r['Name'],
-      category: r['Category'] || '',
-      tagline: r['Tagline'] || '',
-      description: r['Description'] || '',
-      include: r['Include'] || '',
-      price: numOr(r['Price']),
-      deliveryTime: r['Delivery Time'] || '',
-      revisionRounds: r['Revision Rounds'] || '',
-      supportDays: r['Support Days'] || '',
-      hostingIncluded: r['Hosting Included'] || '',
-      cmsTraining: r['CMS Training Included'] || '',
-      maintenanceAddon: r['Maintenance Add-on'] || '',
-      badge: r['Badge Label'] || '',
-      sortOrder: numOr(r['Sort Order']),
-      paymentInstallments: numOr(r['Payment Installments']),
-      components: (r['Included Components'] || '')
-        .split(';')
-        .map((s) => s.trim())
-        .filter(Boolean),
-    })),
-  schema: z.object({
-    name: z.string(),
-    category: z.string().default(''),
-    tagline: z.string().default(''),
-    description: z.string().default(''),
-    include: z.string().default(''),
-    price: z.number().default(0),
-    deliveryTime: z.string().default(''),
-    revisionRounds: z.string().default(''),
-    supportDays: z.string().default(''),
-    hostingIncluded: z.string().default(''),
-    cmsTraining: z.string().default(''),
-    maintenanceAddon: z.string().default(''),
-    badge: z.string().default(''),
-    sortOrder: z.number().default(0),
-    paymentInstallments: z.number().default(0),
-    components: z.array(z.string()).default([]),
-  }),
-});
-
-/* ---------- LOGOS (tools / integrations) ---------- */
 const logos = defineCollection({
   loader: async () =>
-    readCsv('Logos').map((r, i) => ({
-      id: r['Slug'],
-      name: r['Name'],
-      logo: r['Logo'] || '',
-      order: i,
-    })),
+    fetchSanity<any[]>(`*[_type == "logo"] | order(order asc) {
+      "id": slug.current,
+      name,
+      "logo": coalesce(logoUrl, ''),
+      "order": coalesce(order, 0)
+    }`),
   schema: z.object({
     name: z.string(),
     logo: z.string().default(''),
@@ -180,17 +134,17 @@ const logos = defineCollection({
   }),
 });
 
-/* ---------- VIDEOS (video testimonials / showcases) ---------- */
 const videos = defineCollection({
-  loader: async () =>
-    readCsv('Videos').map((r, i) => ({
-      id: r['Slug'],
-      name: r['Name'],
-      summary: r['Summary'] || '',
-      link: r['Link Video'] || '',
-      youtubeId: youtubeId(r['Link Video']),
-      order: i,
-    })),
+  loader: async () => {
+    const data = await fetchSanity<any[]>(`*[_type == "video"] | order(order asc) {
+      "id": slug.current,
+      name,
+      "summary": coalesce(summary, ''),
+      "link": coalesce(link, ''),
+      "order": coalesce(order, 0)
+    }`);
+    return data.map((v) => ({ ...v, youtubeId: extractYoutubeId(v.link) }));
+  },
   schema: z.object({
     name: z.string(),
     summary: z.string().default(''),
@@ -200,11 +154,23 @@ const videos = defineCollection({
   }),
 });
 
-/* ---------- TESTIMONIALS (text reviews — local JSON, no CMS export yet) ---------- */
 const testimonials = defineCollection({
-  loader: file('./src/content/testimonials.json'),
+  loader: async () =>
+    fetchSanity<any[]>(`*[_type == "testimonial"] | order(_createdAt asc) {
+      "id": _id,
+      name, company, category,
+      "rating": coalesce(rating, 5),
+      "quote_en": coalesce(quoteEn, ''),
+      "quote_es": coalesce(quoteEs, ''),
+      "date": coalesce(date, ''),
+      "avatarClass": coalesce(avatarClass, ''),
+      "videoType": coalesce(videoType, 'none'),
+      "videoId": coalesce(videoId, ''),
+      "thumbClass": coalesce(thumbClass, ''),
+      "duration": coalesce(duration, '')
+    }`),
   schema: z.object({
-    id: z.string(),
+    id: z.string().optional(),
     name: z.string(),
     company: z.string(),
     category: z.enum(['web-design', 'ecommerce', 'web-app', 'marketing']),
@@ -220,4 +186,4 @@ const testimonials = defineCollection({
   }),
 });
 
-export const collections = { blog, portfolio, serviceAreas, packages, logos, videos, testimonials };
+export const collections = { blog, portfolio, serviceAreas, logos, videos, testimonials };
