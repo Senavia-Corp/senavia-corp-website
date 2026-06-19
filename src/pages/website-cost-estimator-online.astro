@@ -715,6 +715,92 @@ const description = "Get a custom estimate for your website project in under 2 m
     .est-live { display: none; }
     .est-back, .est-next { padding: 11px 18px; font-size: 13px; }
   }
+
+  /* ===== GUIDED CONFIGURATOR (v2) ===== */
+  /* Two-tile rows (category / platform) */
+  .est-grid-2 { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 720px) { .est-grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  /* Platform tag inside a tile */
+  .est-platform-tag {
+    display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 5px 12px; border-radius: 999px;
+  }
+  .est-platform-tag::before { content: ""; width: 7px; height: 7px; border-radius: 999px; }
+  .est-platform-tag.is-webflow { color: #8fb6ff; background: rgba(20,110,245,0.14); border: 1px solid rgba(20,110,245,0.40); }
+  .est-platform-tag.is-webflow::before { background: #4d8bff; }
+  .est-platform-tag.is-shopify { color: #bfe07e; background: rgba(149,191,71,0.16); border: 1px solid rgba(149,191,71,0.42); }
+  .est-platform-tag.is-shopify::before { background: #95bf47; }
+
+  /* Base-package selection cards */
+  .est-pkg-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 720px) { .est-pkg-grid { grid-template-columns: 1fr 1fr; } }
+  .est-pkg {
+    position: relative; appearance: none; text-align: left; cursor: pointer; color: inherit;
+    display: flex; flex-direction: column; gap: 7px;
+    padding: 1.4rem 1.4rem; border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all .2s cubic-bezier(.2,.6,.2,1);
+  }
+  .est-pkg:hover { border-color: rgba(153,204,51,0.4); background: rgba(20,28,60,0.5); transform: translateY(-2px); }
+  .est-pkg.is-badged { border-color: rgba(153,204,51,0.35); }
+  .est-pkg.is-active {
+    border-color: var(--primary, #99cc33);
+    background: linear-gradient(180deg, rgba(20,38,30,0.6), rgba(11,28,22,0.4));
+    box-shadow: 0 0 0 1px rgba(153,204,51,0.3);
+  }
+  .est-pkg-flag { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; min-height: 20px; }
+  .est-pkg-level { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary, #99cc33); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .est-pkg-badge { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0a0e26; background: linear-gradient(135deg, #99cc33, #33cccc); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .est-pkg-name { font-size: 1.3rem; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+  .est-pkg-price { font-size: 12px; color: rgba(255,255,255,0.55); display: flex; align-items: baseline; gap: 6px; }
+  .est-pkg-price b { font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  .est-pkg-price i { font-style: normal; }
+  .est-pkg-tagline { font-size: 13px; color: var(--primary, #99cc33); line-height: 1.4; }
+  .est-pkg-foryou { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.5; font-style: italic; }
+  .est-pkg-foryou b { font-style: normal; font-weight: 600; color: rgba(255,255,255,0.75); }
+  .est-pkg-meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+  .est-pkg-meta svg { width: 13px; height: 13px; color: var(--primary, #99cc33); flex: 0 0 13px; }
+  .est-pkg-radio { display: none; }
+
+  /* "Included in your base" panel */
+  .est-incl { margin-bottom: 1.5rem; padding: 1.1rem 1.25rem; border-radius: 14px; background: rgba(153,204,51,0.06); border: 1px solid rgba(153,204,51,0.20); }
+  .est-incl-head { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary, #99cc33); margin-bottom: 10px; }
+  .est-incl-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media (min-width: 680px) { .est-incl-list { grid-template-columns: 1fr 1fr; } }
+  .est-incl-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .est-incl-list li svg { width: 15px; height: 15px; color: var(--primary, #99cc33); flex: 0 0 15px; margin-top: 2px; }
+
+  /* Add-on group header */
+  .est-group { margin-bottom: 1.5rem; }
+  .est-group-head { font-size: 12.5px; color: rgba(255,255,255,0.6); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+  .est-group-head b { color: #fff; font-weight: 600; }
+
+  /* Upgrade nudge banner */
+  .est-nudge {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 1rem 1.25rem; margin-bottom: 1.5rem; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(240,160,80,0.12), rgba(153,204,51,0.10));
+    border: 1px solid rgba(240,160,80,0.32);
+  }
+  .est-nudge-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+  .est-nudge-body strong { color: #fff; font-size: 14px; font-weight: 600; }
+  .est-nudge-body span { color: rgba(255,255,255,0.66); font-size: 12.5px; line-height: 1.45; }
+  .est-nudge-btn {
+    flex: 0 0 auto; appearance: none; border: 0; cursor: pointer; white-space: nowrap;
+    background: linear-gradient(135deg, #99cc33, #c1e15a); color: #0a0e26;
+    font: inherit; font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 999px;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .est-nudge-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(153,204,51,0.32); }
+
+  /* Informational note (top-tier / platform migration) */
+  .est-note { padding: 1.25rem 1.4rem; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  /* Disclaimer */
+  .est-disclaimer { margin: 1.5rem 0 0; font-size: 12px; color: rgba(255,255,255,0.45); font-style: italic; text-align: center; }
 </style>
 
 <main>
@@ -726,8 +812,8 @@ const description = "Get a custom estimate for your website project in under 2 m
     <video class="hero-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
-           poster="/videos/hero-home-poster.jpg">
-      <source src="/videos/hero-home.mp4" type="video/mp4">
+           poster="/videos/bg-video-poster.jpg">
+      <source src="/videos/bg-video.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Free · No commitment · 2 minutes</span><span class="lang-only-es">Gratis · Sin compromiso · 2 minutos</span></div>

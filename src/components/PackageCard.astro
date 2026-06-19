@@ -1,0 +1,77 @@
+---
+import type { Pkg } from '@/data/pricing';
+import { CALENDLY_URL } from '@/data/site';
+
+interface Props { pkg: Pkg }
+const { pkg } = Astro.props;
+
+const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+const badged = Boolean(pkg.badge_en);
+const isSales = pkg.cta === 'sales';
+// Badged → primary (lime) button; everyone else → secondary outline.
+const btnClass = badged ? 'btn' : 'btn is-secondary';
+---
+<article class={`pkg-card${badged ? ' is-badged' : ''}`}>
+
+  <!-- Flag row: badge (left) + platform (right) -->
+  <div class="pkg-flag">
+    {pkg.badge_en && (
+      <span class="pkg-badge"><span class="lang-only-en">{pkg.badge_en}</span><span class="lang-only-es">{pkg.badge_es}</span></span>
+    )}
+    {pkg.platform && (
+      <span class={`pkg-platform is-${pkg.platform.toLowerCase()}`}>{pkg.platform}</span>
+    )}
+  </div>
+
+  <!-- Head: level · name · tagline -->
+  <span class="pkg-level"><span class="lang-only-en">{pkg.level_en}</span><span class="lang-only-es">{pkg.level_es}</span></span>
+  <h3 class="pkg-name">{pkg.name}</h3>
+  <p class="pkg-tagline"><span class="lang-only-en">{pkg.tagline_en}</span><span class="lang-only-es">{pkg.tagline_es}</span></p>
+
+  <!-- For you if… -->
+  <p class="pkg-foryou">
+    <span class="lang-only-en"><b>This is for you if</b> {pkg.forYou_en}</span>
+    <span class="lang-only-es"><b>Esto es para ti si</b> {pkg.forYou_es}</span>
+  </p>
+
+  <!-- Includes -->
+  <ul class="pkg-includes">
+    {pkg.includes.map((it) => (
+      <li><span class="lang-only-en">{it.en}</span><span class="lang-only-es">{it.es}</span></li>
+    ))}
+  </ul>
+
+  <!-- Anchored bottom: result · add-ons · price · delivery · CTA -->
+  <div class="pkg-bottom">
+    <div class="pkg-achieve">
+      <span class="lbl"><span class="lang-only-en">What you achieve</span><span class="lang-only-es">Lo que logras</span></span>
+      <p><span class="lang-only-en">{pkg.achieve_en}</span><span class="lang-only-es">{pkg.achieve_es}</span></p>
+    </div>
+
+    {pkg.addons_en && (
+      <p class="pkg-addons">
+        <span class="lang-only-en"><b>Optional add-ons:</b> {pkg.addons_en}</span>
+        <span class="lang-only-es"><b>Add-ons opcionales:</b> {pkg.addons_es}</span>
+      </p>
+    )}
+
+    <div class="pkg-price">
+      <span class="from"><span class="lang-only-en">from</span><span class="lang-only-es">desde</span></span>
+      <span class="amount">{fmt(pkg.price)}</span>
+    </div>
+
+    <span class="pkg-delivery">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
+      <span><span class="lang-only-en">Delivery in {pkg.delivery_en}</span><span class="lang-only-es">Entrega en {pkg.delivery_es}</span></span>
+    </span>
+
+    <a href="#" class={btnClass} onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}>
+      {isSales
+        ? <span><span class="lang-only-en">Talk to Sales</span><span class="lang-only-es">Hablar con Ventas</span></span>
+        : <span><span class="lang-only-en">Choose Plan</span><span class="lang-only-es">Elegir Plan</span></span>}
+    </a>
+
+    <p class="pkg-subtext"><span class="lang-only-en">No commitment · Free 30-min call</span><span class="lang-only-es">Sin compromiso · Llamada gratis de 30 min</span></p>
+  </div>
+
+</article>

@@ -204,9 +204,12 @@ p, .body-copy { font-size: 18px; font-weight: 300; line-height: 1.3; max-width: 
   border-radius: var(--radius-card);
   background: var(--grad-primary);
   overflow: hidden;
+  display: flex;              /* let the dark glass panel fill the full frame height */
+  flex-direction: column;
 }
 .card-border > .card-glass {
   position: relative;
+  flex: 1 1 auto;            /* fill height → uniform 3px frame on every card, regardless of text length */
   margin: 3px;
   border-radius: calc(var(--radius-card) - 3px);
   padding: 2rem;
@@ -215,7 +218,11 @@ p, .body-copy { font-size: 18px; font-weight: 300; line-height: 1.3; max-width: 
           backdrop-filter: blur(16px);
   border: var(--border-faint);
   color: var(--white);
+  display: flex;             /* stack content so the "more" link can sit at the bottom */
+  flex-direction: column;
 }
+/* Align the call-to-action at the bottom of every card (equal-height look) */
+.card-border > .card-glass .more { margin-top: auto; }
 .card-border.is-purple { background: var(--grad-purple); }
 .card-border.is-cyan   { background: var(--grad-cyan);   }
 .card-border.is-green  { background: var(--grad-green);  }

@@ -51,20 +51,20 @@ export const NAV = {
       desc_es: 'Sitios a medida, CMS y e-commerce enfocados en conversión que capturan tu marca.',
     },
     {
-      href: '/services/web-development',
-      icon: '/images/Development-Icon.svg',
-      title_en: 'Web Development',
-      title_es: 'Desarrollo Web',
-      desc_en: 'Admin panels, CRM/ERP portals & workflow automation for how your team works.',
-      desc_es: 'Paneles, portales CRM/ERP y automatización de flujos para tu operación.',
-    },
-    {
       href: '/services/traffic-generation',
       icon: '/images/Marketing-Icon.svg',
       title_en: 'Traffic Generation',
       title_es: 'Generación de Tráfico',
       desc_en: 'SEO, SEM & GEO working together to capture organic, paid and AI-driven traffic.',
       desc_es: 'SEO, SEM y GEO en conjunto para captar tráfico orgánico, pagado y de IA.',
+    },
+    {
+      href: '/services/web-development',
+      icon: '/images/Development-Icon.svg',
+      title_en: 'Web Development',
+      title_es: 'Desarrollo Web',
+      desc_en: 'Admin panels, CRM/ERP portals & workflow automation for how your team works.',
+      desc_es: 'Paneles, portales CRM/ERP y automatización de flujos para tu operación.',
     },
   ],
   about: [

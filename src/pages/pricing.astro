@@ -1,32 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import PackageCard from '@/components/PackageCard.astro';
+import { BUSINESS, ECOMMERCE } from '@/data/pricing';
 
 const title = "Pricing — SENAVIA Corp · Web Design &amp; E-Commerce Packages";
-const description = "Transparent pricing for SENAVIA Corp web design and e-commerce packages. Choose the tier that matches your stage — from a launch landing page to a full omnichannel commerce platform.";
+const description = "Transparent pricing for SENAVIA Corp business websites and e-commerce stores. Find the package that matches your stage — from a launch landing page to a full omnichannel commerce platform.";
 
 const CAL = "https://calendly.com/leads-senaviacorp/30-minute-meeting-clon";
-const fmt = (n: number) => '$' + Math.round(n).toLocaleString();
-
-// Load real packages from the local Webflow CMS
-const allPackages = await getCollection('packages');
-
-const byCategory = (cat: string) =>
-  allPackages
-    .filter((p) => p.data.category === cat)
-    .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
-
-const businessTiers = byCategory('Business Website');
-const ecommerceTiers = byCategory('E-Commerce Website');
-
-// Badge label translations (CMS values vary in casing)
-const badgeEs = (label: string) => {
-  const k = label.trim().toLowerCase();
-  if (k === 'most popular') return 'Más popular';
-  if (k === 'best value') return 'Mejor valor';
-  return label;
-};
-const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popular';
+const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
 ---
 <BaseLayout
   title={title}
@@ -41,12 +22,12 @@ const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popul
      ============================================================ */
   .hero.is-compact + .section { padding-top: 4rem; }
 
-  /* Tabs */
+  /* ---- Tabs ---- */
   .price-tabs {
     display: flex;
     gap: 6px;
     justify-content: center;
-    margin: 0 auto 3rem;
+    margin: 0 auto 1.25rem;
     padding: 6px;
     max-width: max-content;
     background: rgba(13,18,53,0.55);
@@ -65,6 +46,7 @@ const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popul
     border-radius: 999px;
     cursor: pointer;
     transition: color .2s ease, background .2s ease;
+    white-space: nowrap;
   }
   .price-tab:hover { color: #fff; }
   .price-tab.is-active {
@@ -73,195 +55,249 @@ const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popul
     font-weight: 600;
   }
 
-  /* Tier grid */
-  .tier-grid {
+  /* Helper line under the tabs (platform context for e-commerce) */
+  .pkg-note {
+    text-align: center;
+    margin: 0 auto 2.75rem;
+    max-width: 720px;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.55);
+  }
+  .pkg-note b { color: rgba(255,255,255,0.82); font-weight: 600; }
+
+  .tier-pane { display: none; }
+  .tier-pane.is-active { display: block; }
+
+  /* ---- Card grid: 4 desktop / 2 tablet / 1 mobile ---- */
+  .pkg-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 22px;
     align-items: stretch;
   }
-  @media (max-width: 1180px) { .tier-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } }
-  @media (max-width: 640px)  { .tier-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1180px) { .pkg-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; } }
+  @media (max-width: 640px)  { .pkg-grid { grid-template-columns: 1fr; } }
 
-  .tier-pane { display: none; }
-  .tier-pane.is-active { display: block; }
-
-  /* Tier card */
-  .tier-card {
+  /* ---- Card ---- */
+  .pkg-card {
     position: relative;
-    border: 1px solid transparent;
-    border-radius: 18px;
-    background:
-      linear-gradient(180deg, rgba(13,18,53,0.7), rgba(11,15,35,0.55)) padding-box,
-      linear-gradient(160deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02) 45%, rgba(153,204,51,0.18)) border-box;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(13,18,53,0.72), rgba(11,15,35,0.55));
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 1.9rem 1.6rem 1.6rem;
     -webkit-backdrop-filter: blur(14px);
             backdrop-filter: blur(14px);
-    padding: 2rem 1.75rem 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    transition: transform .25s cubic-bezier(.2,.6,.2,1), box-shadow .25s ease;
+    transition: transform .25s cubic-bezier(.2,.6,.2,1), box-shadow .25s ease, border-color .25s ease;
   }
-  .tier-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.32);
+  .pkg-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.40);
+    border-color: rgba(255,255,255,0.14);
   }
-
-  .tier-card.is-featured {
+  /* Badged packages get a 2px accent frame + glow (the ones we want to sell) */
+  .pkg-card.is-badged {
+    border: 2px solid transparent;
     background:
-      linear-gradient(180deg, rgba(20,38,30,0.92), rgba(11,28,22,0.85)) padding-box,
-      linear-gradient(160deg, #99cc33, rgba(51,204,204,0.6) 50%, #99cc33) border-box;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(153,204,51,0.2);
+      linear-gradient(180deg, rgba(16,26,30,0.92), rgba(11,20,24,0.82)) padding-box,
+      linear-gradient(160deg, #99cc33, rgba(51,204,204,0.7) 48%, #99cc33) border-box;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.42), 0 0 0 1px rgba(153,204,51,0.12);
   }
-  .tier-card .ribbon {
-    position: absolute;
-    top: -1px;
-    right: 22px;
-    transform: translateY(-50%);
+  .pkg-card.is-badged:hover { box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 36px rgba(153,204,51,0.18); }
+
+  /* ---- Flag row (badge + platform), reserved height keeps cards aligned ---- */
+  .pkg-flag {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    min-height: 26px;
+    margin-bottom: 16px;
+  }
+  .pkg-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 10.5px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 7px 14px;
+    padding: 6px 12px;
     border-radius: 999px;
-    background: var(--primary, #99cc33);
+    background: linear-gradient(135deg, #99cc33, #33cccc);
     color: #0a0e26;
-    box-shadow: 0 6px 18px rgba(153,204,51,0.35);
+    box-shadow: 0 6px 18px rgba(153,204,51,0.32);
+    line-height: 1.2;
+    white-space: nowrap;       /* long badges drop to their own line via flex-wrap, never blob */
+  }
+  .pkg-badge::before { content: "★"; font-size: 10px; }
+  .pkg-platform {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 5px 11px;
+    border-radius: 999px;
     white-space: nowrap;
   }
-  /* "Best value" (non-featured) ribbon reads as a softer accent */
-  .tier-card:not(.is-featured) .ribbon.is-value {
-    background: linear-gradient(135deg, rgba(51,204,204,0.95), rgba(153,204,51,0.95));
-  }
+  .pkg-platform::before { content: ""; width: 7px; height: 7px; border-radius: 999px; }
+  .pkg-platform.is-webflow { color: #8fb6ff; background: rgba(20,110,245,0.14); border: 1px solid rgba(20,110,245,0.38); }
+  .pkg-platform.is-webflow::before { background: #4d8bff; }
+  .pkg-platform.is-shopify { color: #bfe07e; background: rgba(149,191,71,0.16); border: 1px solid rgba(149,191,71,0.42); }
+  .pkg-platform.is-shopify::before { background: #95bf47; }
 
-  .tier-head {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-bottom: 16px;
-    border-bottom: 1px dashed rgba(255,255,255,0.08);
-  }
-  .tier-code {
+  /* ---- Head ---- */
+  .pkg-level {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--primary, #99cc33);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
-  .tier-name {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: #fff;
-  }
-  .tier-tagline {
-    margin: 4px 0 0;
-    font-size: 13.5px;
-    color: rgba(255,255,255,0.62);
-    line-height: 1.5;
-    max-width: none;
-  }
-
-  .tier-price {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .tier-price .from {
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
-    width: 100%;
-  }
-  .tier-price .amount {
-    font-size: 2.5rem;
+  .pkg-name {
+    margin: 8px 0 0;
+    font-size: 1.6rem;
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     color: #fff;
-    line-height: 1;
+    line-height: 1.1;
   }
-  .tier-price .unit {
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
-  }
-
-  .tier-desc {
-    margin: 0;
-    font-size: 13.5px;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.55;
+  .pkg-tagline {
+    margin: 8px 0 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--primary, #99cc33);
     max-width: none;
   }
+  .pkg-card.is-badged .pkg-tagline { color: #b6e15a; }
 
-  /* Meta row */
-  .tier-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+  .pkg-foryou {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border-left: 2px solid rgba(255,255,255,0.14);
+    font-size: 13px;
+    font-style: italic;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.58);
+    max-width: none;
   }
-  .tier-meta .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11.5px;
-    color: rgba(255,255,255,0.7);
-    padding: 5px 10px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .tier-meta .chip .ico { width: 13px; height: 13px; color: var(--primary, #99cc33); flex: 0 0 13px; }
+  .pkg-foryou b { font-style: normal; font-weight: 600; color: rgba(255,255,255,0.78); }
 
-  /* Include list (CMS rich text → <ul>) */
-  .tier-include {
-    flex: 1;
-  }
-  .tier-include ul {
+  /* ---- Includes ---- */
+  .pkg-includes {
     list-style: none;
-    margin: 0;
-    padding: 0;
+    margin: 18px 0 0;
+    padding: 18px 0 0;
+    border-top: 1px dashed rgba(255,255,255,0.10);
     display: flex;
     flex-direction: column;
     gap: 11px;
   }
-  .tier-include li {
+  .pkg-includes li {
     position: relative;
-    padding-left: 26px;
+    padding-left: 27px;
     font-size: 13.5px;
-    color: rgba(255,255,255,0.78);
-    line-height: 1.5;
+    color: rgba(255,255,255,0.80);
+    line-height: 1.45;
   }
-  .tier-include li::before {
+  .pkg-includes li::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 3px;
-    width: 16px;
-    height: 16px;
+    top: 1px;
+    width: 17px;
+    height: 17px;
     border-radius: 999px;
     background:
-      linear-gradient(135deg, rgba(153,204,51,0.2), rgba(51,204,204,0.12)),
+      linear-gradient(135deg, rgba(153,204,51,0.22), rgba(51,204,204,0.12)),
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2399cc33' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / 10px no-repeat;
     border: 1px solid rgba(153,204,51,0.36);
   }
-  .tier-include li em {
-    font-style: normal;
-    font-weight: 600;
-    color: var(--primary, #99cc33);
-  }
 
-  .tier-card .btn {
+  /* ---- Bottom group (anchored): result + add-ons + price + delivery + CTA ---- */
+  .pkg-bottom {
+    margin-top: auto;
+    padding-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .pkg-achieve {
     margin-top: 4px;
+    padding: 13px 15px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(153,204,51,0.12), rgba(51,204,204,0.07));
+    border: 1px solid rgba(153,204,51,0.22);
+  }
+  .pkg-achieve .lbl {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    margin-bottom: 4px;
+  }
+  .pkg-achieve p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.9);
+    max-width: none;
+  }
+  .pkg-addons {
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.55);
+  }
+  .pkg-addons b { color: rgba(255,255,255,0.78); font-weight: 600; }
+
+  .pkg-price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.09);
+  }
+  .pkg-price .from {
     width: 100%;
-    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+  .pkg-price .amount {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1;
+  }
+  .pkg-delivery {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.62);
+  }
+  .pkg-delivery svg { width: 14px; height: 14px; color: var(--primary, #99cc33); flex: 0 0 14px; }
+
+  .pkg-card .btn { width: 100%; justify-content: center; text-align: center; margin-top: 2px; }
+  .pkg-subtext {
     text-align: center;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.45);
+    margin: 0;
   }
 
-  /* Included grid */
+  /* ---- "Included in every package" grid ---- */
   .inc-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -321,122 +357,40 @@ const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popul
     <video class="hero-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"
-           poster="/videos/hero-home-poster.jpg">
-      <source src="/videos/hero-home.mp4" type="video/mp4">
+           poster="/videos/bg-video-poster.jpg">
+      <source src="/videos/bg-video.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Transparent pricing · No hidden fees</span><span class="lang-only-es">Precios transparentes · Sin costos ocultos</span></div>
       <h1><span class="lang-only-en">Web Design Packages Built to Grow Your Business</span><span class="lang-only-es">Paquetes de Diseño Web Creados para Hacer Crecer tu Negocio</span></h1>
-      <p><span class="lang-only-en">Transparent pricing for Business Websites and E-Commerce stores. Choose the tier that matches your stage.</span><span class="lang-only-es">Precios transparentes para Sitios Empresariales y tiendas E-Commerce. Elige el plan que se ajuste a tu etapa.</span></p>
+      <p><span class="lang-only-en">Find the package that matches your stage — from your first professional website to a full omnichannel store. Value first, price second.</span><span class="lang-only-es">Encuentra el paquete que se ajusta a tu etapa — desde tu primera web profesional hasta una tienda omnicanal completa. Primero el valor, luego el precio.</span></p>
     </div>
   </section>
 
   <!-- ============================================================
-       PRICING TABS + TIERS
+       PRICING TABS + PACKAGES
        ============================================================ -->
-  <section class="section section--band" data-screen-label="02 Pricing Tiers">
+  <section class="section section--band" data-screen-label="02 Pricing Packages">
     <div class="container">
 
-      <div class="price-tabs" role="tablist" aria-label="Service type">
-        <button class="price-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="pane-bw" data-tab="bw"><span class="lang-only-en">Business Website</span><span class="lang-only-es">Sitio Empresarial</span></button>
+      <div class="price-tabs" role="tablist" aria-label="Product line">
+        <button class="price-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="pane-bw" data-tab="bw"><span class="lang-only-en">Business Websites</span><span class="lang-only-es">Sitios Empresariales</span></button>
         <button class="price-tab" type="button" role="tab" aria-selected="false" aria-controls="pane-ec" data-tab="ec"><span class="lang-only-en">E-Commerce</span><span class="lang-only-es">E-Commerce</span></button>
       </div>
 
+      <!-- BUSINESS WEBSITES -->
       <div class="tier-pane is-active" id="pane-bw" role="tabpanel" data-pane="bw">
-        <div class="tier-grid" data-reveal-children>
-          {businessTiers.map((pkg, i) => {
-            const featured = isFeatured(pkg.data.badge);
-            const value = pkg.data.badge.trim().toLowerCase() === 'best value';
-            return (
-            <article class={`tier-card${featured ? ' is-featured' : ''}`}>
-              {pkg.data.badge && (
-                <span class={`ribbon${value ? ' is-value' : ''}`}><span class="lang-only-en">{pkg.data.badge}</span><span class="lang-only-es">{badgeEs(pkg.data.badge)}</span></span>
-              )}
-              <div class="tier-head">
-                <span class="tier-code">BW-{i + 1}</span>
-                <h3 class="tier-name">{pkg.data.name}</h3>
-                <p class="tier-tagline">{pkg.data.tagline}</p>
-              </div>
-              <div class="tier-price">
-                <span class="from"><span class="lang-only-en">from</span><span class="lang-only-es">desde</span></span>
-                <span class="amount">{fmt(pkg.data.price)}</span>
-                <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-              </div>
-              <p class="tier-desc">{pkg.data.description}</p>
-              <div class="tier-meta">
-                {pkg.data.deliveryTime && (
-                  <span class="chip">
-                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
-                    <span><span class="lang-only-en">Delivery:</span><span class="lang-only-es">Entrega:</span> {pkg.data.deliveryTime}</span>
-                  </span>
-                )}
-                {pkg.data.revisionRounds && (
-                  <span class="chip">
-                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                    <span><span class="lang-only-en">{pkg.data.revisionRounds} revision rounds</span><span class="lang-only-es">{pkg.data.revisionRounds} rondas de revisión</span></span>
-                  </span>
-                )}
-                {pkg.data.paymentInstallments > 0 && (
-                  <span class="chip">
-                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                    <span><span class="lang-only-en">Up to {pkg.data.paymentInstallments} installments</span><span class="lang-only-es">Hasta {pkg.data.paymentInstallments} cuotas</span></span>
-                  </span>
-                )}
-              </div>
-              <div class="tier-include" set:html={pkg.data.include} />
-              <a href="#" class={`btn${featured ? '' : ' is-secondary'}`} onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Consultation</span><span class="lang-only-es">Agendar Consulta</span></a>
-            </article>
-            );
-          })}
+        <p class="pkg-note"><span class="lang-only-en">Four stages, from first presence to a full client portal — each step builds on the last.</span><span class="lang-only-es">Cuatro etapas, desde tu primera presencia hasta un portal de clientes completo — cada paso se construye sobre el anterior.</span></p>
+        <div class="pkg-grid" data-reveal-children>
+          {BUSINESS.map((pkg) => <PackageCard pkg={pkg} />)}
         </div>
       </div>
 
+      <!-- E-COMMERCE WEBSITES -->
       <div class="tier-pane" id="pane-ec" role="tabpanel" data-pane="ec" hidden>
-        <div class="tier-grid" data-reveal-children>
-          {ecommerceTiers.map((pkg, i) => {
-            const featured = isFeatured(pkg.data.badge);
-            const value = pkg.data.badge.trim().toLowerCase() === 'best value';
-            return (
-            <article class={`tier-card${featured ? ' is-featured' : ''}`}>
-              {pkg.data.badge && (
-                <span class={`ribbon${value ? ' is-value' : ''}`}><span class="lang-only-en">{pkg.data.badge}</span><span class="lang-only-es">{badgeEs(pkg.data.badge)}</span></span>
-              )}
-              <div class="tier-head">
-                <span class="tier-code">EC-{i + 1}</span>
-                <h3 class="tier-name">{pkg.data.name}</h3>
-                <p class="tier-tagline">{pkg.data.tagline}</p>
-              </div>
-              <div class="tier-price">
-                <span class="from"><span class="lang-only-en">from</span><span class="lang-only-es">desde</span></span>
-                <span class="amount">{fmt(pkg.data.price)}</span>
-                <span class="unit"><span class="lang-only-en">/ project</span><span class="lang-only-es">/ proyecto</span></span>
-              </div>
-              <p class="tier-desc">{pkg.data.description}</p>
-              <div class="tier-meta">
-                {pkg.data.deliveryTime && (
-                  <span class="chip">
-                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
-                    <span><span class="lang-only-en">Delivery:</span><span class="lang-only-es">Entrega:</span> {pkg.data.deliveryTime}</span>
-                  </span>
-                )}
-                {pkg.data.revisionRounds && (
-                  <span class="chip">
-                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                    <span><span class="lang-only-en">{pkg.data.revisionRounds} revision rounds</span><span class="lang-only-es">{pkg.data.revisionRounds} rondas de revisión</span></span>
-                  </span>
-                )}
-                {pkg.data.paymentInstallments > 0 && (
-                  <span class="chip">
-                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                    <span><span class="lang-only-en">Up to {pkg.data.paymentInstallments} installments</span><span class="lang-only-es">Hasta {pkg.data.paymentInstallments} cuotas</span></span>
-                  </span>
-                )}
-              </div>
-              <div class="tier-include" set:html={pkg.data.include} />
-              <a href="#" class={`btn${featured ? '' : ' is-secondary'}`} onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Consultation</span><span class="lang-only-es">Agendar Consulta</span></a>
-            </article>
-            );
-          })}
+        <p class="pkg-note"><span class="lang-only-en"><b>Webflow</b> for design-led brands that sell with content · <b>Shopify</b> to scale and sell everywhere.</span><span class="lang-only-es"><b>Webflow</b> para marcas con diseño que venden con contenido · <b>Shopify</b> para escalar y vender en todos lados.</span></p>
+        <div class="pkg-grid" data-reveal-children>
+          {ECOMMERCE.map((pkg) => <PackageCard pkg={pkg} />)}
         </div>
       </div>
 
@@ -540,7 +494,7 @@ const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popul
     </video>
     <div class="container">
       <h2><span class="lang-only-en">Not Sure Which Package Is Right?</span><span class="lang-only-es">¿No Sabes Cuál Paquete Te Conviene?</span></h2>
-      <p><span class="lang-only-en">Schedule a 30-minute consultation and we'll recommend the tier and integrations that match your goals.</span><span class="lang-only-es">Agenda una consulta de 30 minutos y te recomendaremos el plan y las integraciones que se ajusten a tus objetivos.</span></p>
+      <p><span class="lang-only-en">Schedule a 30-minute consultation and we'll recommend the package and integrations that match your goals.</span><span class="lang-only-es">Agenda una consulta de 30 minutos y te recomendaremos el paquete y las integraciones que se ajusten a tus objetivos.</span></p>
       <a href="#" class="btn cta--glow" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Free Consultation</span><span class="lang-only-es">Agendar Consulta Gratis</span></a>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
@@ -571,5 +525,3 @@ const isFeatured = (label: string) => label.trim().toLowerCase() === 'most popul
   })();
 </script>
 </BaseLayout>
-</content>
-</invoke>
