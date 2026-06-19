@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Correcciones del Dashboard — lista para Jeferson</title>
+<style>
+  :root{--ink:#1f2937;--mut:#6b7280;--line:#e5e7eb;--bg:#f6f8f7;--bad:#dc2626;--warn:#ea580c;--ok:#16a34a;--g8:#14532d;--g6:#15803d;
+        --mono:ui-monospace,Menlo,Consolas,monospace;--sans:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px}
+  .wrap{max-width:860px;margin:0 auto;padding:22px}
+  h1{color:var(--g8);font-size:1.5rem;margin:0 0 4px}
+  .sub{color:var(--mut);margin:0 0 18px}
+  h2{color:var(--g8);font-size:1.15rem;border-bottom:2px solid var(--ok);padding-bottom:5px;margin:30px 0 12px}
+  code{font-family:var(--mono);font-size:.84em;background:#eef2f0;padding:1px 5px;border-radius:4px;color:var(--g8)}
+  .roots{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 8px}
+  .roots b{color:var(--g8)}
+  .roots ol{margin:8px 0 0;padding-left:20px} .roots li{margin:3px 0}
+  .legend{color:var(--mut);font-size:.85rem;margin:8px 0 0}
+  .fix{background:#fff;border:1px solid var(--line);border-left:5px solid var(--mut);border-radius:9px;padding:12px 15px;margin:11px 0}
+  .fix.bad{border-left-color:var(--bad)} .fix.warn{border-left-color:var(--warn)}
+  .m{font-weight:700;color:var(--g8);font-size:1rem;margin-bottom:3px}
+  .m .tab{font-size:.7rem;font-weight:700;background:#eef2f0;color:var(--g6);padding:1px 7px;border-radius:999px;margin-left:6px;text-transform:uppercase;letter-spacing:.3px}
+  .why{margin:5px 0 8px}
+  .row{display:flex;gap:8px;margin:4px 0;align-items:baseline}
+  .lab{flex:0 0 92px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding-top:1px}
+  .lab.h{color:var(--bad)} .lab.s{color:var(--ok)}
+  .val{flex:1}
+  .ok-note{background:#ecfdf3;border:1px solid #bbf7d0;border-radius:8px;padding:9px 13px;margin:11px 0;font-size:.9rem}
+  .ft{color:var(--mut);font-size:.82rem;margin-top:26px;border-top:1px solid var(--line);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Correcciones del Dashboard — lista para aplicar</h1>
+  <p class="sub">Una métrica por tarjeta: <b>qué está mal · fórmula de hoy · fórmula que debería ir</b>. Guía técnica de fórmulas (sin datos de clientes). Los valores concretos de cada caso se comparten aparte.</p>
+
+  <div class="roots">
+    <b>Casi todo se reduce a 4 causas que se repiten:</b>
+    <ol>
+      <li><b>No filtran estado</b> → suman trabajos <i>Cancelados</i> y <i>sin aprobar</i> en los totales.</li>
+      <li><b>Tratan los 3 tipos como QID</b> → PAR/PTL usan otra columna de ingreso y se pierden o se mal-suman.</li>
+      <li><b>Datos corruptos en los %</b> → unas pocas filas con valores imposibles tiran los promedios.</li>
+      <li><b>El rótulo no coincide con la fórmula</b> → la etiqueta dice una cosa y el código calcula otra.</li>
+    </ol>
+    <p class="legend">❌ = el valor está mal · ⚠️ = funciona pero es impreciso/ambiguo. (Las métricas que ya están bien no aparecen.)</p>
+  </div>
+
+  <h2>Pestaña · Jobs</h2>
+
+  <div class="fix bad">
+    <div class="m">Total Quoted <span class="tab">Jobs</span> ❌</div>
+    <div class="why">Suma todos los estados → infla el total con cotizaciones <b>canceladas y sin aprobar</b>.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(target_sold)</code> sobre todos los estados</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val"><code>SUM(target_sold)</code> excluyendo <code>Cancelled</code> (y decidir si excluye <code>Waiting for Approval</code>)</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">Total Formula <span class="tab">Jobs</span> ⚠️</div>
+    <div class="why">Mismo problema de estado que Total Quoted.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(formula_pricing)</code> sobre todos los estados</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val"><code>SUM(formula_pricing)</code> excluyendo <code>Cancelled</code></div></div>
+  </div>
+
+  <div class="fix bad">
+    <div class="m">Total Final Sold <span class="tab">Jobs</span> ❌</div>
+    <div class="why">En la vista <b>"All"</b> trata todo como QID → el ingreso de <b>PAR queda en $0</b> (PAR no tiene <code>final_sold</code>).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(final_sold) WHERE paid</code> usando la columna de QID para todos</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">columna por tipo: PAR → <code>target_sold</code>, QID/PTL → <code>final_sold</code> (<code>revenue_expr</code> por fila)</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">Total Premium $ <span class="tab">Jobs</span> ⚠️</div>
+    <div class="why">El subtítulo dice "Final Sold − Adj Formula" pero el código suma el <b>campo guardado</b> <code>premium</code> (no calcula la resta).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(premium_in_money) WHERE paid</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">calcular <code>SUM(final_sold − adj_formula)</code>, <b>o</b> corregir el subtítulo para que diga "campo Premium"</div></div>
+  </div>
+
+  <div class="fix bad">
+    <div class="m">Avg Final % <span class="tab">Jobs</span> ❌</div>
+    <div class="why">Promedio <b>simple</b> sobre <b>todas</b> las filas (incluye nulos, no-pagados y corruptos). Además el "Final %" real <b>solo existe en QID</b>.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>AVG(final_percentage)</code> sobre todas las filas</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">solo <code>paid</code>, <b>ponderado por $</b>, por tipo (PAR/PTL → <code>target_return</code>), descartando filas &lt;−100% o &gt;100%</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m"># Jobs PAID <span class="tab">Jobs</span> ⚠️</div>
+    <div class="why">El denominador (total de jobs) incluye los <b>cancelados</b> → baja el % de pagados artificialmente.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>paid / COUNT(*)</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val"><code>paid / COUNT(* sin Cancelled)</code></div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">Pipeline <span class="tab">Jobs</span> ⚠️</div>
+    <div class="why">El tooltip dice "incluye Invoiced", pero el código <b>excluye</b> Invoiced.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(target_sold) WHERE status IN (in-progress)</code> — sin Invoiced</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">incluir <code>Invoiced</code> en el filtro, <b>o</b> corregir el texto del tooltip</div></div>
+  </div>
+
+  <div class="fix bad">
+    <div class="m">Avg Target Return <span class="tab">Jobs</span> ❌</div>
+    <div class="why">Da un valor <b>negativo</b> (imposible) por <b>unas filas con datos corruptos</b>; al limpiarlas vuelve positivo.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>AVG(target_return) WHERE active</code> — sin limpiar corruptas</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">descartar/clamp filas &lt;−100% o &gt;100% antes de promediar</div></div>
+  </div>
+
+  <h2>Pestaña · Parent Companies</h2>
+
+  <div class="fix bad">
+    <div class="m">Communities <span class="tab">Parent</span> ❌</div>
+    <div class="why">Cuenta los clientes de <b>todo-el-tiempo</b>, no los del año seleccionado → la tarjeta muestra más comunidades de las que realmente tuvieron jobs en el año (las que sí lista la tabla de abajo).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>COUNT(DISTINCT ID_Client)</code> sin filtro de año</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">contar comunidades <b>con jobs en el año seleccionado</b> (aplicar <code>year_ok</code>)</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">$ Quoted / Quotes Received <span class="tab">Parent</span> ⚠️</div>
+    <div class="why">No es el total cotizado: es solo el bucket <b>pendiente</b> (Waiting + Hold + P.Quote), así que el conteo y el monto mostrados quedan por debajo del total real de cotizaciones.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>count / SUM(revenue)</code> solo sobre estados <code>PENDING</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">re-rotular "Cotizaciones pendientes / $ en cotización", <b>o</b> cambiar el filtro a todos los estados si se quiere el total</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">Community Assignment by Member <span class="tab">Parent</span> ⚠️</div>
+    <div class="why">El revenue suma <b>todos los estados</b> (no solo pagados) y <b>dobla</b> los jobs que tienen 2 roles (Acc Rep + Mgmt).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(revenue)</code> sin filtro de estado, con join a <code>JobMemberLink</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">filtrar <code>paid</code> y <b>deduplicar por job</b> (un job cuenta una vez)</div></div>
+  </div>
+
+  <div class="ok-note">✅ <b>Approval %</b> está bien: es <code>(total − propuestas)/total</code> (propuestas = P.Quote+Waiting+Cancelled), no "pagadas/total". Solo conviene que el tooltip lo explique. <b>$ Paid, In Progress y Avg Target/Final también coinciden exacto.</b></div>
+
+  <h2>Pestaña · Members</h2>
+
+  <div class="fix bad">
+    <div class="m">$ Quoted (por miembro) <span class="tab">Members</span> ❌</div>
+    <div class="why">Sin filtro de estado: <b>una parte grande</b> del total son trabajos <b>cancelados o sin aprobar</b>. Y usa la columna <b>equivocada</b> (<code>final_sold</code> en vez del precio cotizado).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>SUM(final_sold)</code> sobre todos los estados</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">filtrar estado + usar <code>target_sold</code> para el "cotizado"; corregir el docstring que se contradice con el código</div></div>
+  </div>
+
+  <div class="fix bad">
+    <div class="m">Tabla "Pending Vendor Quote" <span class="tab">Members</span> ❌</div>
+    <div class="why">Está <b>hardcodeada a QID</b> → nunca muestra PTL/PAR (el estado <code>Assigned/P. Quote</code> solo existe en QID).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>WHERE type='QID' AND status='Assigned/P. Quote'</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">pares <code>(tipo, estado)</code>: QID→<code>Assigned/P. Quote</code>, PTL→<code>Received-Stand By</code>, PAR→(decisión de negocio, hoy vacío)</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m"># Assigned/P.Quote ≠ filas de la tabla <span class="tab">Members</span> ⚠️</div>
+    <div class="why">El card y la tabla justo debajo cuentan distinto → el usuario ve un número en el card que no coincide con la cantidad de filas de la tabla.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val">card cuenta rol <code>Acc Rep + Mgmt Member</code>; la tabla solo <code>Acc Rep</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">alinear ambos a <code>Acc Rep Selling + QID</code> (en las 3 superficies: lista, individual, tabla)</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m"># / $ In Progress (por miembro) <span class="tab">Members</span> ⚠️</div>
+    <div class="why">Usa una lista plana de estados → <b>fuga entre tipos</b> (cuenta de más un job de otro tipo con un estado de QID).</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>status IN (lista plana de estados)</code></div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">pares <code>(tipo, estado)</code></div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">Avg Target % (por miembro) <span class="tab">Members</span> ⚠️</div>
+    <div class="why">Mezcla 2 columnas distintas (QID usa <code>final_percentage</code>, PTL/PAR usan <code>target_return</code>) + filas corruptas.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>AVG</code> mezclando columnas, sin limpiar corruptas</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">por tipo (no mezclar columnas) + descartar filas &lt;−100% o &gt;100%</div></div>
+  </div>
+
+  <div class="fix warn">
+    <div class="m">Communities Assigned (por miembro) <span class="tab">Members</span> ⚠️</div>
+    <div class="why">No respeta el filtro de año: muestra el histórico mientras lo demás se re-escala al año.</div>
+    <div class="row"><div class="lab h">Hoy</div><div class="val"><code>COUNT(DISTINCT client)</code> sin fecha (la tabla no tiene columna de fecha)</div></div>
+    <div class="row"><div class="lab s">Debería</div><div class="val">rotular la casilla "(histórico / all-time)" para que no parezca inconsistente</div></div>
+  </div>
+
+  <p class="ft">Guía técnica de fórmulas · GQM Analytics · para Jeferson Forero. Los valores concretos de cada métrica se comparten por canal privado.</p>
+</div>
+</body>
+</html>
