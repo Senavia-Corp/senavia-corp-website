@@ -12,12 +12,19 @@ const { entry, all } = Astro.props;
 const d = entry.data;
 const cityShort = d.city.replace(/,\s*FL$/i, '');
 
+// Featured local visual + agency reel (requested assets).
+const featureImage = '/images/services/web-design-miami.avif';
+const videoId = 'qOOyCUcOKfM';
+
 // Real Google Maps embed centered on the city.
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`${d.city}, FL`)}&output=embed`;
 const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent('150 S Pine Island Rd Suite 377, Plantation FL 33324')}`;
 
-// The 3 services (canonical pillars) from site nav data.
+// The 3 services (canonical pillars) from site nav data, paired with the
+// homepage gradient palette (purple / cyan / green) for visual life.
 const services = NAV.services;
+const cardVariant = ['is-purple', 'is-cyan', 'is-green'];
+const iconVariant = ['', 'is-cyan', 'is-green'];
 
 // Real CMS data for the strips.
 const projects = (await getCollection('portfolio'))
@@ -51,11 +58,18 @@ const t = {
   blogHead: { en: `Insights for ${cityShort} Business Owners`, es: `Recursos para Negocios de ${cityShort}` },
 };
 
+// Localized service titles (the canonical service + the city).
+const svcTitle = [
+  { en: `Custom Web Design in ${cityShort}`, es: `Diseño Web Personalizado en ${cityShort}` },
+  { en: `Traffic Generation in ${cityShort}`, es: `Generación de Tráfico en ${cityShort}` },
+  { en: `Web Development in ${cityShort}`, es: `Desarrollo Web en ${cityShort}` },
+];
+
 const steps = [
-  { n: '01', en: 'Discovery & local research', es: 'Descubrimiento e investigación local', den: `We map your ${cityShort} market, competitors, and the searches your customers actually use.`, des: `Mapeamos tu mercado en ${cityShort}, la competencia y las búsquedas que tus clientes realmente usan.` },
-  { n: '02', en: 'Strategy & estimate', es: 'Estrategia y estimado', den: 'A clear plan, scope, and quote aligned to your goals — no surprises.', des: 'Un plan claro, alcance y cotización alineados a tus objetivos — sin sorpresas.' },
-  { n: '03', en: 'Design & build', es: 'Diseño y desarrollo', den: 'A fast, conversion-focused site built around local SEO and your brand.', des: 'Un sitio rápido y enfocado en conversión, construido sobre SEO local y tu marca.' },
-  { n: '04', en: 'Launch & grow', es: 'Lanzamiento y crecimiento', den: 'We launch, track conversions, and keep optimizing for more local leads.', des: 'Lanzamos, medimos conversiones y seguimos optimizando para más prospectos locales.' },
+  { n: '01', img: '/images/process/explore.avif',     en: 'Discovery & local research', es: 'Descubrimiento e investigación local', den: `We map your ${cityShort} market, competitors, and the searches your customers actually use.`, des: `Mapeamos tu mercado en ${cityShort}, la competencia y las búsquedas que tus clientes realmente usan.` },
+  { n: '02', img: '/images/process/estimate.avif',    en: 'Strategy & estimate', es: 'Estrategia y estimado', den: 'A clear plan, scope, and quote aligned to your goals — no surprises.', des: 'Un plan claro, alcance y cotización alineados a tus objetivos — sin sorpresas.' },
+  { n: '03', img: '/images/process/development.avif', en: 'Design & build', es: 'Diseño y desarrollo', den: 'A fast, conversion-focused site built around local SEO and your brand.', des: 'Un sitio rápido y enfocado en conversión, construido sobre SEO local y tu marca.' },
+  { n: '04', img: '/images/process/delivery.avif',   en: 'Launch & grow', es: 'Lanzamiento y crecimiento', den: 'We launch, track conversions, and keep optimizing for more local leads.', des: 'Lanzamos, medimos conversiones y seguimos optimizando para más prospectos locales.' },
 ];
 
 // City-specific structured data (Service + Breadcrumb) for local SEO.
@@ -118,50 +132,42 @@ const cityLd = {
   .cms-prose a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
   .cms-prose strong { color: #fff; }
 
-  /* INTRO 2-col: copy + trust panel */
-  .sa-intro-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: 48px; align-items: center; }
-  @media (max-width: 900px) { .sa-intro-grid { grid-template-columns: 1fr; gap: 32px; } }
-  .sa-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  /* INTRO 2-col: copy + featured local image */
+  .sa-intro-grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .sa-intro-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+  /* Framed feature image with floating Google-proof badge */
+  .sa-figure {
+    position: relative; border-radius: 20px; overflow: hidden;
+    aspect-ratio: 3 / 2;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: linear-gradient(160deg, #12173f, #0c1030);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+  }
+  .sa-figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sa-figure::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,14,38,0) 45%, rgba(10,14,38,0.45) 100%); z-index: 1; }
+  .sa-figure .badge {
+    position: absolute; left: 18px; bottom: 18px; z-index: 2;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 12px;
+    background: rgba(13,18,53,0.86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+  .sa-figure .badge svg { width: 20px; height: 20px; flex: 0 0 auto; }
+  .sa-figure .badge .b-main { font-size: 14px; font-weight: 600; color: #fff; line-height: 1.1; }
+  .sa-figure .badge .b-sub { font-size: 12px; color: rgba(255,255,255,0.66); line-height: 1.2; }
+  .sa-figure .badge .stars { color: #FFC83D; font-size: 12px; letter-spacing: 1px; }
+
+  /* full-width trust stats below the intro grid */
+  .sa-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 3rem; }
+  @media (max-width: 900px) { .sa-stats { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 420px) { .sa-stats { grid-template-columns: 1fr; } }
 
-  /* generic premium card grid for services/process */
-  .sa-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 2.5rem; }
-  .sa-cards.cols-4 { grid-template-columns: repeat(4, 1fr); }
-  @media (max-width: 900px) { .sa-cards, .sa-cards.cols-4 { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 600px) { .sa-cards, .sa-cards.cols-4 { grid-template-columns: 1fr; } }
-  .sa-card {
-    display: flex; flex-direction: column; gap: 10px; padding: 1.6rem 1.5rem; border-radius: 16px;
-    background: rgba(13,18,53,0.55); border: 1px solid rgba(255,255,255,0.08);
-    text-decoration: none; color: inherit; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
-  }
-  a.sa-card:hover { transform: translateY(-4px); border-color: rgba(153,204,51,0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
-  .sa-card .ic { width: 46px; height: 46px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(153,204,51,0.18), rgba(51,204,204,0.12)); border: 1px solid rgba(153,204,51,0.28); }
-  .sa-card .ic img { width: 24px; height: 24px; }
-  .sa-card h3 { font-size: 1.15rem; margin: 0; color: #fff; }
-  .sa-card p { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.7); margin: 0; }
-  .sa-card .more { margin-top: auto; font-size: 13px; font-weight: 600; color: var(--primary); }
-  .sa-card .step-n { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--primary); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-
-  /* project cards with real images */
-  .sa-proj { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);
-    text-decoration: none; color: inherit; display: block; transition: transform .25s ease, box-shadow .25s ease; }
-  .sa-proj:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-  .sa-proj .ph { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #0c1030; }
-  .sa-proj .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .sa-proj .bd { padding: 1.1rem 1.25rem 1.3rem; }
-  .sa-proj h3 { font-size: 1.05rem; margin: 0 0 .35rem; color: #fff; }
-  .sa-proj p { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.65); margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-  /* review cards */
-  .sa-rev { padding: 1.6rem 1.5rem; border-radius: 16px; background: rgba(13,18,53,0.55); border: 1px solid rgba(255,255,255,0.08); }
-  .sa-rev .stars { display: inline-flex; gap: 2px; color: #FFC83D; margin-bottom: .7rem; }
-  .sa-rev .stars svg { width: 16px; height: 16px; }
-  .sa-rev p { font-size: 14.5px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 0 0 1rem; }
-  .sa-rev .who { display: flex; align-items: center; gap: 10px; }
-  .sa-rev .av { width: 38px; height: 38px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; color: #0a0e26; background: linear-gradient(135deg, #99CC33, #33CCCC); }
-  .sa-rev .nm { font-size: 14px; font-weight: 600; color: #fff; } .sa-rev .co { font-size: 12.5px; color: rgba(255,255,255,0.6); }
+  /* portfolio: real CMS image fills the project cover (homepage parity) */
+  .project-cover.has-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .project-cover.has-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,14,38,0.05) 0%, rgba(10,14,38,0.6) 100%); z-index: 1; }
+  .project-cover.has-img .project-name { z-index: 2; }
+  a.project-card, a.blog-card { text-decoration: none; color: inherit; }
 
   /* map + nearby cities */
   .sa-mapgrid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 40px; align-items: stretch; }
@@ -176,7 +182,7 @@ const cityLd = {
   .map-card .addr { font-size: 13px; color: rgba(255,255,255,0.66); line-height: 1.4; }
   .map-card .map-card-link { margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--primary); display: inline-flex; align-items: center; gap: 6px; }
   .sa-aside { display: flex; flex-direction: column; gap: 16px; }
-  .sa-aside .sa-stats { grid-template-columns: 1fr 1fr; }
+  .sa-aside .sa-stats { grid-template-columns: 1fr 1fr; margin-top: 0; }
   .sa-nearby { padding: 1.6rem 1.5rem; border-radius: 16px; background: rgba(13,18,53,0.55); border: 1px solid rgba(255,255,255,0.08); }
   .sa-nearby h3 { font-size: 1.05rem; margin: 0 0 .9rem; color: #fff; }
   .sa-nearby .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -184,7 +190,7 @@ const cityLd = {
     background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); text-decoration: none; transition: all .18s ease; }
   .sa-nearby a:hover { color: var(--primary); border-color: rgba(153,204,51,0.45); background: rgba(153,204,51,0.08); }
 
-  .sa-strip-cta { text-align: center; margin-top: 2.25rem; }
+  .sa-strip-cta { text-align: center; margin-top: 2.75rem; }
 </style>
 
 <script type="application/ld+json" set:html={JSON.stringify(cityLd)} is:inline></script>
@@ -218,7 +224,7 @@ const cityLd = {
     </div>
   </section>
 
-  <!-- INTRO + trust stats -->
+  <!-- INTRO + featured local image + trust stats -->
   <section class="section section--band" data-screen-label="02 Intro">
     <div class="container">
       <div class="sa-intro-grid">
@@ -226,27 +232,46 @@ const cityLd = {
           <span class="sa-sec-num">01</span>
           <div class="eyebrow"><span class="lang-only-en">Local web design</span><span class="lang-only-es">Diseño web local</span></div>
           <h2>{d.headingIntro || `Web Design Agency Serving ${cityShort}, FL`}</h2>
-          {d.paragraphIntro && <div class="cms-prose" set:html={d.paragraphIntro} />}
-          <div style="margin-top:1.6rem;">
+          {d.paragraphIntro
+            ? <div class="cms-prose" set:html={d.paragraphIntro} />
+            : <p class="cms-prose"><span class="lang-only-en">We help {cityShort} businesses win online with custom websites, local SEO, and Google Ads built to turn searches into booked jobs and sales — not just clicks.</span><span class="lang-only-es">Ayudamos a los negocios de {cityShort} a ganar en línea con sitios web a medida, SEO local y Google Ads diseñados para convertir búsquedas en trabajos y ventas — no solo clics.</span></p>}
+          <div style="margin-top:1.8rem; display:flex; gap:12px; flex-wrap:wrap;">
             <a href="#" class="btn is-sm" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}>
               <span class="lang-only-en">Get a Free Quote</span><span class="lang-only-es">Solicita una Cotización</span>
             </a>
+            <a href="/portfolio" class="btn is-secondary is-sm"><span class="lang-only-en">See Our Work</span><span class="lang-only-es">Ver Nuestro Trabajo</span></a>
           </div>
         </div>
-        <div class="sa-stats" data-reveal-children>
-          <article class="stat-card"><span class="stat-value">100+</span><span class="stat-label"><span class="lang-only-en">Websites launched for South Florida businesses</span><span class="lang-only-es">Sitios lanzados para negocios del Sur de Florida</span></span></article>
-          <article class="stat-card"><span class="stat-value">5.0 ★</span><span class="stat-label"><span class="lang-only-en">Average verified Google review rating</span><span class="lang-only-es">Promedio de reseñas verificadas en Google</span></span></article>
-          <article class="stat-card"><span class="stat-value">EN / ES</span><span class="stat-label"><span class="lang-only-en">Fully bilingual team for your market</span><span class="lang-only-es">Equipo totalmente bilingüe para tu mercado</span></span></article>
-          <article class="stat-card"><span class="stat-value">Google</span><span class="stat-label"><span class="lang-only-en">Partner-certified for Ads &amp; local search</span><span class="lang-only-es">Certificados como Partner para Ads y búsqueda local</span></span></article>
+        <div class="sa-figure" data-reveal>
+          <img src={featureImage} alt={`Custom web design for ${cityShort}, FL businesses by SENAVIA Corp`} loading="lazy" decoding="async" />
+          <div class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+            </svg>
+            <span>
+              <span class="b-main">Google Partner · 5.0</span>
+              <span class="stars" aria-hidden="true">★★★★★</span>
+              <span class="b-sub"><span class="lang-only-en">Trusted by South Florida businesses</span><span class="lang-only-es">Con la confianza de negocios del Sur de Florida</span></span>
+            </span>
+          </div>
         </div>
+      </div>
+      <div class="sa-stats" data-reveal-children>
+        <article class="stat-card"><span class="stat-value">100+</span><span class="stat-label"><span class="lang-only-en">Websites launched for South Florida businesses</span><span class="lang-only-es">Sitios lanzados para negocios del Sur de Florida</span></span></article>
+        <article class="stat-card"><span class="stat-value">5.0 ★</span><span class="stat-label"><span class="lang-only-en">Average verified Google review rating</span><span class="lang-only-es">Promedio de reseñas verificadas en Google</span></span></article>
+        <article class="stat-card"><span class="stat-value">EN / ES</span><span class="stat-label"><span class="lang-only-en">Fully bilingual team for your market</span><span class="lang-only-es">Equipo totalmente bilingüe para tu mercado</span></span></article>
+        <article class="stat-card"><span class="stat-value">24h</span><span class="stat-label"><span class="lang-only-en">Typical response time on new inquiries</span><span class="lang-only-es">Tiempo de respuesta típico a nuevas consultas</span></span></article>
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
+  <!-- SERVICES — vibrant gradient cards -->
   <section class="section" data-screen-label="03 Services">
     <div class="container">
-      <div class="section-head center" data-reveal>
+      <div class="section-head" data-reveal>
         <span class="sa-sec-num">02</span>
         <div class="eyebrow"><span class="lang-only-en">What we do</span><span class="lang-only-es">Lo que hacemos</span></div>
         <h2>{d.headingServices || t.servicesHead.en}</h2>
@@ -254,34 +279,66 @@ const cityLd = {
           ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphServices} />
           : <p><span class="lang-only-en">Three services that grow {cityShort} businesses — built to attract, convert, and scale.</span><span class="lang-only-es">Tres servicios que hacen crecer a los negocios de {cityShort} — para atraer, convertir y escalar.</span></p>}
       </div>
-      <div class="sa-cards" data-reveal-children>
-        {services.map((s) => (
-          <a class="sa-card" href={s.href}>
-            <span class="ic"><img src={s.icon} alt="" /></span>
-            <h3><span class="lang-only-en">{s.title_en}</span><span class="lang-only-es">{s.title_es}</span></h3>
-            <p><span class="lang-only-en">{s.desc_en}</span><span class="lang-only-es">{s.desc_es}</span></p>
-            <span class="more"><span class="lang-only-en">Learn more →</span><span class="lang-only-es">Conoce más →</span></span>
-          </a>
+      <div class="grid-3" data-reveal-children>
+        {services.map((s, i) => (
+          <article class={`card-border ${cardVariant[i]}`}>
+            <a class="card-glass service-link" href={s.href}>
+              <span class={`svc-icon ${iconVariant[i]}`}><img src={s.icon} alt="" /></span>
+              <h3 style="margin-top:18px;"><span class="lang-only-en">{svcTitle[i].en}</span><span class="lang-only-es">{svcTitle[i].es}</span></h3>
+              <p style="font-size:14px;color:rgba(255,255,255,0.75);margin:0 0 12px;"><span class="lang-only-en">{s.desc_en}</span><span class="lang-only-es">{s.desc_es}</span></p>
+              <span class="more"><span class="lang-only-en">See More</span><span class="lang-only-es">Ver Más</span></span>
+            </a>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- PORTFOLIO -->
-  <section class="section section--band" data-screen-label="04 Portfolio">
+  <!-- FEATURED VIDEO -->
+  <section class="intro" data-screen-label="04 Video">
+    <video class="intro-video" autoplay muted loop playsinline preload="metadata"
+           disablepictureinpicture disableremoteplayback
+           controlslist="nodownload nofullscreen noremoteplayback" poster="/videos/bg-video-poster.jpg">
+      <source src="/videos/bg-video.mp4" type="video/mp4">
+    </video>
     <div class="container">
-      <div class="section-head center" data-reveal>
+      <div class="section-head" data-reveal>
+        <div class="eyebrow"><span class="lang-only-en">See it in action</span><span class="lang-only-es">Míralo en acción</span></div>
+        <h2><span class="lang-only-en">How We Help {cityShort} Businesses Grow Online</span><span class="lang-only-es">Cómo Ayudamos a los Negocios de {cityShort} a Crecer en Línea</span></h2>
+        <p><span class="lang-only-en">A quick look at how SENAVIA designs, builds, and markets high-converting websites for businesses across {d.county} County.</span><span class="lang-only-es">Un vistazo a cómo SENAVIA diseña, construye y promociona sitios web de alta conversión para negocios en el Condado de {d.county}.</span></p>
+      </div>
+      <div class="video-frame" data-reveal>
+        <iframe src={`https://www.youtube.com/embed/${videoId}?rel=0`} title={`SENAVIA Corp — Web design for ${cityShort}, FL`}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="section section--band" data-screen-label="05 Portfolio">
+    <div class="container">
+      <div class="section-head" data-reveal>
         <span class="sa-sec-num">03</span>
         <div class="eyebrow"><span class="lang-only-en">Our work</span><span class="lang-only-es">Nuestro trabajo</span></div>
         <h2>{d.headingPortfolio || t.portfolioHead.en}</h2>
-        {d.paragraphPortfolio && <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphPortfolio} />}
+        {d.paragraphPortfolio
+          ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphPortfolio} />
+          : <p><span class="lang-only-en">Real websites for real South Florida businesses — built to convert visitors into customers.</span><span class="lang-only-es">Sitios reales para negocios reales del Sur de Florida — construidos para convertir visitantes en clientes.</span></p>}
       </div>
-      <div class="sa-cards" data-reveal-children>
+      <div class="grid-3" data-reveal-children>
         {projects.map((p) => (
-          <a class="sa-proj" href={`/portfolio/${p.id}`}>
-            <span class="ph">{p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}</span>
-            <span class="bd"><h3>{p.data.title}</h3><p>{p.data.summary}</p></span>
-          </a>
+          <article class="project-card">
+            <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
+              {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}
+              <span class="project-name">{p.data.title}</span>
+            </a>
+            <div class="project-body">
+              <p>{p.data.summary}</p>
+              <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
+            </div>
+          </article>
         ))}
       </div>
       <div class="sa-strip-cta">
@@ -290,70 +347,114 @@ const cityLd = {
     </div>
   </section>
 
-  <!-- PROCESS -->
-  <section class="section" data-screen-label="05 Process">
-    <div class="container">
-      <div class="section-head center" data-reveal>
-        <span class="sa-sec-num">04</span>
-        <div class="eyebrow"><span class="lang-only-en">How we work</span><span class="lang-only-es">Cómo trabajamos</span></div>
-        <h2>{d.headingProcess || t.processHead.en}</h2>
-        {d.paragraphProcess && <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphProcess} />}
-      </div>
-      <div class="sa-cards cols-4" data-reveal-children>
-        {steps.map((st) => (
-          <article class="sa-card">
-            <span class="step-n">{st.n}</span>
-            <h3><span class="lang-only-en">{st.en}</span><span class="lang-only-es">{st.es}</span></h3>
-            <p><span class="lang-only-en">{st.den}</span><span class="lang-only-es">{st.des}</span></p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
+  <!-- PROCESS + REVIEWS (inside .green-bg) -->
+  <div class="green-bg">
+    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
+    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
+    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
 
-  <!-- REVIEWS -->
-  <section class="section section--band" data-screen-label="06 Reviews">
-    <div class="container">
-      <div class="section-head center" data-reveal>
-        <span class="sa-sec-num">05</span>
-        <div class="eyebrow"><span class="lang-only-en">Client reviews</span><span class="lang-only-es">Reseñas de clientes</span></div>
-        <h2>{d.headingReviews || t.reviewsHead.en}</h2>
-        {d.paragraphReviews && <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphReviews} />}
+    <!-- PROCESS -->
+    <section class="section section-flush" data-screen-label="06 Process">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <span class="sa-sec-num">04</span>
+          <div class="eyebrow"><span class="lang-only-en">How we work</span><span class="lang-only-es">Cómo trabajamos</span></div>
+          <h2>{d.headingProcess || t.processHead.en}</h2>
+          {d.paragraphProcess
+            ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphProcess} />
+            : <p><span class="lang-only-en">A clear, proven process from first call to launch — and beyond.</span><span class="lang-only-es">Un proceso claro y comprobado desde la primera llamada hasta el lanzamiento — y más allá.</span></p>}
+        </div>
+        <div class="grid-4" data-reveal-children>
+          {steps.map((st) => (
+            <article class="process-block">
+              <img class="process-img" src={st.img} alt="" loading="lazy" decoding="async" />
+              <div class="process-glass"></div>
+              <div class="process-content">
+                <div class="process-header">
+                  <h3><span class="lang-only-en">Step {st.n}</span><span class="lang-only-es">Paso {st.n}</span></h3>
+                  <h4><span class="lang-only-en">{st.en}</span><span class="lang-only-es">{st.es}</span></h4>
+                </div>
+                <p><span class="lang-only-en">{st.den}</span><span class="lang-only-es">{st.des}</span></p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="center-cta" style="margin-top: 3rem;" data-reveal>
+          <a href="#" class="btn" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}>
+            <span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span>
+          </a>
+        </div>
       </div>
-      <div class="sa-cards" data-reveal-children>
-        {reviews.map((r) => (
-          <article class="sa-rev">
-            <span class="stars" aria-hidden="true" set:html={STAR.repeat(Number(r.data.rating) || 5)}></span>
-            <p class="lang-only-en">“{r.data.quote_en}”</p>
-            <p class="lang-only-es">“{r.data.quote_es}”</p>
-            <div class="who">
-              <span class="av">{r.data.name.split(' ').map((w) => w[0]).slice(0, 2).join('')}</span>
-              <span><span class="nm" style="display:block;">{r.data.name}</span><span class="co">{r.data.company}</span></span>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="section" data-screen-label="07 Reviews">
+      <div class="container">
+        <div class="reviews-grid">
+          <div class="reviews-left" data-reveal>
+            <span class="sa-sec-num">05</span>
+            <h2>{d.headingReviews || t.reviewsHead.en}</h2>
+            {d.paragraphReviews
+              ? <div class="cms-prose" set:html={d.paragraphReviews} />
+              : <p><span class="lang-only-en">South Florida business owners trust SENAVIA to design, build, and grow their online presence. Here's what working with our team is like.</span><span class="lang-only-es">Los dueños de negocios del Sur de Florida confían en SENAVIA para diseñar, construir y hacer crecer su presencia en línea. Esto es lo que se siente trabajar con nuestro equipo.</span></p>}
+            <div class="reviews-rating">
+              <span class="score">5.0
+                <span class="score-stars" aria-hidden="true" set:html={STAR.repeat(5)}></span>
+              </span>
+              <span class="score-meta"><span class="lang-only-en">From <strong>47 verified reviews</strong> on Google</span><span class="lang-only-es">De <strong>47 reseñas verificadas</strong> en Google</span></span>
             </div>
-          </article>
-        ))}
+            <div class="reviews-cta-row">
+              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-sm"><span class="lang-only-en">Read All Reviews</span><span class="lang-only-es">Leer Todas las Reseñas</span></a>
+            </div>
+          </div>
+          <div class="reviews-card" data-reveal>
+            {reviews.map((r) => (
+              <div class="review-item">
+                <div class="review-stars" aria-hidden="true" set:html={STAR.repeat(Number(r.data.rating) || 5)}></div>
+                <div class="review-head">
+                  <span class="review-name">{r.data.company}</span>
+                  <span class="review-date">{r.data.date}</span>
+                </div>
+                <p class="review-text lang-only-en">“{r.data.quote_en}”</p>
+                <p class="review-text lang-only-es">“{r.data.quote_es}”</p>
+              </div>
+            ))}
+            <div class="google-badge">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+              </svg>
+              <span><span class="lang-only-en">Powered by Google · 5.0 ★ from 47 reviews</span><span class="lang-only-es">Con tecnología de Google · 5.0 ★ de 47 reseñas</span></span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- BLOG -->
-  <section class="section" data-screen-label="07 Blog">
+  <section class="section section--band" data-screen-label="08 Blog">
     <div class="container">
-      <div class="section-head center" data-reveal>
+      <div class="section-head" data-reveal>
         <span class="sa-sec-num">06</span>
         <div class="eyebrow"><span class="lang-only-en">Insights</span><span class="lang-only-es">Recursos</span></div>
         <h2>{d.headingBlog || t.blogHead.en}</h2>
-        {d.paragraphBlog && <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphBlog} />}
+        {d.paragraphBlog
+          ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphBlog} />
+          : <p><span class="lang-only-en">Practical tips on web design, SEO, and digital marketing to grow your {cityShort} business.</span><span class="lang-only-es">Consejos prácticos de diseño web, SEO y marketing digital para hacer crecer tu negocio en {cityShort}.</span></p>}
       </div>
-      <div class="sa-cards" data-reveal-children>
+      <div class="grid-3" data-reveal-children>
         {posts.map((p) => (
-          <a class="sa-proj" href={`/blog/${p.id}`}>
-            <span class="ph">{(p.data.thumbnail || p.data.mainImage) && <img src={p.data.thumbnail || p.data.mainImage} alt={p.data.altImage} loading="lazy" decoding="async" />}</span>
-            <span class="bd">
-              <span class="step-n">{p.data.category && (<><span class="lang-only-en">{catLabelEn[p.data.category] ?? p.data.category}</span><span class="lang-only-es">{catLabelEs[p.data.category] ?? p.data.category}</span></>)}</span>
-              <h3 style="margin-top:.4rem;">{p.data.title}</h3>
-              <p>{p.data.summary}</p>
-            </span>
+          <a class="blog-card" href={`/blog/${p.id}`}>
+            <div class="cover">{(p.data.thumbnail || p.data.mainImage) && <img src={p.data.thumbnail || p.data.mainImage} alt={p.data.altImage} loading="lazy" decoding="async" />}</div>
+            <h3>{p.data.title}</h3>
+            <p class="excerpt">{p.data.summary}</p>
+            <div class="meta">
+              <span><span class="lang-only-en">{fmtEn(p.data.pubDate)}</span><span class="lang-only-es">{fmtEs(p.data.pubDate)}</span></span>
+              {p.data.category && (<><span class="dot"></span><span><span class="lang-only-en">{catLabelEn[p.data.category] ?? p.data.category}</span><span class="lang-only-es">{catLabelEs[p.data.category] ?? p.data.category}</span></span></>)}
+            </div>
           </a>
         ))}
       </div>
@@ -364,7 +465,7 @@ const cityLd = {
   </section>
 
   <!-- MAP + NEARBY CITIES -->
-  <section class="section section--band" data-screen-label="08 Map & Area">
+  <section class="section" data-screen-label="09 Map & Area">
     <div class="container">
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">On the ground in {cityShort}</span><span class="lang-only-es">Presentes en {cityShort}</span></div>
@@ -399,7 +500,7 @@ const cityLd = {
   </section>
 
   <!-- CTA -->
-  <section class="cta cta--glow" data-screen-label="09 CTA">
+  <section class="cta cta--glow" data-screen-label="10 CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback" poster="/videos/cta-bg-poster.jpg">
