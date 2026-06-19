@@ -246,7 +246,10 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
     border: 1px solid rgba(255,255,255,0.08);
     background: rgba(13,18,53,0.55);
   }
-  .ct-calendly-frame { min-height: 640px; }
+  .ct-calendly-frame { min-height: 700px; }
+  .ct-calendly-frame #calendlyInline,
+  .ct-calendly-frame #calendlyInline iframe { width: 100%; min-height: inherit; border: 0; }
+  @media (max-width: 640px) { .ct-calendly-frame { min-height: 1040px; } }
   .ct-map-frame { aspect-ratio: 21 / 9; }
   @media (max-width: 900px) { .ct-map-frame { aspect-ratio: 4 / 3; } }
 

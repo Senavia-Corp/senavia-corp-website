@@ -1881,18 +1881,28 @@ html.js .hero-inner > * {
   flex: 0 0 auto;
 }
 
-/* Inline Calendly widget container */
+/* Inline Calendly widget container.
+   Calendly injects an <iframe height="100%">; with only a min-height on the
+   container the iframe collapses to the min and the date-picker (~700px) gets
+   clipped — you'd see just the header/avatar. Give an explicit tall min-height
+   AND let the injected iframe/div inherit it so the full scheduler renders. */
 .calendly-inline {
   position: relative;
   background: var(--secondary);
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.08);
-  min-height: 460px;
+  min-height: 700px;
   overflow: hidden;
 }
-.calendly-inline > div {
+.calendly-inline > div,
+.calendly-inline iframe {
   width: 100%;
-  min-height: 460px;
+  min-height: inherit;
+  border: 0;
+}
+@media (max-width: 640px) {
+  /* Calendly's single-column mobile layout is taller */
+  .calendly-inline { min-height: 1040px; }
 }
 /* Loading skeleton — shows while Calendly JS loads */
 .calendly-inline::before {
