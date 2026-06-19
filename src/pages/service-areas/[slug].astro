@@ -29,7 +29,7 @@ const iconVariant = ['', 'is-cyan', 'is-green'];
 // Real CMS data for the strips.
 const projects = (await getCollection('portfolio'))
   .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order)
-  .slice(0, 3);
+  .slice(0, 9);
 const posts = (await getCollection('blog'))
   .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
   .slice(0, 3);
@@ -327,19 +327,34 @@ const cityLd = {
           ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphPortfolio} />
           : <p><span class="lang-only-en">Real websites for real South Florida businesses — built to convert visitors into customers.</span><span class="lang-only-es">Sitios reales para negocios reales del Sur de Florida — construidos para convertir visitantes en clientes.</span></p>}
       </div>
-      <div class="grid-3" data-reveal-children>
-        {projects.map((p) => (
-          <article class="project-card">
-            <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
-              {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}
-              <span class="project-name">{p.data.title}</span>
-            </a>
-            <div class="project-body">
-              <p>{p.data.summary}</p>
-              <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-            </div>
-          </article>
-        ))}
+      <div class="carousel" data-carousel="portfolio" data-reveal>
+        <div class="carousel-arrows">
+          <button class="carousel-arrow prev" aria-label="Previous projects / Proyectos anteriores" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
+          </button>
+          <button class="carousel-arrow next" aria-label="Next projects / Proyectos siguientes" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+          </button>
+        </div>
+        <div class="carousel-viewport">
+          <div class="carousel-track" role="list">
+            {projects.map((p) => (
+              <article class="project-card" role="listitem">
+                <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
+                  {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}
+                  <span class="project-name">{p.data.title}</span>
+                </a>
+                <div class="project-body">
+                  <p>{p.data.summary}</p>
+                  <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div class="carousel-scrollbar" role="presentation">
+          <div class="carousel-scrollbar-thumb"></div>
+        </div>
       </div>
       <div class="sa-strip-cta">
         <a href="/portfolio" class="btn is-secondary"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>

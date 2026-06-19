@@ -32,6 +32,12 @@ const {
   bodyClass = '',
   screenLabel,
 } = Astro.props;
+
+// Absolute URL for hreflang. The site serves both languages from one URL via a
+// client-side toggle, so we emit a single absolute x-default (per-language
+// hreflang pointing at the same URL is contradictory and errors in Search Console).
+const canonicalPath = canonical ?? Astro.url.pathname;
+const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
 ---
 <!DOCTYPE html>
 <html lang="en" class="no-js lang-en">
@@ -39,9 +45,7 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="alternate" hreflang="en" href={canonical || Astro.url.pathname} />
-    <link rel="alternate" hreflang="es" href={canonical || Astro.url.pathname} />
-    <link rel="alternate" hreflang="x-default" href={canonical || Astro.url.pathname} />
+    <link rel="alternate" hreflang="x-default" href={absoluteUrl} />
 
     <Seo
       title={title}
@@ -71,12 +75,14 @@ const {
     <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
     <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
-    <!-- Plausible (loaded conditionally — production only via env) -->
-    <script
-      defer
-      data-domain="new.senaviacorp.com"
-      src="https://plausible.io/js/script.tagged-events.outbound-links.js"
-    ></script>
+    <!-- Plausible — production only (keeps local/preview traffic out of analytics) -->
+    {import.meta.env.PROD && (
+      <script
+        defer
+        data-domain="new.senaviacorp.com"
+        src="https://plausible.io/js/script.tagged-events.outbound-links.js"
+      ></script>
+    )}
     <script is:inline>
       window.plausible = window.plausible || function () {
         (window.plausible.q = window.plausible.q || []).push(arguments);

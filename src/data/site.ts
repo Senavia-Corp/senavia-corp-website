@@ -7,7 +7,7 @@ export const SITE = {
     'Google Partner-certified digital agency in Plantation, FL. Custom web design, SEO, and digital marketing for South Florida businesses across Miami-Dade, Broward, and Palm Beach.',
   defaultOgImage: '/images/og-default.webp',
   twitter: '@senaviacorp',
-  copyrightYear: 2025,
+  copyrightYear: 2026,
 };
 
 export const NAP = {

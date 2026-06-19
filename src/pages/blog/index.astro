@@ -2,8 +2,9 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { prettyName } from '@/lib/cms';
+import { CALENDLY_URL } from '@/data/site';
 
-const title = "Blog &amp; Tips — SENAVIA Corp · Web, SEO &amp; Marketing Insights";
+const title = "Blog & Tips — SENAVIA Corp · Web, SEO & Marketing Insights";
 const description = "Expert insights on web development, SEO, digital marketing, and automation — from the SENAVIA Corp team in South Florida.";
 
 /* ------------------------------------------------------------------ *
@@ -449,6 +450,67 @@ const total = posts.length;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     letter-spacing: 0.04em;
   }
+
+  /* ---------- CATEGORY FILTER ---------- */
+  .blog-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  .blog-filters-label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-right: 2px;
+  }
+  .blog-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 15px;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    transition: color .18s ease, background .18s ease, border-color .18s ease;
+  }
+  .blog-filter-chip:hover { color: #fff; border-color: rgba(153,204,51,0.45); background: rgba(153,204,51,0.08); }
+  .blog-filter-chip .chip-count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    opacity: 0.6;
+  }
+  .blog-filter-chip[aria-pressed="true"] {
+    color: var(--secondary, #0a0e26);
+    background: var(--primary, #99cc33);
+    border-color: var(--primary, #99cc33);
+    font-weight: 600;
+  }
+  .blog-filter-chip[aria-pressed="true"] .chip-count { opacity: 0.7; }
+  .blog-filter-chip:focus-visible { outline: 2px solid var(--primary, #99cc33); outline-offset: 2px; }
+
+  /* Sidebar category rows are interactive buttons */
+  .cat-list .cat-row {
+    width: 100%;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: background .15s ease, color .15s ease;
+  }
+  .cat-list .cat-row:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .cat-list .cat-row[aria-pressed="true"] { background: rgba(153,204,51,0.12); color: #fff; }
+  .cat-list .cat-row[aria-pressed="true"] .count { background: rgba(153,204,51,0.2); color: var(--primary, #99cc33); }
+  .cat-list .cat-row:focus-visible { outline: 2px solid var(--primary, #99cc33); outline-offset: -2px; }
 </style>
 
 <main>
@@ -539,6 +601,24 @@ const total = posts.length;
             </span>
           </div>
 
+          {categories.length > 0 && (
+            <div class="blog-filters" role="group" aria-label="Filter articles by category / Filtrar artículos por categoría" data-reveal>
+              <span class="blog-filters-label">
+                <span class="lang-only-en">Filter</span><span class="lang-only-es">Filtrar</span>
+              </span>
+              <button type="button" class="blog-filter-chip" data-cat="all" aria-pressed="true">
+                <span class="lang-only-en">All</span><span class="lang-only-es">Todas</span>
+                <span class="chip-count">{total}</span>
+              </button>
+              {categories.map((c) => (
+                <button type="button" class="blog-filter-chip" data-cat={c.slug} aria-pressed="false">
+                  <span class="lang-only-en">{catEn(c.slug)}</span><span class="lang-only-es">{catEs(c.slug)}</span>
+                  <span class="chip-count">{c.count}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
           <div class="blog-grid" data-reveal-children>
             {posts.length === 0 && (
               <div class="blog-empty">
@@ -547,8 +627,13 @@ const total = posts.length;
               </div>
             )}
 
+            <div class="blog-empty blog-empty-filter" hidden>
+              <span class="lang-only-en">No articles in this category yet.</span>
+              <span class="lang-only-es">Aún no hay artículos en esta categoría.</span>
+            </div>
+
             {posts.map((post) => (
-              <a href={`/blog/${post.id}`} class="blog-card">
+              <a href={`/blog/${post.id}`} class="blog-card" data-card-cat={post.data.category}>
                 <div class="blog-cover">
                   <img
                     src={post.data.thumbnail || post.data.mainImage}
@@ -580,28 +665,21 @@ const total = posts.length;
 
           <div class="sub-card" data-reveal>
             <span class="side-eyebrow">
-              <span class="lang-only-en">Newsletter</span>
-              <span class="lang-only-es">Boletín</span>
+              <span class="lang-only-en">Free consultation</span>
+              <span class="lang-only-es">Consulta gratuita</span>
             </span>
             <h3>
-              <span class="lang-only-en">Get growth tips in your inbox</span>
-              <span class="lang-only-es">Recibe consejos de crecimiento en tu correo</span>
+              <span class="lang-only-en">Want a growth plan for your business?</span>
+              <span class="lang-only-es">¿Quieres un plan de crecimiento para tu negocio?</span>
             </h3>
             <p>
-              <span class="lang-only-en">One email per month with SEO, design, and marketing playbooks from the SENAVIA team. No spam, unsubscribe anytime.</span>
-              <span class="lang-only-es">Un correo al mes con estrategias de SEO, diseño y marketing del equipo de SENAVIA. Sin spam, cancela cuando quieras.</span>
+              <span class="lang-only-en">Book a free 30-minute call and we'll map out the SEO, design, and marketing moves that grow your traffic and leads.</span>
+              <span class="lang-only-es">Agenda una llamada gratuita de 30 minutos y trazaremos las acciones de SEO, diseño y marketing que hacen crecer tu tráfico y tus clientes.</span>
             </p>
-            <form class="sub-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓';">
-              <input type="email" required placeholder="you@business.com" aria-label="Email address">
-              <button type="submit" class="btn">
-                <span class="lang-only-en">Subscribe</span>
-                <span class="lang-only-es">Suscribirme</span>
-              </button>
-            </form>
-            <p class="sub-note">
-              <span class="lang-only-en">By subscribing you agree to our privacy policy. Used only for monthly insights.</span>
-              <span class="lang-only-es">Al suscribirte aceptas nuestra política de privacidad. Solo para perspectivas mensuales.</span>
-            </p>
+            <a href="#" class="btn is-block" data-calendly-trigger data-track="book_call_click" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}>
+              <span class="lang-only-en">Book a Free Call</span>
+              <span class="lang-only-es">Agenda una Llamada Gratis</span>
+            </a>
           </div>
 
           {categories.length > 0 && (
@@ -611,15 +689,24 @@ const total = posts.length;
                 <span class="lang-only-es">Categorías</span>
               </h3>
               <ul class="cat-list">
+                <li>
+                  <button type="button" class="cat-row" data-cat="all" aria-pressed="true">
+                    <span>
+                      <span class="lang-only-en">All Articles</span>
+                      <span class="lang-only-es">Todos los Artículos</span>
+                    </span>
+                    <span class="count">{total}</span>
+                  </button>
+                </li>
                 {categories.map((c) => (
                   <li>
-                    <div class="cat-row">
+                    <button type="button" class="cat-row" data-cat={c.slug} aria-pressed="false">
                       <span>
                         <span class="lang-only-en">{catEn(c.slug)}</span>
                         <span class="lang-only-es">{catEs(c.slug)}</span>
                       </span>
                       <span class="count">{c.count}</span>
-                    </div>
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -682,11 +769,43 @@ const total = posts.length;
         <span class="lang-only-en">Schedule a 30-minute consultation and let's design a digital strategy worth talking about.</span>
         <span class="lang-only-es">Agenda una consulta de 30 minutos y diseñemos una estrategia digital de la que valga la pena hablar.</span>
       </p>
+      <a href="#" class="btn" data-calendly-trigger data-track="book_call_click" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}>
+        <span class="lang-only-en">Book a Free Call</span>
+        <span class="lang-only-es">Agenda una Llamada Gratis</span>
+      </a>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>
 
+  <script>
+    /* Blog category filter — client-side, SEO-safe (all posts stay in the DOM).
+       One handler drives both the chip bar and the sidebar list, syncing
+       aria-pressed state, the live "Showing N" count, and the empty state. */
+    (function () {
+      var controls = Array.prototype.slice.call(document.querySelectorAll('[data-cat]'));
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.blog-grid [data-card-cat]'));
+      if (!controls.length || !cards.length) return;
+      var countAccents = document.querySelectorAll('.blog-count .accent');
+      var emptyFilter = document.querySelector('.blog-empty-filter');
+
+      function apply(cat) {
+        var shown = 0;
+        cards.forEach(function (c) {
+          var match = cat === 'all' || c.getAttribute('data-card-cat') === cat;
+          c.hidden = !match;
+          if (match) shown++;
+        });
+        controls.forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-cat') === cat ? 'true' : 'false');
+        });
+        countAccents.forEach(function (el) { el.textContent = String(shown); });
+        if (emptyFilter) emptyFilter.hidden = shown !== 0;
+      }
+
+      controls.forEach(function (b) {
+        b.addEventListener('click', function () { apply(b.getAttribute('data-cat')); });
+      });
+    })();
+  </script>
 </main>
 </BaseLayout>
-</content>
-</invoke>
