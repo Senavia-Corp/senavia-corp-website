@@ -688,6 +688,12 @@ html.lang-es .nav-lang-option[data-lang="es"] .check { opacity: 1; }
 .nav-mobile-foot .nav-call .number { white-space: nowrap; font-size: 15px; }
 .nav-mobile-foot .nav-call .label { font-size: 11px; }
 .nav-mobile-foot .nav-lang { display: inline-flex; }
+/* In the mobile footer the switcher sits bottom-left, so drop the menu
+   UP and left-aligned instead of down/right (which clipped off-screen). */
+.nav-mobile-foot .nav-lang-menu {
+  top: auto; bottom: calc(100% + 10px);
+  left: 0; right: auto;
+}
 
 /* Focus ring for keyboard nav (a11y) */
 .btn:focus-visible,
