@@ -121,6 +121,73 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
     height: auto;
   }
 
+  /* ===== LIVE BROWSER PREVIEW ===== */
+  .pp-browser { background: #0d1235; }
+  .pp-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .pp-dots { display: inline-flex; gap: 7px; flex-shrink: 0; }
+  .pp-dots i { width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+  .pp-url {
+    flex: 1;
+    min-width: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.55);
+    background: rgba(0,0,0,0.25);
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pp-open {
+    flex-shrink: 0;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all .2s ease;
+  }
+  .pp-open:hover { color: var(--primary, #99cc33); background: rgba(153,204,51,0.12); }
+  .pp-browser-stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #0d1235;
+  }
+  .pp-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .pp-launch {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: max-content;
+    height: max-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0a0e26;
+    text-decoration: none;
+    background: var(--primary, #99cc33);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .pp-launch svg { width: 16px; height: 16px; }
+  .pp-launch:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(0,0,0,0.5); }
+  .pp-launch:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
   /* ===== CONTENT LAYOUT ===== */
   .pp-layout {
     display: grid;
@@ -301,7 +368,24 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
         </a>
       </div>
     </div>
-    {d.mainImage && (
+    {d.liveUrl ? (
+      <div class="container">
+        <figure class="pp-showcase pp-browser">
+          <div class="pp-browser-bar">
+            <span class="pp-dots"><i></i><i></i><i></i></span>
+            <span class="pp-url">{d.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+            <a class="pp-open" href={d.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Open live site in a new tab">↗</a>
+          </div>
+          <div class="pp-browser-stage">
+            {d.mainImage && <img class="pp-poster" src={d.mainImage} alt={d.imageAlt} loading="eager" decoding="async" />}
+            <a class="pp-launch" href={d.liveUrl} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              <span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver sitio web</span>
+            </a>
+          </div>
+        </figure>
+      </div>
+    ) : d.mainImage && (
       <div class="container">
         <figure class="pp-showcase">
           <img src={d.mainImage} alt={d.imageAlt} loading="eager" decoding="async" />
