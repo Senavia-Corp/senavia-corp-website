@@ -766,6 +766,21 @@ body.nav-locked { overflow: hidden; }
 }
 .hero .btn { padding: 16px 32px; font-size: 16px; }
 
+/* Compact hero on phones: drop the 100vh full-screen, let it size to content.
+   Nav is sticky (in-flow) so no top-overlap; marquee flows under content. */
+@media (max-width: 600px) {
+  .hero {
+    min-height: auto;
+    flex-direction: column;
+    padding-block: 40px 0;
+  }
+  .hero-inner { padding-bottom: 36px; }
+  .hero h1 { font-size: clamp(1.85rem, 7vw, 2.3rem); margin-bottom: 14px; }
+  .hero p  { font-size: 1rem; margin-bottom: 22px; }
+  /* .hero .marquee beats the later base `.marquee{position:absolute}` by specificity */
+  .hero .marquee { position: static; }
+}
+
 /* Marquee strip on hero */
 .marquee {
   position: absolute; left: 0; right: 0; bottom: 0;
