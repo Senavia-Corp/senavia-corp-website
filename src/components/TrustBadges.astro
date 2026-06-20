@@ -1,0 +1,90 @@
+---
+// Translucent "glass" trust-badge pills for hero sections.
+// Bilingual per project rule: each badge carries EN + ES labels, toggled by
+// the global .lang-only-en / .lang-only-es classes. Icons are decorative
+// (aria-hidden); the label text is what screen readers announce.
+type IconKey = 'star' | 'pin' | 'globe' | 'rocket';
+interface Badge { icon: IconKey; en: string; es: string; }
+interface Props { badges?: Badge[]; }
+
+const DEFAULT_BADGES: Badge[] = [
+  { icon: 'star',   en: '5-Star Google Reviews',  es: 'Reseñas 5★ en Google' },
+  { icon: 'pin',    en: 'Based in Plantation, FL', es: 'En Plantation, FL' },
+  { icon: 'globe',  en: 'Hablamos Español',        es: 'Hablamos Español' },
+  { icon: 'rocket', en: '100+ Projects Delivered', es: '100+ Proyectos Entregados' },
+];
+
+const { badges = DEFAULT_BADGES } = Astro.props;
+---
+<ul class="trust-badges">
+  {badges.map((b) => (
+    <li class="trust-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        {b.icon === 'star' && (
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        )}
+        {b.icon === 'pin' && (
+          <Fragment>
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+            <circle cx="12" cy="10" r="3" />
+          </Fragment>
+        )}
+        {b.icon === 'globe' && (
+          <Fragment>
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+            <path d="M2 12h20" />
+          </Fragment>
+        )}
+        {b.icon === 'rocket' && (
+          <Fragment>
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+            <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+          </Fragment>
+        )}
+      </svg>
+      <span class="lang-only-en">{b.en}</span><span class="lang-only-es">{b.es}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+  }
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .trust-badge svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    color: var(--primary);
+  }
+  @media (max-width: 640px) {
+    .trust-badges { gap: 8px; margin-bottom: 18px; }
+    .trust-badge { padding: 6px 11px; font-size: 0.74rem; }
+  }
+</style>

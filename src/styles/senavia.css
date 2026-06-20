@@ -1001,6 +1001,40 @@ video::-webkit-media-controls-volume-slider {
   border: 0;
   display: block;
 }
+/* Click-to-load YouTube facade — defers the iframe (and its third-party
+   cookies + ~5 MB of player JS) until the visitor actually plays the reel.
+   ponytail: no dependency, just a poster + a play button. */
+.yt-lite {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  margin: 0; padding: 0; border: 0;
+  display: block; cursor: pointer;
+  background-color: #0a0e26;
+  background-size: cover;
+  background-position: center;
+}
+.yt-lite::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(10,14,38,0.28);
+  transition: background .2s ease;
+}
+.yt-lite:hover::after { background: rgba(10,14,38,0.12); }
+.yt-lite .yt-lite-play {
+  position: absolute; top: 50%; left: 50%; z-index: 1;
+  width: 72px; height: 72px; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--primary, #99CC33);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  transition: transform .2s ease;
+}
+.yt-lite:hover .yt-lite-play { transform: translate(-50%, -50%) scale(1.06); }
+.yt-lite .yt-lite-play::before {
+  content: ''; position: absolute; top: 50%; left: 54%;
+  transform: translate(-50%, -50%);
+  border-style: solid; border-width: 13px 0 13px 22px;
+  border-color: transparent transparent transparent #0a0e26;
+}
+.yt-lite:focus-visible { outline: 3px solid var(--primary, #99CC33); outline-offset: 3px; }
 
 /* --- Service card link wrapping (when card is a link) --- */
 .service-link {
@@ -1389,7 +1423,7 @@ video::-webkit-media-controls-volume-slider {
   gap: 12px;
 }
 .review-name { font-weight: 500; color: var(--white); font-size: 15px; }
-.review-date { font-size: 12px; color: rgba(255,255,255,0.5); }
+.review-date { font-size: 12px; color: rgba(255,255,255,0.72); }
 .review-text {
   margin: 0;
   font-size: 14px;

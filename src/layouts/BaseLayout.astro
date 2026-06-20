@@ -71,9 +71,10 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
       })();
     </script>
 
-    <!-- Calendly -->
-    <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
-    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <!-- Calendly is loaded lazily (on first interaction / on demand) by the
+         loader at the end of <body>, so it sets no third-party cookies on the
+         initial page load. Preconnect keeps the on-demand load fast. -->
+    <link rel="preconnect" href="https://assets.calendly.com" />
 
     <!-- Plausible — production only (keeps local/preview traffic out of analytics) -->
     {import.meta.env.PROD && (
@@ -120,6 +121,50 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
           if (document.activeElement && (document.activeElement as HTMLElement).blur) {
             (document.activeElement as HTMLElement).blur();
           }
+        });
+      })();
+    </script>
+
+    <!-- Lazy Calendly loader: injects the widget only on first user intent
+         (scroll / pointer / key) or when a [data-calendly-trigger] is clicked.
+         Keeps Calendly's third-party cookies off the initial page load while
+         staying instant for real visitors. -->
+    <script is:inline define:vars={{ CALENDLY_URL }}>
+      (function () {
+        var loading;
+        function ensure() {
+          if (loading) return loading;
+          loading = new Promise(function (resolve) {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = 'https://assets.calendly.com/assets/external/widget.css';
+            document.head.appendChild(l);
+            var s = document.createElement('script');
+            s.src = 'https://assets.calendly.com/assets/external/widget.js';
+            s.async = true;
+            s.onload = function () {
+              window.__calendlyReady = true;
+              window.dispatchEvent(new Event('calendly:ready'));
+              resolve(window.Calendly);
+            };
+            document.head.appendChild(s);
+          });
+          return loading;
+        }
+        window.ensureCalendly = ensure;
+        window.openCalendly = function (url) {
+          ensure().then(function (C) { if (C) C.initPopupWidget({ url: url || CALENDLY_URL }); });
+        };
+        // Warm up on first intent so the popup feels instant. Each fires once.
+        ['scroll', 'pointerdown', 'touchstart', 'keydown'].forEach(function (ev) {
+          window.addEventListener(ev, ensure, { once: true, passive: true });
+        });
+        // Delegate clicks on any Calendly trigger.
+        document.addEventListener('click', function (e) {
+          var t = e.target.closest && e.target.closest('[data-calendly-trigger]');
+          if (!t) return;
+          e.preventDefault();
+          window.openCalendly(t.getAttribute('data-calendly-url'));
         });
       })();
     </script>

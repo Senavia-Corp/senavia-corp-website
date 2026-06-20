@@ -65,7 +65,7 @@ const btnClass = badged ? 'btn' : 'btn is-secondary';
       <span><span class="lang-only-en">Delivery in {pkg.delivery_en}</span><span class="lang-only-es">Entrega en {pkg.delivery_es}</span></span>
     </span>
 
-    <a href="#" class={btnClass} onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}>
+    <a href="#" class={btnClass} data-calendly-trigger>
       {isSales
         ? <span><span class="lang-only-en">Talk to Sales</span><span class="lang-only-es">Hablar con Ventas</span></span>
         : <span><span class="lang-only-en">Choose Plan</span><span class="lang-only-es">Elegir Plan</span></span>}

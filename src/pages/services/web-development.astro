@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import TrustBadges from '@/components/TrustBadges.astro';
 const title = "Web Development in Miami — SENAVIA Corp · Apps, CRM & ERP";
 const description = "Web development agency in Miami. Custom admin panels, CRM/ERP systems, and workflow automation built to scale your operations across South Florida.";
 ---
@@ -29,11 +30,12 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
       <source src="/videos/hero-web-development.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
+      <TrustBadges />
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Web Development · Miami</span><span class="lang-only-es">Desarrollo Web · Miami</span></div>
       <h1><span class="lang-only-en">Your Business Needs a Platform That Works as Hard as You Do.</span><span class="lang-only-es">Su Negocio Necesita una Plataforma Que Trabaje Tan Duro Como Usted.</span></h1>
       <p class="lang-only-en">Custom admin panels, CRM/ERP systems, and workflow automation built to scale your operations.</p>
       <p class="lang-only-es">Paneles administrativos a la medida, sistemas CRM/ERP y automatización de flujos de trabajo creados para escalar sus operaciones.</p>
-      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+      <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
       <div class="metric-strip" aria-label="Key metrics">
         <div class="metric"><span class="metric-value">40+</span><span class="metric-label"><span class="lang-only-en">Custom systems shipped</span><span class="lang-only-es">Sistemas a la medida entregados</span></span></div>
         <span class="divider"></span>
@@ -311,7 +313,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
           </article>
         </div>
         <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
         </div>
       </div>
     </section>

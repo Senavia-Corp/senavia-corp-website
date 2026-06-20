@@ -107,7 +107,7 @@ import LangSwitcher from './LangSwitcher.astro';
         class="btn is-nav-primary"
         data-calendly-trigger
         data-track="book_call_click"
-        onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}
+        
       >
         <span class="lang-only-en">Book a Free Call</span>
         <span class="lang-only-es">Agenda una Llamada</span>
@@ -207,7 +207,7 @@ import LangSwitcher from './LangSwitcher.astro';
       style="margin-top:8px;"
       data-calendly-trigger
       data-track="book_call_click"
-      onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}
+      
     >
       <span class="lang-only-en">Book a Free Call</span>
       <span class="lang-only-es">Agenda una Llamada</span>

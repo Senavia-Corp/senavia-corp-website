@@ -495,7 +495,7 @@ const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
     <div class="container">
       <h2><span class="lang-only-en">Not Sure Which Package Is Right?</span><span class="lang-only-es">¿No Sabes Cuál Paquete Te Conviene?</span></h2>
       <p><span class="lang-only-en">Schedule a 30-minute consultation and we'll recommend the package and integrations that match your goals.</span><span class="lang-only-es">Agenda una consulta de 30 minutos y te recomendaremos el paquete y las integraciones que se ajusten a tus objetivos.</span></p>
-      <a href="#" class="btn cta--glow" onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CAL}'});}return false;`}><span class="lang-only-en">Book a Free Consultation</span><span class="lang-only-es">Agendar Consulta Gratis</span></a>
+      <a href="#" class="btn cta--glow" data-calendly-trigger><span class="lang-only-en">Book a Free Consultation</span><span class="lang-only-es">Agendar Consulta Gratis</span></a>
       <a href="tel:+17542623659" class="btn is-call">(754) 262-3659</a>
     </div>
   </section>

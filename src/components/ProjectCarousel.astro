@@ -23,7 +23,7 @@ const projects = featured.length ? featured : portfolio.slice(0, 6);
     <div class="carousel-track" role="list">
       {projects.map((p) => (
         <article class="project-card" role="listitem">
-          <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
+          <a href={`/portfolio/${p.id}`} class="project-cover has-img">
             {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}
             <span class="project-name">{p.data.title}</span>
           </a>

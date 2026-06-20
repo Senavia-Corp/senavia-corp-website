@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import TrustBadges from '@/components/TrustBadges.astro';
 const title = "Custom Web Design in Miami — SENAVIA Corp";
 const description = "Custom web design in Miami & South Florida. 100% custom, conversion-focused websites with advanced UX/UI, mobile-first design, and SEO architecture — never prebuilt templates.";
 ---
@@ -29,11 +30,12 @@ const description = "Custom web design in Miami & South Florida. 100% custom, co
       <source src="/videos/hero-web-design.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
+      <TrustBadges />
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Custom Web Design · Miami</span><span class="lang-only-es">Diseño Web Personalizado · Miami</span></div>
       <h1><span class="lang-only-en">Custom Web Design That Captures Your Brand &amp; Converts</span><span class="lang-only-es">Diseño Web Personalizado que Captura su Marca y Convierte</span></h1>
       <p class="lang-only-en">SENAVIA designs 100% custom, conversion-focused visual experiences for South Florida businesses — never prebuilt templates. Advanced UX/UI, mobile-first, and SEO architecture that guide visitors to convert.</p>
       <p class="lang-only-es">SENAVIA diseña experiencias visuales 100% personalizadas y enfocadas en la conversión para negocios del Sur de Florida — nunca plantillas prediseñadas. UX/UI avanzado, mobile-first y arquitectura SEO que guían al visitante a convertir.</p>
-      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+      <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
       <div class="metric-strip" aria-label="Key metrics / Métricas clave">
         <div class="metric"><span class="metric-value">100+</span><span class="metric-label"><span class="lang-only-en">Sites launched</span><span class="lang-only-es">Sitios lanzados</span></span></div>
         <span class="divider"></span>
@@ -311,7 +313,7 @@ const description = "Custom web design in Miami & South Florida. 100% custom, co
           </article>
         </div>
         <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
         </div>
       </div>
     </section>

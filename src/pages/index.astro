@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import TrustBadges from '@/components/TrustBadges.astro';
 
 const title = "SENAVIA Corp — Custom Web Design & Web Development Agency in South Florida";
 const description = "Google Partner-certified digital agency in Plantation, FL. Custom web design, web development, and traffic generation (SEO, SEM & GEO) for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
@@ -39,9 +40,10 @@ const fmtEs = (d?: Date) =>
       <source src="/videos/hero-home.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
+      <TrustBadges />
       <h1><span class="lang-only-en">Custom Web Design &amp; Web Development Agency in South Florida</span><span class="lang-only-es">Agencia de Diseño Web Personalizado y Desarrollo Web en el Sur de Florida</span></h1>
       <p><span class="lang-only-en">We design high-performing websites, build custom systems, and generate the traffic that grows businesses across Miami-Dade, Broward, and Palm Beach counties. Based in Plantation, Florida, we help brands rank higher, convert more traffic, and scale faster.</span><span class="lang-only-es">Diseñamos sitios web de alto rendimiento, construimos sistemas personalizados y generamos el tráfico que hace crecer a las empresas en los condados de Miami-Dade, Broward y Palm Beach. Desde Plantation, Florida, ayudamos a las marcas a posicionarse mejor, convertir más tráfico y crecer más rápido.</span></p>
-      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+      <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
     </div>
     <div class="marquee" aria-hidden="true">
       <div class="marquee-track">
@@ -71,10 +73,11 @@ const fmtEs = (d?: Date) =>
         <p><span class="lang-only-en">We are a custom web design and development agency based in South Florida, delivering conversion-focused websites, custom systems, and traffic generation (SEO, SEM &amp; GEO) designed to drive growth.</span><span class="lang-only-es">Somos una agencia de diseño web personalizado y desarrollo con base en el Sur de Florida, que ofrece sitios web enfocados en conversión, sistemas personalizados y generación de tráfico (SEO, SEM y GEO) diseñados para impulsar el crecimiento.</span></p>
       </div>
       <div class="video-frame" data-reveal>
-        <iframe src="https://www.youtube.com/embed/T2MHMFoFvbk?rel=0" title="SENAVIA Corp — Agency reel"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
+        <button class="yt-lite" type="button" data-yt-facade="T2MHMFoFvbk"
+                aria-label="Play video — SENAVIA Corp agency reel"
+                style="background-image:url('/images/agency-reel-poster.jpg')">
+          <span class="yt-lite-play" aria-hidden="true"></span>
+        </button>
       </div>
     </div>
   </section>
@@ -197,7 +200,7 @@ const fmtEs = (d?: Date) =>
           </article>
         </div>
         <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
         </div>
       </div>
     </section>
@@ -391,4 +394,20 @@ const fmtEs = (d?: Date) =>
   a.blog-card { text-decoration: none; color: inherit; }
   a.blog-card:hover { text-decoration: none; }
 </style>
+
+<script>
+  // Click-to-load the agency reel: swap the facade for the real YouTube iframe
+  // only when the visitor presses play.
+  document.querySelectorAll('[data-yt-facade]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('data-yt-facade');
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+      f.title = 'SENAVIA Corp — Agency reel';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.setAttribute('allowfullscreen', '');
+      btn.replaceWith(f);
+    });
+  });
+</script>
 </BaseLayout>

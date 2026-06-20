@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import TrustBadges from '@/components/TrustBadges.astro';
 const title = "Traffic Generation in Miami — SENAVIA Corp · SEO, SEM & GEO";
 const description = "Traffic generation agency in Miami. We combine SEO, paid SEM, and Generative Engine Optimization (GEO) to send qualified visitors to your site across South Florida.";
 ---
@@ -29,11 +30,12 @@ const description = "Traffic generation agency in Miami. We combine SEO, paid SE
       <source src="/videos/hero-digital-marketing.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
+      <TrustBadges />
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">Traffic Generation · Miami</span><span class="lang-only-es">Generación de Tráfico · Miami</span></div>
       <h1><span class="lang-only-en">A Great Website Means Nothing Without the Right Visitors.</span><span class="lang-only-es">Un Gran Sitio Web No Sirve de Nada Sin los Visitantes Correctos.</span></h1>
       <p class="lang-only-en">An advanced ecosystem that captures customers by combining organic, paid, and AI-driven channels — SEO, SEM, and GEO working as one engine.</p>
       <p class="lang-only-es">Un ecosistema avanzado que captura clientes combinando canales orgánicos, pagados y de inteligencia artificial — SEO, SEM y GEO funcionando como un solo motor.</p>
-      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+      <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
       <div class="metric-strip" aria-label="Key metrics">
         <div class="metric"><span class="metric-value">$12M+</span><span class="metric-label"><span class="lang-only-en">Ad spend managed</span><span class="lang-only-es">Inversión publicitaria gestionada</span></span></div>
         <span class="divider"></span>
@@ -377,7 +379,7 @@ const description = "Traffic generation agency in Miami. We combine SEO, paid SE
           </article>
         </div>
         <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
         </div>
       </div>
     </section>

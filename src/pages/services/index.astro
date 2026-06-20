@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import TrustBadges from '@/components/TrustBadges.astro';
 const title = "Web Design, Development & Traffic Generation — SENAVIA Corp";
 const description = "Three focused services for South Florida businesses — custom web design, web development, and traffic generation (SEO, SEM & GEO). Based in Plantation, serving Miami-Dade, Broward & Palm Beach.";
 ---
@@ -28,11 +29,12 @@ const description = "Three focused services for South Florida businesses — cus
       <source src="/videos/bg-video.mp4" type="video/mp4">
     </video>
     <div class="hero-inner">
+      <TrustBadges />
       <div class="eyebrow" style="margin-bottom: 18px;"><span class="lang-only-en">What we do</span><span class="lang-only-es">Qué hacemos</span></div>
       <h1><span class="lang-only-en">Digital Agency Services Built for Business Growth</span><span class="lang-only-es">Servicios de Agencia Digital Creados para el Crecimiento de tu Negocio</span></h1>
       <p class="lang-only-en">Three connected practices — Custom Web Design, Web Development, and Traffic Generation — combined into a single growth system. We design the site, build the systems, and drive the traffic that scales your South Florida business.</p>
       <p class="lang-only-es">Tres prácticas conectadas — Diseño Web Personalizado, Desarrollo Web y Generación de Tráfico — combinadas en un solo sistema de crecimiento. Diseñamos el sitio, construimos los sistemas y atraemos el tráfico que escala su negocio en el Sur de Florida.</p>
-      <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+      <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
     </div>
   </section>
 
@@ -192,7 +194,7 @@ const description = "Three focused services for South Florida businesses — cus
           </article>
         </div>
         <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;"><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
+          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
         </div>
       </div>
     </section>

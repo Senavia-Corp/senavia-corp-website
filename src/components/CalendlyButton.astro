@@ -19,7 +19,7 @@ const classes = ['btn', block ? 'is-block' : '', extraClass]
   class={classes}
   data-calendly-trigger
   data-track="book_call_click"
-  onclick={`if(window.Calendly){Calendly.initPopupWidget({url:'${CALENDLY_URL}'});}return false;`}
+  data-calendly-trigger
 >
   <span class="lang-only-en">{label}</span>
   <span class="lang-only-es">{label === 'Book a Free Call' ? 'Agenda una Llamada' : label}</span>
