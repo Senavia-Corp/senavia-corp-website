@@ -806,6 +806,9 @@ body.nav-locked { overflow: hidden; }
 }
 .cta h2 { max-width: 880px; margin: 0 auto 14px; }
 .cta p  { max-width: 720px; margin: 0 auto 28px; color: rgba(255,255,255,0.85); }
+/* CTA buttons sit bare in .container (no flex wrapper), so give them spacing
+   that holds side-by-side on desktop and when they wrap/stack on mobile. */
+.cta .container > .btn { margin: 12px 6px 0; }
 
 /* ---------- 10. Footer ---------- */
 .footer { position: relative; color: var(--white); padding-top: 5rem; }
