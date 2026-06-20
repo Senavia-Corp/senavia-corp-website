@@ -187,6 +187,21 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
   .pp-launch svg { width: 16px; height: 16px; }
   .pp-launch:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(0,0,0,0.5); }
   .pp-launch:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  /* Provisional pending state — same shape, muted, non-interactive */
+  .pp-launch.is-pending {
+    background: rgba(255,255,255,0.16);
+    color: rgba(255,255,255,0.78);
+    cursor: default;
+    box-shadow: none;
+    backdrop-filter: blur(6px);
+  }
+  .pp-launch.is-pending:hover { transform: none; box-shadow: none; }
+  .pp-provisional {
+    margin-top: 0.85rem;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+  }
 
   /* ===== CONTENT LAYOUT ===== */
   .pp-layout {
@@ -360,7 +375,7 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
       <h1>{d.title}</h1>
       {d.summary && <p class="pp-hero-summary">{d.summary}</p>}
       <div class="pp-hero-actions">
-        <a href="#" class="btn cta--glow" onclick="if(window.Calendly){Calendly.initPopupWidget({url:'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon'});}return false;">
+        <a href="#" class="btn cta--glow" data-calendly-trigger>
           <span class="lang-only-en">Start a project like this</span><span class="lang-only-es">Inicia un proyecto así</span>
         </a>
         <a href="/portfolio" class="btn is-secondary">
@@ -368,30 +383,32 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
         </a>
       </div>
     </div>
-    {d.liveUrl ? (
-      <div class="container">
-        <figure class="pp-showcase pp-browser">
-          <div class="pp-browser-bar">
-            <span class="pp-dots"><i></i><i></i><i></i></span>
-            <span class="pp-url">{d.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
-            <a class="pp-open" href={d.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Open live site in a new tab">↗</a>
-          </div>
-          <div class="pp-browser-stage">
-            {d.mainImage && <img class="pp-poster" src={d.mainImage} alt={d.imageAlt} loading="eager" decoding="async" />}
+    {/* Every case study renders the same browser frame. liveUrl drives the
+        Preview button; when it's missing we show a provisional pending state
+        until the URL is added in Sanity. ponytail: provisional placeholder, not a hidden section. */}
+    <div class="container">
+      <figure class="pp-showcase pp-browser">
+        <div class="pp-browser-bar">
+          <span class="pp-dots"><i></i><i></i><i></i></span>
+          <span class="pp-url">{d.liveUrl ? d.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') : 'preview coming soon'}</span>
+          {d.liveUrl && <a class="pp-open" href={d.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Open live site in a new tab">↗</a>}
+        </div>
+        <div class="pp-browser-stage">
+          {d.mainImage && <img class="pp-poster" src={d.mainImage} alt={d.imageAlt} loading="eager" decoding="async" />}
+          {d.liveUrl ? (
             <a class="pp-launch" href={d.liveUrl} target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               <span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver sitio web</span>
             </a>
-          </div>
-        </figure>
-      </div>
-    ) : d.mainImage && (
-      <div class="container">
-        <figure class="pp-showcase">
-          <img src={d.mainImage} alt={d.imageAlt} loading="eager" decoding="async" />
-        </figure>
-      </div>
-    )}
+          ) : (
+            <span class="pp-launch is-pending" aria-disabled="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>
+              <span class="lang-only-en">Preview coming soon</span><span class="lang-only-es">Preview próximamente</span>
+            </span>
+          )}
+        </div>
+      </figure>
+    </div>
   </section>
 
   <!-- ============================================================
@@ -408,13 +425,23 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
             : <p class="cms-prose">{d.summary}</p>}
         </div>
 
-        {d.services && (
-          <aside class="pp-aside">
-            <div class="eyebrow"><span class="lang-only-en">What we delivered</span><span class="lang-only-es">Lo que Entregamos</span></div>
-            <h2><span class="lang-only-en">Services Rendered</span><span class="lang-only-es">Servicios Prestados</span></h2>
-            <div class="cms-prose" set:html={d.services} />
-          </aside>
-        )}
+        <aside class="pp-aside">
+          <div class="eyebrow"><span class="lang-only-en">What we delivered</span><span class="lang-only-es">Lo que Entregamos</span></div>
+          <h2><span class="lang-only-en">Services Rendered</span><span class="lang-only-es">Servicios Prestados</span></h2>
+          {d.services
+            ? <div class="cms-prose" set:html={d.services} />
+            : (
+              /* Provisional generic services until the CMS `services` field is filled. */
+              <div class="cms-prose">
+                <ul>
+                  <li><span class="lang-only-en">Web Design</span><span class="lang-only-es">Diseño Web</span></li>
+                  <li><span class="lang-only-en">Web Development</span><span class="lang-only-es">Desarrollo Web</span></li>
+                  <li><span class="lang-only-en">SEO &amp; Performance</span><span class="lang-only-es">SEO y Rendimiento</span></li>
+                </ul>
+                <p class="pp-provisional"><span class="lang-only-en">Detailed services coming soon.</span><span class="lang-only-es">Detalle de servicios próximamente.</span></p>
+              </div>
+            )}
+        </aside>
       </div>
     </div>
   </section>
