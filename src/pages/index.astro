@@ -1,20 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import ProjectCarousel from '@/components/ProjectCarousel.astro';
 
 const title = "SENAVIA Corp — Custom Web Design & Web Development Agency in South Florida";
 const description = "Google Partner-certified digital agency in Plantation, FL. Custom web design, web development, and traffic generation (SEO, SEM & GEO) for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
 
 /* Tool / integration logos for the hero marquee */
 const logos = (await getCollection('logos')).sort((a, b) => a.data.order - b.data.order);
-
-/* First 3 projects: featured first, then CMS order */
-const projects = (await getCollection('portfolio'))
-  .sort(
-    (a, b) =>
-      Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order,
-  )
-  .slice(0, 3);
 
 /* 2 most recent blog posts by publish date */
 const posts = (await getCollection('blog'))
@@ -134,35 +127,7 @@ const fmtEs = (d?: Date) =>
         <p><span class="lang-only-en">Explore our web design projects across South Florida — custom digital experiences built to elevate UX, boost conversions, and increase visibility.</span><span class="lang-only-es">Explora nuestros proyectos de diseño web en todo el Sur de Florida — experiencias digitales a la medida creadas para mejorar la UX, aumentar las conversiones y ganar visibilidad.</span></p>
       </div>
 
-      <div class="carousel" data-carousel="portfolio">
-        <div class="carousel-arrows">
-          <button class="carousel-arrow prev" aria-label="Previous projects" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
-          </button>
-          <button class="carousel-arrow next" aria-label="Next projects" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
-          </button>
-        </div>
-        <div class="carousel-viewport">
-          <div class="carousel-track" role="list">
-          {projects.map((p) => (
-            <article class="project-card" role="listitem">
-              <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
-                <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />
-                <span class="project-name">{p.data.title}</span>
-              </a>
-              <div class="project-body">
-                <p>{p.data.summary}</p>
-                <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
-              </div>
-            </article>
-          ))}
-        </div>
-        </div>
-        <div class="carousel-scrollbar" role="presentation">
-          <div class="carousel-scrollbar-thumb"></div>
-        </div>
-      </div>
+      <ProjectCarousel />
 
       <div class="center-cta">
         <a href="/portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>

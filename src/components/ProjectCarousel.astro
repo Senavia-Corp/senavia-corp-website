@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props { reveal?: boolean; }
+const { reveal = false } = Astro.props;
+
+/* CMS-driven: show every project flagged "Proyecto destacado" (featured), in CMS order.
+   ponytail: fall back to the first 6 by order so the carousel is never empty. */
+const portfolio = (await getCollection('portfolio')).sort((a, b) => a.data.order - b.data.order);
+const featured = portfolio.filter((p) => p.data.featured);
+const projects = featured.length ? featured : portfolio.slice(0, 6);
+---
+<div class="carousel" data-carousel="portfolio" data-reveal={reveal ? "" : undefined}>
+  <div class="carousel-arrows">
+    <button class="carousel-arrow prev" aria-label="Previous projects / Proyectos anteriores" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
+    </button>
+    <button class="carousel-arrow next" aria-label="Next projects / Proyectos siguientes" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+    </button>
+  </div>
+  <div class="carousel-viewport">
+    <div class="carousel-track" role="list">
+      {projects.map((p) => (
+        <article class="project-card" role="listitem">
+          <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
+            {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}
+            <span class="project-name">{p.data.title}</span>
+          </a>
+          <div class="project-body">
+            <p>{p.data.summary}</p>
+            <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+  <div class="carousel-scrollbar" role="presentation">
+    <div class="carousel-scrollbar-thumb"></div>
+  </div>
+</div>

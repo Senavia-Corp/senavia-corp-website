@@ -1,16 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import ProjectCarousel from '@/components/ProjectCarousel.astro';
 const title = "Traffic Generation in Miami — SENAVIA Corp · SEO, SEM & GEO";
 const description = "Traffic generation agency in Miami. We combine SEO, paid SEM, and Generative Engine Optimization (GEO) to send qualified visitors to your site across South Florida.";
-
-/* First 3 projects: featured first, then CMS order */
-const projects = (await getCollection('portfolio'))
-  .sort(
-    (a, b) =>
-      Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order,
-  )
-  .slice(0, 3);
 ---
 <BaseLayout
   title={title}
@@ -310,35 +302,7 @@ const projects = (await getCollection('portfolio'))
         <p class="lang-only-es">Explora campañas y proyectos digitales en todo el Sur de Florida: medios pagados, SEO y estrategias de embudo completo diseñadas para generar un crecimiento medible.</p>
       </div>
 
-      <div class="carousel" data-carousel="portfolio">
-        <div class="carousel-arrows">
-          <button class="carousel-arrow prev" aria-label="Previous projects / Proyectos anteriores" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
-          </button>
-          <button class="carousel-arrow next" aria-label="Next projects / Proyectos siguientes" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
-          </button>
-        </div>
-        <div class="carousel-viewport">
-          <div class="carousel-track" role="list">
-          {projects.map((p) => (
-            <article class="project-card" role="listitem">
-              <a href={`/portfolio/${p.id}`} class="project-cover has-img" aria-label={p.data.title}>
-                <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />
-                <span class="project-name">{p.data.title}</span>
-              </a>
-              <div class="project-body">
-                <p>{p.data.summary}</p>
-                <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio Web</span></a>
-              </div>
-            </article>
-          ))}
-        </div>
-        </div>
-        <div class="carousel-scrollbar" role="presentation">
-          <div class="carousel-scrollbar-thumb"></div>
-        </div>
-      </div>
+      <ProjectCarousel />
 
       <div class="center-cta">
         <a href="/portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
