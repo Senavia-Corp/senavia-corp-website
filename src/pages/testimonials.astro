@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { CALENDLY_URL } from '@/data/site';
+import { Icon } from 'astro-icon/components';
 
 const title = "Testimonials — SENAVIA Corp · What Our Clients Say in South Florida";
 const description = "Hear from South Florida business owners SENAVIA Corp has worked with — web design, e-commerce, custom apps, and marketing clients across Miami-Dade, Broward, and Palm Beach.";
@@ -370,7 +371,7 @@ const STAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><p
                 <div class="gr-cardtop">
                   <div class="gr-stars" role="img" aria-label={`${stars} out of 5 stars`} set:html={STAR.repeat(stars)}></div>
                   <span class="gr-verified">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <Icon name="lucide:check" />
                     <span class="lang-only-en">Verified review</span>
                     <span class="lang-only-es">Reseña Verificada</span>
                   </span>

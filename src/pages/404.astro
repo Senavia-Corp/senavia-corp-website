@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 const title = "404 — Page not found · SENAVIA Corp";
 const description = "404 — Page not found. The page you're looking for has either moved, been renamed, or never existed. Let's get you somewhere useful.";
 ---
@@ -164,12 +165,12 @@ const description = "404 — Page not found. The page you're looking for has eit
       <p class="err-desc"><span class="lang-only-en">The page you're looking for has either moved, been renamed, or never existed. Let's get you somewhere useful.</span><span class="lang-only-es">La página que buscas se movió, cambió de nombre o nunca existió. Te llevamos a un lugar útil.</span></p>
       <div class="err-actions">
         <a href="/" class="btn">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+          <Icon name="lucide:house" width="14" height="14" style="margin-right: 6px;" />
           <span class="lang-only-en">Back to Home</span><span class="lang-only-es">Volver al Inicio</span>
         </a>
         <a href="/contact" class="btn-secondary">
           <span class="lang-only-en">Contact Us</span><span class="lang-only-es">Contáctanos</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <Icon name="lucide:arrow-right" />
         </a>
       </div>
       <nav class="err-links" aria-label="Helpful links">

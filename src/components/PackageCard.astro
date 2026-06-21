@@ -1,6 +1,7 @@
 ---
 import type { Pkg } from '@/data/pricing';
 import { CALENDLY_URL } from '@/data/site';
+import { Icon } from 'astro-icon/components';
 
 interface Props { pkg: Pkg }
 const { pkg } = Astro.props;
@@ -61,7 +62,7 @@ const btnClass = badged ? 'btn' : 'btn is-secondary';
     </div>
 
     <span class="pkg-delivery">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
+      <Icon name="lucide:clock" />
       <span><span class="lang-only-en">Delivery in {pkg.delivery_en}</span><span class="lang-only-es">Entrega en {pkg.delivery_es}</span></span>
     </span>
 

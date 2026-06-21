@@ -1,6 +1,7 @@
 ---
 import { NAV, NAP, CALENDLY_URL } from '@/data/site';
 import LangSwitcher from './LangSwitcher.astro';
+import { Icon } from 'astro-icon/components';
 ---
 <nav class="nav" data-screen-label="01 Navbar">
   <div class="nav-inner">
@@ -113,7 +114,7 @@ import LangSwitcher from './LangSwitcher.astro';
         <span class="lang-only-es">Agenda una Llamada</span>
       </a>
       <a href={`tel:${NAP.phoneE164}`} class="nav-call">
-        <span class="phone-ic"><img src="/images/phone_1.svg" alt="" /></span>
+        <span class="phone-ic"><Icon name="lucide:phone" /></span>
         <span class="text">
           <span class="label">
             <span class="lang-only-en">Call Us Now!</span>
@@ -215,7 +216,7 @@ import LangSwitcher from './LangSwitcher.astro';
   </div>
   <div class="nav-mobile-foot">
     <a href={`tel:${NAP.phoneE164}`} class="nav-call">
-      <span class="phone-ic"><img src="/images/phone_1.svg" alt="" /></span>
+      <span class="phone-ic"><Icon name="lucide:phone" /></span>
       <span class="text">
         <span class="label">
           <span class="lang-only-en">Call Us Now!</span>
@@ -227,9 +228,9 @@ import LangSwitcher from './LangSwitcher.astro';
     <div class="row">
       <LangSwitcher />
       <span class="nav-social">
-        <a href={`https://www.instagram.com/senaviacorp`} aria-label="Instagram" target="_blank" rel="noopener"><img src="/images/insta.svg" alt="" /></a>
-        <a href={`https://www.facebook.com/senaviacorp`} aria-label="Facebook" target="_blank" rel="noopener"><img src="/images/face.svg" alt="" /></a>
-        <a href={`https://www.youtube.com/@senaviacorp`} aria-label="YouTube" target="_blank" rel="noopener"><img src="/images/youtube.svg" alt="" /></a>
+        <a href={`https://www.instagram.com/senaviacorp`} aria-label="Instagram" target="_blank" rel="noopener"><Icon name="lucide:instagram" /></a>
+        <a href={`https://www.facebook.com/senaviacorp`} aria-label="Facebook" target="_blank" rel="noopener"><Icon name="lucide:facebook" /></a>
+        <a href={`https://www.youtube.com/@senaviacorp`} aria-label="YouTube" target="_blank" rel="noopener"><Icon name="lucide:youtube" /></a>
       </span>
     </div>
   </div>

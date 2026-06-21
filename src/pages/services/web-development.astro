@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCarousel from '@/components/ProjectCarousel.astro';
 import TrustBadges from '@/components/TrustBadges.astro';
+import { Icon } from 'astro-icon/components';
 const title = "Web Development in Miami — SENAVIA Corp · Apps, CRM & ERP";
 const description = "Web development agency in Miami. Custom admin panels, CRM/ERP systems, and workflow automation built to scale your operations across South Florida.";
 ---
@@ -90,36 +91,42 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
       </div>
       <div class="grid-3" data-reveal-children>
         <article class="cap-card is-purple">
+          <span class="cap-icon" aria-hidden="true"><Icon name="lucide:app-window" /></span>
           <span class="cap-num">01 · <span class="lang-only-en">Web Apps</span><span class="lang-only-es">Aplicaciones</span></span>
           <h3><span class="lang-only-en">Custom Web Application Development</span><span class="lang-only-es">Desarrollo de Aplicaciones Web a Medida</span></h3>
           <p class="lang-only-en">Custom web application development for businesses that have outgrown off-the-shelf software — a web app developer in Miami building secure, scalable tools around your exact business logic.</p>
           <p class="lang-only-es">Desarrollo de aplicaciones web a medida para empresas que ya superaron el software genérico — un desarrollador de aplicaciones web en Miami que construye herramientas seguras y escalables en torno a la lógica exacta de su negocio.</p>
         </article>
         <article class="cap-card is-cyan">
+          <span class="cap-icon" aria-hidden="true"><Icon name="lucide:layout-dashboard" /></span>
           <span class="cap-num">02 · <span class="lang-only-en">Dashboards</span><span class="lang-only-es">Tableros</span></span>
           <h3><span class="lang-only-en">Admin Panel Development</span><span class="lang-only-es">Desarrollo de Paneles Administrativos</span></h3>
           <p class="lang-only-en">Custom dashboard and admin panel development — manage users, finances, inventory, and KPIs in real time from one unified panel built by a business dashboard developer who knows your data.</p>
           <p class="lang-only-es">Desarrollo de paneles administrativos y dashboards a medida — gestione usuarios, finanzas, inventario y KPIs en tiempo real desde un panel unificado construido por un desarrollador que entiende sus datos.</p>
         </article>
         <article class="cap-card is-green">
+          <span class="cap-icon" aria-hidden="true"><Icon name="lucide:users" /></span>
           <span class="cap-num">03 · CRM</span>
           <h3><span class="lang-only-en">CRM Development</span><span class="lang-only-es">Desarrollo de CRM</span></h3>
           <p class="lang-only-en">Custom CRM development that fits how you actually sell — a CRM system developer building pipelines, client portals, and follow-up automation, with no per-seat fees or rigid templates.</p>
           <p class="lang-only-es">Desarrollo de CRM a medida que se ajusta a cómo realmente vende — un desarrollador de sistemas CRM que construye embudos, portales de clientes y automatización de seguimiento, sin tarifas por usuario ni plantillas rígidas.</p>
         </article>
         <article class="cap-card is-purple">
+          <span class="cap-icon" aria-hidden="true"><Icon name="lucide:webhook" /></span>
           <span class="cap-num">04 · <span class="lang-only-en">Integrations</span><span class="lang-only-es">Integraciones</span></span>
           <h3><span class="lang-only-en">API Integration Services</span><span class="lang-only-es">Servicios de Integración de API</span></h3>
           <p class="lang-only-en">API integration services that connect the tools you already use — a QuickBooks integration developer and software integration company syncing your data so nothing is entered twice.</p>
           <p class="lang-only-es">Servicios de integración de API que conectan las herramientas que ya usa — desarrollador de integraciones con QuickBooks y empresa de integración de software que sincroniza sus datos para no capturar nada dos veces.</p>
         </article>
         <article class="cap-card is-cyan">
+          <span class="cap-icon" aria-hidden="true"><Icon name="lucide:workflow" /></span>
           <span class="cap-num">05 · <span class="lang-only-en">Automation</span><span class="lang-only-es">Automatización</span></span>
           <h3><span class="lang-only-en">Workflow Automation</span><span class="lang-only-es">Automatización de Flujos de Trabajo</span></h3>
           <p class="lang-only-en">Business workflow automation that eliminates manual busywork — a process automation developer turning repetitive tasks into automated business systems that run while your team focuses on growth.</p>
           <p class="lang-only-es">Automatización de flujos de trabajo que elimina el trabajo manual repetitivo — un desarrollador de automatización de procesos que convierte tareas repetitivas en sistemas de negocio automatizados que operan mientras su equipo se enfoca en crecer.</p>
         </article>
         <article class="cap-card is-green">
+          <span class="cap-icon" aria-hidden="true"><Icon name="lucide:boxes" /></span>
           <span class="cap-num">06 · ERP</span>
           <h3><span class="lang-only-en">ERP System Development</span><span class="lang-only-es">Desarrollo de Sistemas ERP</span></h3>
           <p class="lang-only-en">ERP system development for operations that have outgrown spreadsheets — a custom ERP developer building one business management system that unifies finance, inventory, and operations.</p>
@@ -143,7 +150,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
       <div class="reasons-grid" data-reveal-children>
         <article class="reason-item">
           <span class="check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <Icon name="lucide:badge-check" />
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Google Partner-certified team</span><span class="lang-only-es">Equipo certificado como Google Partner</span></h3>
@@ -153,7 +160,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
         </article>
         <article class="reason-item">
           <span class="check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <Icon name="lucide:languages" />
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Bilingual EN / ES service</span><span class="lang-only-es">Servicio bilingüe EN / ES</span></h3>
@@ -163,7 +170,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
         </article>
         <article class="reason-item">
           <span class="check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <Icon name="lucide:map-pin" />
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Local South Florida expertise</span><span class="lang-only-es">Experiencia local en el Sur de Florida</span></h3>
@@ -173,7 +180,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
         </article>
         <article class="reason-item">
           <span class="check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <Icon name="lucide:route" />
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Built around your real workflow</span><span class="lang-only-es">Construido en torno a su flujo de trabajo real</span></h3>
@@ -183,7 +190,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
         </article>
         <article class="reason-item">
           <span class="check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <Icon name="lucide:blocks" />
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Integration-first engineering</span><span class="lang-only-es">Ingeniería centrada en la integración</span></h3>
@@ -193,7 +200,7 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
         </article>
         <article class="reason-item">
           <span class="check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <Icon name="lucide:wrench" />
           </span>
           <div class="reason-body">
             <h3><span class="lang-only-en">Ongoing maintenance &amp; support</span><span class="lang-only-es">Mantenimiento &amp; soporte continuo</span></h3>

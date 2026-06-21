@@ -1,5 +1,6 @@
 ---
 import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
+import { Icon } from 'astro-icon/components';
 ---
 <footer id="footer" class="footer" data-screen-label="09 Footer">
   <div class="container">
@@ -72,6 +73,7 @@ import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
 
     <div class="footer-info">
       <a class="footer-info-item" href={`tel:${NAP.phoneE164}`}>
+        <span class="footer-info-ic" aria-hidden="true"><Icon name="lucide:phone" /></span>
         <span class="k">
           <span class="lang-only-en">Call Us!</span>
           <span class="lang-only-es">¡Llámanos!</span>
@@ -79,6 +81,7 @@ import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
         <span class="v">{NAP.phone}</span>
       </a>
       <a class="footer-info-item" href={NAP.googleMapsUrl} target="_blank" rel="noopener">
+        <span class="footer-info-ic" aria-hidden="true"><Icon name="lucide:map-pin" /></span>
         <span class="k">
           <span class="lang-only-en">Visit Us!</span>
           <span class="lang-only-es">¡Visítanos!</span>
@@ -86,6 +89,7 @@ import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
         <span class="v">{NAP.streetAddress}, {NAP.addressLocality}, {NAP.addressRegion} {NAP.postalCode}</span>
       </a>
       <a class="footer-info-item" href={`mailto:${NAP.email}`}>
+        <span class="footer-info-ic" aria-hidden="true"><Icon name="lucide:mail" /></span>
         <span class="k">
           <span class="lang-only-en">Message Us!</span>
           <span class="lang-only-es">¡Escríbenos!</span>
@@ -93,6 +97,7 @@ import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
         <span class="v">{NAP.email}</span>
       </a>
       <div class="footer-info-item">
+        <span class="footer-info-ic" aria-hidden="true"><Icon name="lucide:clock" /></span>
         <span class="k">
           <span class="lang-only-en">Available Hours</span>
           <span class="lang-only-es">Horario</span>
@@ -112,9 +117,9 @@ import { NAP, SOCIAL, SITE, GOOGLE_PARTNER_URL } from '@/data/site';
         <a href="/sitemap-index.xml">Sitemap</a>
       </div>
       <div class="footer-social">
-        <a href={SOCIAL.instagram} aria-label="Instagram" target="_blank" rel="noopener"><img src="/images/insta.svg" alt="" /></a>
-        <a href={SOCIAL.facebook} aria-label="Facebook" target="_blank" rel="noopener"><img src="/images/face.svg" alt="" /></a>
-        <a href={SOCIAL.youtube} aria-label="YouTube" target="_blank" rel="noopener"><img src="/images/youtube.svg" alt="" /></a>
+        <a href={SOCIAL.instagram} aria-label="Instagram" target="_blank" rel="noopener"><Icon name="lucide:instagram" /></a>
+        <a href={SOCIAL.facebook} aria-label="Facebook" target="_blank" rel="noopener"><Icon name="lucide:facebook" /></a>
+        <a href={SOCIAL.youtube} aria-label="YouTube" target="_blank" rel="noopener"><Icon name="lucide:youtube" /></a>
       </div>
     </div>
   </div>

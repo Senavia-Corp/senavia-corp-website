@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 
 interface Props { reveal?: boolean; }
 const { reveal = false } = Astro.props;
@@ -13,10 +14,10 @@ const projects = featured.length ? featured : portfolio.slice(0, 6);
 <div class="carousel" data-carousel="portfolio" data-reveal={reveal ? "" : undefined}>
   <div class="carousel-arrows">
     <button class="carousel-arrow prev" aria-label="Previous projects / Proyectos anteriores" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
+      <Icon name="lucide:chevron-left" />
     </button>
     <button class="carousel-arrow next" aria-label="Next projects / Proyectos siguientes" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+      <Icon name="lucide:chevron-right" />
     </button>
   </div>
   <div class="carousel-viewport">
