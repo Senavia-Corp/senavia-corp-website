@@ -1788,13 +1788,16 @@ html.js .hero-inner > * {
 /* --- Capability card (3-up for service detail pages) --- */
 .cap-card {
   position: relative;
-  border: 1px solid transparent;
-  border-radius: 14px;
+  border: 3px solid transparent;
+  border-radius: 16px;
+  /* Match the homepage card recipe: bright color frame (border-box) +
+     color-tinted glass inner (color under a dark overlay, both padding-box). */
   background:
-    linear-gradient(rgba(13,18,53,0.62), rgba(11,15,35,0.62)) padding-box,
+    linear-gradient(rgba(11,15,26,0.50), rgba(11,15,26,0.50)) padding-box,
+    var(--grad-primary) padding-box,
     var(--grad-primary) border-box;
-  -webkit-backdrop-filter: blur(14px);
-          backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(16px);
+          backdrop-filter: blur(16px);
   padding: 2rem;
   display: flex; flex-direction: column;
   gap: 14px;
@@ -1802,6 +1805,24 @@ html.js .hero-inner > * {
   transition: transform .25s cubic-bezier(.2,.6,.2,1);
 }
 .cap-card:hover { transform: translateY(-3px); }
+.cap-card.is-purple {
+  background:
+    linear-gradient(rgba(11,15,26,0.50), rgba(11,15,26,0.50)) padding-box,
+    var(--grad-purple) padding-box,
+    var(--grad-purple) border-box;
+}
+.cap-card.is-cyan {
+  background:
+    linear-gradient(rgba(11,15,26,0.50), rgba(11,15,26,0.50)) padding-box,
+    var(--grad-cyan) padding-box,
+    var(--grad-cyan) border-box;
+}
+.cap-card.is-green {
+  background:
+    linear-gradient(rgba(11,15,26,0.50), rgba(11,15,26,0.50)) padding-box,
+    var(--grad-green) padding-box,
+    var(--grad-green) border-box;
+}
 .cap-card .cap-num {
   font-size: 11px; font-weight: 600;
   letter-spacing: 0.18em;
