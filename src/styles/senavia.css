@@ -1862,6 +1862,8 @@ html.js .hero-inner > * {
   line-height: 1.55;
   max-width: none;
 }
+/* cap-card rendered as a link (subservice cards + related cards) */
+a.cap-card { text-decoration: none; color: inherit; }
 
 /* --- Reasons grid (2-col with check icons) --- */
 .reasons-grid {
