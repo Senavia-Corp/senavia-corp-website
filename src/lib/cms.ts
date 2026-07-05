@@ -53,6 +53,46 @@ export function parseCsvObjects(text: string): Record<string, string>[] {
     });
 }
 
+/* ---------- Legacy Webflow CDN → local mirror (WL-008) ---------- */
+/* Assets are mirrored into public/images/webflow/ by
+ * scripts/mirror-webflow-assets.mjs. Local name = basename minus the
+ * 24-hex Webflow asset-id prefix (collisions keep an 8-char id prefix);
+ * the naming here must stay in sync with that script. */
+const WEBFLOW_CDN_RE = /https:\/\/cdn\.prod\.website-files\.com\/[^\s"'<>()\\,]+/g;
+const WEBFLOW_LOCAL_DIR = path.join(process.cwd(), 'public', 'images', 'webflow');
+const webflowLocalCache = new Map<string, string>();
+
+/** cdn.prod.website-files.com URL → /images/webflow/<name>; falls back to the remote URL if the asset was never mirrored. */
+export function toLocalWebflowAsset(url: string): string {
+  const cached = webflowLocalCache.get(url);
+  if (cached) return cached;
+  const raw = url.split('/').pop() || '';
+  const base = decodeURIComponent(raw).replace(/^[0-9a-f]{20,}_/, '').replace(/[^A-Za-z0-9._-]/g, '-');
+  const id = (raw.match(/^([0-9a-f]{20,})_/) || [])[1];
+  let resolved = url;
+  for (const name of id ? [base, `${id.slice(-8)}-${base}`] : [base]) {
+    if (fs.existsSync(path.join(WEBFLOW_LOCAL_DIR, name))) {
+      resolved = `/images/webflow/${name}`;
+      break;
+    }
+  }
+  webflowLocalCache.set(url, resolved);
+  return resolved;
+}
+
+/** Replace every Webflow CDN URL inside a string (plain URL field or HTML body) with its local mirror. */
+export const localizeWebflowAssets = (v: string): string =>
+  v.includes('website-files.com') ? v.replace(WEBFLOW_CDN_RE, toLocalWebflowAsset) : v;
+
+/** Deep-localize all string fields of CMS records (wrap collection loader output with this). */
+export function localizeWebflowRecords<T extends Record<string, unknown>>(rows: T[]): T[] {
+  return rows.map((r) => {
+    const o: Record<string, unknown> = { ...r };
+    for (const k in o) if (typeof o[k] === 'string') o[k] = localizeWebflowAssets(o[k] as string);
+    return o as T;
+  });
+}
+
 /* ---------- File lookup (filenames carry changing Webflow IDs) ---------- */
 function findFile(substr: string): string {
   const files = fs.readdirSync(CMS_DIR).filter((f) => f.endsWith('.csv') && f.includes(substr));
@@ -63,9 +103,10 @@ function findFile(substr: string): string {
 /** Read a collection CSV → array of row objects, excluding drafts/archived. */
 export function readCsv(substr: string): Record<string, string>[] {
   const text = fs.readFileSync(findFile(substr), 'utf-8');
-  return parseCsvObjects(text).filter(
+  const rows = parseCsvObjects(text).filter(
     (r) => (r['Draft'] || '').toLowerCase() !== 'true' && (r['Archived'] || '').toLowerCase() !== 'true',
   );
+  return localizeWebflowRecords(rows);
 }
 
 /* ---------- Field helpers ---------- */

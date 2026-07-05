@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { fetchSanity } from '@/lib/sanity';
+import { localizeWebflowRecords } from '@/lib/cms';
 
 function extractYoutubeId(url: string): string {
   if (!url) return '';
@@ -14,7 +15,7 @@ function extractYoutubeId(url: string): string {
 
 const blog = defineCollection({
   loader: async () =>
-    fetchSanity<any[]>(`*[_type == "blogPost"] | order(pubDate desc) {
+    localizeWebflowRecords(await fetchSanity<any[]>(`*[_type == "blogPost"] | order(pubDate desc) {
       "id": slug.current,
       title,
       "summary": coalesce(summary, ''),
@@ -28,7 +29,7 @@ const blog = defineCollection({
       "seoTitle": coalesce(seoTitle, title, ''),
       "seoDescription": coalesce(seoDescription, summary, ''),
       pubDate
-    }`),
+    }`)),
   schema: z.object({
     title: z.string(),
     summary: z.string().default(''),
@@ -47,7 +48,7 @@ const blog = defineCollection({
 
 const portfolio = defineCollection({
   loader: async () =>
-    fetchSanity<any[]>(`*[_type == "project"] | order(order asc) {
+    localizeWebflowRecords(await fetchSanity<any[]>(`*[_type == "project"] | order(order asc) {
       "id": slug.current,
       title,
       "summary": coalesce(summary, ''),
@@ -58,7 +59,7 @@ const portfolio = defineCollection({
       "services": coalesce(services, ''),
       "featured": coalesce(featured, false),
       "order": coalesce(order, 0)
-    }`),
+    }`)),
   schema: z.object({
     title: z.string(),
     summary: z.string().default(''),
@@ -123,12 +124,12 @@ const serviceAreas = defineCollection({
 
 const logos = defineCollection({
   loader: async () =>
-    fetchSanity<any[]>(`*[_type == "logo"] | order(order asc) {
+    localizeWebflowRecords(await fetchSanity<any[]>(`*[_type == "logo"] | order(order asc) {
       "id": slug.current,
       name,
       "logo": coalesce(logoUrl, ''),
       "order": coalesce(order, 0)
-    }`),
+    }`)),
   schema: z.object({
     name: z.string(),
     logo: z.string().default(''),
