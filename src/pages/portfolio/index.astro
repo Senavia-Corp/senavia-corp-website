@@ -162,6 +162,53 @@ const projects = (await getCollection('portfolio'))
   .pf-card:hover .pf-view svg,
   .pf-card:focus-within .pf-view svg { transform: translateX(4px); }
 
+  /* WL-060 — closing CTA card: fills the open slot in the last row of the
+     3-col grid (17 published cases) and converts instead of leaving a gap */
+  .pf-card--cta {
+    align-items: flex-start;
+    justify-content: center;
+    gap: 14px;
+    padding: 2rem 1.75rem;
+    border: 1px dashed rgba(153,204,51,0.4);
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(153,204,51,0.08) 0%, transparent 55%),
+      rgba(13,18,53,0.4);
+  }
+  .pf-card--cta:hover,
+  .pf-card--cta:focus-visible {
+    border-color: rgba(153,204,51,0.7);
+  }
+  .pf-card--cta .pf-cta-badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary, #99cc33);
+    background: rgba(153,204,51,0.12);
+    border: 1px solid rgba(153,204,51,0.4);
+  }
+  .pf-card--cta .pf-cta-badge svg { width: 20px; height: 20px; }
+  .pf-card--cta h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: #fff;
+    text-transform: none;
+  }
+  .pf-card--cta:hover h3,
+  .pf-card--cta:focus-visible h3 { color: var(--primary, #99cc33); }
+  .pf-card--cta p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.7);
+  }
+  .pf-card--cta .pf-view { margin-top: 4px; padding-top: 0; }
+
   /* Compact hero gets a bit of bottom breathing room */
   .hero.is-compact + .section { padding-top: 4rem; }
 </style>
@@ -210,12 +257,25 @@ const projects = (await getCollection('portfolio'))
               <h3>{p.data.title}</h3>
               <p>{p.data.summary}</p>
               <span class="pf-view">
-                <span class="lang-only-en">View case study</span><span class="lang-only-es">Ver caso</span>
+                <span class="lang-only-en">View case study</span><span class="lang-only-es">Ver caso (en inglés)</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
               </span>
             </div>
           </a>
         ))}
+
+        <!-- closing CTA card squares the case grid -->
+        <a href="#" class="pf-card pf-card--cta" data-calendly-trigger>
+          <span class="pf-cta-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+          <h3><span class="lang-only-en">Your Project Here</span><span class="lang-only-es">Tu Proyecto Aquí</span></h3>
+          <p><span class="lang-only-en">The next case study could be yours. Book a free call and let's plan it together.</span><span class="lang-only-es">El próximo caso de estudio puede ser el tuyo. Agenda una llamada gratis y planeémoslo juntos.</span></p>
+          <span class="pf-view">
+            <span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+          </span>
+        </a>
 
       </div>
     </div>

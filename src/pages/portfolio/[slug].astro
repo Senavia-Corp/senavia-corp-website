@@ -19,6 +19,37 @@ export async function getStaticPaths() {
 const { entry, prev, next } = Astro.props;
 const d = entry.data;
 const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
+
+// WL-042 — neutral state: this client's live domain currently fails TLS at
+// the apex (and www 301s into it), so the Preview button would dead-end.
+// Treat its liveUrl as pending until the owner confirms the client fixed
+// their domain (see _qa/DECISIONS-NEEDED.md §14). Nothing changes in Sanity.
+const LIVE_URL_OFFLINE = new Set(['mile-high-renovation']);
+const liveUrl = LIVE_URL_OFFLINE.has(entry.id) ? '' : d.liveUrl;
+
+// WL-061 — neutral structural pass on the flat CMS prose: split the
+// paragraphs into rhythm blocks (lead paragraph + labeled blocks). Subtitles
+// derive ONLY from labels already present in the CMS text (today that is
+// "Technologies & Services:"); no content is invented. Full challenge/
+// solution/results structure needs owner-approved content (DECISIONS §15).
+type DetailBlock =
+  | { kind: 'lead' | 'p'; html: string }
+  | { kind: 'labeled'; label: string; items: string[] };
+const LABEL_RE = /^\s*(Technologies\s*&(?:amp;)?\s*Services)\s*:\s*/i;
+const detailParas = (d.details.match(/<p[\s\S]*?<\/p>/gi) || [])
+  .map((p) => p.replace(/^<p[^>]*>/i, '').replace(/<\/p>$/i, '').trim())
+  .filter(Boolean);
+const detailBlocks: DetailBlock[] = detailParas.map((html, i) => {
+  if (LABEL_RE.test(html)) {
+    const items = html
+      .replace(LABEL_RE, '')
+      .split(/,\s*/)
+      .map((s) => s.trim().replace(/\.\s*$/, ''))
+      .filter(Boolean);
+    return { kind: 'labeled', label: 'Technologies & Services', items };
+  }
+  return { kind: i === 0 ? 'lead' : 'p', html };
+});
 ---
 <BaseLayout
   title={seoTitle}
@@ -196,12 +227,6 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
     backdrop-filter: blur(6px);
   }
   .pp-launch.is-pending:hover { transform: none; box-shadow: none; }
-  .pp-provisional {
-    margin-top: 0.85rem;
-    font-size: 13px;
-    font-style: italic;
-    color: rgba(255,255,255,0.45);
-  }
 
   /* ===== CONTENT LAYOUT ===== */
   .pp-layout {
@@ -211,6 +236,9 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
     align-items: start;
   }
   @media (max-width: 980px) { .pp-layout { grid-template-columns: 1fr; gap: 40px; } }
+  /* WL-020 — cases without a CMS services list render single-column
+     (the aside simply does not exist for them) */
+  .pp-layout.is-solo { grid-template-columns: minmax(0, 1fr); }
 
   .pp-block-head .eyebrow { margin-bottom: 14px; }
   .pp-block-head h2 {
@@ -291,6 +319,40 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
     border-left: 3px solid var(--primary, #99cc33);
     color: rgba(255,255,255,0.85);
     font-style: italic;
+  }
+
+  /* WL-061 — structural rhythm for the flat CMS paragraphs */
+  .cms-prose .pp-lead {
+    font-size: 1.16em;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.88);
+  }
+  .pp-tech { margin-top: 2rem; }
+  .pp-tech h3 { font-size: 1.05rem; letter-spacing: 0.01em; margin-bottom: 0; }
+  .pp-tech-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0.9rem 0 0;
+    padding: 0;
+  }
+  .cms-prose .pp-tech-list li {
+    margin: 0;
+    font-size: 13px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* WL-037 — discreet ES-only notice (the case-study body is EN-only) */
+  .pp-lang-note {
+    font-size: 13.5px;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    margin: -0.75rem 0 1.25rem;
   }
 
   /* Tighter prose for the services aside */
@@ -384,26 +446,27 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
       </div>
     </div>
     {/* Every case study renders the same browser frame. liveUrl drives the
-        Preview button; when it's missing we show a provisional pending state
-        until the URL is added in Sanity. ponytail: provisional placeholder, not a hidden section. */}
+        Preview button; when it's missing (or the client site is known to be
+        offline — WL-042) we show the pending state instead of a dead link.
+        ponytail: provisional placeholder, not a hidden section. */}
     <div class="container">
       <figure class="pp-showcase pp-browser">
         <div class="pp-browser-bar">
           <span class="pp-dots"><i></i><i></i><i></i></span>
-          <span class="pp-url">{d.liveUrl ? d.liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') : 'preview coming soon'}</span>
-          {d.liveUrl && <a class="pp-open" href={d.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Open live site in a new tab">↗</a>}
+          <span class="pp-url">{liveUrl ? liveUrl.replace(/^https?:\/\//, '').replace(/\/$/, '') : 'offline'}</span>
+          {liveUrl && <a class="pp-open" href={liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Open live site in a new tab">↗</a>}
         </div>
         <div class="pp-browser-stage">
           {d.mainImage && <img class="pp-poster" src={d.mainImage} alt={d.imageAlt} loading="eager" decoding="async" />}
-          {d.liveUrl ? (
-            <a class="pp-launch" href={d.liveUrl} target="_blank" rel="noopener noreferrer">
+          {liveUrl ? (
+            <a class="pp-launch" href={liveUrl} target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               <span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver sitio web</span>
             </a>
           ) : (
             <span class="pp-launch is-pending" aria-disabled="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>
-              <span class="lang-only-en">Preview coming soon</span><span class="lang-only-es">Preview próximamente</span>
+              <span class="lang-only-en">Preview unavailable</span><span class="lang-only-es">Vista previa no disponible</span>
             </span>
           )}
         </div>
@@ -416,32 +479,38 @@ const seoTitle = `${d.title} — Portfolio · SENAVIA Corp`;
        ============================================================ -->
   <section class="section" data-screen-label="02 Project Details">
     <div class="container">
-      <div class="pp-layout" data-reveal>
+      <div class={`pp-layout${d.services ? '' : ' is-solo'}`} data-reveal>
         <div class="pp-block-head">
           <div class="eyebrow"><span class="lang-only-en">Project details</span><span class="lang-only-es">Detalles del Proyecto</span></div>
           <h2><span class="lang-only-en">Inside the build</span><span class="lang-only-es">Dentro del Proyecto</span></h2>
-          {d.details
-            ? <div class="cms-prose" set:html={d.details} />
-            : <p class="cms-prose">{d.summary}</p>}
+          <p class="pp-lang-note lang-only-es">Este caso de estudio está disponible solo en inglés.</p>
+          {detailBlocks.length > 0
+            ? <div class="cms-prose">
+                {detailBlocks.map((b) =>
+                  b.kind === 'labeled' ? (
+                    <div class="pp-tech">
+                      <h3>{b.label}</h3>
+                      <ul class="pp-tech-list">
+                        {b.items.map((it) => <li set:html={it} />)}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p class={b.kind === 'lead' ? 'pp-lead' : undefined} set:html={b.html} />
+                  ),
+                )}
+              </div>
+            : d.details
+              ? <div class="cms-prose" set:html={d.details} />
+              : <p class="cms-prose">{d.summary}</p>}
         </div>
 
-        <aside class="pp-aside">
-          <div class="eyebrow"><span class="lang-only-en">What we delivered</span><span class="lang-only-es">Lo que Entregamos</span></div>
-          <h2><span class="lang-only-en">Services Rendered</span><span class="lang-only-es">Servicios Prestados</span></h2>
-          {d.services
-            ? <div class="cms-prose" set:html={d.services} />
-            : (
-              /* Provisional generic services until the CMS `services` field is filled. */
-              <div class="cms-prose">
-                <ul>
-                  <li><span class="lang-only-en">Web Design</span><span class="lang-only-es">Diseño Web</span></li>
-                  <li><span class="lang-only-en">Web Development</span><span class="lang-only-es">Desarrollo Web</span></li>
-                  <li><span class="lang-only-en">SEO &amp; Performance</span><span class="lang-only-es">SEO y Rendimiento</span></li>
-                </ul>
-                <p class="pp-provisional"><span class="lang-only-en">Detailed services coming soon.</span><span class="lang-only-es">Detalle de servicios próximamente.</span></p>
-              </div>
-            )}
-        </aside>
+        {d.services && (
+          <aside class="pp-aside">
+            <div class="eyebrow"><span class="lang-only-en">What we delivered</span><span class="lang-only-es">Lo que Entregamos</span></div>
+            <h2><span class="lang-only-en">Services Rendered</span><span class="lang-only-es">Servicios Prestados</span></h2>
+            <div class="cms-prose" set:html={d.services} />
+          </aside>
+        )}
       </div>
     </div>
   </section>

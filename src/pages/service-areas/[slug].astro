@@ -31,8 +31,13 @@ const iconVariant = ['', 'is-cyan', 'is-green'];
 const posts = (await getCollection('blog'))
   .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
   .slice(0, 3);
-const reviews = (await getCollection('testimonials'))
-  .sort((a, b) => Number(b.data.rating) - Number(a.data.rating))
+
+// WL-016 — real client video testimonials (same neutral pattern as the
+// committed home/services reviews sections); replaces the fabricated
+// written-reviews rotation and its 5.0/47 claims.
+const videoTestimonials = (await getCollection('videos'))
+  .filter((v) => v.data.youtubeId)
+  .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 
 // Nearby cities in the same county (internal linking for local SEO).
@@ -45,15 +50,42 @@ const fmtEs = (x?: Date) => (x ? x.toLocaleDateString('es-US', { month: 'short',
 const catLabelEn: Record<string, string> = { 'web-design': 'Web Design', 'web-development': 'Web Development', 'digital-marketing': 'Traffic Generation' };
 const catLabelEs: Record<string, string> = { 'web-design': 'Diseño Web', 'web-development': 'Desarrollo Web', 'digital-marketing': 'Generación de Tráfico' };
 
-const STAR = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
-
-// Bilingual fallbacks for section heads when a CMS field is empty.
+// WL-006 — bilingual template copy. Sanity fields are EN-only, so EN mode
+// renders the CMS content (or the EN fallback) and ES mode always renders
+// the template's ES copy. `t` = section heads; `fb` = section paragraphs.
 const t = {
+  introHead: { en: `Web Design Agency Serving ${cityShort}, FL`, es: `Agencia de Diseño Web al Servicio de ${cityShort}, FL` },
   servicesHead: { en: `Web Design, Development & Traffic Generation in ${cityShort}`, es: `Diseño Web, Desarrollo y Generación de Tráfico en ${cityShort}` },
   portfolioHead: { en: `Our Work Across ${cityShort} & South Florida`, es: `Nuestro Trabajo en ${cityShort} y el Sur de Florida` },
   processHead: { en: `How We Work With ${cityShort} Businesses`, es: `Cómo Trabajamos con Negocios de ${cityShort}` },
   reviewsHead: { en: `What ${cityShort} Business Owners Say`, es: `Lo Que Dicen los Negocios de ${cityShort}` },
   blogHead: { en: `Insights for ${cityShort} Business Owners`, es: `Recursos para Negocios de ${cityShort}` },
+};
+const fb = {
+  intro: {
+    en: `We help ${cityShort} businesses win online with custom websites, local SEO, and Google Ads built to turn searches into booked jobs and sales — not just clicks.`,
+    es: `Ayudamos a los negocios de ${cityShort} a ganar en línea con sitios web a medida, SEO local y Google Ads diseñados para convertir búsquedas en trabajos y ventas — no solo clics.`,
+  },
+  services: {
+    en: `Three services that grow ${cityShort} businesses — built to attract, convert, and scale.`,
+    es: `Tres servicios que hacen crecer a los negocios de ${cityShort} — para atraer, convertir y escalar.`,
+  },
+  portfolio: {
+    en: 'Real websites for real South Florida businesses — built to convert visitors into customers.',
+    es: 'Sitios reales para negocios reales del Sur de Florida — construidos para convertir visitantes en clientes.',
+  },
+  process: {
+    en: 'A clear, proven process from first call to launch — and beyond.',
+    es: 'Un proceso claro y comprobado desde la primera llamada hasta el lanzamiento — y más allá.',
+  },
+  reviews: {
+    en: "South Florida business owners trust SENAVIA to design, build, and grow their online presence. Hear what working with our team is like — on camera, in their own words.",
+    es: 'Los dueños de negocios del Sur de Florida confían en SENAVIA para diseñar, construir y hacer crecer su presencia en línea. Descubre cómo es trabajar con nuestro equipo — frente a cámara, en sus propias palabras.',
+  },
+  blog: {
+    en: `Practical tips on web design, SEO, and digital marketing to grow your ${cityShort} business.`,
+    es: `Consejos prácticos de diseño web, SEO y marketing digital para hacer crecer tu negocio en ${cityShort}.`,
+  },
 };
 
 // Localized service titles (the canonical service + the city).
@@ -77,6 +109,7 @@ const cityLd = {
     {
       '@type': 'Service',
       name: `Web Design & Digital Marketing in ${cityShort}, FL`,
+      description: d.seoDescription || `Custom web design, web development, local SEO and traffic generation for businesses in ${cityShort}, FL by SENAVIA Corp.`,
       serviceType: 'Web Design, Web Development & Traffic Generation',
       provider: { '@type': 'Organization', name: SITE.name, url: SITE.url },
       areaServed: { '@type': 'City', name: cityShort, containedInPlace: { '@type': 'AdministrativeArea', name: `${d.county} County, FL` } },
@@ -92,6 +125,9 @@ const cityLd = {
     },
   ],
 };
+// WL-016 — safe JSON-LD serialization: escape '<' so no CMS-sourced string
+// can ever close the inline <script> (twin of the JsonLd.astro fix, WL-027).
+const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
 ---
 <BaseLayout
   title={d.seoTitle}
@@ -134,7 +170,8 @@ const cityLd = {
   .sa-intro-grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1fr); gap: 56px; align-items: center; }
   @media (max-width: 900px) { .sa-intro-grid { grid-template-columns: 1fr; gap: 36px; } }
 
-  /* Framed feature image with floating Google-proof badge */
+  /* Framed feature image with floating brand badge (WL-016: neutral, no
+     Google branding / no numeric rating claims) */
   .sa-figure {
     position: relative; border-radius: 20px; overflow: hidden;
     aspect-ratio: 3 / 2;
@@ -151,10 +188,9 @@ const cityLd = {
     background: rgba(13,18,53,0.86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.14);
   }
-  .sa-figure .badge svg { width: 20px; height: 20px; flex: 0 0 auto; }
-  .sa-figure .badge .b-main { font-size: 14px; font-weight: 600; color: #fff; line-height: 1.1; }
-  .sa-figure .badge .b-sub { font-size: 12px; color: rgba(255,255,255,0.66); line-height: 1.2; }
-  .sa-figure .badge .stars { color: #FFC83D; font-size: 12px; letter-spacing: 1px; }
+  .sa-figure .badge .b-dot { width: 10px; height: 10px; border-radius: 999px; flex: 0 0 auto; background: var(--primary, #99cc33); box-shadow: 0 0 10px rgba(153,204,51,0.8); }
+  .sa-figure .badge .b-main { display: block; font-size: 14px; font-weight: 600; color: #fff; line-height: 1.1; }
+  .sa-figure .badge .b-sub { display: block; font-size: 12px; color: rgba(255,255,255,0.66); line-height: 1.2; margin-top: 3px; }
 
   /* full-width trust stats below the intro grid */
   .sa-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 3rem; }
@@ -166,6 +202,49 @@ const cityLd = {
   .project-cover.has-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,14,38,0.05) 0%, rgba(10,14,38,0.6) 100%); z-index: 1; }
   .project-cover.has-img .project-name { z-index: 2; }
   a.project-card, a.blog-card { text-decoration: none; color: inherit; }
+
+  /* WL-016 — real video-testimonial rows inside the reviews card (same
+     pattern & styles as the committed home page; scoped per page because
+     senavia.css is a hot file owned by PKG-DS) */
+  a.review-item.vt-mini {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  a.review-item.vt-mini:hover {
+    border-color: rgba(153,204,51,0.35);
+    background: rgba(255,255,255,0.05);
+  }
+  .vt-mini-thumb {
+    width: 128px;
+    height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex: 0 0 auto;
+    background: #0a0e26;
+  }
+  .vt-mini-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+  .vt-mini-name { color: var(--white); font-weight: 500; font-size: 15px; }
+  .vt-mini-tag { font-size: 12.5px; color: rgba(255,255,255,0.6); }
+  .vt-mini-play {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(153,204,51,0.14);
+    border: 1px solid rgba(153,204,51,0.35);
+    color: var(--primary, #99cc33);
+  }
+  .vt-mini-play svg { width: 16px; height: 16px; }
+  @media (max-width: 480px) {
+    .vt-mini-thumb { width: 96px; height: 54px; }
+  }
 
   /* map + nearby cities */
   .sa-mapgrid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 40px; align-items: stretch; }
@@ -191,7 +270,7 @@ const cityLd = {
   .sa-strip-cta { text-align: center; margin-top: 2.75rem; }
 </style>
 
-<script type="application/ld+json" set:html={JSON.stringify(cityLd)} is:inline></script>
+<script type="application/ld+json" set:html={cityLdJson} is:inline></script>
 
 <main>
 
@@ -229,10 +308,11 @@ const cityLd = {
         <div data-reveal>
           <span class="sa-sec-num">01</span>
           <div class="eyebrow"><span class="lang-only-en">Local web design</span><span class="lang-only-es">Diseño web local</span></div>
-          <h2>{d.headingIntro || `Web Design Agency Serving ${cityShort}, FL`}</h2>
+          <h2><span class="lang-only-en">{d.headingIntro || t.introHead.en}</span><span class="lang-only-es">{t.introHead.es}</span></h2>
           {d.paragraphIntro
-            ? <div class="cms-prose" set:html={d.paragraphIntro} />
-            : <p class="cms-prose"><span class="lang-only-en">We help {cityShort} businesses win online with custom websites, local SEO, and Google Ads built to turn searches into booked jobs and sales — not just clicks.</span><span class="lang-only-es">Ayudamos a los negocios de {cityShort} a ganar en línea con sitios web a medida, SEO local y Google Ads diseñados para convertir búsquedas en trabajos y ventas — no solo clics.</span></p>}
+            ? <div class="cms-prose lang-only-en" set:html={d.paragraphIntro} />
+            : <p class="cms-prose lang-only-en">{fb.intro.en}</p>}
+          <p class="cms-prose lang-only-es">{fb.intro.es}</p>
           <div style="margin-top:1.8rem; display:flex; gap:12px; flex-wrap:wrap;">
             <a href="#" class="btn is-sm" data-calendly-trigger>
               <span class="lang-only-en">Get a Free Quote</span><span class="lang-only-es">Solicita una Cotización</span>
@@ -241,27 +321,21 @@ const cityLd = {
           </div>
         </div>
         <div class="sa-figure" data-reveal>
-          <img src={featureImage} alt={`Custom web design for ${cityShort}, FL businesses by SENAVIA Corp`} loading="lazy" decoding="async" />
+          <img src={featureImage} alt={`Custom web design for ${cityShort}, FL businesses by SENAVIA Corp`} width="1400" height="781" loading="lazy" decoding="async" />
           <div class="badge">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
-            </svg>
+            <span class="b-dot" aria-hidden="true"></span>
             <span>
-              <span class="b-main">Google Partner · 5.0</span>
-              <span class="stars" aria-hidden="true">★★★★★</span>
-              <span class="b-sub"><span class="lang-only-en">Trusted by South Florida businesses</span><span class="lang-only-es">Con la confianza de negocios del Sur de Florida</span></span>
+              <span class="b-main">SENAVIA Corp</span>
+              <span class="b-sub"><span class="lang-only-en">Web design &amp; SEO for {cityShort} businesses</span><span class="lang-only-es">Diseño web y SEO para negocios de {cityShort}</span></span>
             </span>
           </div>
         </div>
       </div>
       <div class="sa-stats" data-reveal-children>
-        <article class="stat-card"><span class="stat-value">100+</span><span class="stat-label"><span class="lang-only-en">Websites launched for South Florida businesses</span><span class="lang-only-es">Sitios lanzados para negocios del Sur de Florida</span></span></article>
-        <article class="stat-card"><span class="stat-value">5.0 ★</span><span class="stat-label"><span class="lang-only-en">Average verified Google review rating</span><span class="lang-only-es">Promedio de reseñas verificadas en Google</span></span></article>
+        <article class="stat-card"><span class="stat-value">100%</span><span class="stat-label"><span class="lang-only-en">Custom-built websites — no cookie-cutter templates</span><span class="lang-only-es">Sitios web a la medida — sin plantillas genéricas</span></span></article>
+        <article class="stat-card"><span class="stat-value">17</span><span class="stat-label"><span class="lang-only-en">Case studies published in our portfolio</span><span class="lang-only-es">Casos de estudio publicados en nuestro portafolio</span></span></article>
         <article class="stat-card"><span class="stat-value">EN / ES</span><span class="stat-label"><span class="lang-only-en">Fully bilingual team for your market</span><span class="lang-only-es">Equipo totalmente bilingüe para tu mercado</span></span></article>
-        <article class="stat-card"><span class="stat-value">24h</span><span class="stat-label"><span class="lang-only-en">Typical response time on new inquiries</span><span class="lang-only-es">Tiempo de respuesta típico a nuevas consultas</span></span></article>
+        <article class="stat-card"><span class="stat-value">3</span><span class="stat-label"><span class="lang-only-en">Counties served: Miami-Dade, Broward &amp; Palm Beach</span><span class="lang-only-es">Condados atendidos: Miami-Dade, Broward y Palm Beach</span></span></article>
       </div>
     </div>
   </section>
@@ -272,10 +346,11 @@ const cityLd = {
       <div class="section-head" data-reveal>
         <span class="sa-sec-num">02</span>
         <div class="eyebrow"><span class="lang-only-en">What we do</span><span class="lang-only-es">Lo que hacemos</span></div>
-        <h2>{d.headingServices || t.servicesHead.en}</h2>
+        <h2><span class="lang-only-en">{d.headingServices || t.servicesHead.en}</span><span class="lang-only-es">{t.servicesHead.es}</span></h2>
         {d.paragraphServices
-          ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphServices} />
-          : <p><span class="lang-only-en">Three services that grow {cityShort} businesses — built to attract, convert, and scale.</span><span class="lang-only-es">Tres servicios que hacen crecer a los negocios de {cityShort} — para atraer, convertir y escalar.</span></p>}
+          ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphServices} />
+          : <p class="lang-only-en">{fb.services.en}</p>}
+        <p class="lang-only-es">{fb.services.es}</p>
       </div>
       <div class="grid-3" data-reveal-children>
         {services.map((s, i) => (
@@ -292,7 +367,7 @@ const cityLd = {
     </div>
   </section>
 
-  <!-- FEATURED VIDEO -->
+  <!-- FEATURED VIDEO — click-to-load facade with real poster -->
   <section class="intro" data-screen-label="04 Video">
     <video class="intro-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
@@ -306,10 +381,11 @@ const cityLd = {
         <p><span class="lang-only-en">A quick look at how SENAVIA designs, builds, and markets high-converting websites for businesses across {d.county} County.</span><span class="lang-only-es">Un vistazo a cómo SENAVIA diseña, construye y promociona sitios web de alta conversión para negocios en el Condado de {d.county}.</span></p>
       </div>
       <div class="video-frame" data-reveal>
-        <iframe src={`https://www.youtube.com/embed/${videoId}?rel=0`} title={`SENAVIA Corp — Web design for ${cityShort}, FL`}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
+        <button class="yt-lite" type="button" data-yt-facade={videoId}
+                aria-label={`Play video — SENAVIA Corp, web design for ${cityShort}, FL`}
+                style={`background-image:url('https://i.ytimg.com/vi/${videoId}/hqdefault.jpg')`}>
+          <span class="yt-lite-play" aria-hidden="true"></span>
+        </button>
       </div>
     </div>
   </section>
@@ -320,10 +396,11 @@ const cityLd = {
       <div class="section-head" data-reveal>
         <span class="sa-sec-num">03</span>
         <div class="eyebrow"><span class="lang-only-en">Our work</span><span class="lang-only-es">Nuestro trabajo</span></div>
-        <h2>{d.headingPortfolio || t.portfolioHead.en}</h2>
+        <h2><span class="lang-only-en">{d.headingPortfolio || t.portfolioHead.en}</span><span class="lang-only-es">{t.portfolioHead.es}</span></h2>
         {d.paragraphPortfolio
-          ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphPortfolio} />
-          : <p><span class="lang-only-en">Real websites for real South Florida businesses — built to convert visitors into customers.</span><span class="lang-only-es">Sitios reales para negocios reales del Sur de Florida — construidos para convertir visitantes en clientes.</span></p>}
+          ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphPortfolio} />
+          : <p class="lang-only-en">{fb.portfolio.en}</p>}
+        <p class="lang-only-es">{fb.portfolio.es}</p>
       </div>
       <ProjectCarousel reveal />
       <div class="sa-strip-cta">
@@ -344,10 +421,11 @@ const cityLd = {
         <div class="section-head" data-reveal>
           <span class="sa-sec-num">04</span>
           <div class="eyebrow"><span class="lang-only-en">How we work</span><span class="lang-only-es">Cómo trabajamos</span></div>
-          <h2>{d.headingProcess || t.processHead.en}</h2>
+          <h2><span class="lang-only-en">{d.headingProcess || t.processHead.en}</span><span class="lang-only-es">{t.processHead.es}</span></h2>
           {d.paragraphProcess
-            ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphProcess} />
-            : <p><span class="lang-only-en">A clear, proven process from first call to launch — and beyond.</span><span class="lang-only-es">Un proceso claro y comprobado desde la primera llamada hasta el lanzamiento — y más allá.</span></p>}
+            ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphProcess} />
+            : <p class="lang-only-en">{fb.process.en}</p>}
+          <p class="lang-only-es">{fb.process.es}</p>
         </div>
         <div class="grid-4" data-reveal-children>
           {steps.map((st) => (
@@ -372,47 +450,35 @@ const cityLd = {
       </div>
     </section>
 
-    <!-- REVIEWS -->
+    <!-- REVIEWS — real client video testimonials -->
     <section class="section" data-screen-label="07 Reviews">
       <div class="container">
         <div class="reviews-grid">
           <div class="reviews-left" data-reveal>
             <span class="sa-sec-num">05</span>
-            <h2>{d.headingReviews || t.reviewsHead.en}</h2>
+            <h2><span class="lang-only-en">{d.headingReviews || t.reviewsHead.en}</span><span class="lang-only-es">{t.reviewsHead.es}</span></h2>
             {d.paragraphReviews
-              ? <div class="cms-prose" set:html={d.paragraphReviews} />
-              : <p><span class="lang-only-en">South Florida business owners trust SENAVIA to design, build, and grow their online presence. Here's what working with our team is like.</span><span class="lang-only-es">Los dueños de negocios del Sur de Florida confían en SENAVIA para diseñar, construir y hacer crecer su presencia en línea. Esto es lo que se siente trabajar con nuestro equipo.</span></p>}
-            <div class="reviews-rating">
-              <span class="score">5.0
-                <span class="score-stars" aria-hidden="true" set:html={STAR.repeat(5)}></span>
-              </span>
-              <span class="score-meta"><span class="lang-only-en">From <strong>47 verified reviews</strong> on Google</span><span class="lang-only-es">De <strong>47 reseñas verificadas</strong> en Google</span></span>
-            </div>
+              ? <div class="cms-prose lang-only-en" set:html={d.paragraphReviews} />
+              : <p class="lang-only-en">{fb.reviews.en}</p>}
+            <p class="lang-only-es">{fb.reviews.es}</p>
             <div class="reviews-cta-row">
-              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-sm"><span class="lang-only-en">Read All Reviews</span><span class="lang-only-es">Leer Todas las Reseñas</span></a>
+              <a href="/testimonials" class="btn is-sm"><span class="lang-only-en">Watch Video Testimonials</span><span class="lang-only-es">Ver Testimonios en Video</span></a>
+              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-secondary is-sm"><span class="lang-only-en">Find Us on Google</span><span class="lang-only-es">Encuéntranos en Google</span></a>
             </div>
           </div>
           <div class="reviews-card" data-reveal>
-            {reviews.map((r) => (
-              <div class="review-item">
-                <div class="review-stars" aria-hidden="true" set:html={STAR.repeat(Number(r.data.rating) || 5)}></div>
-                <div class="review-head">
-                  <span class="review-name">{r.data.company}</span>
-                  <span class="review-date">{r.data.date}</span>
-                </div>
-                <p class="review-text lang-only-en">“{r.data.quote_en}”</p>
-                <p class="review-text lang-only-es">“{r.data.quote_es}”</p>
-              </div>
+            {videoTestimonials.map((v) => (
+              <a class="review-item vt-mini" href="/testimonials#video-testimonials">
+                <img class="vt-mini-thumb" src={`https://i.ytimg.com/vi/${v.data.youtubeId}/mqdefault.jpg`} alt="" width="128" height="72" loading="lazy" decoding="async" />
+                <span class="vt-mini-body">
+                  <span class="vt-mini-name">{v.data.name}</span>
+                  <span class="vt-mini-tag"><span class="lang-only-en">Video testimonial</span><span class="lang-only-es">Testimonio en video</span></span>
+                </span>
+                <span class="vt-mini-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg>
+                </span>
+              </a>
             ))}
-            <div class="google-badge">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
-              </svg>
-              <span><span class="lang-only-en">Powered by Google · 5.0 ★ from 47 reviews</span><span class="lang-only-es">Con tecnología de Google · 5.0 ★ de 47 reseñas</span></span>
-            </div>
           </div>
         </div>
       </div>
@@ -425,10 +491,11 @@ const cityLd = {
       <div class="section-head" data-reveal>
         <span class="sa-sec-num">06</span>
         <div class="eyebrow"><span class="lang-only-en">Insights</span><span class="lang-only-es">Recursos</span></div>
-        <h2>{d.headingBlog || t.blogHead.en}</h2>
+        <h2><span class="lang-only-en">{d.headingBlog || t.blogHead.en}</span><span class="lang-only-es">{t.blogHead.es}</span></h2>
         {d.paragraphBlog
-          ? <div class="cms-prose" style="margin:0 auto; max-width:760px;" set:html={d.paragraphBlog} />
-          : <p><span class="lang-only-en">Practical tips on web design, SEO, and digital marketing to grow your {cityShort} business.</span><span class="lang-only-es">Consejos prácticos de diseño web, SEO y marketing digital para hacer crecer tu negocio en {cityShort}.</span></p>}
+          ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphBlog} />
+          : <p class="lang-only-en">{fb.blog.en}</p>}
+        <p class="lang-only-es">{fb.blog.es}</p>
       </div>
       <div class="grid-3" data-reveal-children>
         {posts.map((p) => (
@@ -439,6 +506,7 @@ const cityLd = {
             <div class="meta">
               <span><span class="lang-only-en">{fmtEn(p.data.pubDate)}</span><span class="lang-only-es">{fmtEs(p.data.pubDate)}</span></span>
               {p.data.category && (<><span class="dot"></span><span><span class="lang-only-en">{catLabelEn[p.data.category] ?? p.data.category}</span><span class="lang-only-es">{catLabelEs[p.data.category] ?? p.data.category}</span></span></>)}
+              <span class="lang-only-es">(en inglés)</span>
             </div>
           </a>
         ))}
@@ -469,7 +537,7 @@ const cityLd = {
         <div class="sa-aside">
           <div class="sa-stats">
             <article class="stat-card"><span class="stat-value">{d.county}</span><span class="stat-label"><span class="lang-only-en">County we proudly serve</span><span class="lang-only-es">Condado que atendemos</span></span></article>
-            <article class="stat-card"><span class="stat-value">24h</span><span class="stat-label"><span class="lang-only-en">Typical response time</span><span class="lang-only-es">Tiempo de respuesta típico</span></span></article>
+            <article class="stat-card"><span class="stat-value">HQ</span><span class="stat-label"><span class="lang-only-en">Based in Plantation, FL — Broward County</span><span class="lang-only-es">Sede en Plantation, FL — Condado de Broward</span></span></article>
           </div>
           {nearby.length > 0 && (
             <div class="sa-nearby">
@@ -502,4 +570,20 @@ const cityLd = {
   </section>
 
 </main>
+
+<script>
+  // Click-to-load the featured video: swap the facade for the real YouTube
+  // iframe only when the visitor presses play (same pattern as the home page).
+  document.querySelectorAll('[data-yt-facade]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('data-yt-facade');
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+      f.title = 'SENAVIA Corp — Web design & marketing for South Florida businesses';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.setAttribute('allowfullscreen', '');
+      btn.replaceWith(f);
+    });
+  });
+</script>
 </BaseLayout>
