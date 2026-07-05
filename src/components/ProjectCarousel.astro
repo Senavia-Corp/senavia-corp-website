@@ -10,6 +10,19 @@ const { reveal = false } = Astro.props;
 const portfolio = (await getCollection('portfolio')).sort((a, b) => a.data.order - b.data.order);
 const featured = portfolio.filter((p) => p.data.featured);
 const projects = featured.length ? featured : portfolio.slice(0, 6);
+
+/* WL-036 — project summaries only exist in English in Sanity; show a generic
+   Spanish line per service category instead of leaking EN copy in ES mode. */
+function summaryEs(services: string): string {
+  const s = (services || '').toLowerCase();
+  if (s.includes('shopify') || s.includes('commerce') || s.includes('store'))
+    return 'Tienda en línea diseñada y desarrollada a la medida para vender más.';
+  if (s.includes('seo') || s.includes('marketing') || s.includes('ads') || s.includes('traffic'))
+    return 'Diseño web y generación de tráfico enfocados en resultados medibles.';
+  if (s.includes('development') || s.includes('portal') || s.includes('app'))
+    return 'Desarrollo web a la medida para la operación diaria del negocio.';
+  return 'Sitio web personalizado, diseñado para convertir visitantes en clientes.';
+}
 ---
 <div class="carousel" data-carousel="portfolio" data-reveal={reveal ? "" : undefined}>
   <div class="carousel-arrows">
@@ -22,14 +35,17 @@ const projects = featured.length ? featured : portfolio.slice(0, 6);
   </div>
   <div class="carousel-viewport">
     <div class="carousel-track" role="list">
-      {projects.map((p) => (
+      {projects.map((p, i) => (
         <article class="project-card" role="listitem">
           <a href={`/portfolio/${p.id}`} class="project-cover has-img">
-            {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading="lazy" decoding="async" />}
+            {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />}
             <span class="project-name">{p.data.title}</span>
           </a>
           <div class="project-body">
-            <p>{p.data.summary}</p>
+            <p>
+              <span class="lang-only-en">{p.data.summary}</span>
+              <span class="lang-only-es">{summaryEs(p.data.services)}</span>
+            </p>
             <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
           </div>
         </article>

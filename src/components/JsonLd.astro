@@ -114,6 +114,48 @@ if (type === 'pricing' && Array.isArray(data.offers)) {
   });
 }
 
+/* WL-029 — BreadcrumbList generated from the URL for every route >=2 levels
+   deep. Excluded: /gqm (private) and the two templates that already emit
+   their own breadcrumb inline (service-areas/[slug], services/web-design/[slug]). */
+const segments = Astro.url.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
+const SEGMENT_LABELS: Record<string, string> = {
+  blog: 'Blog',
+  portfolio: 'Portfolio',
+  services: 'Services',
+  'service-areas': 'Service Areas',
+  'web-design': 'Custom Web Design',
+  'web-development': 'Web Development',
+  'traffic-generation': 'Traffic Generation',
+};
+const skipBreadcrumb =
+  segments.length < 2 ||
+  segments[0] === 'gqm' ||
+  (segments[0] === 'service-areas' && segments.length >= 2) ||
+  (segments[0] === 'services' && segments[1] === 'web-design' && segments.length >= 3);
+function crumbLabel(seg: string, isLast: boolean): string {
+  if (isLast && type === 'blog' && typeof data.headline === 'string') return data.headline;
+  if (isLast && type === 'portfolio' && typeof data.name === 'string') return data.name;
+  return (
+    SEGMENT_LABELS[seg] ??
+    seg.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+  );
+}
+if (!skipBreadcrumb) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.url}/` },
+      ...segments.map((seg, i) => ({
+        '@type': 'ListItem',
+        position: i + 2,
+        name: crumbLabel(seg, i === segments.length - 1),
+        item: `${SITE.url}/${segments.slice(0, i + 1).join('/')}`,
+      })),
+    ],
+  });
+}
+
 const ld = { '@context': 'https://schema.org', '@graph': graph };
 ---
-<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+{/* WL-027 — escape '<' so CMS-sourced strings can never close the script tag */}
+<script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, '\\u003c')} />

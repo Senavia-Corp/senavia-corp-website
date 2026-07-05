@@ -5,7 +5,7 @@ import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import Seo from '@/components/Seo.astro';
 import JsonLd from '@/components/JsonLd.astro';
-import { CALENDLY_URL } from '@/data/site';
+import { CALENDLY_URL, SITE } from '@/data/site';
 
 interface Props {
   title: string;
@@ -18,6 +18,9 @@ interface Props {
   noindex?: boolean;
   bodyClass?: string;
   screenLabel?: string;
+  /** Absolute or root-relative URL of the page's LCP image — emitted as
+      <link rel="preload" as="image" fetchpriority="high">. */
+  preloadImage?: string;
 }
 
 const {
@@ -31,6 +34,7 @@ const {
   noindex = false,
   bodyClass = '',
   screenLabel,
+  preloadImage,
 } = Astro.props;
 
 // Absolute URL for hreflang. The site serves both languages from one URL via a
@@ -76,11 +80,58 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
          initial page load. Preconnect keeps the on-demand load fast. -->
     <link rel="preconnect" href="https://assets.calendly.com" />
 
+    <!-- WL-031 — LCP hint: preload the hero asset when the page declares it. -->
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    <!-- WL-007 — background-video gating: detach <source> before the fetch
+         starts (poster-on-mobile everywhere; cta/intro lazy on desktop too).
+         home.js re-attaches them near the viewport on >=768px screens. -->
+    <script is:inline>
+      (function () {
+        var desktop = window.matchMedia('(min-width: 768px)').matches;
+        function strip(v) {
+          var cls = v.className || '';
+          if (!/(^|\s)(hero-video|cta-video|intro-video)(\s|$)/.test(cls)) return;
+          if (desktop && /(^|\s)hero-video(\s|$)/.test(cls)) return;
+          var sources = v.querySelectorAll('source[src]');
+          if (!sources.length) return;
+          for (var i = 0; i < sources.length; i++) {
+            sources[i].setAttribute('data-src', sources[i].getAttribute('src'));
+            sources[i].removeAttribute('src');
+          }
+          v.removeAttribute('autoplay');
+          v.setAttribute('data-lazy-video', '');
+          try { v.load(); } catch (e) {}
+        }
+        var mo = new MutationObserver(function (muts) {
+          for (var i = 0; i < muts.length; i++) {
+            var nodes = muts[i].addedNodes;
+            for (var j = 0; j < nodes.length; j++) {
+              var n = nodes[j];
+              if (n.nodeType !== 1) continue;
+              if (n.tagName === 'VIDEO') strip(n);
+              else if (n.tagName === 'SOURCE' && n.parentElement && n.parentElement.tagName === 'VIDEO') strip(n.parentElement);
+              else if (n.querySelectorAll) {
+                var vs = n.querySelectorAll('video');
+                for (var k = 0; k < vs.length; k++) strip(vs[k]);
+              }
+            }
+          }
+        });
+        mo.observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', function () {
+          var vs = document.querySelectorAll('video');
+          for (var i = 0; i < vs.length; i++) strip(vs[i]);
+          mo.disconnect();
+        });
+      })();
+    </script>
+
     <!-- Plausible — production only (keeps local/preview traffic out of analytics) -->
     {import.meta.env.PROD && (
       <script
         defer
-        data-domain="new.senaviacorp.com"
+        data-domain={SITE.domain}
         src="https://plausible.io/js/script.tagged-events.outbound-links.js"
       ></script>
     )}
@@ -91,6 +142,10 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
     </script>
   </head>
   <body class={bodyClass} data-screen-label={screenLabel}>
+    <a class="skip-link" href="#main">
+      <span class="lang-only-en">Skip to content</span>
+      <span class="lang-only-es">Saltar al contenido</span>
+    </a>
     <div class="site-bg" aria-hidden="true"></div>
     <Nav />
 
@@ -102,6 +157,20 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
     <script>
       (function () {
         var d = document.documentElement;
+        // WL-024 — skip-link target: pages render their own <main>
+        var main = document.querySelector('main');
+        if (main && !main.id) {
+          main.id = 'main';
+          main.setAttribute('tabindex', '-1');
+        }
+        function closeLangMenus(except?: Element | null) {
+          document.querySelectorAll('.nav-lang.is-open').forEach(function (l) {
+            if (l === except) return;
+            l.classList.remove('is-open');
+            var t = l.querySelector('.nav-lang-trigger');
+            if (t) t.setAttribute('aria-expanded', 'false');
+          });
+        }
         function setLang(lang) {
           if (lang !== 'en' && lang !== 'es') return;
           d.classList.toggle('lang-es', lang === 'es');
@@ -113,14 +182,29 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
         }
         document.addEventListener('click', function (e) {
           var target = e.target as HTMLElement | null;
+          // WL-026 — click-driven dropdown (iOS Safari can't rely on
+          // :hover/:focus-within) with aria-expanded kept in sync.
+          var trigger = target ? (target.closest('.nav-lang-trigger') as HTMLElement | null) : null;
+          if (trigger) {
+            var wrap = trigger.closest('.nav-lang') as HTMLElement;
+            closeLangMenus(wrap);
+            var open = wrap.classList.toggle('is-open');
+            trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (!open) trigger.blur(); // otherwise :focus-within re-opens it
+            return;
+          }
           var opt = target ? target.closest('.nav-lang-option') : null;
-          if (!opt) return;
+          if (!opt) { closeLangMenus(null); return; }
           e.preventDefault();
           var lang = opt.getAttribute('data-lang');
           if (lang) setLang(lang);
+          closeLangMenus(null);
           if (document.activeElement && (document.activeElement as HTMLElement).blur) {
             (document.activeElement as HTMLElement).blur();
           }
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeLangMenus(null);
         });
       })();
     </script>
@@ -134,7 +218,16 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
         var loading;
         function ensure() {
           if (loading) return loading;
+          // WL-022 — resolve to null on error/timeout (ad-blockers, DNS
+          // filters) so every CTA can fall back to the public Calendly URL
+          // instead of dying in silence.
           loading = new Promise(function (resolve) {
+            var settled = false;
+            function settle(C) {
+              if (settled) return;
+              settled = true;
+              resolve(C || null);
+            }
             var l = document.createElement('link');
             l.rel = 'stylesheet';
             l.href = 'https://assets.calendly.com/assets/external/widget.css';
@@ -145,15 +238,22 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
             s.onload = function () {
               window.__calendlyReady = true;
               window.dispatchEvent(new Event('calendly:ready'));
-              resolve(window.Calendly);
+              settle(window.Calendly);
             };
+            s.onerror = function () { settle(null); };
+            setTimeout(function () { settle(window.Calendly || null); }, 4000);
             document.head.appendChild(s);
           });
           return loading;
         }
         window.ensureCalendly = ensure;
         window.openCalendly = function (url) {
-          ensure().then(function (C) { if (C) C.initPopupWidget({ url: url || CALENDLY_URL }); });
+          ensure().then(function (C) {
+            var target = url || CALENDLY_URL;
+            var widget = C || window.Calendly; // late arrival after the 4s timeout
+            if (widget) widget.initPopupWidget({ url: target });
+            else window.open(target, '_blank', 'noopener');
+          });
         };
         // Warm up on first intent so the popup feels instant. Each fires once.
         ['scroll', 'pointerdown', 'touchstart', 'keydown'].forEach(function (ev) {
@@ -169,7 +269,9 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
       })();
     </script>
 
-    <!-- Home/global interactions: carousels, reveals, video autoplay -->
-    <script src="/scripts/home.js" defer></script>
+    <!-- Home/global interactions: carousels, reveals, video autoplay.
+         WL-032 — /scripts/ ships with immutable 1y cache but no fingerprint:
+         bump ?v= on every content change so returning visitors get patches. -->
+    <script src="/scripts/home.js?v=20260703" defer></script>
   </body>
 </html>

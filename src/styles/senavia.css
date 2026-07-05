@@ -119,7 +119,8 @@ body {
 
 /* CMS rich-text (set:html) safety — wide/embedded content must never break
    the page layout (tables, code blocks, images from the Webflow CMS). */
-.cms-prose { overflow-wrap: anywhere; }
+.cms-prose { overflow-wrap: anywhere; line-height: 1.6; }
+.cms-prose ul, .cms-prose ol { line-height: 1.55; }
 .cms-prose img, .cms-prose video, .cms-prose iframe { max-width: 100%; height: auto; }
 .cms-prose pre { max-width: 100%; overflow-x: auto; }
 .cms-prose table {
@@ -129,6 +130,22 @@ body {
   overflow-x: auto;
   border-collapse: collapse;
 }
+/* WL-014 — tables: the global overflow-wrap:anywhere let columns compress to
+   broken words ("Conten t format"); restore normal wrapping inside cells and
+   give them a floor so wide tables scroll inside the block wrapper instead. */
+.cms-prose th,
+.cms-prose td {
+  overflow-wrap: normal;
+  min-width: 130px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  vertical-align: top;
+}
+.cms-prose th { background: rgba(255,255,255,0.06); font-weight: 600; color: var(--white); }
+.cms-prose tbody tr:nth-child(even) { background: rgba(255,255,255,0.025); }
 img { max-width:100%; display:block; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; }
@@ -139,7 +156,8 @@ h1 { font-size: clamp(2.25rem, 4.2vw, 4rem); font-weight: 700; letter-spacing: -
 h2 { font-size: clamp(1.875rem, 3.2vw, 3rem); font-weight: 500; letter-spacing: -0.02em; }
 h3 { font-size: 1.5rem; font-weight: 500; letter-spacing: -0.005em; }
 h4 { font-size: 1.125rem; font-weight: 500; }
-p, .body-copy { font-size: 18px; font-weight: 300; line-height: 1.3; max-width: 750px; }
+/* WL-035 — readable measure: ~70ch (was 750px ≈ 96-115 chars) + prose leading */
+p, .body-copy { font-size: 18px; font-weight: 300; line-height: 1.55; max-width: 70ch; }
 .eyebrow {
   font-size: 0.875rem; font-weight: 600; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--primary); margin: 0 0 12px;
@@ -265,6 +283,32 @@ video { background: var(--secondary); }
    on dark backgrounds. The .ic-white filter turns them solid white. */
 .ic-white { filter: brightness(0) invert(1); }
 
+/* WL-024 — skip link: first tab stop on every page, visible only on focus */
+.skip-link {
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: var(--secondary);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  font-weight: 600;
+  font-size: 15px;
+  transform: translateY(calc(-100% - 20px));
+  opacity: 0;
+  pointer-events: none;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+main:focus { outline: none; }
+
 /* ---------- 7. Navbar ---------- */
 .nav {
   position: sticky; top: 0; z-index: 50;
@@ -376,7 +420,7 @@ video { background: var(--secondary); }
 .nav-panel-item:nth-child(2) .ic { background: var(--grad-cyan); }
 .nav-panel-item:nth-child(3) .ic { background: var(--grad-green); }
 .nav-panel-item .ic img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
-.nav-panel-item h4 { margin: 0; color: var(--white); text-transform: capitalize; font-weight: 500; font-size: 0.95rem; }
+.nav-panel-item .nav-panel-title { display: block; margin: 0; color: var(--white); text-transform: capitalize; font-weight: 500; font-size: 0.95rem; }
 .nav-panel-item p { margin: 0; font-size: 12.5px; color: rgba(255,255,255,0.6); line-height: 1.4; }
 .nav-panel-item .more {
   display: inline-flex; align-items: center; gap: 8px;
@@ -462,7 +506,8 @@ html:not(.lang-es) .lang-only-es { display: none; }
   transition: transform .18s ease, opacity .18s ease;
 }
 .nav-lang:hover .nav-lang-trigger .caret,
-.nav-lang:focus-within .nav-lang-trigger .caret { transform: rotate(225deg) translate(2px,2px); opacity: 1; }
+.nav-lang:focus-within .nav-lang-trigger .caret,
+.nav-lang.is-open .nav-lang-trigger .caret { transform: rotate(225deg) translate(2px,2px); opacity: 1; }
 
 /* Hover bridge so the panel stays open while moving from trigger to menu */
 .nav-lang::after {
@@ -488,7 +533,8 @@ html:not(.lang-es) .lang-only-es { display: none; }
   display: flex; flex-direction: column; gap: 2px;
 }
 .nav-lang:hover .nav-lang-menu,
-.nav-lang:focus-within .nav-lang-menu {
+.nav-lang:focus-within .nav-lang-menu,
+.nav-lang.is-open .nav-lang-menu {
   opacity: 1; pointer-events: auto;
   transform: translateY(0);
 }
@@ -582,7 +628,8 @@ html.lang-es .nav-lang-option[data-lang="es"] .check { opacity: 1; }
 /* Mobile slide-in panel */
 .nav-mobile {
   position: fixed; inset: 0 0 0 auto;
-  width: min(420px, 100vw);
+  /* WL-051 — leave a sliver of scrim tappable on phones (was 100vw) */
+  width: min(420px, 88vw);
   background: var(--secondary);
   background-image: linear-gradient(180deg, rgba(13,18,53,0.6), rgba(10,14,38,1) 40%);
   border-left: var(--border-faint);
@@ -637,6 +684,13 @@ html.lang-es .nav-lang-option[data-lang="es"] .check { opacity: 1; }
   padding: 14px 6px;
   font-size: 16px; color: var(--white);
   cursor: pointer; user-select: none;
+}
+/* WL-013 — accordion toggles are real <button>s now; neutralize UA chrome */
+button.nav-mobile-link {
+  width: 100%;
+  background: none;
+  border: 0;
+  text-align: left;
 }
 .nav-mobile-link:hover { color: var(--primary); }
 .nav-mobile-link .caret {
@@ -694,6 +748,13 @@ html.lang-es .nav-lang-option[data-lang="es"] .check { opacity: 1; }
 .nav-mobile-foot .nav-lang-menu {
   top: auto; bottom: calc(100% + 10px);
   left: 0; right: auto;
+}
+
+/* WL-052 — brand focus ring for EVERY focusable element (zero-specificity
+   base rule; the component allowlists below stay as harmless overrides). */
+:where(a, button, [tabindex], input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
 }
 
 /* Focus ring for keyboard nav (a11y) */
@@ -840,6 +901,8 @@ body.nav-locked { overflow: hidden; }
 }
 .footer .brand-logo { height: 36px; margin-bottom: 18px; }
 .footer-col p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.55; }
+.footer-col p a { color: rgba(255,255,255,0.9); text-decoration: underline; text-underline-offset: 3px; }
+.footer-col p a:hover { color: var(--primary); }
 .footer-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .footer-list a {
   color: rgba(255,255,255,0.75); font-size: 14px;
@@ -907,6 +970,22 @@ body.nav-locked { overflow: hidden; }
   .footer-info { grid-template-columns: 1fr 1fr; }
   .footer-bottom { grid-template-columns: 1fr; text-align: center; }
   .footer-bottom .footer-social { justify-content: center; }
+}
+/* WL-011 — /pricing tab rail (scoped max-width:max-content) was the one
+   page-local overflow left after the footer fix; let it wrap on phones.
+   div+[role] beats the scoped selector's specificity without touching the page. */
+@media (max-width: 480px) {
+  div.price-tabs[role="tablist"] { max-width: 100%; flex-wrap: wrap; }
+}
+
+/* WL-011/WL-012 — the contact grid's min-content width exceeded narrow
+   viewports (sitewide 21-31px horizontal overflow at 360px): let the items
+   shrink inside their tracks and stack the footer to one column on phones. */
+.footer-info-item { min-width: 0; }
+.footer-info-item .v { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-info { grid-template-columns: 1fr; }
 }
 
 /* ---------- 11. Decorative figures ---------- */
@@ -983,6 +1062,11 @@ video::-webkit-media-controls-volume-slider {
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .grid-4 { grid-template-columns: 1fr 1fr; }
 }
+/* WL-034 — odd counts (3, 5 cards) left a 2+1 hole on tablet: span the
+   orphan card across both tracks. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .grid-3 > *:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 @media (max-width: 600px) {
   .grid-3, .grid-4 { grid-template-columns: 1fr; }
 }
@@ -1035,6 +1119,9 @@ video::-webkit-media-controls-volume-slider {
   margin: 0; padding: 0; border: 0;
   display: block; cursor: pointer;
   background-color: #0a0e26;
+  /* WL-021 — fallback gradient while (or if) the poster image never paints;
+     the inline poster background set by the page wins when present */
+  background-image: linear-gradient(135deg, rgba(153,204,51,0.12), rgba(51,204,204,0.12));
   background-size: cover;
   background-position: center;
 }
@@ -1284,23 +1371,35 @@ video::-webkit-media-controls-volume-slider {
 }
 .carousel-scrollbar.is-dragging .carousel-scrollbar-thumb { transition: none; }
 .carousel-scrollbar:hover .carousel-scrollbar-thumb { filter: brightness(1.15); }
+/* WL-050 — one indicator on phones: dots only (the bar returns via
+   .has-many-pages when home.js hides dots past 8 pages) */
+@media (max-width: 767px) {
+  .carousel:not(.has-many-pages) .carousel-scrollbar { display: none; }
+}
 
 /* Page indicators (dots) */
 .carousel-dots {
   display: flex; justify-content: center; gap: 8px;
   margin-top: 1.25rem;
 }
+/* WL-023 — 24x24 hit area (WCAG 2.5.8) with the 8px visual dot on ::before */
 .carousel-dot {
-  width: 8px; height: 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.16);
+  width: 24px; height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent;
   border: 0;
   padding: 0;
   cursor: pointer;
+}
+.carousel-dot::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.16);
   transition: background .2s ease, width .25s cubic-bezier(.2,.6,.2,1);
 }
-.carousel-dot:hover { background: rgba(255,255,255,0.32); }
-.carousel-dot.is-active { background: var(--primary); width: 24px; }
+.carousel-dot:hover::before { background: rgba(255,255,255,0.32); }
+.carousel-dot.is-active::before { background: var(--primary); width: 24px; }
 
 /* --- Project card (portfolio carousel) --- */
 .project-card {
@@ -1321,6 +1420,13 @@ video::-webkit-media-controls-volume-slider {
   position: relative;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
+}
+/* WL-021 — brand placeholder behind lazy-loading covers (no more black boxes) */
+.project-cover.has-img {
+  background: linear-gradient(135deg, rgba(153,204,51,0.14), rgba(51,204,204,0.14));
+}
+.process-img {
+  background: linear-gradient(135deg, rgba(153,204,51,0.10), rgba(51,204,204,0.10));
 }
 .project-cover .project-name {
   position: relative;
@@ -1710,6 +1816,19 @@ html.js .hero-inner > * {
   outline: none;
 }
 
+/* WL-023 — touch-target pass: raise small tap areas toward 24-44px without
+   changing the visual scale of the design. */
+.footer-list a { display: inline-block; padding: 5px 0; }
+.footer-list { gap: 4px; }
+.footer-bottom .legal a { display: inline-block; padding: 6px 0; }
+.article-back,
+.map-card-link { min-height: 24px; padding-block: 4px; }
+.crumbs a { display: inline-flex; align-items: center; min-height: 24px; }
+.btn.is-sm { min-height: 44px; }
+.nav-lang-trigger { min-height: 44px; min-width: 44px; justify-content: center; }
+.nav-mobile-foot .nav-social a,
+.footer-bottom .footer-social a { width: 44px; height: 44px; }
+
 /* Fix iteración 3 — Project card link area for keyboard nav (whole card focusable) */
 .project-card { position: relative; }
 .project-card .project-cover { position: relative; z-index: 2; }
@@ -2017,6 +2136,17 @@ a.cap-card { text-decoration: none; color: inherit; }
   pointer-events: none;
 }
 .calendly-inline.is-loaded::before { display: none; }
+/* WL-021 — bilingual skeleton text + gentle pulse so the tall container
+   never reads as a dead void while Calendly JS loads */
+html.lang-es .calendly-inline::before { content: 'Cargando agenda…'; }
+.calendly-inline::before { animation: calendlyPulse 1.6s ease-in-out infinite; }
+@keyframes calendlyPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calendly-inline::before { animation: none; }
+}
 
 /* --- Pillar / hero metric strip (under service hero, optional) --- */
 .metric-strip {
@@ -2205,7 +2335,7 @@ a.cap-card { text-decoration: none; color: inherit; }
 }
 .philosophy .quote-mark {
   display: block;
-  font-family: 'Inter', serif;
+  font-family: var(--font-sans);
   font-size: 8rem;
   font-weight: 700;
   line-height: 0.6;

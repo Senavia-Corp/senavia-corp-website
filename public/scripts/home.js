@@ -50,7 +50,9 @@
     }
     function renderDots() {
       var n = pageCount();
-      // Cap dots at 8 — beyond that, dots become noise
+      // Cap dots at 8 — beyond that, dots become noise (the scrollbar takes
+      // over as the sole mobile indicator via .has-many-pages)
+      root.classList.toggle('has-many-pages', n > 8);
       if (n > 8) { dotsWrap.style.display = 'none'; return; }
       dotsWrap.style.display = '';
       if (dotsWrap.children.length !== n) {
@@ -317,12 +319,51 @@
      ------------------------------------------------------------ */
   function tryPlay(v) {
     if (!v) return;
+    if (v.hasAttribute('data-lazy-video') && v.dataset.videoAttached !== 'true') return;
     var p = v.play();
     if (p && p.catch) p.catch(function () {});
   }
   function tryPlayAll() {
     document.querySelectorAll('video').forEach(tryPlay);
   }
+
+  /* Background-video gating (pairs with the BaseLayout head script that
+     detached the <source> elements): on >=768px screens re-attach lazily as
+     each video nears the viewport; on phones the poster stays. */
+  var videoMQ = window.matchMedia('(min-width: 768px)');
+  function attachVideo(v) {
+    if (v.dataset.videoAttached === 'true') return;
+    var pending = v.querySelectorAll('source[data-src]');
+    if (!pending.length) return;
+    v.dataset.videoAttached = 'true';
+    pending.forEach(function (s) {
+      s.setAttribute('src', s.dataset.src);
+      s.removeAttribute('data-src');
+    });
+    v.load();
+    tryPlay(v);
+  }
+  function attachNearViewport() {
+    if (!videoMQ.matches) return;
+    document.querySelectorAll('video[data-lazy-video]').forEach(function (v) {
+      var r = v.getBoundingClientRect();
+      if (r.bottom > -600 && r.top < window.innerHeight + 600) attachVideo(v);
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    var lazyVidIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && videoMQ.matches) {
+          attachVideo(e.target);
+          lazyVidIO.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '600px 0px' });
+    document.querySelectorAll('video[data-lazy-video]').forEach(function (v) { lazyVidIO.observe(v); });
+  } else {
+    attachNearViewport();
+  }
+  if (videoMQ.addEventListener) videoMQ.addEventListener('change', attachNearViewport);
   // Try to play on every common signal (covers most autoplay-policy gates)
   tryPlayAll();
   window.addEventListener('load', tryPlayAll, { once: true });

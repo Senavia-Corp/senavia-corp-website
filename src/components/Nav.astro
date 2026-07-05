@@ -20,10 +20,10 @@ import { Icon } from 'astro-icon/components';
           {NAV.services.map((item) => (
             <a class="nav-panel-item" href={item.href}>
               <span class="ic"><img src={item.icon} alt="" /></span>
-              <h4>
+              <span class="nav-panel-title">
                 <span class="lang-only-en">{item.title_en}</span>
                 <span class="lang-only-es">{item.title_es}</span>
-              </h4>
+              </span>
               <p>
                 <span class="lang-only-en">{item.desc_en}</span>
                 <span class="lang-only-es">{item.desc_es}</span>
@@ -52,10 +52,10 @@ import { Icon } from 'astro-icon/components';
           {NAV.about.map((item) => (
             <a class="nav-panel-item" href={item.href}>
               <span class="ic"><img src={item.icon} alt="" /></span>
-              <h4>
+              <span class="nav-panel-title">
                 <span class="lang-only-en">{item.title_en}</span>
                 <span class="lang-only-es">{item.title_es}</span>
-              </h4>
+              </span>
               <p>
                 <span class="lang-only-en">{item.desc_en}</span>
                 <span class="lang-only-es">{item.desc_es}</span>
@@ -79,10 +79,10 @@ import { Icon } from 'astro-icon/components';
           {NAV.resources.map((item) => (
             <a class="nav-panel-item" href={item.href}>
               <span class="ic"><img src={item.icon} alt="" /></span>
-              <h4>
+              <span class="nav-panel-title">
                 <span class="lang-only-en">{item.title_en}</span>
                 <span class="lang-only-es">{item.title_es}</span>
-              </h4>
+              </span>
               <p>
                 <span class="lang-only-en">{item.desc_en}</span>
                 <span class="lang-only-es">{item.desc_es}</span>
@@ -124,7 +124,7 @@ import { Icon } from 'astro-icon/components';
         </span>
       </a>
       <LangSwitcher />
-      <button class="nav-burger" aria-label="Open menu" id="navBurger">
+      <button class="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="navMobile" id="navBurger">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <line x1="4" y1="7" x2="20" y2="7"></line>
           <line x1="4" y1="12" x2="20" y2="12"></line>
@@ -136,19 +136,19 @@ import { Icon } from 'astro-icon/components';
 </nav>
 
 <div class="nav-scrim" id="navScrim"></div>
-<aside class="nav-mobile" id="navMobile" aria-hidden="true" inert>
+<aside class="nav-mobile" id="navMobile" role="dialog" aria-modal="true" aria-label="Menu / Menú" aria-hidden="true" inert>
   <div class="nav-mobile-head">
     <img src="/images/Logo-Senavia.svg" alt="SENAVIA Corp" />
     <button class="nav-mobile-close" id="navClose" aria-label="Close menu"></button>
   </div>
   <div class="nav-mobile-body">
     <div class="nav-mobile-section">
-      <div class="nav-mobile-link" data-toggle>
+      <button type="button" class="nav-mobile-link" data-toggle aria-expanded="false" aria-controls="navSubServices">
         <span class="lang-only-en">Services</span>
         <span class="lang-only-es">Servicios</span>
         <span class="caret"></span>
-      </div>
-      <div class="nav-mobile-sub">
+      </button>
+      <div class="nav-mobile-sub" id="navSubServices">
         {NAV.services.map((item) => (
           <a href={item.href}>
             <span class="ic"><img src={item.icon} alt="" /></span>
@@ -165,12 +165,12 @@ import { Icon } from 'astro-icon/components';
       </a>
     </div>
     <div class="nav-mobile-section">
-      <div class="nav-mobile-link" data-toggle>
+      <button type="button" class="nav-mobile-link" data-toggle aria-expanded="false" aria-controls="navSubAbout">
         <span class="lang-only-en">About Us</span>
         <span class="lang-only-es">Nosotros</span>
         <span class="caret"></span>
-      </div>
-      <div class="nav-mobile-sub">
+      </button>
+      <div class="nav-mobile-sub" id="navSubAbout">
         {NAV.about.map((item) => (
           <a href={item.href}>
             <span class="ic"><img src={item.icon} alt="" /></span>
@@ -181,12 +181,12 @@ import { Icon } from 'astro-icon/components';
       </div>
     </div>
     <div class="nav-mobile-section">
-      <div class="nav-mobile-link" data-toggle>
+      <button type="button" class="nav-mobile-link" data-toggle aria-expanded="false" aria-controls="navSubResources">
         <span class="lang-only-en">Resources</span>
         <span class="lang-only-es">Recursos</span>
         <span class="caret"></span>
-      </div>
-      <div class="nav-mobile-sub">
+      </button>
+      <div class="nav-mobile-sub" id="navSubResources">
         {NAV.resources.map((item) => (
           <a href={item.href}>
             <span class="ic"><img src={item.icon} alt="" /></span>
@@ -243,6 +243,13 @@ import { Icon } from 'astro-icon/components';
     var scrim = document.getElementById('navScrim');
     var close = document.getElementById('navClose');
     if (!burger || !menu || !scrim || !close) return;
+    function setBackgroundInert(on: boolean) {
+      Array.prototype.forEach.call(document.body.children, function (el: Element) {
+        if (el === menu || el === scrim || el.tagName === 'SCRIPT') return;
+        if (on) el.setAttribute('inert', '');
+        else el.removeAttribute('inert');
+      });
+    }
     function open() {
       menu!.classList.add('is-open');
       scrim!.classList.add('is-open');
@@ -250,14 +257,19 @@ import { Icon } from 'astro-icon/components';
       menu!.setAttribute('aria-hidden', 'false');
       menu!.removeAttribute('inert');
       burger!.setAttribute('aria-expanded', 'true');
+      setBackgroundInert(true);
+      (close as HTMLElement).focus();
     }
     function shut() {
+      if (!menu!.classList.contains('is-open')) return;
       menu!.classList.remove('is-open');
       scrim!.classList.remove('is-open');
       document.body.classList.remove('nav-locked');
       menu!.setAttribute('aria-hidden', 'true');
       menu!.setAttribute('inert', '');
       burger!.setAttribute('aria-expanded', 'false');
+      setBackgroundInert(false);
+      (burger as HTMLElement).focus();
     }
     burger.addEventListener('click', open);
     close.addEventListener('click', shut);
@@ -276,7 +288,8 @@ import { Icon } from 'astro-icon/components';
     });
     menu.querySelectorAll('[data-toggle]').forEach(function (el) {
       el.addEventListener('click', function () {
-        el.parentElement?.classList.toggle('is-open');
+        var expanded = el.parentElement?.classList.toggle('is-open');
+        el.setAttribute('aria-expanded', expanded ? 'true' : 'false');
       });
     });
   })();
