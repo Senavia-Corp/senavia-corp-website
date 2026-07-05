@@ -95,12 +95,13 @@ for (const [gate, val, umbral] of fromResults) {
   const cmd = `grep -rl 'new\\.senaviacorp' src/ public/ astro.config.mjs || true`;
   const r = run(cmd);
   const hits = r.out.split('\n').map((l) => l.trim()).filter(Boolean);
-  const allowed = new Set(['src/data/site.ts', 'public/robots.txt', 'astro.config.mjs']);
+  // llms.txt es estático y debe llevar URLs absolutas → entra al swap de dominio pre-deploy (§9).
+  const allowed = new Set(['src/data/site.ts', 'public/robots.txt', 'astro.config.mjs', 'public/llms.txt']);
   const offenders = hits.filter((h) => !allowed.has(h));
   gates.push({
     gate: 'dominio-new.senaviacorp-solo-en-config',
     valor_medido: hits,
-    umbral: 'hits ⊆ {src/data/site.ts, public/robots.txt, astro.config.mjs}',
+    umbral: 'hits ⊆ {src/data/site.ts, public/robots.txt, astro.config.mjs, public/llms.txt}',
     pass: offenders.length === 0,
     comando: cmd,
     salida_literal: trunc(r.out) + (offenders.length ? `\nFUERA DE ALLOWLIST: ${offenders.join(', ')}` : ''),
