@@ -8,6 +8,53 @@ const description = "Transparent pricing for SENAVIA Corp business websites and 
 
 const CAL = "https://calendly.com/leads-senaviacorp/30-minute-meeting-clon";
 const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+
+/* WL-040 — FAQ derived strictly from existing pricing content (packages in
+   src/data/pricing.ts and the copy on this page). No new figures. */
+const faqs = [
+  {
+    q_en: 'How much does a website from SENAVIA Corp cost?',
+    q_es: '¿Cuánto cuesta un sitio web de SENAVIA Corp?',
+    a_en: `Business websites start at ${fmt(BUSINESS[0].price)} for a Landing Page and go up to ${fmt(BUSINESS[3].price)} for the Corporate Portal Suite. E-commerce stores range from ${fmt(ECOMMERCE[0].price)} for a Starter Store on Webflow to ${fmt(ECOMMERCE[3].price)} for an Enterprise Store on Shopify. Every package lists its starting price and exactly what it includes.`,
+    a_es: `Los sitios empresariales van desde ${fmt(BUSINESS[0].price)} por una Landing Page hasta ${fmt(BUSINESS[3].price)} por el Corporate Portal Suite. Las tiendas e-commerce van desde ${fmt(ECOMMERCE[0].price)} por una Starter Store en Webflow hasta ${fmt(ECOMMERCE[3].price)} por una Enterprise Store en Shopify. Cada paquete muestra su precio inicial y exactamente qué incluye.`,
+  },
+  {
+    q_en: "What's included in every package?",
+    q_es: '¿Qué incluye cada paquete?',
+    a_en: 'Every SENAVIA build ships with hosting setup and SSL, on-page SEO foundations, mobile-first responsive design, GA4 and conversion tracking, a CMS training session, 30 days of post-launch optimization, Core Web Vitals tuning, and bilingual EN/ES support.',
+    a_es: 'Cada proyecto de SENAVIA incluye configuración de hosting y SSL, bases de SEO on-page, diseño responsive mobile-first, GA4 y seguimiento de conversiones, una sesión de capacitación en CMS, 30 días de optimización post-lanzamiento, ajuste de Core Web Vitals y soporte bilingüe EN/ES.',
+  },
+  {
+    q_en: 'How long does it take to build my website?',
+    q_es: '¿Cuánto tarda la construcción de mi sitio web?',
+    a_en: `Delivery depends on the package: ${BUSINESS[0].delivery_en} for a Landing Page or Starter Store, ${BUSINESS[1].delivery_en} for Corporate Business or Brand Store, ${BUSINESS[2].delivery_en} for Lead Generation or Scale Store, and ${BUSINESS[3].delivery_en} to ${ECOMMERCE[3].delivery_en} for the Corporate Portal Suite and Enterprise Store.`,
+    a_es: `La entrega depende del paquete: ${BUSINESS[0].delivery_es} para una Landing Page o Starter Store, ${BUSINESS[1].delivery_es} para Corporate Business o Brand Store, ${BUSINESS[2].delivery_es} para Lead Generation o Scale Store, y de ${BUSINESS[3].delivery_es} a ${ECOMMERCE[3].delivery_es} para el Corporate Portal Suite y la Enterprise Store.`,
+  },
+  {
+    q_en: 'Should I choose Webflow or Shopify for my online store?',
+    q_es: '¿Elijo Webflow o Shopify para mi tienda en línea?',
+    a_en: 'Webflow is for design-led brands that sell with content and a manageable catalog. Shopify is built to scale and sell everywhere — recurring revenue, omnichannel, and heavy inventory. Our e-commerce packages are organized along those two lines.',
+    a_es: 'Webflow es para marcas con diseño que venden con contenido y un catálogo manejable. Shopify está hecho para escalar y vender en todos lados — ingresos recurrentes, omnicanal y mucho inventario. Nuestros paquetes de e-commerce siguen esas dos líneas.',
+  },
+  {
+    q_en: "What if I'm not sure which package is right for me?",
+    q_es: '¿Y si no sé cuál paquete me conviene?',
+    a_en: "Schedule a free 30-minute consultation and we'll recommend the package and integrations that match your goals — value first, price second.",
+    a_es: 'Agenda una consulta gratis de 30 minutos y te recomendaremos el paquete y las integraciones que se ajusten a tus objetivos — primero el valor, luego el precio.',
+  },
+];
+
+/* FAQ JSON-LD (English — primary indexed language), same pattern as
+   services/web-design/[slug].astro. */
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q_en,
+    acceptedAnswer: { '@type': 'Answer', text: f.a_en },
+  })),
+};
 ---
 <BaseLayout
   title={title}
@@ -346,9 +393,22 @@ const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
     line-height: 1.5;
     max-width: none;
   }
+
+  /* ---- FAQ accordion (WL-040 — same styles as web-design/[slug]) ---- */
+  .container--narrow { max-width: 820px; }
+  .faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-item { background: var(--navy-card); border: var(--border-faint); border-radius: 12px; overflow: hidden; }
+  .faq-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; font-weight: 500; font-size: 1.05rem; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-mark { flex: none; color: var(--primary); display: inline-flex; transition: transform .2s ease; }
+  .faq-mark svg { width: 20px; height: 20px; }
+  .faq-item[open] .faq-mark { transform: rotate(45deg); }
+  .faq-a { padding: 0 22px 20px; color: rgba(255,255,255,0.78); font-size: 1rem; line-height: 1.5; }
+  .faq-a p { margin: 0; }
 </style>
 
 <main>
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd).replace(/</g, '\\u003c')} />
 
   <!-- ============================================================
        HERO — Compact
@@ -483,9 +543,35 @@ const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
   </div>
 
   <!-- ============================================================
+       FAQ
+       ============================================================ -->
+  <section class="section" data-screen-label="04 FAQ">
+    <div class="container container--narrow">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow"><span class="lang-only-en">FAQ</span><span class="lang-only-es">Preguntas Frecuentes</span></div>
+        <h2><span class="lang-only-en">Pricing Questions, Answered</span><span class="lang-only-es">Respuestas Sobre Precios</span></h2>
+      </div>
+      <div class="faq-list" data-reveal-children>
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>
+              <span class="faq-q"><span class="lang-only-en">{f.q_en}</span><span class="lang-only-es">{f.q_es}</span></span>
+              <span class="faq-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg></span>
+            </summary>
+            <div class="faq-a">
+              <p class="lang-only-en">{f.a_en}</p>
+              <p class="lang-only-es">{f.a_es}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
        CTA
        ============================================================ -->
-  <section class="cta" data-screen-label="04 CTA">
+  <section class="cta" data-screen-label="05 CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback"

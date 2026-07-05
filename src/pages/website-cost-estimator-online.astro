@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Estimator from '@/components/Estimator';
+import { SITE } from '@/data/site';
 const title = "Website Cost Estimator — SENAVIA Corp · Get an Instant Project Quote";
 const description = "Get a custom estimate for your website project in under 2 minutes. Free, no commitment — pick your project type, features, and timeline.";
 ---
@@ -9,6 +10,12 @@ const description = "Get a custom estimate for your website project in under 2 m
   description={description}
   canonical="/website-cost-estimator-online"
   jsonLdType="service"
+  jsonLdData={{
+    name: 'Website Cost Estimator',
+    serviceType: 'Website Cost Estimation',
+    description,
+    url: `${SITE.url}/website-cost-estimator-online`,
+  }}
   screenLabel="Cost Estimator"
 >
 <style is:global data-recovered>
@@ -715,6 +722,21 @@ const description = "Get a custom estimate for your website project in under 2 m
     .est-live { display: none; }
     .est-back, .est-next { padding: 11px 18px; font-size: 13px; }
   }
+
+  /* WL-038 / MOB-057 — 44px minimum touch targets for estimator controls
+     (step dots were 74×32, back/next 41px on mobile, phone link ~28px). */
+  .est-step-dot { min-height: 44px; justify-content: center; }
+  .est-back, .est-next { min-height: 44px; }
+  .est-call {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* WL-039 — the step heading receives programmatic focus (tabindex="-1")
+     after each step change; no ring needed for non-tabbable targets. */
+  .est-stage h2:focus { outline: none; }
 
   /* ===== GUIDED CONFIGURATOR (v2) ===== */
   /* Two-tile rows (category / platform) */

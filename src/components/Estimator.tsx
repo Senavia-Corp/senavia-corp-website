@@ -27,6 +27,9 @@ const fmtMonths = (m: number) => {
 declare global {
   interface Window {
     Calendly?: { initPopupWidget: (opts: { url: string }) => void };
+    /* Shared Calendly loader exposed by BaseLayout (WL-022). */
+    ensureCalendly?: () => Promise<{ initPopupWidget: (opts: { url: string }) => void } | null>;
+    openCalendly?: (url?: string) => void;
     plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
   }
 }
@@ -69,7 +72,8 @@ function Progress({ stepIds, current, onJump, lang }: { stepIds: string[]; curre
               className={`est-step-dot is-${status}`}
               onClick={() => i <= current && onJump(i)}
               disabled={i > current}
-              aria-label={`${t(lang, 'Step', 'Paso')} ${i + 1}`}
+              aria-current={i === current ? 'step' : undefined}
+              aria-label={`${t(lang, 'Step', 'Paso')} ${i + 1}: ${t(lang, STEP_LABELS[id].en, STEP_LABELS[id].es)}`}
             >
               <span className="est-step-num">{i + 1}</span>
               <span className="est-step-label">{t(lang, STEP_LABELS[id].en, STEP_LABELS[id].es)}</span>
@@ -91,7 +95,7 @@ function StepCategory({ state, choose, lang }: { state: State; choose: (c: Categ
       <h2>{t(lang, 'What do you want to build?', '¿Qué quieres construir?')}</h2>
       <p className="est-lede">{t(lang, 'Two paths, in plain terms. Pick the one that sounds like you — we tailor everything from here.', 'Dos caminos, en simple. Elige el que suene a ti — desde aquí lo ajustamos todo.')}</p>
       <div className="est-grid-2">
-        <button type="button" className={`est-tile ${state.category === 'business' ? 'is-active' : ''}`} onClick={() => choose('business')}>
+        <button type="button" className={`est-tile ${state.category === 'business' ? 'is-active' : ''}`} aria-pressed={state.category === 'business'} onClick={() => choose('business')}>
           <span className="est-tile-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><line x1="3" y1="9" x2="21" y2="9" /><circle cx="6" cy="6.5" r="0.6" fill="currentColor" /></svg>
           </span>
@@ -99,7 +103,7 @@ function StepCategory({ state, choose, lang }: { state: State; choose: (c: Categ
           <span className="est-tile-sub">{t(lang, 'Presence, authority, and leads — from a landing page to a full client portal.', 'Presencia, autoridad y clientes — desde una landing hasta un portal de clientes.')}</span>
           <span className="est-tile-price">{t(lang, 'Business Websites · from', 'Sitios Empresariales · desde')} $1,500</span>
         </button>
-        <button type="button" className={`est-tile ${state.category === 'ecommerce' ? 'is-active' : ''}`} onClick={() => choose('ecommerce')}>
+        <button type="button" className={`est-tile ${state.category === 'ecommerce' ? 'is-active' : ''}`} aria-pressed={state.category === 'ecommerce'} onClick={() => choose('ecommerce')}>
           <span className="est-tile-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 6h15l-2 11H8L6 4H3" /><circle cx="10" cy="20" r="1.4" /><circle cx="17" cy="20" r="1.4" /></svg>
           </span>
@@ -122,13 +126,13 @@ function StepPlatform({ state, choose, lang }: { state: State; choose: (tr: Trac
       <h2>{t(lang, 'How do you want to sell?', '¿Cómo quieres vender?')}</h2>
       <p className="est-lede">{t(lang, 'Webflow and Shopify are different engines. This one question routes you to the right one — they don’t mix.', 'Webflow y Shopify son motores distintos. Esta pregunta te lleva al correcto — no se mezclan.')}</p>
       <div className="est-grid-2">
-        <button type="button" className={`est-tile ${state.track === 'webflow' ? 'is-active' : ''}`} onClick={() => choose('webflow')}>
+        <button type="button" className={`est-tile ${state.track === 'webflow' ? 'is-active' : ''}`} aria-pressed={state.track === 'webflow'} onClick={() => choose('webflow')}>
           <span className="est-platform-tag is-webflow">Webflow</span>
           <span className="est-tile-label">{t(lang, 'Brand, design & content', 'Marca, diseño y contenido')}</span>
           <span className="est-tile-sub">{t(lang, 'A design-led store with a manageable catalog. You sell through brand and story.', 'Una tienda con diseño y catálogo manejable. Vendes por marca e historia.')}</span>
           <span className="est-tile-price">{t(lang, 'Starter / Brand · from', 'Starter / Brand · desde')} $1,600</span>
         </button>
-        <button type="button" className={`est-tile ${state.track === 'shopify' ? 'is-active' : ''}`} onClick={() => choose('shopify')}>
+        <button type="button" className={`est-tile ${state.track === 'shopify' ? 'is-active' : ''}`} aria-pressed={state.track === 'shopify'} onClick={() => choose('shopify')}>
           <span className="est-platform-tag is-shopify">Shopify</span>
           <span className="est-tile-label">{t(lang, 'Scale & sell everywhere', 'Escalar y vender en todos lados')}</span>
           <span className="est-tile-sub">{t(lang, 'Recurring revenue, omnichannel, heavy inventory. Built to scale operations.', 'Ingresos recurrentes, omnicanal, mucho inventario. Hecho para escalar.')}</span>
@@ -152,7 +156,7 @@ function StepPackage({ state, pkgs, choose, lang }: { state: State; pkgs: EstPkg
         {pkgs.map((p) => {
           const on = state.packageId === p.id;
           return (
-            <button key={p.id} type="button" className={`est-pkg ${on ? 'is-active' : ''} ${p.badge_en ? 'is-badged' : ''}`} onClick={() => choose(p.id)}>
+            <button key={p.id} type="button" className={`est-pkg ${on ? 'is-active' : ''} ${p.badge_en ? 'is-badged' : ''}`} aria-pressed={on} onClick={() => choose(p.id)}>
               <span className="est-pkg-flag">
                 <span className="est-pkg-level">{t(lang, p.level_en, p.level_es)}</span>
                 {p.badge_en && <span className="est-pkg-badge">★ {t(lang, p.badge_en, p.badge_es || p.badge_en)}</span>}
@@ -244,7 +248,7 @@ function StepAddons({
               {available.filter((c) => c.tier === tier).map((c) => {
                 const on = addons.includes(c.id);
                 return (
-                  <button key={c.id} type="button" className={`est-feat ${on ? 'is-on' : ''}`} onClick={() => toggle(c.id)}>
+                  <button key={c.id} type="button" className={`est-feat ${on ? 'is-on' : ''}`} aria-pressed={on} onClick={() => toggle(c.id)}>
                     <span className="est-feat-check" aria-hidden="true">
                       {on ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg> : null}
                     </span>
@@ -365,6 +369,7 @@ export default function Estimator() {
   const [step, setStep] = useState(0);
   const [state, setState] = useState<State>({ category: '', track: '', packageId: '', addons: [] });
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const isFirstRender = useRef(true);
 
   // Sync with site-wide language switcher.
   useEffect(() => {
@@ -399,11 +404,24 @@ export default function Estimator() {
     return m;
   }, [base, selected, nudgePkg]);
 
-  // Scroll into view on step change.
+  // Scroll into view on step change. WL-038: skipped on the initial mount so
+  // the page loads at y=0 (hero + nav visible) instead of jumping ~565px down.
+  // WL-039: after each real step change, move focus to the new step's heading
+  // — the stage re-mounts (key={stepId}) and would otherwise drop focus to
+  // <body>, forcing keyboard/SR users to re-tab through the whole nav.
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (wrapRef.current) {
       const top = wrapRef.current.getBoundingClientRect().top + window.scrollY - 100;
       window.scrollTo({ top, behavior: 'smooth' });
+      const heading = wrapRef.current.querySelector<HTMLElement>('.est-stage h2');
+      if (heading) {
+        heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
     }
   }, [step]);
 
@@ -472,8 +490,13 @@ export default function Estimator() {
     if (typeof window.plausible === 'function') {
       window.plausible('estimator_complete', { props: { package: base.id, total: String(Math.round(total)) } });
     }
-    if (window.Calendly) window.Calendly.initPopupWidget({ url });
-    else window.open(url, '_blank');
+    // WL-038 — go through the shared loader (BaseLayout, WL-022) instead of
+    // racing window.Calendly directly: on slow networks the widget may still
+    // be loading, and openCalendly() waits for it (with its own new-tab
+    // fallback on ad-blockers/timeouts).
+    if (typeof window.openCalendly === 'function') window.openCalendly(url);
+    else if (window.Calendly) window.Calendly.initPopupWidget({ url });
+    else window.open(url, '_blank', 'noopener');
   };
 
   // Can we advance from the current step?
