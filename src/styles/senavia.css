@@ -1382,9 +1382,11 @@ video::-webkit-media-controls-volume-slider {
   display: flex; justify-content: center; gap: 8px;
   margin-top: 1.25rem;
 }
-/* WL-023 — 24x24 hit area (WCAG 2.5.8) with the 8px visual dot on ::before */
+/* WL-023b — 44x44 hit area (gate touch-targets) with the 8px visual dot on
+   ::before; negative margins keep the visible 24px pitch/rhythm intact. */
 .carousel-dot {
-  width: 24px; height: 24px;
+  width: 44px; height: 44px;
+  margin: -10px;
   display: inline-flex; align-items: center; justify-content: center;
   background: transparent;
   border: 0;
@@ -1816,14 +1818,65 @@ html.js .hero-inner > * {
   outline: none;
 }
 
-/* WL-023 — touch-target pass: raise small tap areas toward 24-44px without
-   changing the visual scale of the design. */
-.footer-list a { display: inline-block; padding: 5px 0; }
+/* WL-023 / WL-023b — touch-target pass: raise every non-inline control to a
+   >=44x44px hit area (gate touch-targets) WITHOUT changing the rendered
+   design — padding/transparent borders grow the hit box and compensating
+   negative margins keep the flow and visual rhythm identical. Cross-page
+   families (post TOC, breadcrumbs, city chips, 404 quick links, .pp-open)
+   are handled here with specificity-bumped selectors because their base
+   styles live in page <style> blocks (which compile unscoped). The .est-*
+   estimator family is owned by another package and is intentionally NOT
+   touched here. */
+
+/* Footer link columns (11 links sitewide, were 28px tall; text stays
+   baseline-pinned, 28px flow contribution preserved) */
+.footer-list a { display: inline-block; padding: 14px 0; margin-block: -9px; }
 .footer-list { gap: 4px; }
-.footer-bottom .legal a { display: inline-block; padding: 6px 0; }
-.article-back,
-.map-card-link { min-height: 24px; padding-block: 4px; }
-.crumbs a { display: inline-flex; align-items: center; min-height: 24px; }
+/* Footer legal row (Terms/Privacy/Sitemap, were 29px) */
+.footer-bottom .legal a { display: inline-block; padding: 14px 0; margin-block: -8px; }
+/* Footer contact items (tel/maps/mailto, were 37px) */
+.footer-info-item { padding-block: 4px; margin-block: -4px; }
+/* Navbar brand logo link (30px logo untouched; hit box grows to 46px) */
+.nav-brand { padding-block: 8px; margin-block: -8px; }
+/* Call pill (navbar >=1180px and mobile drawer foot; was 38px). Content is
+   vertically centered so the extra height is invisible. */
+.nav-call { min-height: 44px; }
+/* Language switcher menu options (were 42px; the menu is a closed overlay,
+   so the 4px growth only shows while it is open) */
+.nav-lang-option { min-height: 44px; }
+/* Blog article: back link (was 25px) and post TOC anchors (were 38px).
+   Flow contribution preserved via compensating margins. */
+a.article-back { min-height: 44px; padding-block: 4px; margin-top: -9px; margin-bottom: calc(1.5rem - 10px); }
+.article-toc li a { padding-block: 12px; margin-block: -3px; min-height: 44px; }
+/* Service-area map card link (was 25px; page rule sets margin-top: 10px,
+   rebalanced here so the flow position is identical) */
+.map-card a.map-card-link { min-height: 44px; padding-block: 4px; margin-top: 1px; margin-bottom: -10px; }
+.map-card-link { min-height: 44px; padding-block: 4px; }
+/* Breadcrumbs: service subpages (.crumbs, were 24px — "Home" also only 36px
+   wide) and service-area hero (.sa-crumb, were 28px). The inline padding is
+   cancelled by inline margins so text-to-separator spacing is unchanged. */
+.crumbs a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -10px; padding-inline: 6px; margin-inline: -6px; }
+.sa-crumb a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -8px; }
+/* 404 quick links (were 19px tall, "Blog" only 29px wide) */
+.err-links a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -12px; padding-inline: 8px; margin-inline: -8px; }
+/* Service-area nearby-city chips (were 33px): a transparent 6px border
+   widens the hit box; background-clip keeps the fill inside the padding
+   box and an inset ring redraws the 1px pill border at the exact same
+   place, so the rendered pill is pixel-identical. */
+.sa-nearby .chips a {
+  padding: 8px 14px;
+  border: 6px solid transparent;
+  margin: -6px;
+  background-clip: padding-box;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+.sa-nearby .chips a:hover,
+.sa-nearby .chips a:focus-visible {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(153,204,51,0.45);
+}
+/* Portfolio detail: open-live-site link in the mock browser bar (was 28x24) */
+a.pp-open { padding: 15px 17px; margin: -11px -9px; }
 .btn.is-sm { min-height: 44px; }
 .nav-lang-trigger { min-height: 44px; min-width: 44px; justify-content: center; }
 .nav-mobile-foot .nav-social a,
