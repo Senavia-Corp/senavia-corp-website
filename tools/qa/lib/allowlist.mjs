@@ -15,6 +15,9 @@ export const CONSOLE_ALLOW_SUBSTRINGS = [
   'googleapis',
   'gstatic',
   'google.com/maps',
+  // Dependencia transitiva del widget de Calendly (analytics): en sandbox el
+  // fetch a cdn.segment.io falla igual que calendly.com — mismo artefacto.
+  'cdn.segment.io',
   'net::ERR_BLOCKED_BY_CLIENT',
 ];
 
