@@ -52,6 +52,10 @@ const categories = [...catCounts.entries()]
   .map(([slug, count]) => ({ slug, count }));
 
 const total = posts.length;
+
+// Load-more batch size (mirrored by PAGE in the client script below).
+const PAGE_SIZE = 12;
+const initialShown = Math.min(PAGE_SIZE, total);
 ---
 <BaseLayout
   title={title}
@@ -207,9 +211,17 @@ const total = posts.length;
     color: var(--primary, #99cc33);
     border: 1px solid rgba(153,204,51,0.28);
   }
-  .blog-tag[data-cat="web-design"]        { background: rgba(153,204,51,0.14); color: #b6e06a; border-color: rgba(153,204,51,0.3); }
-  .blog-tag[data-cat="web-development"]   { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
-  .blog-tag[data-cat="digital-marketing"] { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
+  /* Pillar colors mirror the service cards and the article template
+     (web-design=purple, development=green, traffic/marketing=cyan). */
+  .blog-tag[data-cat] {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box,
+      var(--grad-primary) border-box;
+  }
+  .blog-tag[data-cat="web-design"]        { color: #b89bf2; background: linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box, var(--grad-purple) border-box; }
+  .blog-tag[data-cat="web-development"]   { color: #b6e06a; background: linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box, var(--grad-green) border-box; }
+  .blog-tag[data-cat="digital-marketing"] { color: #7fdede; background: linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box, var(--grad-cyan) border-box; }
 
   .blog-card h3 {
     margin: 0;
@@ -475,6 +487,7 @@ const total = posts.length;
     display: inline-flex;
     align-items: center;
     gap: 7px;
+    min-height: 44px;
     padding: 8px 15px;
     border-radius: 999px;
     font: inherit;
@@ -504,6 +517,7 @@ const total = posts.length;
   /* Sidebar category rows are interactive buttons */
   .cat-list .cat-row {
     width: 100%;
+    min-height: 44px;
     border: 0;
     background: none;
     font: inherit;
@@ -511,10 +525,15 @@ const total = posts.length;
     text-align: left;
     transition: background .15s ease, color .15s ease;
   }
+
   .cat-list .cat-row:hover { background: rgba(255,255,255,0.05); color: #fff; }
   .cat-list .cat-row[aria-pressed="true"] { background: rgba(153,204,51,0.12); color: #fff; }
   .cat-list .cat-row[aria-pressed="true"] .count { background: rgba(153,204,51,0.2); color: var(--primary, #99cc33); }
   .cat-list .cat-row:focus-visible { outline: 2px solid var(--primary, #99cc33); outline-offset: -2px; }
+
+  /* Load more */
+  .blog-loadmore { display: flex; justify-content: center; margin-top: 2.75rem; }
+  .blog-loadmore[hidden] { display: none; }
 </style>
 
 <main>
@@ -587,6 +606,8 @@ const total = posts.length;
                       <span class="sep">·</span>
                       <span class="lang-only-en">{fmtEn(post.data.pubDate)}</span>
                       <span class="lang-only-es">{fmtEs(post.data.pubDate)}</span>
+                      <span class="sep lang-only-es">·</span>
+                      <span class="lang-only-es">(en inglés)</span>
                     </div>
                   </a>
                 ))}
@@ -596,8 +617,8 @@ const total = posts.length;
 
           <div class="blog-toolbar" data-reveal>
             <span class="blog-count">
-              <span class="lang-only-en">Showing <span class="accent">{total}</span> {total === 1 ? 'article' : 'articles'}</span>
-              <span class="lang-only-es">Mostrando <span class="accent">{total}</span> {total === 1 ? 'artículo' : 'artículos'}</span>
+              <span class="lang-only-en">Showing <span class="accent">{initialShown}</span> of <span data-filter-total>{total}</span> {total === 1 ? 'article' : 'articles'}</span>
+              <span class="lang-only-es">Mostrando <span class="accent">{initialShown}</span> de <span data-filter-total>{total}</span> {total === 1 ? 'artículo' : 'artículos'}</span>
             </span>
             <span class="blog-count">
               <span class="lang-only-en">Newest first</span>
@@ -636,8 +657,8 @@ const total = posts.length;
               <span class="lang-only-es">Aún no hay artículos en esta categoría.</span>
             </div>
 
-            {posts.map((post) => (
-              <a href={`/blog/${post.id}`} class="blog-card" data-card-cat={post.data.category}>
+            {posts.map((post, i) => (
+              <a href={`/blog/${post.id}`} class="blog-card" data-card-cat={post.data.category} hidden={i >= PAGE_SIZE}>
                 <div class="blog-cover">
                   <img
                     src={post.data.thumbnail || post.data.mainImage}
@@ -658,9 +679,18 @@ const total = posts.length;
                   <span class="sep">·</span>
                   <span class="lang-only-en">{fmtEn(post.data.pubDate)}</span>
                   <span class="lang-only-es">{fmtEs(post.data.pubDate)}</span>
+                  <span class="sep lang-only-es">·</span>
+                  <span class="lang-only-es">(en inglés)</span>
                 </div>
               </a>
             ))}
+          </div>
+
+          <div class="blog-loadmore" hidden={total <= PAGE_SIZE}>
+            <button type="button" class="btn is-secondary blog-loadmore-btn">
+              <span class="lang-only-en">Load More Articles</span>
+              <span class="lang-only-es">Cargar Más Artículos</span>
+            </button>
           </div>
         </div>
 
@@ -782,36 +812,58 @@ const total = posts.length;
   </section>
 
   <script>
-    /* Blog category filter — client-side, SEO-safe (all posts stay in the DOM).
-       One handler drives both the chip bar and the sidebar list, syncing
-       aria-pressed state, the live "Showing N" count, and the empty state. */
+    /* Blog category filter + load-more — client-side, SEO-safe (all posts
+       stay in the DOM; batches reveal via [hidden]). One handler drives the
+       chip bar, the sidebar list and the load-more button, syncing
+       aria-pressed, the "Showing N of M" count and the empty state. */
     (function () {
-      var controls = Array.prototype.slice.call(document.querySelectorAll('[data-cat]'));
+      var PAGE = 12; // keep in sync with PAGE_SIZE in the frontmatter
+      var controls = Array.prototype.slice.call(document.querySelectorAll('button[data-cat]'));
       var cards = Array.prototype.slice.call(document.querySelectorAll('.blog-grid [data-card-cat]'));
-      if (!controls.length || !cards.length) return;
+      if (!cards.length) return;
       var countAccents = document.querySelectorAll('.blog-count .accent');
+      var countTotals = document.querySelectorAll('.blog-count [data-filter-total]');
       var emptyFilter = document.querySelector('.blog-empty-filter');
       var featured = document.querySelector('.blog-featured');
+      var loadWrap = document.querySelector('.blog-loadmore');
+      var loadBtn = document.querySelector('.blog-loadmore-btn');
+      var current = 'all';
+      var limit = PAGE;
 
-      function apply(cat) {
+      function apply() {
+        var matched = 0;
         var shown = 0;
         cards.forEach(function (c) {
-          var match = cat === 'all' || c.getAttribute('data-card-cat') === cat;
-          c.hidden = !match;
-          if (match) shown++;
+          var match = current === 'all' || c.getAttribute('data-card-cat') === current;
+          if (match) matched++;
+          var visible = match && matched <= limit;
+          c.hidden = !visible;
+          if (visible) shown++;
         });
         controls.forEach(function (b) {
-          b.setAttribute('aria-pressed', b.getAttribute('data-cat') === cat ? 'true' : 'false');
+          b.setAttribute('aria-pressed', b.getAttribute('data-cat') === current ? 'true' : 'false');
         });
         countAccents.forEach(function (el) { el.textContent = String(shown); });
-        if (emptyFilter) emptyFilter.hidden = shown !== 0;
+        countTotals.forEach(function (el) { el.textContent = String(matched); });
+        if (emptyFilter) emptyFilter.hidden = matched !== 0;
         // Editor's Picks only makes sense in the unfiltered view.
-        if (featured) featured.hidden = (cat !== 'all');
+        if (featured) featured.hidden = (current !== 'all');
+        if (loadWrap) loadWrap.hidden = matched <= limit;
       }
 
       controls.forEach(function (b) {
-        b.addEventListener('click', function () { apply(b.getAttribute('data-cat')); });
+        b.addEventListener('click', function () {
+          current = b.getAttribute('data-cat');
+          limit = PAGE;
+          apply();
+        });
       });
+      if (loadBtn) {
+        loadBtn.addEventListener('click', function () {
+          limit += PAGE;
+          apply();
+        });
+      }
     })();
   </script>
 </main>

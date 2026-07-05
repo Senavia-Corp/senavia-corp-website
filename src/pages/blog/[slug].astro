@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { CALENDLY_URL } from '@/data/site';
+import { CALENDLY_URL, SITE } from '@/data/site';
 import { prettyName } from '@/lib/cms';
 
 /* ------------------------------------------------------------------ *
@@ -44,6 +44,104 @@ const authorName = prettyName(data.author);
 const initials = authorName.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 const avatarPalette = ['av1', 'av2', 'av3', 'av4'];
 const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
+
+/* ------------------------------------------------------------------ *
+ *  CMS body sanitation (imported Webflow HTML), run before set:html:
+ *  1. drop the leading <h1> when it repeats the post title (the hero
+ *     already renders it), 2. demote any other <h1> to <h2>, 3. remove
+ *     ul/ol filled only with <br>/&nbsp;, 4. wrap orphan <li> runs.
+ * ------------------------------------------------------------------ */
+const decodeEntities = (s: string) =>
+  s
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#0?39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>');
+const plainText = (s: string) => decodeEntities(s.replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim();
+const normalizeHeading = (s: string) => plainText(s).toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+function wrapOrphanListItems(html: string): string {
+  const parts = html.split(/(<\/?(?:ul|ol|li)\b[^>]*>)/gi);
+  let depth = 0;
+  let orphan = false;
+  let out = '';
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    const tag = part.match(/^<(\/?)(ul|ol|li)\b/i);
+    if (!tag) {
+      out += part;
+      continue;
+    }
+    const closing = tag[1] === '/';
+    const name = tag[2].toLowerCase();
+    if (name === 'ul' || name === 'ol') {
+      if (orphan) { out += '</ul>'; orphan = false; }
+      depth = Math.max(0, depth + (closing ? -1 : 1));
+      out += part;
+      continue;
+    }
+    if (!closing && depth === 0 && !orphan) { out += '<ul>'; orphan = true; }
+    out += part;
+    if (closing && orphan && !/^\s*<li\b/i.test(parts.slice(i + 1).join(''))) {
+      out += '</ul>';
+      orphan = false;
+    }
+  }
+  if (orphan) out += '</ul>';
+  return out;
+}
+
+function cleanCmsBody(raw: string, title: string): string {
+  let html = raw ?? '';
+  const firstH1 = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/i);
+  if (firstH1 && normalizeHeading(firstH1[0]) === normalizeHeading(title)) {
+    html = html.replace(firstH1[0], '');
+  }
+  html = html.replace(/<h1\b([^>]*)>/gi, '<h2$1>').replace(/<\/h1>/gi, '</h2>');
+  html = html.replace(/<li\b[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/li>/gi, '');
+  html = html.replace(/<(ul|ol)\b[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/\1>/gi, '');
+  /* tables scroll horizontally (overflow-x in senavia.css) — the scrollable
+     element must be keyboard-focusable (axe: scrollable-region-focusable) */
+  html = html.replace(/<table\b(?![^>]*\btabindex=)/gi, '<table tabindex="0"');
+  return wrapOrphanListItems(html);
+}
+
+/* Anchor ids on every H2 + collapsible TOC data for long posts. */
+const slugifyHeading = (s: string) =>
+  plainText(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/[\s-]+/g, '-') || 'section';
+
+const toc: Array<{ id: string; text: string }> = [];
+const seenIds = new Set<string>();
+let body = cleanCmsBody(data.body, data.title);
+body = body.replace(/<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi, (match, attrs, inner) => {
+  const existing = attrs.match(/\bid=["']([^"']+)["']/i);
+  const base = existing ? existing[1] : slugifyHeading(inner);
+  let id = base;
+  for (let n = 2; seenIds.has(id); n++) id = `${base}-${n}`;
+  seenIds.add(id);
+  toc.push({ id, text: plainText(inner) });
+  return existing ? match : `<h2 id="${id}"${attrs}>${inner}</h2>`;
+});
+const showToc = toc.length >= 3;
+
+/* BlogPosting JSON-LD payload (JsonLd.astro emits it when headline is set). */
+const postUrl = `${SITE.url}/blog/${entry.id}`;
+const jsonLdData = {
+  headline: data.title,
+  description: data.seoDescription || data.summary || undefined,
+  datePublished: data.pubDate ? data.pubDate.toISOString() : undefined,
+  image: data.mainImage ? new URL(data.mainImage, SITE.url).href : undefined,
+  author: { '@type': 'Person', name: authorName },
+  mainEntityOfPage: postUrl,
+  url: postUrl,
+  inLanguage: 'en',
+};
 ---
 <BaseLayout
   title={data.seoTitle || data.title}
@@ -51,6 +149,7 @@ const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
   canonical={`/blog/${entry.id}`}
   ogType="article"
   jsonLdType="blog"
+  jsonLdData={jsonLdData}
   screenLabel="Blog Article"
 >
 <style is:global data-blog-article>
@@ -105,9 +204,17 @@ const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
     border: 1px solid rgba(153,204,51,0.3);
     margin-bottom: 1.25rem;
   }
-  .article-cat[data-cat="web-design"]        { background: rgba(153,204,51,0.16); color: #b6e06a; border-color: rgba(153,204,51,0.32); }
-  .article-cat[data-cat="web-development"]   { background: rgba(123,63,228,0.16); color: #b89bf2; border-color: rgba(123,63,228,0.36); }
-  .article-cat[data-cat="digital-marketing"] { background: rgba(240,160,80,0.14); color: #f6b56e; border-color: rgba(240,160,80,0.32); }
+  /* Pillar colors mirror the service cards (web-design=purple,
+     traffic/marketing=cyan, development=green) via the --grad-* tokens. */
+  .article-cat[data-cat] {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box,
+      var(--grad-primary) border-box;
+  }
+  .article-cat[data-cat="web-design"]        { color: #b89bf2; background: linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box, var(--grad-purple) border-box; }
+  .article-cat[data-cat="web-development"]   { color: #b6e06a; background: linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box, var(--grad-green) border-box; }
+  .article-cat[data-cat="digital-marketing"] { color: #7fdede; background: linear-gradient(rgba(13,18,53,0.85), rgba(13,18,53,0.85)) padding-box, var(--grad-cyan) border-box; }
 
   .article-hero h1 {
     font-size: clamp(2rem, 4vw, 3.25rem);
@@ -150,6 +257,109 @@ const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
   /* BODY — readable column */
   .article-body-wrap { padding: 3.5rem 0 4rem; }
   .article-body-wrap .container { max-width: 760px; }
+
+  /* ES-mode notice: CMS content is English-only */
+  .article-lang-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 0 2rem;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.75);
+    background: rgba(51,204,204,0.07);
+    border: 1px solid rgba(51,204,204,0.25);
+    border-radius: 12px;
+  }
+  .article-lang-note svg { width: 16px; height: 16px; flex: none; margin-top: 2px; color: #7fdede; }
+
+  /* TOC — collapsible, generated from the body H2s */
+  .article-toc {
+    margin: 0 0 2.25rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    background: rgba(13,18,53,0.55);
+  }
+  .article-toc summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary, #99cc33);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .article-toc summary::-webkit-details-marker { display: none; }
+  .article-toc summary::after {
+    content: '';
+    width: 8px; height: 8px;
+    margin-left: auto;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform .2s ease;
+  }
+  .article-toc[open] summary::after { transform: rotate(-135deg); }
+  .article-toc summary:focus-visible { outline: 2px solid var(--primary, #99cc33); outline-offset: 2px; border-radius: 14px; }
+  .article-toc ol {
+    margin: 0;
+    padding: 0 18px 14px 18px;
+    list-style: none;
+    counter-reset: toc;
+  }
+  .article-toc li { counter-increment: toc; }
+  .article-toc li + li { border-top: 1px dashed rgba(255,255,255,0.07); }
+  .article-toc a {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 9px 2px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    transition: color .15s ease;
+  }
+  .article-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+  .article-toc a:hover { color: var(--primary, #99cc33); }
+  .cms-prose h2[id] { scroll-margin-top: 96px; }
+
+  /* Floating back-to-top (appears after ~2 screens of scroll) */
+  .back-to-top {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 60;
+    width: 44px; height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(153,204,51,0.4);
+    background: rgba(13,18,53,0.85);
+    color: var(--primary, #99cc33);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity .25s ease, transform .25s ease;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+  }
+  .back-to-top.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .back-to-top:hover { background: rgba(153,204,51,0.16); }
+  .back-to-top:focus-visible { outline: 2px solid var(--primary, #99cc33); outline-offset: 2px; }
+  .back-to-top svg { width: 18px; height: 18px; }
 
   /* ---------- CMS PROSE (rich-text HTML from Webflow) ---------- */
   .cms-prose {
@@ -390,7 +600,26 @@ const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
        ============================================================ -->
   <article class="article-body-wrap section--band" data-screen-label="02 Article Body">
     <div class="container">
-      <div class="cms-prose" data-reveal set:html={data.body} />
+      <div class="article-lang-note lang-only-es">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <span>Este artículo está disponible solo en inglés. El resto del sitio, incluida nuestra atención, está en español.</span>
+      </div>
+
+      {showToc && (
+        <details class="article-toc" data-reveal>
+          <summary>
+            <span class="lang-only-en">Table of Contents</span>
+            <span class="lang-only-es">Tabla de Contenido</span>
+          </summary>
+          <ol>
+            {toc.map((item) => (
+              <li><a href={`#${item.id}`}>{item.text}</a></li>
+            ))}
+          </ol>
+        </details>
+      )}
+
+      <div class="cms-prose" data-reveal set:html={body} />
 
       <!-- Author footer -->
       <div class="article-author-card" data-reveal>
@@ -469,12 +698,35 @@ const avatarClass = avatarPalette[entry.id.length % avatarPalette.length];
         class="btn"
         data-calendly-trigger
         data-track="book_call_click"
-        data-calendly-trigger
       >
         <span class="lang-only-en">Book a Free Call</span>
         <span class="lang-only-es">Agenda tu Llamada Gratis</span>
       </a>
     </div>
   </section>
+
+  <button class="back-to-top" type="button" aria-label="Back to top / Volver arriba" data-back-to-top>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 15 12 9 18 15"></polyline></svg>
+  </button>
+
+  <script>
+    (function () {
+      var btn = document.querySelector('[data-back-to-top]');
+      if (!btn) return;
+      var ticking = false;
+      function update() {
+        ticking = false;
+        if (btn) btn.classList.toggle('is-visible', window.scrollY > window.innerHeight * 2);
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+      btn.addEventListener('click', function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      });
+    })();
+  </script>
 </main>
 </BaseLayout>
