@@ -5,10 +5,16 @@ import ProjectCarousel from '@/components/ProjectCarousel.astro';
 import TrustBadges from '@/components/TrustBadges.astro';
 
 const title = "SENAVIA Corp — Custom Web Design & Web Development Agency in South Florida";
-const description = "Google Partner-certified digital agency in Plantation, FL. Custom web design, web development, and traffic generation (SEO, SEM & GEO) for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
+const description = "Bilingual digital agency in Plantation, FL. Custom web design, web development, and traffic generation (SEO, SEM & GEO) for South Florida businesses across Miami-Dade, Broward, and Palm Beach.";
 
 /* Tool / integration logos for the hero marquee */
 const logos = (await getCollection('logos')).sort((a, b) => a.data.order - b.data.order);
+
+/* Real client video testimonials (YouTube, from the CMS) */
+const videoTestimonials = (await getCollection('videos'))
+  .filter((v) => v.data.youtubeId)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
 
 /* 2 most recent blog posts by publish date */
 const posts = (await getCollection('blog'))
@@ -48,10 +54,10 @@ const fmtEs = (d?: Date) =>
     <div class="marquee" aria-hidden="true">
       <div class="marquee-track">
         {logos.map((l) => (
-          <img class="marquee-logo" src={l.data.logo} alt={l.data.name} loading="lazy" decoding="async" />
+          <img class="marquee-logo" src={l.data.logo} alt={l.data.name} width="140" height="40" decoding="async" />
         ))}
         {logos.map((l) => (
-          <img class="marquee-logo" src={l.data.logo} alt={l.data.name} loading="lazy" decoding="async" />
+          <img class="marquee-logo" src={l.data.logo} alt={l.data.name} width="140" height="40" loading="lazy" decoding="async" />
         ))}
       </div>
     </div>
@@ -205,82 +211,31 @@ const fmtEs = (d?: Date) =>
       </div>
     </section>
 
-    <!-- GOOGLE REVIEWS -->
-    <section id="reviews" class="section" data-screen-label="06 Google Reviews">
+    <!-- CLIENT REVIEWS -->
+    <section id="reviews" class="section" data-screen-label="06 Client Reviews">
       <div class="container">
         <div class="reviews-grid">
           <div class="reviews-left" data-reveal>
-            <h2><span class="lang-only-en">Google Reviews</span><span class="lang-only-es">Reseñas de Google</span></h2>
-            <p><span class="lang-only-en">Based in Plantation, we deliver custom web design and SEO that help South Florida companies grow. Hear what our clients say about working with the SENAVIA team.</span><span class="lang-only-es">Desde Plantation, ofrecemos diseño web a la medida y SEO que ayudan a las empresas del Sur de Florida a crecer. Descubre lo que dicen nuestros clientes sobre trabajar con el equipo de SENAVIA.</span></p>
-            <div class="reviews-rating">
-              <span class="score">
-                5.0
-                <span class="score-stars" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </span>
-              </span>
-              <span class="score-meta"><span class="lang-only-en">From <strong>47 verified reviews</strong> on Google</span><span class="lang-only-es">De <strong>47 reseñas verificadas</strong> en Google</span></span>
-            </div>
+            <h2><span class="lang-only-en">What Our Clients Say</span><span class="lang-only-es">Lo Que Dicen Nuestros Clientes</span></h2>
+            <p><span class="lang-only-en">Based in Plantation, we deliver custom web design and SEO that help South Florida companies grow. Hear what our clients say about working with the SENAVIA team — on camera, in their own words.</span><span class="lang-only-es">Desde Plantation, ofrecemos diseño web a la medida y SEO que ayudan a las empresas del Sur de Florida a crecer. Descubre lo que dicen nuestros clientes sobre trabajar con el equipo de SENAVIA — frente a cámara, en sus propias palabras.</span></p>
             <div class="reviews-cta-row">
-              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-sm"><span class="lang-only-en">Read All Reviews</span><span class="lang-only-es">Leer Todas las Reseñas</span></a>
+              <a href="/testimonials" class="btn is-sm"><span class="lang-only-en">Watch Video Testimonials</span><span class="lang-only-es">Ver Testimonios en Video</span></a>
+              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-secondary is-sm"><span class="lang-only-en">Find Us on Google</span><span class="lang-only-es">Encuéntranos en Google</span></a>
             </div>
           </div>
-          <div class="reviews-card" data-reveal data-elfsight-app-id="d2ce1169-e2c8-43d7-873d-f9e6f7bc1e07">
-            <div class="review-item">
-              <div class="review-stars" role="img" aria-label="5 out of 5 stars">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <div class="review-head">
-                <span class="review-name">Carlos Rivera</span>
-                <span class="review-date"><span class="lang-only-en">2 weeks ago</span><span class="lang-only-es">hace 2 semanas</span></span>
-              </div>
-              <p class="review-text"><span class="lang-only-en">Senavia rebuilt our roofing company website and within two months we doubled our qualified leads. The team is detail-oriented, communicative, and clearly knows local SEO inside out.</span><span class="lang-only-es">Senavia reconstruyó el sitio web de nuestra empresa de techos y en dos meses duplicamos nuestros prospectos calificados. El equipo es detallista, comunicativo y claramente domina el SEO local a fondo.</span></p>
-            </div>
-            <div class="review-item">
-              <div class="review-stars" role="img" aria-label="5 out of 5 stars">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <div class="review-head">
-                <span class="review-name">Maria Gonzalez</span>
-                <span class="review-date"><span class="lang-only-en">1 month ago</span><span class="lang-only-es">hace 1 mes</span></span>
-              </div>
-              <p class="review-text"><span class="lang-only-en">Their design work elevated our brand instantly — modern, fast, and converting. We've climbed three Google ranking positions for our main keywords since launch. Highly recommend.</span><span class="lang-only-es">Su trabajo de diseño elevó nuestra marca al instante — moderno, rápido y que convierte. Hemos subido tres posiciones en el ranking de Google para nuestras palabras clave principales desde el lanzamiento. Muy recomendados.</span></p>
-            </div>
-            <div class="review-item">
-              <div class="review-stars" role="img" aria-label="5 out of 5 stars">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <div class="review-head">
-                <span class="review-name">James Patterson</span>
-                <span class="review-date"><span class="lang-only-en">3 months ago</span><span class="lang-only-es">hace 3 meses</span></span>
-              </div>
-              <p class="review-text"><span class="lang-only-en">Best agency decision we've made. Communication is fast, the SEO strategy actually drives traffic, and the website performs in Core Web Vitals. Real partners, not just vendors.</span><span class="lang-only-es">La mejor decisión de agencia que hemos tomado. La comunicación es rápida, la estrategia de SEO realmente atrae tráfico y el sitio web rinde en Core Web Vitals. Verdaderos socios, no solo proveedores.</span></p>
-            </div>
-            <div class="google-badge">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92c-.25 1.37-1.03 2.53-2.2 3.31v2.75h3.56c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.98.66-2.24 1.06-3.72 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.12A6.6 6.6 0 0 1 5.5 12c0-.74.13-1.45.34-2.12V7.04H2.18A10.97 10.97 0 0 0 1 12c0 1.78.43 3.47 1.18 4.96l3.66-2.84z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.65l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.04l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
-              </svg>
-              <span><span class="lang-only-en">Powered by Google · 5.0 ★ from 47 reviews</span><span class="lang-only-es">Con tecnología de Google · 5.0 ★ de 47 reseñas</span></span>
-            </div>
+          <div class="reviews-card" data-reveal>
+            {videoTestimonials.map((v) => (
+              <a class="review-item vt-mini" href="/testimonials#video-testimonials">
+                <img class="vt-mini-thumb" src={`https://i.ytimg.com/vi/${v.data.youtubeId}/mqdefault.jpg`} alt="" width="128" height="72" loading="lazy" decoding="async" />
+                <span class="vt-mini-body">
+                  <span class="vt-mini-name">{v.data.name}</span>
+                  <span class="vt-mini-tag"><span class="lang-only-en">Video testimonial</span><span class="lang-only-es">Testimonio en video</span></span>
+                </span>
+                <span class="vt-mini-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg>
+                </span>
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -360,7 +315,7 @@ const fmtEs = (d?: Date) =>
   .marquee .marquee-track { gap: 4rem; }
   .marquee-track img.marquee-logo {
     height: 40px;
-    width: auto;
+    width: 140px;                 /* fixed slot: zero CLS while logos load */
     flex: 0 0 auto;
     opacity: 1;
     filter: none;                 /* keep brand color of the logos */
@@ -368,7 +323,48 @@ const fmtEs = (d?: Date) =>
   }
   @media (max-width: 700px) {
     .marquee .marquee-track { gap: 2.5rem; }
-    .marquee-track img.marquee-logo { height: 32px; }
+    .marquee-track img.marquee-logo { height: 32px; width: 112px; }
+  }
+
+  /* ---- Real video-testimonial rows inside the reviews card ---- */
+  a.review-item.vt-mini {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  a.review-item.vt-mini:hover {
+    border-color: rgba(153,204,51,0.35);
+    background: rgba(255,255,255,0.05);
+  }
+  .vt-mini-thumb {
+    width: 128px;
+    height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex: 0 0 auto;
+    background: #0a0e26;
+  }
+  .vt-mini-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+  .vt-mini-name { color: var(--white); font-weight: 500; font-size: 15px; }
+  .vt-mini-tag { font-size: 12.5px; color: rgba(255,255,255,0.6); }
+  .vt-mini-play {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(153,204,51,0.14);
+    border: 1px solid rgba(153,204,51,0.35);
+    color: var(--primary, #99cc33);
+  }
+  .vt-mini-play svg { width: 16px; height: 16px; }
+  @media (max-width: 480px) {
+    .vt-mini-thumb { width: 96px; height: 54px; }
   }
 
   /* ---- Project card cover: real CMS image fills the frame ---- */

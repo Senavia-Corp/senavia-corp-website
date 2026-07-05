@@ -24,6 +24,11 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
     gap: 56px;
     align-items: start;
   }
+  /* Desktop: center the shorter CTA column against the 4 info cards so it
+     never leaves a dead band under the card. */
+  @media (min-width: 981px) {
+    .ct-layout > .ct-col:last-child { align-self: center; }
+  }
   @media (max-width: 980px) {
     .ct-layout { grid-template-columns: 1fr; gap: 40px; }
   }
@@ -173,13 +178,14 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
   }
   .ct-form-wrap .btn-submit {
     appearance: none;
-    border: 0;
-    background: linear-gradient(135deg, #99cc33 0%, #c1e15a 100%);
-    color: #0a0e26;
+    border: 1px solid transparent;
+    background-color: var(--primary);
+    background-image: var(--grad-button);
+    color: var(--secondary);
     font-weight: 600;
     font-size: 14.5px;
     padding: 14px 30px;
-    border-radius: 999px;
+    border-radius: var(--radius-btn);
     cursor: pointer;
     transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
     display: inline-flex;
@@ -189,7 +195,7 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
   }
   .ct-form-wrap .btn-submit:hover {
     transform: translateY(-1px);
-    box-shadow: 0 12px 30px rgba(153,204,51,0.32);
+    box-shadow: 0 10px 28px rgba(153,204,51,0.28);
     filter: brightness(1.05);
   }
   .ct-form-wrap .btn-submit svg { width: 16px; height: 16px; }
@@ -387,7 +393,7 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
         <div class="ct-col" data-reveal>
           <div class="eyebrow" style="margin-bottom: 14px;"><span class="lang-only-en">How to reach us</span><span class="lang-only-es">Cómo contactarnos</span></div>
           <h2><span class="lang-only-en">Contact Info</span><span class="lang-only-es">Información de Contacto</span></h2>
-          <p class="ct-intro"><span class="lang-only-en">Prefer a call, email, or coffee at our Plantation HQ? Use any of the channels below — we typically respond within one business day.</span><span class="lang-only-es">¿Prefieres una llamada, un correo o un café en nuestra oficina de Plantation? Usa cualquiera de los canales de abajo — respondemos en menos de un día hábil.</span></p>
+          <p class="ct-intro"><span class="lang-only-en">Prefer a call, email, or coffee at our Plantation HQ? Use any of the channels below — we'll get back to you as soon as we can.</span><span class="lang-only-es">¿Prefieres una llamada, un correo o un café en nuestra oficina de Plantation? Usa cualquiera de los canales de abajo — te responderemos tan pronto como podamos.</span></p>
 
           <div class="ct-info-list">
             <a class="ct-info-card" href="tel:+17542623659">
@@ -419,7 +425,7 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
               <div class="ct-info-body">
                 <span class="ct-info-label"><span class="lang-only-en">Email</span><span class="lang-only-es">Correo</span></span>
                 <span class="ct-info-value">info@senaviacorp.com</span>
-                <span class="ct-info-sub"><span class="lang-only-en">We reply within one business day</span><span class="lang-only-es">Respondemos en menos de un día hábil</span></span>
+                <span class="ct-info-sub"><span class="lang-only-en">Send us a message anytime</span><span class="lang-only-es">Escríbenos cuando quieras</span></span>
               </div>
             </a>
 
@@ -466,9 +472,16 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
             </a>
 
             <p class="ct-disclaimer" style="text-align:left;margin:0;">
-              <span class="lang-only-en">Prefer a quick call or message? Use any of the contact channels on the left — we typically respond within one business day.</span>
-              <span class="lang-only-es">¿Prefieres llamar o escribir? Usa cualquiera de los canales a la izquierda — respondemos en menos de un día hábil.</span>
+              <span class="lang-only-en">Prefer a quick call or message? Use any of the contact channels on the left — we'll get back to you as soon as we can.</span>
+              <span class="lang-only-es">¿Prefieres llamar o escribir? Usa cualquiera de los canales a la izquierda — te responderemos tan pronto como podamos.</span>
             </p>
+          </div>
+
+          <div class="chip-row" style="margin-top:18px;" aria-label="What to expect / Qué esperar">
+            <span class="chip"><span class="dot"></span><span class="lang-only-en">30 minutes</span><span class="lang-only-es">30 minutos</span></span>
+            <span class="chip"><span class="dot"></span><span class="lang-only-en">No commitment</span><span class="lang-only-es">Sin compromiso</span></span>
+            <span class="chip"><span class="dot"></span><span class="lang-only-en">English &amp; Español</span><span class="lang-only-es">Inglés y Español</span></span>
+            <span class="chip"><span class="dot"></span><span class="lang-only-en">Live project review</span><span class="lang-only-es">Revisión del proyecto en vivo</span></span>
           </div>
         </div>
 

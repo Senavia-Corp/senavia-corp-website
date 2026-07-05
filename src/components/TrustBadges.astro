@@ -8,10 +8,10 @@ interface Badge { icon: IconKey; en: string; es: string; }
 interface Props { badges?: Badge[]; }
 
 const DEFAULT_BADGES: Badge[] = [
-  { icon: 'star',   en: '5-Star Google Reviews',  es: 'Reseñas 5★ en Google' },
-  { icon: 'pin',    en: 'Based in Plantation, FL', es: 'En Plantation, FL' },
-  { icon: 'globe',  en: 'Hablamos Español',        es: 'Hablamos Español' },
-  { icon: 'rocket', en: '100+ Projects Delivered', es: '100+ Proyectos Entregados' },
+  { icon: 'star',   en: 'Client Video Testimonials', es: 'Testimonios de Clientes en Video' },
+  { icon: 'pin',    en: 'Based in Plantation, FL',   es: 'En Plantation, FL' },
+  { icon: 'globe',  en: 'Hablamos Español',          es: 'Hablamos Español' },
+  { icon: 'rocket', en: 'Published Case Studies',    es: 'Casos de Estudio Publicados' },
 ];
 
 const { badges = DEFAULT_BADGES } = Astro.props;
