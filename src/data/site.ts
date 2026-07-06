@@ -1,8 +1,8 @@
 export const SITE = {
   name: 'SENAVIA Corp',
   legalName: 'Senavia Corp',
-  domain: 'new.senaviacorp.com',
-  url: 'https://new.senaviacorp.com',
+  domain: 'senaviacorp.com',
+  url: 'https://senaviacorp.com',
   description:
     'Google Partner-certified digital agency in Plantation, FL. Custom web design, SEO, and digital marketing for South Florida businesses across Miami-Dade, Broward, and Palm Beach.',
   defaultOgImage: '/images/og-default.webp',

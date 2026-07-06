@@ -6,7 +6,7 @@ import vercel from '@astrojs/vercel';
 import icon from 'astro-icon';
 
 export default defineConfig({
-  site: 'https://new.senaviacorp.com',
+  site: 'https://senaviacorp.com',
   output: 'static',
   // Dev-only UI; never shipped in the static build. Disabled so it never
   // overlays content in dev or QA screenshots.
