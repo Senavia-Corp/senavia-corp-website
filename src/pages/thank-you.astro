@@ -7,16 +7,15 @@ const description =
   'Your consultation with SENAVIA Corp is confirmed. Check your email for the details — we look forward to meeting you.';
 
 // ──────────────────────────────────────────────────────────────────────────
-//     Conversion tracking IDs. gtag.js is bootstrapped on this page only (the
-//     site uses Plausible everywhere else). Tags fire ONCE on page load, on
-//     PRODUCTION builds only (import.meta.env.PROD guard below) so local/preview
-//     visits don't pollute conversion counts. Test live: npm run build && preview.
-//     No Ads conversion label was provided — appointment conversions are counted
-//     via the GA4 'schedule_appointment' event (import into Google Ads via
-//     linked accounts), so there is no separate Ads label-based snippet.
+//     Conversion tracking. The shared gtag.js + the Google Ads base tag
+//     (AW-711225908) load SITE-WIDE from BaseLayout; here we add the GA4 config
+//     and fire the booking conversion event — PRODUCTION builds only
+//     (import.meta.env.PROD guard below) so local/preview visits don't pollute
+//     counts. No Ads conversion label was provided → the appointment conversion
+//     is counted via the GA4 'schedule_appointment' event (import into Google
+//     Ads via linked accounts), so there is no Ads label-based snippet.
 // ──────────────────────────────────────────────────────────────────────────
 const GA4_MEASUREMENT_ID = 'G-9442Q92NXR';
-const GOOGLE_ADS_CONVERSION_ID = 'AW-711225908';
 ---
 <BaseLayout
   title={title}
@@ -199,29 +198,20 @@ const GOOGLE_ADS_CONVERSION_ID = 'AW-711225908';
     </div>
   </main>
 
-  {/* ── Conversion tracking — production builds only ─────────────────────────
-       gtag.js is not loaded site-wide (Plausible is the site analytics), so it
-       is bootstrapped here for this conversion page. Fires once, on page load.
-       GA4 records the 'schedule_appointment' event; the Ads tag loads for
-       remarketing + GA4-imported conversions (no label-based Ads snippet). */}
+  {/* Booking conversion event — production only. gtag.js + the Google Ads base
+       tag load site-wide from BaseLayout; here we add the GA4 config and fire
+       the conversion event on the shared gtag/dataLayer (no second gtag.js). */}
   {import.meta.env.PROD && (
-    <Fragment>
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}></script>
-      <script is:inline define:vars={{ GA4_MEASUREMENT_ID, GOOGLE_ADS_CONVERSION_ID }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', GA4_MEASUREMENT_ID);
-        gtag('config', GOOGLE_ADS_CONVERSION_ID);
-
-        // GA4 conversion event — mark "schedule_appointment" as a Key Event in
-        // GA4, then import it into Google Ads via linked accounts. (No Ads
-        // conversion label provided, so no separate Ads conversion snippet.)
-        gtag('event', 'schedule_appointment', {
-          event_category: 'engagement',
-          event_label: 'cal_com_booking',
-        });
-      </script>
-    </Fragment>
+    <script is:inline define:vars={{ GA4_MEASUREMENT_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('config', GA4_MEASUREMENT_ID);
+      // Mark "schedule_appointment" as a Key Event in GA4, then import it into
+      // Google Ads via linked accounts.
+      gtag('event', 'schedule_appointment', {
+        event_category: 'engagement',
+        event_label: 'cal_com_booking',
+      });
+    </script>
   )}
 </BaseLayout>

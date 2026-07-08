@@ -141,6 +141,21 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
         (window.plausible.q = window.plausible.q || []).push(arguments);
       };
     </script>
+
+    <!-- Google Ads base tag (AW-711225908) — site-wide, production only, for
+         remarketing. Shared gtag.js: the /thank-you page adds the GA4 config +
+         the schedule_appointment conversion event on top of this. -->
+    {import.meta.env.PROD && (
+      <Fragment>
+        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=AW-711225908"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', 'AW-711225908');
+        </script>
+      </Fragment>
+    )}
   </head>
   <body class={bodyClass} data-screen-label={screenLabel}>
     <a class="skip-link" href="#main">
