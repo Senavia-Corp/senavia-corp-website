@@ -170,8 +170,12 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
   #senavia-chat-panel .chat-heading {
     display: flex;
     align-items: center;
+    justify-content: flex-start; /* widget default is space-between → pushes title right; keep badge+title together on the left */
     gap: 0.6rem;
   }
+  /* Left-align the subtitle to the same edge as the badge */
+  #senavia-chat-panel .chat-header { text-align: left; }
+  #senavia-chat-panel .chat-header p { margin: 0; }
   #senavia-chat-panel .chat-heading::before {
     content: '';
     flex: 0 0 auto;
