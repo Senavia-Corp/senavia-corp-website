@@ -262,6 +262,17 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
               cssVarsPerTheme: { light: { 'cal-brand': '#0A0E26' }, dark: { 'cal-brand': '#99CC33' } },
               hideEventTypeDetails: true, layout: 'month_view',
             });
+            // On a completed booking, send the visitor to /thank-you so its
+            // conversion tags (GA4 + Google Ads) fire. V2 deprecates the old
+            // event; register both + dedupe for cross-version safety. Fresh
+            // bookings only — reschedules are not counted as conversions.
+            function onBooked() {
+              if (window.__booked) return;
+              window.__booked = true;
+              window.location.href = '/thank-you';
+            }
+            window.Cal.ns[CAL_NS]('on', { action: 'bookingSuccessfulV2', callback: onBooked });
+            window.Cal.ns[CAL_NS]('on', { action: 'bookingSuccessful', callback: onBooked });
             var settled = false;
             function finish(ok) { if (settled) return; settled = true; clearTimeout(to); if (!ok) readyPromise = null; resolve(!!ok); }
             var to = setTimeout(function () { finish(false); }, 10000);
