@@ -5,6 +5,7 @@ import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import Seo from '@/components/Seo.astro';
 import JsonLd from '@/components/JsonLd.astro';
+import SenaviaChat from '@/components/SenaviaChat.astro';
 import { CALENDLY_URL, SITE } from '@/data/site';
 
 interface Props {
@@ -152,6 +153,11 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
     <slot />
 
     <Footer />
+
+    <!-- AI sales chat: lazy-loaded, self-hosted @n8n/chat. PROD/preview only
+         (kept out of local dev, same as Plausible). Nothing loads until the
+         visitor opens it. -->
+    {import.meta.env.PROD && <SenaviaChat />}
 
     <!-- Global language switcher logic -->
     <script>

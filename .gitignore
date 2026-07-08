@@ -35,5 +35,5 @@ _qa/
 
 # Planning artifacts — not part of the build
 FABLE-FINISH-SITE-PROMPT.md
-scripts/
+/scripts/
 .vercel
