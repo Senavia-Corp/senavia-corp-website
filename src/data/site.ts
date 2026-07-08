@@ -29,7 +29,7 @@ export const NAP = {
 };
 
 export const CALENDLY_URL =
-  'https://calendly.com/leads-senaviacorp/30-minute-meeting-clon';
+  'https://calendly.com/leads-senaviacorp/30-minute-meeting-senavia';
 
 export const SOCIAL = {
   instagram: 'https://www.instagram.com/senaviacorp',
