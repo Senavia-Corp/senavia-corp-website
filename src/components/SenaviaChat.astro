@@ -183,6 +183,12 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
   /* Left-align the subtitle to the same edge as the badge */
   #senavia-chat-panel .chat-header { text-align: left; }
   #senavia-chat-panel .chat-header p { margin: 0; }
+  /* Match the title's line-box to the 30px favicon badge so they center vertically together */
+  #senavia-chat-panel .chat-heading h1,
+  #senavia-chat-panel .chat-header h1 {
+    margin: 0;
+    line-height: 30px;
+  }
   #senavia-chat-panel .chat-heading::before {
     content: '';
     flex: 0 0 auto;
