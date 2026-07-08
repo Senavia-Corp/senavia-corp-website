@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { CALENDLY_URL } from '@/data/site';
+import { CAL_LINK } from '@/data/site';
 import {
   EST_PACKAGES,
   EST_COMPONENTS,
@@ -26,10 +26,8 @@ const fmtMonths = (m: number) => {
 
 declare global {
   interface Window {
-    Calendly?: { initPopupWidget: (opts: { url: string }) => void };
-    /* Shared Calendly loader exposed by BaseLayout (WL-022). */
-    ensureCalendly?: () => Promise<{ initPopupWidget: (opts: { url: string }) => void } | null>;
-    openCalendly?: (url?: string) => void;
+    /* Cal.com opener exposed by BaseLayout (single init point). */
+    openBooking?: (opts?: { notes?: string }) => void;
     plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
   }
 }
@@ -486,17 +484,14 @@ export default function Estimator() {
       `${t(lang, 'Estimated total', 'Total estimado')}: ${t(lang, 'from', 'desde')} ${fmt(total)}`,
       `${t(lang, 'Timeline', 'Plazo')}: ≈ ${fmtMonths(months)} ${t(lang, 'months', 'meses')}`,
     ].filter(Boolean).join(' · ');
-    const url = `${CALENDLY_URL}?${new URLSearchParams({ a1: lines }).toString()}`;
     if (typeof window.plausible === 'function') {
       window.plausible('estimator_complete', { props: { package: base.id, total: String(Math.round(total)) } });
     }
-    // WL-038 — go through the shared loader (BaseLayout, WL-022) instead of
-    // racing window.Calendly directly: on slow networks the widget may still
-    // be loading, and openCalendly() waits for it (with its own new-tab
-    // fallback on ad-blockers/timeouts).
-    if (typeof window.openCalendly === 'function') window.openCalendly(url);
-    else if (window.Calendly) window.Calendly.initPopupWidget({ url });
-    else window.open(url, '_blank', 'noopener');
+    // Open Cal.com with the estimate summary prefilled as booking notes. The
+    // shared opener (BaseLayout) falls back to the public page if embed.js is
+    // blocked; this direct fallback covers the rare case it never loaded at all.
+    if (typeof window.openBooking === 'function') window.openBooking({ notes: lines });
+    else window.location.assign(`https://cal.com/${CAL_LINK}`);
   };
 
   // Can we advance from the current step?

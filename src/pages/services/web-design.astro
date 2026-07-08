@@ -486,18 +486,19 @@ const description = "Custom web design in Miami & South Florida. 100% custom, co
 <script>
   (function(){
     var el = document.getElementById('calendlyInline');
-    if (!el) return;
-    function init() {
-      if (!window.Calendly) { setTimeout(init, 200); return; }
-      window.Calendly.initInlineWidget({
-        url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-senavia?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
-        parentElement: el,
-        prefill: {}, utm: {}
-      });
-      // Mark loaded after a beat
+    if (!el || !window.calInline) return;
+    var mounted = false;
+    function mount(){
+      if (mounted) return; mounted = true;
+      window.calInline(el);
       setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
     }
-    init();
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(ents){
+        ents.forEach(function(e){ if (e.isIntersecting) { mount(); io.disconnect(); } });
+      }, { rootMargin: '300px 0px' });
+      io.observe(el);
+    } else { mount(); }
   })();
 </script>
 

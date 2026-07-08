@@ -2,7 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Icon } from 'astro-icon/components';
 const title = "Schedule a Consultation — SENAVIA Corp · Book a Free 30-Minute Call";
-const description = "Book a free 30-minute consultation with the SENAVIA team. Pick a time from the live Calendly calendar — no back-and-forth required.";
+const description = "Book a free 30-minute consultation with the SENAVIA team. Pick a time from the live calendar — no back-and-forth required.";
 ---
 <BaseLayout
   title={title}
@@ -125,7 +125,7 @@ const description = "Book a free 30-minute consultation with the SENAVIA team. P
           <div class="sch-fallback" id="calendlyFallback">
             <span class="ic"><Icon name="lucide:calendar" /></span>
             <strong><span class="lang-only-en">Loading availability…</span><span class="lang-only-es">Cargando disponibilidad…</span></strong>
-            <p><span class="lang-only-en">Pick a 30-minute slot from the Calendly grid once it loads. If it doesn't appear, refresh or call us directly.</span><span class="lang-only-es">Elige un espacio de 30 minutos en el calendario de Calendly una vez que cargue. Si no aparece, actualiza la página o llámanos directamente.</span></p>
+            <p><span class="lang-only-en">Pick a 30-minute slot from the calendar once it loads. If it doesn't appear, refresh or call us directly.</span><span class="lang-only-es">Elige un espacio de 30 minutos en el calendario una vez que cargue. Si no aparece, actualiza la página o llámanos directamente.</span></p>
           </div>
         </div>
 
@@ -192,18 +192,12 @@ const description = "Book a free 30-minute consultation with the SENAVIA team. P
 <script>
   (function(){
     var el = document.getElementById('calendlyInline');
-    if (!el || !window.ensureCalendly) return;
+    if (!el || !window.calInline) return;
     var mounted = false;
     function mount(){
       if (mounted) return; mounted = true;
-      window.ensureCalendly().then(function(C){
-        C.initInlineWidget({
-          url: 'https://calendly.com/leads-senaviacorp/30-minute-meeting-senavia?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0a0e26&text_color=ffffff&primary_color=99cc33',
-          parentElement: el,
-          prefill: {}, utm: {}
-        });
-        setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
-      });
+      window.calInline(el);
+      setTimeout(function(){ el.classList.add('is-loaded'); }, 1200);
     }
     // Mount when the calendar nears the viewport — instant for visitors,
     // never triggered during a no-scroll Lighthouse navigation pass.

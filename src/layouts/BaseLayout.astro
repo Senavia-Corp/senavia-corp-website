@@ -6,7 +6,7 @@ import Footer from '@/components/Footer.astro';
 import Seo from '@/components/Seo.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import SenaviaChat from '@/components/SenaviaChat.astro';
-import { CALENDLY_URL, SITE } from '@/data/site';
+import { CAL_LINK, CAL_NS, SITE } from '@/data/site';
 
 interface Props {
   title: string;
@@ -76,10 +76,10 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
       })();
     </script>
 
-    <!-- Calendly is loaded lazily (on first interaction / on demand) by the
+    <!-- Cal.com is loaded lazily (on first interaction / on demand) by the
          loader at the end of <body>, so it sets no third-party cookies on the
          initial page load. Preconnect keeps the on-demand load fast. -->
-    <link rel="preconnect" href="https://assets.calendly.com" />
+    <link rel="preconnect" href="https://app.cal.com" />
 
     <!-- LCP hint: preload the hero asset when the page declares it. -->
     {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
@@ -215,62 +215,145 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
       })();
     </script>
 
-    <!-- Lazy Calendly loader: injects the widget only on first user intent
-         (scroll / pointer / key) or when a [data-calendly-trigger] is clicked.
-         Keeps Calendly's third-party cookies off the initial page load while
-         staying instant for real visitors. -->
-    <script is:inline define:vars={{ CALENDLY_URL }}>
+    <!-- Floating "Book a Free Call" button — a circular FAB that matches the AI
+         chat launcher (SenaviaChat.astro) in size/color/icon, placed in the
+         opposite (bottom-left) corner. Always visible; opens the modal in-page. -->
+    <button id="book-fab" class="book-fab" type="button" aria-label="Book a Free Call">
+      <svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    </button>
+
+    <!-- Cal.com booking — single init point for the whole site. Loads the
+         official embed lazily (first user intent / on demand) so no third-party
+         cookies hit the initial page load. The FAB and every existing CTA open
+         the SAME in-page modal (never a new tab); inline calendars + an
+         Estimator opener share one namespace + calLink + config. -->
+    <script is:inline define:vars={{ CAL_LINK, CAL_NS }}>
       (function () {
-        var loading;
+        var CFG = { layout: 'month_view', useSlotsViewOnSmallScreen: 'true' };
+        var CFG_STR = JSON.stringify(CFG);
+        var EMBED = 'https://app.cal.com/embed/embed.js';
+        function isEs() { return document.documentElement.classList.contains('lang-es'); }
+
+        // Cal queue stub — the official snippet WITHOUT its auto-append, so we
+        // load embed.js ourselves and get a real load/error signal.
+        function calStub() {
+          if (window.Cal) return;
+          (function (C, A, L) { var p = function (a, ar) { a.q.push(ar); }; C.Cal = function () { var cal = C.Cal; var ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; cal.loaded = true; } if (ar[0] === L) { var api = function () { p(api, arguments); }; var ns = ar[1]; api.q = api.q || []; if (typeof ns === 'string') { cal.ns[ns] = cal.ns[ns] || api; p(cal.ns[ns], ar); p(cal, ['initNamespace', ns]); } else p(cal, ar); return; } p(cal, ar); }; })(window, EMBED, 'init');
+        }
+
+        // Resolve TRUE only when embed.js's OWN load event fires (the real
+        // "it executed" signal — NOT the stub's synchronous cal.loaded flag,
+        // which is always set even when the script is blocked). FALSE on
+        // error/timeout, and re-arm so a later click can retry.
+        var readyPromise;
         function ensure() {
-          if (loading) return loading;
-          // resolve to null on error/timeout (ad-blockers, DNS
-          // filters) so every CTA can fall back to the public Calendly URL
-          // instead of dying in silence.
-          loading = new Promise(function (resolve) {
+          if (readyPromise) return readyPromise;
+          readyPromise = new Promise(function (resolve) {
+            calStub();
+            window.Cal('init', CAL_NS, { origin: 'https://app.cal.com' });
+            window.Cal.config = window.Cal.config || {};
+            window.Cal.config.forwardQueryParams = true;
+            window.Cal.ns[CAL_NS]('ui', {
+              cssVarsPerTheme: { light: { 'cal-brand': '#0A0E26' }, dark: { 'cal-brand': '#99CC33' } },
+              hideEventTypeDetails: true, layout: 'month_view',
+            });
             var settled = false;
-            function settle(C) {
-              if (settled) return;
-              settled = true;
-              resolve(C || null);
-            }
-            var l = document.createElement('link');
-            l.rel = 'stylesheet';
-            l.href = 'https://assets.calendly.com/assets/external/widget.css';
-            document.head.appendChild(l);
+            function finish(ok) { if (settled) return; settled = true; clearTimeout(to); if (!ok) readyPromise = null; resolve(!!ok); }
+            var to = setTimeout(function () { finish(false); }, 10000);
             var s = document.createElement('script');
-            s.src = 'https://assets.calendly.com/assets/external/widget.js';
-            s.async = true;
-            s.onload = function () {
-              window.__calendlyReady = true;
-              window.dispatchEvent(new Event('calendly:ready'));
-              settle(window.Calendly);
-            };
-            s.onerror = function () { settle(null); };
-            setTimeout(function () { settle(window.Calendly || null); }, 4000);
+            s.src = EMBED; s.async = true;
+            s.onload = function () { finish(true); };
+            s.onerror = function () { finish(false); };
             document.head.appendChild(s);
           });
-          return loading;
+          return readyPromise;
         }
-        window.ensureCalendly = ensure;
-        window.openCalendly = function (url) {
-          ensure().then(function (C) {
-            var target = url || CALENDLY_URL;
-            var widget = C || window.Calendly; // late arrival after the 4s timeout
-            if (widget) widget.initPopupWidget({ url: target });
-            else window.open(target, '_blank', 'noopener');
+
+        // Hidden <button> (no href → can never navigate) = the element-click
+        // trigger for programmatic opens. Clicked only AFTER embed.js is ready,
+        // so it always opens the in-page modal, never a new tab.
+        var hidden;
+        function getHidden() {
+          if (hidden) return hidden;
+          hidden = document.createElement('button');
+          hidden.type = 'button';
+          hidden.style.display = 'none';
+          hidden.setAttribute('data-cal-link', CAL_LINK);
+          hidden.setAttribute('data-cal-namespace', CAL_NS);
+          hidden.setAttribute('data-cal-config', CFG_STR);
+          document.body.appendChild(hidden);
+          return hidden;
+        }
+        // Open the booking modal in-page. opts.notes prefills the booking form.
+        // If the embed is blocked/broken, degrade to the public page in the SAME
+        // tab — never a new tab, never a dead button.
+        window.openBooking = function (opts) {
+          ensure().then(function (ok) {
+            if (ok) {
+              var h = getHidden();
+              h.setAttribute('data-cal-config',
+                opts && opts.notes
+                  ? JSON.stringify({ layout: CFG.layout, useSlotsViewOnSmallScreen: CFG.useSlotsViewOnSmallScreen, notes: opts.notes })
+                  : CFG_STR);
+              h.click();
+              // Cal creates <cal-modal-box> synchronously when it handles the
+              // click; if it's there, the modal is open and we're done.
+              if (document.querySelector('cal-modal-box')) return;
+            }
+            window.location.assign('https://cal.com/' + CAL_LINK);
           });
         };
-        // Warm up on first intent so the popup feels instant. Each fires once.
-        ['scroll', 'pointerdown', 'touchstart', 'keydown'].forEach(function (ev) {
-          window.addEventListener(ev, ensure, { once: true, passive: true });
-        });
-        // Delegate clicks on any Calendly trigger.
+
+        // Inline calendar mount (used by /schedule, /contact, service pages).
+        window.calInline = function (target) {
+          ensure().then(function (ok) {
+            if (ok) window.Cal.ns[CAL_NS]('inline', { elementOrSelector: target, calLink: CAL_LINK, config: CFG });
+          });
+        };
+
+        // Every existing CTA opens the SAME in-page modal — never a new tab.
+        // The real href (public page) is only a no-JS fallback; the delegated
+        // handler preventDefaults it for JS users. No data-cal-link on the
+        // visible CTAs, so Cal never double-handles the click.
+        function wireCtas() {
+          var els = document.querySelectorAll('[data-calendly-trigger]');
+          for (var i = 0; i < els.length; i++) {
+            var el = els[i];
+            if (el.tagName === 'A') {
+              var h = el.getAttribute('href');
+              if (!h || h === '#') el.setAttribute('href', 'https://cal.com/' + CAL_LINK);
+              el.removeAttribute('target'); // never open a new tab
+            }
+          }
+        }
+        if (document.readyState !== 'loading') wireCtas();
+        else document.addEventListener('DOMContentLoaded', wireCtas);
         document.addEventListener('click', function (e) {
           var t = e.target.closest && e.target.closest('[data-calendly-trigger]');
           if (!t) return;
           e.preventDefault();
-          window.openCalendly(t.getAttribute('data-calendly-url'));
+          window.openBooking();
+        });
+
+        // Floating button: label per language, click opens the modal.
+        function labelFab() {
+          var f = document.getElementById('book-fab');
+          if (f) f.setAttribute('aria-label', isEs() ? 'Agenda una Llamada' : 'Book a Free Call');
+        }
+        var fab = document.getElementById('book-fab');
+        if (fab) fab.addEventListener('click', function () { window.openBooking(); });
+        labelFab();
+        window.addEventListener('languagechange', labelFab);
+
+        // Warm up embed.js on first intent so the first open is instant, while
+        // keeping third-party cookies off the initial page load. Each once.
+        ['scroll', 'pointerdown', 'touchstart', 'keydown'].forEach(function (ev) {
+          window.addEventListener(ev, ensure, { once: true, passive: true });
         });
       })();
     </script>

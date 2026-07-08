@@ -2201,6 +2201,38 @@ html.lang-es .calendly-inline::before { content: 'Cargando agenda…'; }
   .calendly-inline::before { animation: none; }
 }
 
+/* Floating "Book a Free Call" button — a circular FAB that mirrors the AI chat
+   launcher (#senavia-chat-launcher in SenaviaChat.astro) in size, color, icon
+   and shadow, placed in the opposite corner (chat = bottom-right, this =
+   bottom-left). Keep these values in sync with the chat launcher. */
+.book-fab {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 40; /* same layer as the chat launcher; the Cal modal overlays it */
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #99CC33, #69D72D);
+  color: #0A0E26;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(153, 204, 51, 0.35), 0 0 22px rgba(153, 204, 51, 0.22);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.book-fab:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5), 0 0 0 1px rgba(153,204,51,0.6), 0 0 30px rgba(153,204,51,0.35); }
+.book-fab:focus-visible { outline: 3px solid #ADE73A; outline-offset: 3px; }
+.book-fab svg { display: block; }
+@media (max-width: 560px) {
+  .book-fab { left: 1rem; bottom: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book-fab { transition: none; }
+}
+
 /* --- Pillar / hero metric strip (under service hero, optional) --- */
 .metric-strip {
   display: flex;

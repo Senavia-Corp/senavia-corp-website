@@ -28,8 +28,9 @@ export const NAP = {
   areaServed: ['Miami-Dade County', 'Broward County', 'Palm Beach County'],
 };
 
-export const CALENDLY_URL =
-  'https://calendly.com/leads-senaviacorp/30-minute-meeting-senavia';
+// Cal.com booking — single source of truth. Override per-deploy with PUBLIC_CAL_LINK.
+export const CAL_LINK = import.meta.env.PUBLIC_CAL_LINK || 'senavia/30min';
+export const CAL_NS = '30min'; // embed namespace (fixed by the Cal.com dashboard)
 
 export const SOCIAL = {
   instagram: 'https://www.instagram.com/senaviacorp',
