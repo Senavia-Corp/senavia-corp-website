@@ -5,17 +5,6 @@ import { Icon } from 'astro-icon/components';
 const title = 'Thank You — Appointment Confirmed · SENAVIA Corp';
 const description =
   'Your consultation with SENAVIA Corp is confirmed. Check your email for the details — we look forward to meeting you.';
-
-// ──────────────────────────────────────────────────────────────────────────
-//     Conversion tracking. The shared gtag.js + the Google Ads base tag
-//     (AW-711225908) load SITE-WIDE from BaseLayout; here we add the GA4 config
-//     and fire the booking conversion event — PRODUCTION builds only
-//     (import.meta.env.PROD guard below) so local/preview visits don't pollute
-//     counts. No Ads conversion label was provided → the appointment conversion
-//     is counted via the GA4 'schedule_appointment' event (import into Google
-//     Ads via linked accounts), so there is no Ads label-based snippet.
-// ──────────────────────────────────────────────────────────────────────────
-const GA4_MEASUREMENT_ID = 'G-9442Q92NXR';
 ---
 <BaseLayout
   title={title}
@@ -198,20 +187,15 @@ const GA4_MEASUREMENT_ID = 'G-9442Q92NXR';
     </div>
   </main>
 
-  {/* Booking conversion event — production only. gtag.js + the Google Ads base
-       tag load site-wide from BaseLayout; here we add the GA4 config and fire
-       the conversion event on the shared gtag/dataLayer (no second gtag.js). */}
+  {/* Booking conversion → GTM. GTM is installed site-wide (BaseLayout); this
+       page just announces the completed booking on the dataLayer. GTM fires the
+       GA4 key event + Google Ads conversion off the 'book_appointment' trigger.
+       Production only, once on load. Reschedules never reach here (Cal onBooked
+       in BaseLayout redirects fresh bookings only). */}
   {import.meta.env.PROD && (
-    <script is:inline define:vars={{ GA4_MEASUREMENT_ID }}>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('config', GA4_MEASUREMENT_ID);
-      // Mark "schedule_appointment" as a Key Event in GA4, then import it into
-      // Google Ads via linked accounts.
-      gtag('event', 'schedule_appointment', {
-        event_category: 'engagement',
-        event_label: 'cal_com_booking',
-      });
+      window.dataLayer.push({ event: 'book_appointment', method: 'cal_com' });
     </script>
   )}
 </BaseLayout>

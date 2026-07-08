@@ -8,6 +8,12 @@ import JsonLd from '@/components/JsonLd.astro';
 import SenaviaChat from '@/components/SenaviaChat.astro';
 import { CAL_LINK, CAL_NS, SITE } from '@/data/site';
 
+// Google Tag Manager container — the single site-wide container. GA4
+// (G-9442Q92NXR) and Google Ads (AW-711225908) tags live INSIDE GTM, not in
+// code, so there is exactly one source of truth and no double-counting. Loaded
+// on built deploys only (matches Plausible); local `astro dev` stays clean.
+const GTM_ID = 'GTM-N6H7BC5';
+
 interface Props {
   title: string;
   description?: string;
@@ -49,6 +55,21 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Tag Manager — as high in <head> as possible. Built deploys only
+         (local dev stays out of analytics). Every tag (GA4 + Ads + others) is
+         configured in the GTM dashboard; code only bootstraps the container and
+         pushes events to the dataLayer. -->
+    {import.meta.env.PROD && (
+      <script is:inline define:vars={{ GTM_ID }}>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer',GTM_ID);
+      </script>
+    )}
+
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="alternate" hreflang="x-default" href={absoluteUrl} />
 
@@ -141,23 +162,14 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
         (window.plausible.q = window.plausible.q || []).push(arguments);
       };
     </script>
-
-    <!-- Google Ads base tag (AW-711225908) — site-wide, production only, for
-         remarketing. Shared gtag.js: the /thank-you page adds the GA4 config +
-         the schedule_appointment conversion event on top of this. -->
-    {import.meta.env.PROD && (
-      <Fragment>
-        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=AW-711225908"></script>
-        <script is:inline>
-          window.dataLayer = window.dataLayer || [];
-          function gtag() { dataLayer.push(arguments); }
-          gtag('js', new Date());
-          gtag('config', 'AW-711225908');
-        </script>
-      </Fragment>
-    )}
   </head>
   <body class={bodyClass} data-screen-label={screenLabel}>
+    {/* Google Tag Manager (noscript) — must be immediately after <body> */}
+    {import.meta.env.PROD && (
+      <noscript>
+        <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`} height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe>
+      </noscript>
+    )}
     <a class="skip-link" href="#main">
       <span class="lang-only-en">Skip to content</span>
       <span class="lang-only-es">Saltar al contenido</span>
@@ -383,6 +395,24 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
         });
       })();
     </script>
+
+    <!-- Lead micro-conversions → dataLayer. GTM turns these into GA4 events /
+         Ads conversions from the dashboard (no code change per tag). Delegated,
+         so it also catches phone/email links added later. Built deploys only. -->
+    {import.meta.env.PROD && (
+      <script is:inline>
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href^="tel:"], a[href^="mailto:"]');
+          if (!a) return;
+          var href = a.getAttribute('href') || '';
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: href.indexOf('tel:') === 0 ? 'tel_click' : 'email_click',
+            link_url: href,
+          });
+        });
+      </script>
+    )}
 
     <!-- Home/global interactions: carousels, reveals, video autoplay.
          /scripts/ ships with immutable 1y cache but no fingerprint:
