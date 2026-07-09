@@ -9,7 +9,11 @@
   override to `#senavia-chat-panel` (id selector = higher specificity), so the
   brand theme reliably beats the widget defaults.
 */
-const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-8541-ce98f915b422/chat';
+// Widget talks to a same-origin proxy (/api/chat) that hides the n8n webhook and
+// enforces Cloudflare Turnstile. Turnstile activates only when PUBLIC_TURNSTILE_SITEKEY
+// is set (fail-open otherwise, so the chat never breaks during setup).
+const WEBHOOK_URL = '/api/chat';
+const TURNSTILE_SITEKEY = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
 ---
 
 <button
@@ -240,7 +244,7 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
   }
 </style>
 
-<script is:inline define:vars={{ WEBHOOK_URL }}>
+<script is:inline define:vars={{ WEBHOOK_URL, TURNSTILE_SITEKEY }}>
   (function () {
     var launcher = document.getElementById('senavia-chat-launcher');
     var panel = document.getElementById('senavia-chat-panel');
@@ -282,37 +286,93 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
         : ['Hi! 👋 I’m the SENAVIA assistant. What are you working on — a website, online store, or marketing?'];
     }
 
+    var tsLoading;
+    function loadTurnstileScript() {
+      if (window.turnstile) return Promise.resolve(true);
+      if (tsLoading) return tsLoading;
+      tsLoading = new Promise(function (resolve) {
+        var s = document.createElement('script');
+        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        s.async = true;
+        s.onload = function () { resolve(true); };
+        s.onerror = function () { resolve(false); };
+        document.head.appendChild(s);
+        setTimeout(function () { resolve(!!window.turnstile); }, 6000);
+      });
+      return tsLoading;
+    }
+
+    // Returns true if the visitor is verified (or Turnstile isn't configured / is blocked —
+    // we fail-open on infra errors so real users are never locked out).
+    function verifyHuman() {
+      if (!TURNSTILE_SITEKEY) return Promise.resolve(true);
+      return loadTurnstileScript().then(function (ok) {
+        if (!ok || !window.turnstile) return true;
+        return new Promise(function (resolve) {
+          var holder = document.createElement('div');
+          holder.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
+          document.body.appendChild(holder);
+          try {
+            window.turnstile.render(holder, {
+              sitekey: TURNSTILE_SITEKEY,
+              callback: function (token) {
+                fetch('/api/chat-verify', {
+                  method: 'POST',
+                  headers: { 'content-type': 'application/json' },
+                  body: JSON.stringify({ token: token })
+                })
+                  .then(function (r) { return r.json(); })
+                  .then(function (d) { resolve(!!d.ok); })
+                  .catch(function () { resolve(false); });
+              },
+              'error-callback': function () { resolve(false); }
+            });
+          } catch (e) { resolve(true); }
+        });
+      });
+    }
+
     function load() {
       if (loaded) return Promise.resolve();
       loaded = true;
-      var css = document.createElement('link');
-      css.rel = 'stylesheet';
-      css.href = '/scripts/n8n-chat.css?v=' + VERSION;
-      document.head.appendChild(css);
-      var lang = currentLang();
-      return import('/scripts/n8n-chat.bundle.js?v=' + VERSION)
-        .then(function (mod) {
-          mod.createChat({
-            webhookUrl: WEBHOOK_URL,
-            target: '#senavia-chat',
-            mode: 'fullscreen',
-            showWelcomeScreen: false,
-            loadPreviousSession: true,
-            defaultLanguage: 'en',
-            initialMessages: greeting(lang),
-            i18n: { en: i18nFor(lang) },
-            metadata: { source_url: location.pathname, site_lang: lang }
-          });
-        })
-        .catch(function () {
+      return verifyHuman().then(function (human) {
+        if (!human) {
           loaded = false;
-          var box = document.getElementById('senavia-chat');
-          if (box) {
-            box.textContent = currentLang() === 'es'
-              ? 'No pudimos cargar el chat. Escríbenos a info@senaviacorp.com o al (754) 262-3659.'
-              : 'We couldn’t load the chat. Email info@senaviacorp.com or call (754) 262-3659.';
-          }
-        });
+          var b = document.getElementById('senavia-chat');
+          if (b) b.textContent = currentLang() === 'es'
+            ? 'No pudimos verificar que eres una persona. Recarga la página, o escríbenos a info@senaviacorp.com / (754) 262-3659.'
+            : 'We couldn’t verify you’re human. Please refresh, or email info@senaviacorp.com / call (754) 262-3659.';
+          return;
+        }
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = '/scripts/n8n-chat.css?v=' + VERSION;
+        document.head.appendChild(css);
+        var lang = currentLang();
+        return import('/scripts/n8n-chat.bundle.js?v=' + VERSION)
+          .then(function (mod) {
+            mod.createChat({
+              webhookUrl: WEBHOOK_URL,
+              target: '#senavia-chat',
+              mode: 'fullscreen',
+              showWelcomeScreen: false,
+              loadPreviousSession: true,
+              defaultLanguage: 'en',
+              initialMessages: greeting(lang),
+              i18n: { en: i18nFor(lang) },
+              metadata: { source_url: location.pathname, site_lang: lang }
+            });
+          })
+          .catch(function () {
+            loaded = false;
+            var box = document.getElementById('senavia-chat');
+            if (box) {
+              box.textContent = currentLang() === 'es'
+                ? 'No pudimos cargar el chat. Escríbenos a info@senaviacorp.com o al (754) 262-3659.'
+                : 'We couldn’t load the chat. Email info@senaviacorp.com or call (754) 262-3659.';
+            }
+          });
+      });
     }
 
     function open() {
