@@ -1,7 +1,29 @@
 ---
 import { NAV, NAP } from '@/data/site';
+import { SUBSERVICES as WEB_DESIGN_SUBS } from '@/data/subservices';
+import { SUBSERVICES_TRAFFIC as TRAFFIC_SUBS } from '@/data/subservices-traffic';
+import { SUBSERVICES_WEBDEV as WEBDEV_SUBS } from '@/data/subservices-webdev';
 import LangSwitcher from './LangSwitcher.astro';
 import { Icon } from 'astro-icon/components';
+
+// Attach each service's subservices as menu sub-links. Data-driven from the
+// same source that renders the subservice pages — labels derived from the
+// eyebrow ("Business Website Design · Miami" → "Business Website Design").
+const SUBS_BY_SERVICE: Record<string, typeof WEB_DESIGN_SUBS> = {
+  '/services/web-design': WEB_DESIGN_SUBS,
+  '/services/traffic-generation': TRAFFIC_SUBS,
+  '/services/web-development': WEBDEV_SUBS,
+};
+const shortLabel = (eyebrow: string) => eyebrow.split('·')[0].trim();
+const servicesNav = NAV.services.map((item) => ({
+  ...item,
+  key: item.href.split('/').pop() ?? item.href,
+  subservices: (SUBS_BY_SERVICE[item.href] ?? []).map((s) => ({
+    href: `${item.href}/${s.slug}`,
+    label_en: shortLabel(s.eyebrow_en),
+    label_es: shortLabel(s.eyebrow_es),
+  })),
+}));
 ---
 <nav class="nav" data-screen-label="01 Navbar">
   <div class="nav-inner">
@@ -16,23 +38,31 @@ import { Icon } from 'astro-icon/components';
           <span class="lang-only-es">Servicios</span>
           <span class="caret"></span>
         </a>
-        <div class="nav-panel">
-          {NAV.services.map((item) => (
-            <a class="nav-panel-item" href={item.href}>
-              <span class="ic"><img src={item.icon} alt="" /></span>
-              <span class="nav-panel-title">
-                <span class="lang-only-en">{item.title_en}</span>
-                <span class="lang-only-es">{item.title_es}</span>
-              </span>
-              <p>
-                <span class="lang-only-en">{item.desc_en}</span>
-                <span class="lang-only-es">{item.desc_es}</span>
-              </p>
-              <span class="more">
-                <span class="lang-only-en">Learn More</span>
-                <span class="lang-only-es">Saber Más</span>
-              </span>
-            </a>
+        <div class="nav-panel is-services">
+          {servicesNav.map((item) => (
+            <div class="nav-panel-col">
+              <a class="nav-panel-head" href={item.href}>
+                <span class="ic"><img src={item.icon} alt="" /></span>
+                <span class="nav-panel-title">
+                  <span class="lang-only-en">{item.title_en}</span>
+                  <span class="lang-only-es">{item.title_es}</span>
+                </span>
+                <span class="more">
+                  <span class="lang-only-en">View all</span>
+                  <span class="lang-only-es">Ver todo</span>
+                </span>
+              </a>
+              <ul class="nav-sublinks">
+                {item.subservices.map((s) => (
+                  <li>
+                    <a href={s.href}>
+                      <span class="lang-only-en">{s.label_en}</span>
+                      <span class="lang-only-es">{s.label_es}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </div>
@@ -149,12 +179,30 @@ import { Icon } from 'astro-icon/components';
         <span class="caret"></span>
       </button>
       <div class="nav-mobile-sub" id="navSubServices">
-        {NAV.services.map((item) => (
-          <a href={item.href}>
-            <span class="ic"><img src={item.icon} alt="" /></span>
-            <span class="lang-only-en">{item.title_en}</span>
-            <span class="lang-only-es">{item.title_es}</span>
-          </a>
+        {servicesNav.map((item) => (
+          <div class="nav-mobile-subgroup">
+            <a class="nav-mobile-subhead" href={item.href}>
+              <span class="ic"><img src={item.icon} alt="" /></span>
+              <span class="lang-only-en">{item.title_en}</span>
+              <span class="lang-only-es">{item.title_es}</span>
+            </a>
+            <button type="button" class="nav-mobile-subtoggle" data-toggle
+              aria-expanded="false" aria-controls={`navSub-${item.key}`}>
+              <span class="sr-only lang-only-en">Show {item.title_en} services</span>
+              <span class="sr-only lang-only-es">Ver servicios de {item.title_es}</span>
+              <span class="caret" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-mobile-subsub" id={`navSub-${item.key}`}>
+              {item.subservices.map((s) => (
+                <li>
+                  <a href={s.href}>
+                    <span class="lang-only-en">{s.label_en}</span>
+                    <span class="lang-only-es">{s.label_es}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
       </div>
     </div>
