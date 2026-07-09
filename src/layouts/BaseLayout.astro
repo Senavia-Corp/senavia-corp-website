@@ -19,6 +19,7 @@ interface Props {
   description?: string;
   canonical?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: 'website' | 'article';
   jsonLdType?: 'home' | 'about' | 'service' | 'portfolio' | 'blog' | 'localbusiness' | 'pricing';
   jsonLdData?: Record<string, unknown>;
@@ -35,6 +36,7 @@ const {
   description,
   canonical,
   ogImage,
+  ogImageAlt,
   ogType = 'website',
   jsonLdType = 'home',
   jsonLdData = {},
@@ -78,6 +80,7 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
       description={description}
       canonical={canonical}
       ogImage={ogImage}
+      ogImageAlt={ogImageAlt}
       ogType={ogType}
       noindex={noindex}
     />

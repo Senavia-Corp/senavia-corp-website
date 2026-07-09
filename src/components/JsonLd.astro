@@ -131,7 +131,9 @@ const skipBreadcrumb =
   segments.length < 2 ||
   segments[0] === 'gqm' ||
   (segments[0] === 'service-areas' && segments.length >= 2) ||
-  (segments[0] === 'services' && segments[1] === 'web-design' && segments.length >= 3);
+  (segments[0] === 'services' &&
+    ['web-design', 'web-development', 'traffic-generation'].includes(segments[1]) &&
+    segments.length >= 3);
 function crumbLabel(seg: string, isLast: boolean): string {
   if (isLast && type === 'blog' && typeof data.headline === 'string') return data.headline;
   if (isLast && type === 'portfolio' && typeof data.name === 'string') return data.name;

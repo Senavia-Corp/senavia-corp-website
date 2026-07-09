@@ -13,6 +13,8 @@ const { sub } = Astro.props;
 const base = `/services/traffic-generation/${sub.slug}`;
 const heroImg = `/images/subservices/${sub.slug}-hero.avif`;
 const introImg = `/images/subservices/${sub.slug}-intro.avif`;
+// Social/AI card: crawler-safe 1200x630 WebP (AVIF heroes don't preview on FB/LinkedIn/X).
+const ogImg = `/images/subservices/${sub.slug}-og.webp`;
 
 // Breadcrumb JSON-LD
 const breadcrumbLd = {
@@ -42,12 +44,16 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
   title={sub.metaTitle}
   description={sub.metaDescription}
   canonical={base}
+  ogImage={ogImg}
+  ogImageAlt={sub.h1_en}
+  preloadImage={heroImg}
   jsonLdType="service"
   jsonLdData={{
     name: sub.h1_en,
     serviceType: sub.eyebrow_en.split(' · ')[0],
     description: sub.metaDescription,
     url: `${SITE.url}${base}`,
+    image: `${SITE.url}${ogImg}`,
   }}
   screenLabel={`Subservice — ${sub.h1_en}`}
 >

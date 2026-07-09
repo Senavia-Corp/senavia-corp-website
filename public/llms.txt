@@ -12,6 +12,32 @@ Website: https://senaviacorp.com
 - [Web Development](https://senaviacorp.com/services/web-development): Admin panels, CRM/ERP portals & workflow automation for how your team works.
 - [All Services](https://senaviacorp.com/services): Overview of every service line.
 
+## Subservices
+
+### Custom Web Design
+- [Business Website Design](https://senaviacorp.com/services/web-design/business-website-design): Conversion-focused custom business sites built on local SEO.
+- [Corporate Website Design](https://senaviacorp.com/services/web-design/corporate-website-design): Premium multi-page corporate platforms built to scale.
+- [Shopify Store Design](https://senaviacorp.com/services/web-design/shopify-store-design): High-converting Shopify stores built to sell from day one.
+- [Custom Website Development](https://senaviacorp.com/services/web-design/custom-website-development): Custom functionality, integrations, portals & dashboards.
+- [Landing Page Design](https://senaviacorp.com/services/web-design/landing-page-design): High-intent landing pages for Google Ads that lower cost per lead.
+- [Website Redesign](https://senaviacorp.com/services/web-design/website-redesign): Rebuilds for modern UX, speed & SEO without losing rankings.
+
+### Traffic Generation
+- [Google Ads Management](https://senaviacorp.com/services/traffic-generation/google-ads-management): Managed Google Ads search campaigns tuned for lower CPA and higher ROAS.
+- [SEO Services](https://senaviacorp.com/services/traffic-generation/seo-services): Technical, on-page & content SEO for durable organic traffic.
+- [Local SEO Services](https://senaviacorp.com/services/traffic-generation/local-seo-services): Local SEO & map-pack visibility across Miami-Dade, Broward, and Palm Beach.
+- [Facebook & Instagram Ads](https://senaviacorp.com/services/traffic-generation/facebook-instagram-ads): Meta ad funnels (Facebook & Instagram) that drive qualified leads.
+- [Google Business Profile Optimization](https://senaviacorp.com/services/traffic-generation/google-business-profile-optimization): Google Business Profile & Maps optimization to win the local pack.
+- [AI Search Optimization (GEO)](https://senaviacorp.com/services/traffic-generation/ai-search-optimization): GEO/AEO to get cited in ChatGPT, Perplexity, and Google AI Overviews.
+
+### Web Development
+- [Custom Web Application Development](https://senaviacorp.com/services/web-development/custom-web-application-development): Bespoke web apps, portals & SaaS built around your business logic.
+- [Admin Panel Development](https://senaviacorp.com/services/web-development/admin-panel-development): Custom dashboards & admin panels for real-time KPIs and operations.
+- [CRM Development](https://senaviacorp.com/services/web-development/crm-development): Custom CRMs — pipelines, client portals & follow-up automation.
+- [API Integration Services](https://senaviacorp.com/services/web-development/api-integration-services): API & webhook integrations connecting CRM, ERP, payments & tools.
+- [Workflow Automation](https://senaviacorp.com/services/web-development/workflow-automation): Automated workflows that eliminate manual busywork.
+- [ERP System Development](https://senaviacorp.com/services/web-development/erp-system-development): Modular ERP unifying finance, inventory & operations.
+
 ## Key Pages
 
 - [Prices & Packages](https://senaviacorp.com/pricing): Transparent pricing for every business size.
@@ -36,7 +62,7 @@ Website: https://senaviacorp.com
 - Phone: +1 (754) 262-3659
 - Email: info@senaviacorp.com
 - Hours: Monday-Friday, 8:00am-6:00pm (ET)
-- Preferred contact channel: book a free 30-minute call at https://calendly.com/leads-senaviacorp/30-minute-meeting-senavia
+- Preferred contact channel: book a free 30-minute call at https://senaviacorp.com/schedule
 
 ## Languages
 

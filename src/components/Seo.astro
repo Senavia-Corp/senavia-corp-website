@@ -5,6 +5,7 @@ interface Props {
   description?: string;
   canonical?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   ogType?: 'website' | 'article';
   noindex?: boolean;
 }
@@ -13,6 +14,7 @@ const {
   description = SITE.description,
   canonical,
   ogImage = SITE.defaultOgImage,
+  ogImageAlt = SITE.name,
   ogType = 'website',
   noindex = false,
 } = Astro.props;
@@ -22,6 +24,10 @@ const canonicalUrl = canonical
   ? new URL(canonical, SITE.url).toString()
   : new URL(Astro.url.pathname, SITE.url).toString();
 const absoluteOgImage = new URL(ogImage, SITE.url).toString();
+const ogImageType = absoluteOgImage.endsWith('.avif') ? 'image/avif'
+  : absoluteOgImage.endsWith('.png') ? 'image/png'
+  : /\.jpe?g$/.test(absoluteOgImage) ? 'image/jpeg'
+  : 'image/webp';
 ---
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
@@ -37,6 +43,8 @@ const absoluteOgImage = new URL(ogImage, SITE.url).toString();
 <meta property="og:image" content={absoluteOgImage} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
+<meta property="og:image:type" content={ogImageType} />
+<meta property="og:image:alt" content={ogImageAlt} />
 <meta property="og:locale" content="en_US" />
 <meta property="og:locale:alternate" content="es_US" />
 
@@ -46,6 +54,7 @@ const absoluteOgImage = new URL(ogImage, SITE.url).toString();
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={absoluteOgImage} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
 
 <!-- Theme color -->
 <meta name="theme-color" content="#0A0E26" />
