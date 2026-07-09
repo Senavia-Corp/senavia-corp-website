@@ -47,7 +47,10 @@ const handler: APIRoute = async ({ params, request }) => {
     const body = await res.text();
     return new Response(body, {
       status: res.status,
-      headers: { 'content-type': res.headers.get('content-type') ?? 'application/json' },
+      headers: {
+        'content-type': res.headers.get('content-type') ?? 'application/json',
+        'x-cal-proxy': process.env.CAL_API_KEY ? 'env-key' : 'forwarded',
+      },
     });
   } catch (e) {
     return new Response(JSON.stringify({ error: 'Proxy fetch failed', detail: String(e) }), {
