@@ -29,8 +29,12 @@ const handler: APIRoute = async ({ params, request }) => {
     'User-Agent': 'Mozilla/5.0 (compatible; SenaviaBot/1.0)',
     Accept: 'application/json',
   };
+  // Prefer the Cal.com key from Vercel env (single secure source); fall back to
+  // whatever Authorization the caller forwarded.
+  const apiKey = process.env.CAL_API_KEY;
   const auth = request.headers.get('authorization');
-  if (auth) headers.Authorization = auth;
+  if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
+  else if (auth) headers.Authorization = auth;
 
   const init: RequestInit = { method: request.method, headers };
   if (request.method === 'POST') {
