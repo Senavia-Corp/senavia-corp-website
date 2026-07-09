@@ -64,7 +64,7 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
   #senavia-chat-launcher:focus-visible { outline: 3px solid #ADE73A; outline-offset: 3px; }
   #senavia-chat-launcher .scl-icon-open { display: block; }
   #senavia-chat-launcher .scl-icon-close { display: none; }
-  #senavia-chat-launcher[aria-expanded='true'] { display: none; } /* hidden while open; close via the header ✕ */
+  #senavia-chat-launcher[aria-expanded='true'] { z-index: 1001; } /* desktop: stays visible showing the ✕ (alongside the header ✕); hidden on mobile — see media query */
   #senavia-chat-launcher[aria-expanded='true'] .scl-icon-open { display: none; }
   #senavia-chat-launcher[aria-expanded='true'] .scl-icon-close { display: block; }
   #senavia-chat-launcher[aria-expanded='true'] .scl-ping { display: none; }
@@ -230,6 +230,8 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
     }
     #senavia-chat-close { top: 12px; right: 12px; width: 40px; height: 40px; }
     #senavia-chat-launcher { right: 1rem; bottom: 1rem; }
+    /* Full-screen panel: a floating ✕ would overlap the input, so hide it (the header ✕ closes) */
+    #senavia-chat-launcher[aria-expanded='true'] { display: none; }
   }
 
   .visually-hidden {
@@ -329,7 +331,7 @@ const WEBHOOK_URL = 'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-85
       launcher.focus();
     }
 
-    launcher.addEventListener('click', open);
+    launcher.addEventListener('click', function () { isOpen ? close() : open(); });
     if (closeBtn) closeBtn.addEventListener('click', close);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) close();
