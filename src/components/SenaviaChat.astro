@@ -107,6 +107,17 @@ const TURNSTILE_SITEKEY = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
   }
   html.lang-es #senavia-chat:empty::before { content: 'Cargando…'; }
 
+  /* Turnstile verification screen (shown briefly before the chat mounts) */
+  #senavia-verify {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1.1rem; height: 100%; padding: 1.5rem; text-align: center;
+  }
+  #senavia-verify p {
+    margin: 0; color: #EAF0FF;
+    font-family: 'Inter', system-ui, sans-serif; font-size: 0.95rem;
+  }
+  #senavia-turnstile { min-height: 65px; }
+
   @keyframes sclRise { from { opacity: 0; transform: translateY(12px) scale(0.99); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) {
     #senavia-chat-panel { animation: none; }
@@ -302,19 +313,26 @@ const TURNSTILE_SITEKEY = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
       return tsLoading;
     }
 
-    // Returns true if the visitor is verified (or Turnstile isn't configured / is blocked —
-    // we fail-open on infra errors so real users are never locked out).
+    // Renders Turnstile VISIBLY inside the panel so a challenge (common in Safari/ITP)
+    // can actually be completed instead of deadlocking a hidden widget. Resolves true
+    // once verified; false on failure/timeout so we never hang on "Loading…".
+    // Fails open only if the Turnstile script itself is blocked.
     function verifyHuman() {
       if (!TURNSTILE_SITEKEY) return Promise.resolve(true);
       return loadTurnstileScript().then(function (ok) {
         if (!ok || !window.turnstile) return true;
         return new Promise(function (resolve) {
-          var holder = document.createElement('div');
-          holder.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
-          document.body.appendChild(holder);
+          var settled = false;
+          function done(v) { if (!settled) { settled = true; resolve(v); } }
+          var box = document.getElementById('senavia-chat');
+          var msg = currentLang() === 'es' ? 'Verificando que eres una persona…' : 'Verifying you’re human…';
+          if (box) box.innerHTML = '<div id="senavia-verify"><p>' + msg + '</p><div id="senavia-turnstile"></div></div>';
+          var holder = document.getElementById('senavia-turnstile');
+          if (!holder) { holder = document.createElement('div'); document.body.appendChild(holder); }
           try {
             window.turnstile.render(holder, {
               sitekey: TURNSTILE_SITEKEY,
+              theme: 'dark',
               callback: function (token) {
                 fetch('/api/chat-verify', {
                   method: 'POST',
@@ -322,12 +340,15 @@ const TURNSTILE_SITEKEY = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
                   body: JSON.stringify({ token: token })
                 })
                   .then(function (r) { return r.json(); })
-                  .then(function (d) { resolve(!!d.ok); })
-                  .catch(function () { resolve(false); });
+                  .then(function (d) { done(!!d.ok); })
+                  .catch(function () { done(false); });
               },
-              'error-callback': function () { resolve(false); }
+              'error-callback': function () { done(false); },
+              'timeout-callback': function () { done(false); }
             });
-          } catch (e) { resolve(true); }
+          } catch (e) { done(false); }
+          // Safety net: never leave the user stuck on "Loading…"
+          setTimeout(function () { done(false); }, 30000);
         });
       });
     }
@@ -349,6 +370,8 @@ const TURNSTILE_SITEKEY = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
         css.href = '/scripts/n8n-chat.css?v=' + VERSION;
         document.head.appendChild(css);
         var lang = currentLang();
+        var box0 = document.getElementById('senavia-chat');
+        if (box0) box0.innerHTML = ''; // clear the verify UI before the chat mounts
         return import('/scripts/n8n-chat.bundle.js?v=' + VERSION)
           .then(function (mod) {
             mod.createChat({
