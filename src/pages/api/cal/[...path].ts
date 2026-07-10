@@ -12,6 +12,17 @@ const CAL_BASE = 'https://api.cal.com/v2';
 const ALLOWED = new Set(['slots', 'bookings']);
 
 const handler: APIRoute = async ({ params, request }) => {
+  // Require a shared secret so only our n8n workflow (server-to-server) can use
+  // this Cal.com-authenticated proxy. Fail-open until CAL_PROXY_SECRET is set,
+  // matching /api/chat, so deploying this never breaks the live chatbot.
+  const proxyKey = process.env.CAL_PROXY_SECRET;
+  if (proxyKey && request.headers.get('x-proxy-key') !== proxyKey) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'content-type': 'application/json' },
+    });
+  }
+
   const path = params.path ?? '';
   const base = path.split('/')[0];
   if (!ALLOWED.has(base)) {
