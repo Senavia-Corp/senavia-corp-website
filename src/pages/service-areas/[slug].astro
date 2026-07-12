@@ -356,6 +356,41 @@ const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
     </div>
   </section>
 
+  <!-- MAP + NEARBY CITIES -->
+  <section class="section" data-screen-label="05 Map & Area">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow"><span class="lang-only-en">On the ground in {cityShort}</span><span class="lang-only-es">Presentes en {cityShort}</span></div>
+        <h2><span class="lang-only-en">Serving {cityShort} &amp; {d.county} County</span><span class="lang-only-es">Atendiendo {cityShort} y el Condado de {d.county}</span></h2>
+        <p><span class="lang-only-en">Headquartered in Plantation and active across {d.county} County — here's our local footprint.</span><span class="lang-only-es">Con sede en Plantation y activos en el Condado de {d.county} — esta es nuestra presencia local.</span></p>
+      </div>
+      <div class="sa-mapgrid" data-reveal>
+        <div class="map-embed">
+          <iframe src={mapSrc} title={`Map of ${d.city} service area`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <div class="map-card">
+            <span class="name">SENAVIA Corp — {cityShort}</span>
+            <span class="addr"><span class="lang-only-en">Serving {cityShort} &amp; greater {d.county} · HQ in Plantation, FL</span><span class="lang-only-es">Atendiendo {cityShort} y el área de {d.county} · Sede en Plantation, FL</span></span>
+            <a class="map-card-link" href={directionsUrl} target="_blank" rel="noopener"><span class="lang-only-en">Get Directions →</span><span class="lang-only-es">Cómo Llegar →</span></a>
+          </div>
+        </div>
+        <div class="sa-aside">
+          <div class="sa-stats">
+            <article class="stat-card"><span class="stat-value">{d.county}</span><span class="stat-label"><span class="lang-only-en">County we proudly serve</span><span class="lang-only-es">Condado que atendemos</span></span></article>
+            <article class="stat-card"><span class="stat-value">HQ</span><span class="stat-label"><span class="lang-only-en">Based in Plantation, FL — Broward County</span><span class="lang-only-es">Sede en Plantation, FL — Condado de Broward</span></span></article>
+          </div>
+          {nearby.length > 0 && (
+            <div class="sa-nearby">
+              <h3><span class="lang-only-en">We also serve nearby cities</span><span class="lang-only-es">También atendemos ciudades cercanas</span></h3>
+              <div class="chips">
+                {nearby.map((c) => (<a href={`/service-areas/${c.id}`}>{c.data.city.replace(/,\s*FL$/i, '')}</a>))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PORTFOLIO -->
   <PortfolioCarousel
     eyebrow={{ en: 'Our work', es: 'Nuestro trabajo' }}
@@ -408,43 +443,8 @@ const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
     </div>
   </section>
 
-  <!-- MAP + NEARBY CITIES -->
-  <section class="section" data-screen-label="09 Map & Area">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <div class="eyebrow"><span class="lang-only-en">On the ground in {cityShort}</span><span class="lang-only-es">Presentes en {cityShort}</span></div>
-        <h2><span class="lang-only-en">Serving {cityShort} &amp; {d.county} County</span><span class="lang-only-es">Atendiendo {cityShort} y el Condado de {d.county}</span></h2>
-        <p><span class="lang-only-en">Headquartered in Plantation and active across {d.county} County — here's our local footprint.</span><span class="lang-only-es">Con sede en Plantation y activos en el Condado de {d.county} — esta es nuestra presencia local.</span></p>
-      </div>
-      <div class="sa-mapgrid" data-reveal>
-        <div class="map-embed">
-          <iframe src={mapSrc} title={`Map of ${d.city} service area`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-          <div class="map-card">
-            <span class="name">SENAVIA Corp — {cityShort}</span>
-            <span class="addr"><span class="lang-only-en">Serving {cityShort} &amp; greater {d.county} · HQ in Plantation, FL</span><span class="lang-only-es">Atendiendo {cityShort} y el área de {d.county} · Sede en Plantation, FL</span></span>
-            <a class="map-card-link" href={directionsUrl} target="_blank" rel="noopener"><span class="lang-only-en">Get Directions →</span><span class="lang-only-es">Cómo Llegar →</span></a>
-          </div>
-        </div>
-        <div class="sa-aside">
-          <div class="sa-stats">
-            <article class="stat-card"><span class="stat-value">{d.county}</span><span class="stat-label"><span class="lang-only-en">County we proudly serve</span><span class="lang-only-es">Condado que atendemos</span></span></article>
-            <article class="stat-card"><span class="stat-value">HQ</span><span class="stat-label"><span class="lang-only-en">Based in Plantation, FL — Broward County</span><span class="lang-only-es">Sede en Plantation, FL — Condado de Broward</span></span></article>
-          </div>
-          {nearby.length > 0 && (
-            <div class="sa-nearby">
-              <h3><span class="lang-only-en">We also serve nearby cities</span><span class="lang-only-es">También atendemos ciudades cercanas</span></h3>
-              <div class="chips">
-                {nearby.map((c) => (<a href={`/service-areas/${c.id}`}>{c.data.city.replace(/,\s*FL$/i, '')}</a>))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- CTA -->
-  <section class="cta cta--glow" data-screen-label="10 CTA">
+  <section class="cta cta--glow" data-screen-label="09 CTA">
     <video class="cta-video" autoplay muted loop playsinline preload="metadata"
            disablepictureinpicture disableremoteplayback
            controlslist="nodownload nofullscreen noremoteplayback" poster="/videos/cta-bg-poster.jpg">

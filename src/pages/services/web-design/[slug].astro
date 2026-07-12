@@ -168,27 +168,8 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
     </div>
   </section>
 
-  <!-- ===================== PROCESS + REVIEWS (shared component) ===================== -->
-  <ProcessTestimonials
-    processScreenLabel="06 Process"
-    testimonialsScreenLabel="07 Reviews"
-    testimonialsTitle={sub.testimonialsTitle_en && sub.testimonialsTitle_es
-      ? { en: sub.testimonialsTitle_en, es: sub.testimonialsTitle_es } : undefined}
-    testimonialsIntro={sub.testimonialsIntro_en && sub.testimonialsIntro_es
-      ? { en: sub.testimonialsIntro_en, es: sub.testimonialsIntro_es } : undefined}
-  />
-
-  <!-- ===================== PORTFOLIO ===================== -->
-  <PortfolioCarousel
-    title={{ en: 'Recent Work', es: 'Trabajo Reciente' }}
-    intro={{
-      en: 'Explore our custom web design work across South Florida — built to elevate UX, capture each brand, and convert.',
-      es: 'Explore nuestro trabajo de diseño web personalizado en el Sur de Florida — creado para elevar la UX, capturar cada marca y convertir.',
-    }}
-  />
-
   <!-- ===================== FAQ ===================== -->
-  <section class="section section--band" data-screen-label="08 FAQ">
+  <section class="section section--band" data-screen-label="06 FAQ">
     <div class="container container--narrow">
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">FAQ</span><span class="lang-only-es">Preguntas Frecuentes</span></div>
@@ -213,7 +194,7 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
 
   <!-- ===================== RELATED ===================== -->
   {related.length > 0 && (
-    <section class="section" data-screen-label="09 Related">
+    <section class="section" data-screen-label="07 Related">
       <div class="container">
         <div class="section-head" data-reveal>
           <div class="eyebrow"><span class="lang-only-en">Explore more</span><span class="lang-only-es">Explore más</span></div>
@@ -235,7 +216,7 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
   )}
 
   <!-- ===================== CONSULTATION (Calendly) ===================== -->
-  <section id="consultation" class="section section--band" data-screen-label="10 Consultation">
+  <section id="consultation" class="section section--band" data-screen-label="08 Consultation">
     <div class="container">
       <div class="section-head" data-reveal>
         <div class="eyebrow"><span class="lang-only-en">Free consultation</span><span class="lang-only-es">Consulta gratuita</span></div>
@@ -263,6 +244,25 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
       </div>
     </div>
   </section>
+
+  <!-- ===================== PORTFOLIO ===================== -->
+  <PortfolioCarousel
+    title={{ en: 'Recent Work', es: 'Trabajo Reciente' }}
+    intro={{
+      en: 'Explore our custom web design work across South Florida — built to elevate UX, capture each brand, and convert.',
+      es: 'Explore nuestro trabajo de diseño web personalizado en el Sur de Florida — creado para elevar la UX, capturar cada marca y convertir.',
+    }}
+  />
+
+  <!-- ===================== PROCESS + REVIEWS (shared component) ===================== -->
+  <ProcessTestimonials
+    processScreenLabel="09 Process"
+    testimonialsScreenLabel="10 Reviews"
+    testimonialsTitle={sub.testimonialsTitle_en && sub.testimonialsTitle_es
+      ? { en: sub.testimonialsTitle_en, es: sub.testimonialsTitle_es } : undefined}
+    testimonialsIntro={sub.testimonialsIntro_en && sub.testimonialsIntro_es
+      ? { en: sub.testimonialsIntro_en, es: sub.testimonialsIntro_es } : undefined}
+  />
 
   <!-- ===================== CTA ===================== -->
   <section class="cta" data-screen-label="11 CTA">
