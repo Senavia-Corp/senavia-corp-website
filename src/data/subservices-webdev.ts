@@ -90,6 +90,11 @@ export const SUBSERVICES_WEBDEV: Subservice[] = [
         a_en: 'Custom builds are scoped individually. We map your requirements and give a clear, transparent proposal on a free consultation — no obligation.',
         a_es: 'Los desarrollos a medida se cotizan individualmente. Mapeamos sus requisitos y le damos una propuesta clara y transparente en una consulta gratuita — sin compromiso.' },
     ],
+    testimonialsTitle_en: 'What Our Web App Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Aplicaciones Web',
+    testimonialsIntro_en: 'Companies trust SENAVIA to build the custom web applications their operations run on every day. Hear what shipping with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Las empresas confían en SENAVIA para construir las aplicaciones web de las que dependen sus operaciones cada día. Descubre cómo es lanzar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['admin-panel-development', 'api-integration-services'],
   },
 
@@ -178,6 +183,11 @@ export const SUBSERVICES_WEBDEV: Subservice[] = [
         a_en: 'It depends on the modules, data sources, and user roles involved. We scope it precisely and give a transparent quote on a free consultation.',
         a_es: 'Depende de los módulos, las fuentes de datos y los roles de usuario involucrados. Lo definimos con precisión y le damos una cotización transparente en una consulta gratuita.' },
     ],
+    testimonialsTitle_en: 'What Operations Teams Say',
+    testimonialsTitle_es: 'Lo Que Dicen los Equipos de Operaciones',
+    testimonialsIntro_en: 'Teams across South Florida trust SENAVIA to replace spreadsheets with admin panels built around their workflow. Hear their experience — on camera, in their own words.',
+    testimonialsIntro_es: 'Equipos de todo el Sur de Florida confían en SENAVIA para reemplazar hojas de cálculo con paneles administrativos construidos en torno a su flujo de trabajo. Descubre su experiencia — frente a cámara, en sus propias palabras.',
+
     related: ['custom-web-application-development', 'erp-system-development'],
   },
 
@@ -266,6 +276,11 @@ export const SUBSERVICES_WEBDEV: Subservice[] = [
         a_en: 'It depends on your pipeline, integrations, and automation needs. We map it out and give a transparent quote on a free consultation — no obligation.',
         a_es: 'Depende de su embudo, integraciones y necesidades de automatización. Lo definimos y le damos una cotización transparente en una consulta gratuita — sin compromiso.' },
     ],
+    testimonialsTitle_en: 'What Our CRM Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de CRM',
+    testimonialsIntro_en: 'Businesses trust SENAVIA to build CRMs shaped around how they actually sell and serve. Hear what organizing growth with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Los negocios confían en SENAVIA para construir CRMs con la forma en que realmente venden y atienden. Descubre cómo es ordenar el crecimiento con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['workflow-automation', 'api-integration-services'],
   },
 
@@ -354,6 +369,11 @@ export const SUBSERVICES_WEBDEV: Subservice[] = [
         a_en: 'It depends on the systems and how much data flows between them. We scope the connections and give a transparent quote on a free consultation.',
         a_es: 'Depende de los sistemas y de cuántos datos fluyen entre ellos. Definimos las conexiones y le damos una cotización transparente en una consulta gratuita.' },
     ],
+    testimonialsTitle_en: 'What Our Integration Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Integraciones',
+    testimonialsIntro_en: 'Companies trust SENAVIA to connect the tools they already use into one smooth operation. Hear what integrating with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Las empresas confían en SENAVIA para conectar las herramientas que ya usan en una sola operación fluida. Descubre cómo es integrar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['workflow-automation', 'custom-web-application-development'],
   },
 
@@ -442,6 +462,11 @@ export const SUBSERVICES_WEBDEV: Subservice[] = [
         a_en: 'It depends on how many workflows and integrations are involved. We map your processes and give a transparent quote on a free consultation — no obligation.',
         a_es: 'Depende de cuántos flujos e integraciones estén involucrados. Mapeamos sus procesos y le damos una cotización transparente en una consulta gratuita — sin compromiso.' },
     ],
+    testimonialsTitle_en: 'What Our Automation Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Automatización',
+    testimonialsIntro_en: 'Businesses trust SENAVIA to automate the repetitive work that was eating their week. Hear what reclaiming hours with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Los negocios confían en SENAVIA para automatizar el trabajo repetitivo que consumía su semana. Descubre cómo es recuperar horas con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['api-integration-services', 'crm-development'],
   },
 
@@ -530,6 +555,11 @@ export const SUBSERVICES_WEBDEV: Subservice[] = [
         a_en: 'ERP builds are scoped by module and complexity, and we can phase them so you start with what matters most. We map it out and give a clear proposal on a free consultation.',
         a_es: 'Los ERP se cotizan por módulo y complejidad, y podemos hacerlos por fases para que empiece con lo más importante. Lo definimos y le damos una propuesta clara en una consulta gratuita.' },
     ],
+    testimonialsTitle_en: 'What Our ERP Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de ERP',
+    testimonialsIntro_en: 'Growing companies trust SENAVIA to build ERP systems that bring every part of the business into one place. Hear their experience — on camera, in their own words.',
+    testimonialsIntro_es: 'Empresas en crecimiento confían en SENAVIA para construir sistemas ERP que reúnen todo el negocio en un solo lugar. Descubre su experiencia — frente a cámara, en sus propias palabras.',
+
     related: ['admin-panel-development', 'api-integration-services'],
   },
 ];

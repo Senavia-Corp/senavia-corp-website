@@ -2,7 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { SITE, NAP, NAV } from '@/data/site';
-import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import PortfolioCarousel from '@/components/PortfolioCarousel.astro';
+import ProcessTestimonials from '@/components/ProcessTestimonials.astro';
 
 export async function getStaticPaths() {
   const all = (await getCollection('serviceAreas')).sort((a, b) => a.data.order - b.data.order);
@@ -30,14 +31,6 @@ const iconVariant = ['', 'is-cyan', 'is-green'];
 // Real CMS data for the strips.
 const posts = (await getCollection('blog'))
   .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
-  .slice(0, 3);
-
-// WL-016 — real client video testimonials (same neutral pattern as the
-// committed home/services reviews sections); replaces the fabricated
-// written-reviews rotation and its 5.0/47 claims.
-const videoTestimonials = (await getCollection('videos'))
-  .filter((v) => v.data.youtubeId)
-  .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 
 // Nearby cities in the same county (internal linking for local SEO).
@@ -96,10 +89,26 @@ const svcTitle = [
 ];
 
 const steps = [
-  { n: '01', img: '/images/process/explore.avif',     en: 'Discovery & local research', es: 'Descubrimiento e investigación local', den: `We map your ${cityShort} market, competitors, and the searches your customers actually use.`, des: `Mapeamos tu mercado en ${cityShort}, la competencia y las búsquedas que tus clientes realmente usan.` },
-  { n: '02', img: '/images/process/estimate.avif',    en: 'Strategy & estimate', es: 'Estrategia y estimado', den: 'A clear plan, scope, and quote aligned to your goals — no surprises.', des: 'Un plan claro, alcance y cotización alineados a tus objetivos — sin sorpresas.' },
-  { n: '03', img: '/images/process/development.avif', en: 'Design & build', es: 'Diseño y desarrollo', den: 'A fast, conversion-focused site built around local SEO and your brand.', des: 'Un sitio rápido y enfocado en conversión, construido sobre SEO local y tu marca.' },
-  { n: '04', img: '/images/process/delivery.avif',   en: 'Launch & grow', es: 'Lanzamiento y crecimiento', den: 'We launch, track conversions, and keep optimizing for more local leads.', des: 'Lanzamos, medimos conversiones y seguimos optimizando para más prospectos locales.' },
+  {
+    label: { en: 'Step 01', es: 'Paso 01' },
+    title: { en: 'Discovery & local research', es: 'Descubrimiento e investigación local' },
+    body: { en: `We map your ${cityShort} market, competitors, and the searches your customers actually use.`, es: `Mapeamos tu mercado en ${cityShort}, la competencia y las búsquedas que tus clientes realmente usan.` },
+  },
+  {
+    label: { en: 'Step 02', es: 'Paso 02' },
+    title: { en: 'Strategy & estimate', es: 'Estrategia y estimado' },
+    body: { en: 'A clear plan, scope, and quote aligned to your goals — no surprises.', es: 'Un plan claro, alcance y cotización alineados a tus objetivos — sin sorpresas.' },
+  },
+  {
+    label: { en: 'Step 03', es: 'Paso 03' },
+    title: { en: 'Design & build', es: 'Diseño y desarrollo' },
+    body: { en: 'A fast, conversion-focused site built around local SEO and your brand.', es: 'Un sitio rápido y enfocado en conversión, construido sobre SEO local y tu marca.' },
+  },
+  {
+    label: { en: 'Step 04', es: 'Paso 04' },
+    title: { en: 'Launch & grow', es: 'Lanzamiento y crecimiento' },
+    body: { en: 'We launch, track conversions, and keep optimizing for more local leads.', es: 'Lanzamos, medimos conversiones y seguimos optimizando para más prospectos locales.' },
+  },
 ];
 
 // City-specific structured data (Service + Breadcrumb) for local SEO.
@@ -202,49 +211,6 @@ const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
   .project-cover.has-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,14,38,0.05) 0%, rgba(10,14,38,0.6) 100%); z-index: 1; }
   .project-cover.has-img .project-name { z-index: 2; }
   a.project-card, a.blog-card { text-decoration: none; color: inherit; }
-
-  /* WL-016 — real video-testimonial rows inside the reviews card (same
-     pattern & styles as the committed home page; scoped per page because
-     senavia.css is a hot file owned by PKG-DS) */
-  a.review-item.vt-mini {
-    flex-direction: row;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color .2s ease, background .2s ease;
-  }
-  a.review-item.vt-mini:hover {
-    border-color: rgba(153,204,51,0.35);
-    background: rgba(255,255,255,0.05);
-  }
-  .vt-mini-thumb {
-    width: 128px;
-    height: 72px;
-    border-radius: 10px;
-    object-fit: cover;
-    flex: 0 0 auto;
-    background: #0a0e26;
-  }
-  .vt-mini-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
-  .vt-mini-name { color: var(--white); font-weight: 500; font-size: 15px; }
-  .vt-mini-tag { font-size: 12.5px; color: rgba(255,255,255,0.6); }
-  .vt-mini-play {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 auto;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(153,204,51,0.14);
-    border: 1px solid rgba(153,204,51,0.35);
-    color: var(--primary, #99cc33);
-  }
-  .vt-mini-play svg { width: 16px; height: 16px; }
-  @media (max-width: 480px) {
-    .vt-mini-thumb { width: 96px; height: 54px; }
-  }
 
   /* map + nearby cities */
   .sa-mapgrid { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: 40px; align-items: stretch; }
@@ -391,105 +357,30 @@ const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
   </section>
 
   <!-- PORTFOLIO -->
-  <section class="section section--band" data-screen-label="05 Portfolio">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <span class="sa-sec-num">03</span>
-        <div class="eyebrow"><span class="lang-only-en">Our work</span><span class="lang-only-es">Nuestro trabajo</span></div>
-        <h2><span class="lang-only-en">{d.headingPortfolio || t.portfolioHead.en}</span><span class="lang-only-es">{t.portfolioHead.es}</span></h2>
-        {d.paragraphPortfolio
-          ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphPortfolio} />
-          : <p class="lang-only-en">{fb.portfolio.en}</p>}
-        <p class="lang-only-es">{fb.portfolio.es}</p>
-      </div>
-      <ProjectCarousel reveal />
-      <div class="sa-strip-cta">
-        <a href="/portfolio" class="btn is-secondary"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
-      </div>
-    </div>
-  </section>
+  <PortfolioCarousel
+    eyebrow={{ en: 'Our work', es: 'Nuestro trabajo' }}
+    title={{ en: d.headingPortfolio || t.portfolioHead.en, es: t.portfolioHead.es }}
+    intro={{ en: d.paragraphPortfolio || fb.portfolio.en, es: fb.portfolio.es }}
+  />
 
-  <!-- PROCESS + REVIEWS (inside .green-bg) -->
-  <div class="green-bg">
-    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
-    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
-    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
-
-    <!-- PROCESS -->
-    <section class="section section-flush" data-screen-label="06 Process">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <span class="sa-sec-num">04</span>
-          <div class="eyebrow"><span class="lang-only-en">How we work</span><span class="lang-only-es">Cómo trabajamos</span></div>
-          <h2><span class="lang-only-en">{d.headingProcess || t.processHead.en}</span><span class="lang-only-es">{t.processHead.es}</span></h2>
-          {d.paragraphProcess
-            ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphProcess} />
-            : <p class="lang-only-en">{fb.process.en}</p>}
-          <p class="lang-only-es">{fb.process.es}</p>
-        </div>
-        <div class="grid-4" data-reveal-children>
-          {steps.map((st) => (
-            <article class="process-block">
-              <img class="process-img" src={st.img} alt="" loading="lazy" decoding="async" />
-              <div class="process-glass"></div>
-              <div class="process-content">
-                <div class="process-header">
-                  <h3><span class="lang-only-en">Step {st.n}</span><span class="lang-only-es">Paso {st.n}</span></h3>
-                  <h4><span class="lang-only-en">{st.en}</span><span class="lang-only-es">{st.es}</span></h4>
-                </div>
-                <p><span class="lang-only-en">{st.den}</span><span class="lang-only-es">{st.des}</span></p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" data-calendly-trigger>
-            <span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- REVIEWS — real client video testimonials -->
-    <section class="section" data-screen-label="07 Reviews">
-      <div class="container">
-        <div class="reviews-grid">
-          <div class="reviews-left" data-reveal>
-            <span class="sa-sec-num">05</span>
-            <h2><span class="lang-only-en">{d.headingReviews || t.reviewsHead.en}</span><span class="lang-only-es">{t.reviewsHead.es}</span></h2>
-            {d.paragraphReviews
-              ? <div class="cms-prose lang-only-en" set:html={d.paragraphReviews} />
-              : <p class="lang-only-en">{fb.reviews.en}</p>}
-            <p class="lang-only-es">{fb.reviews.es}</p>
-            <div class="reviews-cta-row">
-              <a href="/testimonials" class="btn is-sm"><span class="lang-only-en">Watch Video Testimonials</span><span class="lang-only-es">Ver Testimonios en Video</span></a>
-              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-secondary is-sm"><span class="lang-only-en">Find Us on Google</span><span class="lang-only-es">Encuéntranos en Google</span></a>
-            </div>
-          </div>
-          <div class="reviews-card" data-reveal>
-            {videoTestimonials.map((v) => (
-              <a class="review-item vt-mini" href="/testimonials#video-testimonials">
-                <img class="vt-mini-thumb" src={`https://i.ytimg.com/vi/${v.data.youtubeId}/mqdefault.jpg`} alt="" width="128" height="72" loading="lazy" decoding="async" />
-                <span class="vt-mini-body">
-                  <span class="vt-mini-name">{v.data.name}</span>
-                  <span class="vt-mini-tag"><span class="lang-only-en">Video testimonial</span><span class="lang-only-es">Testimonio en video</span></span>
-                </span>
-                <span class="vt-mini-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg>
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  <!-- PROCESS + REVIEWS (shared component; CMS heading/intro with template fallbacks) -->
+  <ProcessTestimonials
+    processEyebrow="03"
+    testimonialsEyebrow="04"
+    processScreenLabel="06 Process"
+    testimonialsScreenLabel="07 Reviews"
+    processTitle={{ en: d.headingProcess || t.processHead.en, es: t.processHead.es }}
+    processIntro={{ en: d.paragraphProcess || fb.process.en, es: fb.process.es }}
+    testimonialsTitle={{ en: d.headingReviews || t.reviewsHead.en, es: t.reviewsHead.es }}
+    testimonialsIntro={{ en: d.paragraphReviews || fb.reviews.en, es: fb.reviews.es }}
+    steps={steps}
+  />
 
   <!-- BLOG -->
   <section class="section section--band" data-screen-label="08 Blog">
     <div class="container">
       <div class="section-head" data-reveal>
-        <span class="sa-sec-num">06</span>
+        <span class="sa-sec-num">05</span>
         <div class="eyebrow"><span class="lang-only-en">Insights</span><span class="lang-only-es">Recursos</span></div>
         <h2><span class="lang-only-en">{d.headingBlog || t.blogHead.en}</span><span class="lang-only-es">{t.blogHead.es}</span></h2>
         {d.paragraphBlog

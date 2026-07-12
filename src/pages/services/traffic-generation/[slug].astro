@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import PortfolioCarousel from '@/components/PortfolioCarousel.astro';
+import ProcessTestimonials from '@/components/ProcessTestimonials.astro';
 import { Icon } from 'astro-icon/components';
 import { SITE } from '@/data/site';
 import { SUBSERVICES_TRAFFIC as SUBSERVICES, getTrafficSubservice as getSubservice } from '@/data/subservices-traffic';
@@ -167,89 +168,24 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
     </div>
   </section>
 
-  <!-- ===================== PROCESS + figures (reused) ===================== -->
-  <div class="green-bg">
-    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
-    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
-    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
-    <section id="process" class="section section-flush" data-screen-label="06 Process">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <h2><span class="lang-only-en">Our Process</span><span class="lang-only-es">Nuestro Proceso</span></h2>
-          <p class="lang-only-en">We understand your goals, create a tailored plan with clear estimates, and build a custom solution designed for your success.</p>
-          <p class="lang-only-es">Entendemos sus objetivos, creamos un plan a la medida con estimaciones claras y construimos una solución personalizada diseñada para su éxito.</p>
-        </div>
-        <div class="grid-4" data-reveal-children>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/explore.avif" alt="Digital strategy and market discovery for South Florida businesses" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">1. Explore</span><span class="lang-only-es">1. Explorar</span></h3>
-                <h4><span class="lang-only-en">Digital Strategy &amp; Market Discovery</span><span class="lang-only-es">Estrategia Digital &amp; Descubrimiento de Mercado</span></h4>
-              </div>
-              <p class="lang-only-en">We analyze goals, audience, and market to uncover growth opportunities across South Florida.</p>
-              <p class="lang-only-es">Analizamos objetivos, audiencia y mercado para descubrir oportunidades de crecimiento en todo el Sur de Florida.</p>
-            </div>
-          </article>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/estimate.avif" alt="Project planning and strategic roadmap for a web project" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">2. Estimate</span><span class="lang-only-es">2. Estimar</span></h3>
-                <h4><span class="lang-only-en">Project Planning &amp; Strategic Roadmap</span><span class="lang-only-es">Planificación del Proyecto &amp; Hoja de Ruta Estratégica</span></h4>
-              </div>
-              <p class="lang-only-en">We define a clear project plan aligned with your budget, timeline, and objectives.</p>
-              <p class="lang-only-es">Definimos un plan de proyecto claro alineado con su presupuesto, cronograma y objetivos.</p>
-            </div>
-          </article>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/development.avif" alt="Custom web development and SEO build in progress" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">3. Development</span><span class="lang-only-es">3. Desarrollo</span></h3>
-                <h4><span class="lang-only-en">Custom Web Development &amp; SEO</span><span class="lang-only-es">Desarrollo Web a la Medida &amp; SEO</span></h4>
-              </div>
-              <p class="lang-only-en">We build high-performance websites and platforms optimized for SEO and conversions.</p>
-              <p class="lang-only-es">Construimos sitios web y plataformas de alto rendimiento optimizados para SEO y conversiones.</p>
-            </div>
-          </article>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/delivery.avif" alt="Website launch and ongoing optimization in Plantation, FL" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">4. Delivery</span><span class="lang-only-es">4. Entrega</span></h3>
-                <h4><span class="lang-only-en">Website Launch &amp; Ongoing Optimization</span><span class="lang-only-es">Lanzamiento del Sitio &amp; Optimización Continua</span></h4>
-              </div>
-              <p class="lang-only-en">We launch and optimize your digital presence from Plantation, serving South Florida.</p>
-              <p class="lang-only-es">Lanzamos y optimizamos su presencia digital desde Plantation, sirviendo a todo el Sur de Florida.</p>
-            </div>
-          </article>
-        </div>
-        <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
-        </div>
-      </div>
-    </section>
-  </div>
+  <!-- ===================== PROCESS + REVIEWS (shared component) ===================== -->
+  <ProcessTestimonials
+    processScreenLabel="06 Process"
+    testimonialsScreenLabel="07 Reviews"
+    testimonialsTitle={sub.testimonialsTitle_en && sub.testimonialsTitle_es
+      ? { en: sub.testimonialsTitle_en, es: sub.testimonialsTitle_es } : undefined}
+    testimonialsIntro={sub.testimonialsIntro_en && sub.testimonialsIntro_es
+      ? { en: sub.testimonialsIntro_en, es: sub.testimonialsIntro_es } : undefined}
+  />
 
   <!-- ===================== PORTFOLIO ===================== -->
-  <section id="portfolio" class="section" data-screen-label="07 Portfolio">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <h2><span class="lang-only-en">Recent Work</span><span class="lang-only-es">Trabajo Reciente</span></h2>
-        <p class="lang-only-en">Explore our custom web design work across South Florida — built to elevate UX, capture each brand, and convert.</p>
-        <p class="lang-only-es">Explore nuestro trabajo de diseño web personalizado en el Sur de Florida — creado para elevar la UX, capturar cada marca y convertir.</p>
-      </div>
-      <ProjectCarousel />
-      <div class="center-cta">
-        <a href="/portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
-      </div>
-    </div>
-  </section>
+  <PortfolioCarousel
+    title={{ en: 'Recent Work', es: 'Trabajo Reciente' }}
+    intro={{
+      en: 'Explore our custom web design work across South Florida — built to elevate UX, capture each brand, and convert.',
+      es: 'Explore nuestro trabajo de diseño web personalizado en el Sur de Florida — creado para elevar la UX, capturar cada marca y convertir.',
+    }}
+  />
 
   <!-- ===================== FAQ ===================== -->
   <section class="section section--band" data-screen-label="08 FAQ">

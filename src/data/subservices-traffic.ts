@@ -90,6 +90,11 @@ export const SUBSERVICES_TRAFFIC: Subservice[] = [
         a_en: 'Yes, always. We manage your own account so you keep full ownership of the account, data, and history — even if we ever stop working together.',
         a_es: 'Sí, siempre. Gestionamos su propia cuenta para que conserve la propiedad total de la cuenta, los datos y el historial — incluso si algún día dejamos de trabajar juntos.' },
     ],
+    testimonialsTitle_en: 'What Our Google Ads Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Google Ads',
+    testimonialsIntro_en: 'South Florida businesses trust SENAVIA to turn ad spend into booked jobs and sales — not just clicks. Hear what growing with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Negocios del Sur de Florida confían en SENAVIA para convertir la inversión publicitaria en trabajos y ventas — no solo clics. Descubre cómo es crecer con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['seo-services', 'facebook-instagram-ads'],
   },
 
@@ -178,6 +183,11 @@ export const SUBSERVICES_TRAFFIC: Subservice[] = [
         a_en: 'Ads buy immediate visibility and stop when the budget stops; SEO builds durable organic rankings that keep bringing traffic for free. Most businesses get the best results running both together.',
         a_es: 'Los anuncios compran visibilidad inmediata y se detienen cuando termina el presupuesto; el SEO construye posiciones orgánicas duraderas que siguen trayendo tráfico gratis. La mayoría de los negocios obtiene mejores resultados combinando ambos.' },
     ],
+    testimonialsTitle_en: 'What Our SEO Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de SEO',
+    testimonialsIntro_en: 'Businesses across South Florida trust SENAVIA to earn rankings that bring customers month after month. Hear what ranking with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Negocios de todo el Sur de Florida confían en SENAVIA para lograr posiciones que traen clientes mes tras mes. Descubre cómo es posicionar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['local-seo-services', 'google-ads-management'],
   },
 
@@ -266,6 +276,11 @@ export const SUBSERVICES_TRAFFIC: Subservice[] = [
         a_en: 'Local SEO focuses on the map pack and "near me" searches — Google Business Profile, citations, reviews, and service-area pages. Regular SEO targets broader organic rankings. Service businesses usually need both.',
         a_es: 'El SEO local se enfoca en el paquete de mapas y las búsquedas "cerca de mí" — Perfil de Empresa en Google, citaciones, reseñas y páginas de áreas de servicio. El SEO normal apunta a posiciones orgánicas más amplias. Los negocios de servicios suelen necesitar ambos.' },
     ],
+    testimonialsTitle_en: 'What Local SEO Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de SEO Local',
+    testimonialsIntro_en: 'Local businesses trust SENAVIA to put them in front of nearby customers searching right now. Hear what winning locally with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Los negocios locales confían en SENAVIA para aparecer frente a clientes cercanos que buscan ahora mismo. Descubre cómo es ganar en lo local con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['google-business-profile-optimization', 'seo-services'],
   },
 
@@ -354,6 +369,11 @@ export const SUBSERVICES_TRAFFIC: Subservice[] = [
         a_en: 'Google Ads captures people actively searching; Meta ads reach people based on interests and behavior to build demand before they search. Together they cover the full funnel.',
         a_es: 'Google Ads capta a personas que buscan activamente; los anuncios de Meta llegan a personas según sus intereses y comportamiento para generar demanda antes de que busquen. Juntos cubren el embudo completo.' },
     ],
+    testimonialsTitle_en: 'What Our Paid Social Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Publicidad en Redes',
+    testimonialsIntro_en: 'Brands across South Florida trust SENAVIA to turn Facebook and Instagram into steady lead sources. Hear what scaling with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Marcas de todo el Sur de Florida confían en SENAVIA para convertir Facebook e Instagram en fuentes constantes de prospectos. Descubre cómo es escalar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['google-ads-management', 'ai-search-optimization'],
   },
 
@@ -442,6 +462,11 @@ export const SUBSERVICES_TRAFFIC: Subservice[] = [
         a_en: 'Profile optimization is the core of local SEO, focused specifically on your Google Business Profile. Full local SEO also adds NAP citations and service-area pages — we can do both together.',
         a_es: 'La optimización del perfil es el núcleo del SEO local, enfocada específicamente en su Perfil de Empresa en Google. El SEO local completo agrega además citaciones NAP y páginas de áreas de servicio — podemos hacer ambos en conjunto.' },
     ],
+    testimonialsTitle_en: 'What Local Businesses Say',
+    testimonialsTitle_es: 'Lo Que Dicen los Negocios Locales',
+    testimonialsIntro_en: 'Local owners trust SENAVIA to turn their Google Business Profile into calls, directions, and booked work. Hear their experience — on camera, in their own words.',
+    testimonialsIntro_es: 'Los dueños locales confían en SENAVIA para convertir su Perfil de Negocio de Google en llamadas, visitas y trabajos agendados. Descubre su experiencia — frente a cámara, en sus propias palabras.',
+
     related: ['local-seo-services', 'seo-services'],
   },
 
@@ -530,6 +555,11 @@ export const SUBSERVICES_TRAFFIC: Subservice[] = [
         a_en: 'SEO earns rankings on search engine results pages; GEO earns citations inside AI-generated answers. They share foundations like authority and structured data, so they work best together as one strategy.',
         a_es: 'El SEO gana posiciones en las páginas de resultados de los buscadores; el GEO gana citas dentro de las respuestas generadas por IA. Comparten bases como la autoridad y los datos estructurados, por lo que funcionan mejor juntos como una sola estrategia.' },
     ],
+    testimonialsTitle_en: 'What Our AI Search Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Búsqueda con IA',
+    testimonialsIntro_en: 'Forward-looking businesses trust SENAVIA to keep them visible where customers ask AI for recommendations. Hear what staying ahead with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Negocios con visión confían en SENAVIA para mantenerse visibles donde los clientes piden recomendaciones a la IA. Descubre cómo es ir un paso adelante con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['seo-services', 'google-ads-management'],
   },
 ];

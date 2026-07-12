@@ -1,14 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import ProjectCarousel from '@/components/ProjectCarousel.astro';
+import PortfolioCarousel from '@/components/PortfolioCarousel.astro';
+import ProcessTestimonials from '@/components/ProcessTestimonials.astro';
 import TrustBadges from '@/components/TrustBadges.astro';
 import { Icon } from 'astro-icon/components';
-
-const videoTestimonials = (await getCollection('videos'))
-  .filter((v) => v.data.youtubeId)
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
 
 const title = "Web Development in Miami — SENAVIA Corp · Apps, CRM & ERP";
 const description = "Web development agency in Miami. Custom admin panels, CRM/ERP systems, and workflow automation built to scale your operations across South Florida.";
@@ -259,128 +254,18 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
 <!-- ============================================================
        PORTFOLIO carousel
        ============================================================ -->
-  <section id="portfolio" class="section" data-screen-label="04 Portfolio">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <h2><span class="lang-only-en">Portfolio &amp; Success Cases</span><span class="lang-only-es">Portafolio &amp; Casos de Éxito</span></h2>
-        <p class="lang-only-en">Explore custom platforms and internal tools we've shipped across South Florida — admin panels, client portals, and integrations engineered for real operational scale.</p>
-        <p class="lang-only-es">Explore plataformas a la medida y herramientas internas que hemos entregado en todo el Sur de Florida — paneles administrativos, portales de clientes e integraciones diseñadas para una escala operativa real.</p>
-      </div>
-
-      <ProjectCarousel />
-
-      <div class="center-cta">
-        <a href="/portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
-      </div>
-    </div>
-  </section>
+  <PortfolioCarousel
+    title={{ en: 'Portfolio & Success Cases', es: 'Portafolio & Casos de Éxito' }}
+    intro={{
+      en: "Explore custom platforms and internal tools we've shipped across South Florida — admin panels, client portals, and integrations engineered for real operational scale.",
+      es: 'Explore plataformas a la medida y herramientas internas que hemos entregado en todo el Sur de Florida — paneles administrativos, portales de clientes e integraciones diseñadas para una escala operativa real.',
+    }}
+  />
 
   <!-- ============================================================
-       PROCESS + REVIEWS (reuse)
+       PROCESS + REVIEWS (shared component)
        ============================================================ -->
-<!-- ============================================================
-       PROCESS + REVIEWS (inside .green-bg)
-       ============================================================ -->
-  <div class="green-bg">
-    <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
-    <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
-    <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
-
-    <!-- PROCESS -->
-    <section id="process" class="section section-flush" data-screen-label="05 Process">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <h2><span class="lang-only-en">Our Process</span><span class="lang-only-es">Nuestro Proceso</span></h2>
-          <p class="lang-only-en">We understand your goals and challenges, create a tailored plan with clear estimates, and build a custom solution designed for your success.</p>
-          <p class="lang-only-es">Entendemos sus objetivos y desafíos, creamos un plan a la medida con estimaciones claras y construimos una solución personalizada diseñada para su éxito.</p>
-        </div>
-        <div class="grid-4" data-reveal-children>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/explore.avif" alt="Digital strategy and market discovery for South Florida businesses" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">1. Explore</span><span class="lang-only-es">1. Explorar</span></h3>
-                <h4><span class="lang-only-en">Digital Strategy &amp; Market Discovery</span><span class="lang-only-es">Estrategia Digital &amp; Descubrimiento de Mercado</span></h4>
-              </div>
-              <p class="lang-only-en">We analyze goals, audience, and market to uncover growth opportunities across South Florida.</p>
-              <p class="lang-only-es">Analizamos objetivos, audiencia y mercado para descubrir oportunidades de crecimiento en todo el Sur de Florida.</p>
-            </div>
-          </article>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/estimate.avif" alt="Project planning and strategic roadmap for a web project" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">2. Estimate</span><span class="lang-only-es">2. Estimar</span></h3>
-                <h4><span class="lang-only-en">Project Planning &amp; Strategic Roadmap</span><span class="lang-only-es">Planificación del Proyecto &amp; Hoja de Ruta Estratégica</span></h4>
-              </div>
-              <p class="lang-only-en">We define a clear project plan aligned with your budget, timeline, and objectives.</p>
-              <p class="lang-only-es">Definimos un plan de proyecto claro alineado con su presupuesto, cronograma y objetivos.</p>
-            </div>
-          </article>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/development.avif" alt="Custom web development and SEO build in progress" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">3. Development</span><span class="lang-only-es">3. Desarrollo</span></h3>
-                <h4><span class="lang-only-en">Custom Web Development &amp; SEO</span><span class="lang-only-es">Desarrollo Web a la Medida &amp; SEO</span></h4>
-              </div>
-              <p class="lang-only-en">We build high-performance websites and platforms optimized for SEO and conversions.</p>
-              <p class="lang-only-es">Construimos sitios web y plataformas de alto rendimiento optimizados para SEO y conversiones.</p>
-            </div>
-          </article>
-          <article class="process-block">
-            <img class="process-img" src="/images/process/delivery.avif" alt="Website launch and ongoing optimization in Plantation, FL" loading="lazy">
-            <div class="process-glass"></div>
-            <div class="process-content">
-              <div class="process-header">
-                <h3><span class="lang-only-en">4. Delivery</span><span class="lang-only-es">4. Entrega</span></h3>
-                <h4><span class="lang-only-en">Website Launch &amp; Ongoing Optimization</span><span class="lang-only-es">Lanzamiento del Sitio &amp; Optimización Continua</span></h4>
-              </div>
-              <p class="lang-only-en">We launch and optimize your digital presence from Plantation, serving South Florida.</p>
-              <p class="lang-only-es">Lanzamos y optimizamos su presencia digital desde Plantation, sirviendo a todo el Sur de Florida.</p>
-            </div>
-          </article>
-        </div>
-        <div class="center-cta" style="margin-top: 3rem;" data-reveal>
-          <a href="#" class="btn" data-calendly-trigger><span class="lang-only-en">Book a Free Call</span><span class="lang-only-es">Agenda tu Llamada Gratis</span></a>
-        </div>
-      </div>
-    </section>
-
-    <!-- CLIENT REVIEWS -->
-    <section id="reviews" class="section" data-screen-label="06 Client Reviews">
-      <div class="container">
-        <div class="reviews-grid">
-          <div class="reviews-left" data-reveal>
-            <h2><span class="lang-only-en">What Our Clients Say</span><span class="lang-only-es">Lo Que Dicen Nuestros Clientes</span></h2>
-            <p class="lang-only-en">Based in Plantation, we deliver custom web design and SEO that help South Florida companies grow. Hear what our clients say about working with the SENAVIA team — on camera, in their own words.</p>
-            <p class="lang-only-es">Con sede en Plantation, ofrecemos diseño web a la medida y SEO que ayudan a crecer a las empresas del Sur de Florida. Escuche lo que dicen nuestros clientes sobre trabajar con el equipo de SENAVIA — frente a cámara, en sus propias palabras.</p>
-            <div class="reviews-cta-row">
-              <a href="/testimonials" class="btn is-sm"><span class="lang-only-en">Watch Video Testimonials</span><span class="lang-only-es">Ver Testimonios en Video</span></a>
-              <a href="https://www.google.com/search?q=senavia+corp+plantation+reviews" target="_blank" rel="noopener" class="btn is-secondary is-sm"><span class="lang-only-en">Find Us on Google</span><span class="lang-only-es">Encuéntranos en Google</span></a>
-            </div>
-          </div>
-          <div class="reviews-card" data-reveal>
-            {videoTestimonials.map((v) => (
-              <a class="review-item vt-mini" href="/testimonials#video-testimonials">
-                <img class="vt-mini-thumb" src={`https://i.ytimg.com/vi/${v.data.youtubeId}/mqdefault.jpg`} alt="" width="128" height="72" loading="lazy" decoding="async" />
-                <span class="vt-mini-body">
-                  <span class="vt-mini-name">{v.data.name}</span>
-                  <span class="vt-mini-tag"><span class="lang-only-en">Video testimonial</span><span class="lang-only-es">Testimonio en video</span></span>
-                </span>
-                <span class="vt-mini-play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg>
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  <ProcessTestimonials />
 
   <!-- ============================================================
        CTA
@@ -441,46 +326,6 @@ const description = "Web development agency in Miami. Custom admin panels, CRM/E
   }
   .project-cover.has-img .project-name { z-index: 2; }
 
-  /* ---- Real video-testimonial rows inside the reviews card ---- */
-  a.review-item.vt-mini {
-    flex-direction: row;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color .2s ease, background .2s ease;
-  }
-  a.review-item.vt-mini:hover {
-    border-color: rgba(153,204,51,0.35);
-    background: rgba(255,255,255,0.05);
-  }
-  .vt-mini-thumb {
-    width: 128px;
-    height: 72px;
-    border-radius: 10px;
-    object-fit: cover;
-    flex: 0 0 auto;
-    background: #0a0e26;
-  }
-  .vt-mini-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
-  .vt-mini-name { color: var(--white); font-weight: 500; font-size: 15px; }
-  .vt-mini-tag { font-size: 12.5px; color: rgba(255,255,255,0.6); }
-  .vt-mini-play {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 auto;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(153,204,51,0.14);
-    border: 1px solid rgba(153,204,51,0.35);
-    color: var(--primary, #99cc33);
-  }
-  .vt-mini-play svg { width: 16px; height: 16px; }
-  @media (max-width: 480px) {
-    .vt-mini-thumb { width: 96px; height: 54px; }
-  }
 </style>
 
 <!-- Initialize Calendly inline widget once the script loads -->

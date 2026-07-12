@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+interface Copy { en: string; es: string }
+interface Props {
+  /* Per-page copy. Both languages are rendered inline (lang-only-* spans); the
+     site's CSS toggle shows the active one. These are the ONLY per-page knobs —
+     everything else (layout, cards, carousel, CTA) is fixed so every instance
+     is identical to the home reference. */
+  title?: Copy;
+  intro?: Copy;   // rendered with set:html so CMS-driven pages can pass rich prose
+  eyebrow?: Copy;
+}
+
+const {
+  title = {
+    en: 'Web Design, Development & Marketing Projects',
+    es: 'Proyectos de Diseño Web, Desarrollo y Marketing',
+  },
+  intro = {
+    en: 'Explore our web design projects across South Florida — custom digital experiences built to elevate UX, boost conversions, and increase visibility.',
+    es: 'Explora nuestros proyectos de diseño web en todo el Sur de Florida — experiencias digitales a la medida creadas para mejorar la UX, aumentar las conversiones y ganar visibilidad.',
+  },
+  eyebrow,
+} = Astro.props;
+
+/* CMS-driven: show every project flagged "Proyecto destacado" (featured), in CMS order.
+   ponytail: fall back to the first 6 by order so the carousel is never empty. */
+const portfolio = (await getCollection('portfolio')).sort((a, b) => a.data.order - b.data.order);
+const featured = portfolio.filter((p) => p.data.featured);
+const projects = featured.length ? featured : portfolio.slice(0, 6);
+
+/* WL-036 — project summaries only exist in English in Sanity; show a generic
+   Spanish line per service category instead of leaking EN copy in ES mode. */
+function summaryEs(services: string): string {
+  const s = (services || '').toLowerCase();
+  if (s.includes('shopify') || s.includes('commerce') || s.includes('store'))
+    return 'Tienda en línea diseñada y desarrollada a la medida para vender más.';
+  if (s.includes('seo') || s.includes('marketing') || s.includes('ads') || s.includes('traffic'))
+    return 'Diseño web y generación de tráfico enfocados en resultados medibles.';
+  if (s.includes('development') || s.includes('portal') || s.includes('app'))
+    return 'Desarrollo web a la medida para la operación diaria del negocio.';
+  return 'Sitio web personalizado, diseñado para convertir visitantes en clientes.';
+}
+---
+<section id="portfolio" class="section section--band" data-screen-label="Portfolio">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      {eyebrow && (
+        <div class="eyebrow">
+          <span class="lang-only-en">{eyebrow.en}</span>
+          <span class="lang-only-es">{eyebrow.es}</span>
+        </div>
+      )}
+      <h2>
+        <span class="lang-only-en">{title.en}</span>
+        <span class="lang-only-es">{title.es}</span>
+      </h2>
+      <p>
+        <span class="lang-only-en" set:html={intro.en} />
+        <span class="lang-only-es" set:html={intro.es} />
+      </p>
+    </div>
+
+    <!-- Reuses the shared carousel engine: class="carousel" is auto-initialised by
+         public/scripts/home.js (multi-instance safe) and styled by the global
+         .carousel*/.project-card* rules in senavia.css — same engine the blog
+         carousel uses, so nothing is duplicated here. -->
+    <div class="carousel" data-carousel="portfolio">
+      <div class="carousel-arrows">
+        <button class="carousel-arrow prev" aria-label="Previous projects / Proyectos anteriores" type="button">
+          <Icon name="lucide:chevron-left" />
+        </button>
+        <button class="carousel-arrow next" aria-label="Next projects / Proyectos siguientes" type="button">
+          <Icon name="lucide:chevron-right" />
+        </button>
+      </div>
+      <div class="carousel-viewport">
+        <div class="carousel-track" role="list">
+          {projects.map((p, i) => (
+            <article class="project-card" role="listitem">
+              <a href={`/portfolio/${p.id}`} class="project-cover has-img">
+                {p.data.mainImage && <img src={p.data.mainImage} alt={p.data.imageAlt} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />}
+                <span class="project-name">{p.data.title}</span>
+              </a>
+              <div class="project-body">
+                <p>
+                  <span class="lang-only-en">{p.data.summary}</span>
+                  <span class="lang-only-es">{summaryEs(p.data.services)}</span>
+                </p>
+                <a href={`/portfolio/${p.id}`} class="btn is-secondary is-sm"><span class="lang-only-en">Preview Website</span><span class="lang-only-es">Ver Sitio</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div class="carousel-scrollbar" role="presentation">
+        <div class="carousel-scrollbar-thumb"></div>
+      </div>
+    </div>
+
+    <div class="center-cta">
+      <a href="/portfolio" class="btn"><span class="lang-only-en">View All Projects</span><span class="lang-only-es">Ver Todos los Proyectos</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Card cover: the CMS image fills the frame and the project name overlays it.
+     Kept in-component so every instance renders identically — most pages carried
+     this inline, but the subservice [slug] pages did not (that's the "se ve
+     diferente" gap). Living here fixes all pages at once. */
+  .project-cover.has-img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Readability scrim so the name stays legible over the screenshot. */
+  .project-cover.has-img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 14, 38, 0.05) 0%, rgba(10, 14, 38, 0.55) 100%);
+    z-index: 1;
+  }
+  .project-cover.has-img .project-name { z-index: 2; }
+</style>

@@ -41,6 +41,11 @@ export interface Subservice {
 
   faq: Faq[];
 
+  /* Optional per-subservice testimonials copy for the shared
+     ProcessTestimonials section; falls back to the home copy when absent. */
+  testimonialsTitle_en?: string; testimonialsTitle_es?: string;
+  testimonialsIntro_en?: string; testimonialsIntro_es?: string;
+
   related: string[]; // sibling slugs
 }
 
@@ -130,6 +135,11 @@ export const SUBSERVICES: Subservice[] = [
         a_en: 'It depends on scope and page count. We give you a transparent quote on a free consultation — no obligation.',
         a_es: 'Depende del alcance y la cantidad de páginas. Le damos una cotización transparente en una consulta gratuita — sin compromiso.' },
     ],
+    testimonialsTitle_en: 'What Local Business Owners Say',
+    testimonialsTitle_es: 'Lo Que Dicen los Dueños de Negocios Locales',
+    testimonialsIntro_en: 'From service companies to growing brands, South Florida owners trust SENAVIA with the website their business runs on. Hear what launching with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'De empresas de servicios a marcas en crecimiento, los dueños de negocios del Sur de Florida confían a SENAVIA el sitio web del que vive su negocio. Descubre cómo es lanzar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['landing-page-design', 'website-redesign'],
   },
 
@@ -218,6 +228,11 @@ export const SUBSERVICES: Subservice[] = [
         a_en: 'Absolutely — we migrate and modernize existing sites while preserving your SEO. Ask us about a redesign on a free consultation.',
         a_es: 'Por supuesto — migramos y modernizamos sitios existentes preservando su SEO. Pregúntenos por un rediseño en una consulta gratuita.' },
     ],
+    testimonialsTitle_en: 'What Corporate Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes Corporativos',
+    testimonialsIntro_en: 'Companies across South Florida rely on SENAVIA for corporate websites that project credibility and win business. Hear what working with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Empresas de todo el Sur de Florida confían en SENAVIA para sitios corporativos que proyectan credibilidad y generan negocio. Descubre cómo es trabajar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['business-website-design', 'custom-website-development'],
   },
 
@@ -306,6 +321,11 @@ export const SUBSERVICES: Subservice[] = [
         a_en: 'It depends on catalog size and features. We give you a transparent quote on a free consultation — no obligation.',
         a_es: 'Depende del tamaño del catálogo y las funciones. Le damos una cotización transparente en una consulta gratuita — sin compromiso.' },
     ],
+    testimonialsTitle_en: 'What Our E-commerce Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de E-commerce',
+    testimonialsIntro_en: 'Store owners across South Florida trust SENAVIA to design Shopify stores that turn visitors into orders. Hear what selling with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Dueños de tiendas en todo el Sur de Florida confían en SENAVIA para diseñar tiendas Shopify que convierten visitantes en pedidos. Descubre cómo es vender con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['business-website-design', 'website-redesign'],
   },
 
@@ -394,6 +414,11 @@ export const SUBSERVICES: Subservice[] = [
         a_en: 'Custom builds are scoped individually. We map your requirements and give a clear proposal on a free consultation.',
         a_es: 'Los desarrollos a medida se cotizan individualmente. Mapeamos sus requisitos y le damos una propuesta clara en una consulta gratuita.' },
     ],
+    testimonialsTitle_en: 'What Our Custom-Build Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Desarrollo a Medida',
+    testimonialsIntro_en: 'Businesses that outgrew templates trust SENAVIA to build fully custom websites around how they actually work. Hear what going custom is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Negocios que superaron las plantillas confían en SENAVIA para construir sitios totalmente a medida en torno a cómo trabajan realmente. Descubre cómo es ir a la medida — frente a cámara, en sus propias palabras.',
+
     related: ['corporate-website-design', 'shopify-store-design'],
   },
 
@@ -482,6 +507,11 @@ export const SUBSERVICES: Subservice[] = [
         a_en: 'Single landing pages move fast — often within days. We scope your timeline on a free consultation.',
         a_es: 'Las landing pages individuales avanzan rápido — a menudo en días. Definimos su cronograma en una consulta gratuita.' },
     ],
+    testimonialsTitle_en: 'What Our Landing Page Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Landing Pages',
+    testimonialsIntro_en: 'Advertisers across South Florida trust SENAVIA with the pages their campaigns depend on. Hear what converting with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Anunciantes de todo el Sur de Florida confían a SENAVIA las páginas de las que dependen sus campañas. Descubre cómo es convertir con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['business-website-design', 'website-redesign'],
   },
 
@@ -570,6 +600,11 @@ export const SUBSERVICES: Subservice[] = [
         a_en: 'It depends on your current site and goals. We review it and give a transparent quote on a free consultation — no obligation.',
         a_es: 'Depende de su sitio actual y sus objetivos. Lo revisamos y le damos una cotización transparente en una consulta gratuita — sin compromiso.' },
     ],
+    testimonialsTitle_en: 'What Redesign Clients Say',
+    testimonialsTitle_es: 'Lo Que Dicen Nuestros Clientes de Rediseño',
+    testimonialsIntro_en: 'Owners who outgrew their old sites trust SENAVIA to redesign without losing rankings or momentum. Hear what relaunching with our team is like — on camera, in their own words.',
+    testimonialsIntro_es: 'Dueños que superaron sus sitios anteriores confían en SENAVIA para rediseñar sin perder posicionamiento ni impulso. Descubre cómo es relanzar con nuestro equipo — frente a cámara, en sus propias palabras.',
+
     related: ['business-website-design', 'landing-page-design'],
   },
 ];
