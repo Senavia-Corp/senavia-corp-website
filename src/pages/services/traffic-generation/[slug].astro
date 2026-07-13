@@ -71,7 +71,7 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
         <span class="crumbs-current"><span class="lang-only-en">{sub.eyebrow_en.split(' · ')[0]}</span><span class="lang-only-es">{sub.eyebrow_es.split(' · ')[0]}</span></span>
       </nav>
       <div class="subhero-grid">
-        <div class="subhero-copy" data-reveal>
+        <div class="subhero-copy">
           <div class="eyebrow"><span class="lang-only-en">{sub.eyebrow_en}</span><span class="lang-only-es">{sub.eyebrow_es}</span></div>
           <h1><span class="lang-only-en">{sub.h1_en}</span><span class="lang-only-es">{sub.h1_es}</span></h1>
           <p><span class="lang-only-en">{sub.heroSub_en}</span><span class="lang-only-es">{sub.heroSub_es}</span></p>
@@ -84,7 +84,7 @@ const related = sub.related.map((s) => getSubservice(s)).filter(Boolean);
             <div class="metric"><span class="metric-value">5.0 ★</span><span class="metric-label"><span class="lang-only-en">Google reviews</span><span class="lang-only-es">Reseñas de Google</span></span></div>
           </div>
         </div>
-        <div class="subhero-media" data-reveal>
+        <div class="subhero-media">
           <img src={heroImg} width="1200" height="1200" alt={sub.h1_en} fetchpriority="high" decoding="async" />
         </div>
       </div>
