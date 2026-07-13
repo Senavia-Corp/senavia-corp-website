@@ -606,7 +606,7 @@ const jsonLdData = {
       </div>
 
       {showToc && (
-        <details class="article-toc" data-reveal>
+        <details class="article-toc">
           <summary>
             <span class="lang-only-en">Table of Contents</span>
             <span class="lang-only-es">Tabla de Contenido</span>
@@ -619,7 +619,7 @@ const jsonLdData = {
         </details>
       )}
 
-      <div class="cms-prose" data-reveal set:html={body} />
+      <div class="cms-prose" set:html={body} />
 
       <!-- Author footer -->
       <div class="article-author-card" data-reveal>

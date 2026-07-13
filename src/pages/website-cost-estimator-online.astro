@@ -76,7 +76,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     justify-content: center;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     border: 1px solid rgba(255,255,255,0.1);
-    transition: all .25s ease;
+    transition: background-color .25s ease, color .25s ease, border-color .25s ease;
   }
   .est-step-dot.is-active .est-step-num {
     background: var(--primary, #99cc33);
@@ -116,6 +116,9 @@ const description = "Get a custom estimate for your website project in under 2 m
   @keyframes estIn {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .est-card { animation: none; }
   }
   @media (max-width: 640px) { .est-card { padding: 2rem 1.5rem; } }
 
@@ -166,7 +169,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: all .25s cubic-bezier(.2,.6,.2,1);
+    transition: border-color .25s cubic-bezier(.2,.6,.2,1), background-color .25s cubic-bezier(.2,.6,.2,1), transform .25s cubic-bezier(.2,.6,.2,1), box-shadow .25s cubic-bezier(.2,.6,.2,1);
   }
   .est-tile:hover {
     border-color: rgba(153,204,51,0.4);
@@ -315,7 +318,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     grid-template-columns: 22px 1fr auto;
     gap: 12px;
     align-items: start;
-    transition: all .2s ease;
+    transition: background-color .2s ease, border-color .2s ease;
   }
   .est-feat:hover {
     background: rgba(20,28,60,0.55);
@@ -335,7 +338,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     align-items: center;
     justify-content: center;
     color: transparent;
-    transition: all .2s ease;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
   }
   .est-feat.is-on .est-feat-check {
     background: var(--primary, #99cc33);
@@ -377,7 +380,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     grid-template-rows: auto auto auto;
     gap: 4px 12px;
     align-items: start;
-    transition: all .2s ease;
+    transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
     position: relative;
   }
   .est-tl:hover { transform: translateY(-2px); border-color: rgba(153,204,51,0.4); background: rgba(20,28,60,0.55); }
@@ -681,7 +684,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: all .2s ease;
+    transition: color .2s ease, border-color .2s ease, opacity .2s ease;
   }
   .est-back:hover:not(:disabled) { color: #fff; border-color: rgba(255,255,255,0.25); }
   .est-back:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -764,7 +767,7 @@ const description = "Get a custom estimate for your website project in under 2 m
     padding: 1.4rem 1.4rem; border-radius: 16px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
-    transition: all .2s cubic-bezier(.2,.6,.2,1);
+    transition: border-color .2s cubic-bezier(.2,.6,.2,1), background-color .2s cubic-bezier(.2,.6,.2,1), transform .2s cubic-bezier(.2,.6,.2,1);
   }
   .est-pkg:hover { border-color: rgba(153,204,51,0.4); background: rgba(20,28,60,0.5); transform: translateY(-2px); }
   .est-pkg.is-badged { border-color: rgba(153,204,51,0.35); }

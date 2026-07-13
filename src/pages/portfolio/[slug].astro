@@ -185,7 +185,7 @@ const detailBlocks: DetailBlock[] = detailParas.map((html, i) => {
     line-height: 1;
     padding: 4px 8px;
     border-radius: 8px;
-    transition: all .2s ease;
+    transition: color .2s ease, background-color .2s ease;
   }
   .pp-open:hover { color: var(--primary, #99cc33); background: rgba(153,204,51,0.12); }
   .pp-browser-stage {
@@ -380,7 +380,7 @@ const detailBlocks: DetailBlock[] = detailParas.map((html, i) => {
     border-radius: 16px;
     text-decoration: none;
     color: inherit;
-    transition: all .25s ease;
+    transition: border-color .25s ease, background-color .25s ease, transform .25s ease;
     position: relative;
     overflow: hidden;
     min-height: 130px;

@@ -317,6 +317,9 @@ const description = "Contact SENAVIA Corp in Plantation, FL. Schedule a free web
     70%  { box-shadow: 0 0 0 16px rgba(153,204,51,0), 0 0 0 32px rgba(153,204,51,0); }
     100% { box-shadow: 0 0 0 0 rgba(153,204,51,0), 0 0 0 0 rgba(153,204,51,0); }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .ct-map-pin { animation: none; }
+  }
   .ct-map-pin-label {
     position: absolute;
     top: calc(48% - 38px);

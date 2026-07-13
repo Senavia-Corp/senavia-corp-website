@@ -980,6 +980,9 @@ body.nav-locked { overflow: hidden; }
 }
 .marquee-track img { height: 28px; opacity: .55; filter: grayscale(1) brightness(1.6); }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
 
 /* ---------- 9. CTA section ---------- */
 .cta {
@@ -2512,6 +2515,9 @@ html.lang-es .calendly-inline::before { content: 'Cargando agenda…'; }
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 4px rgba(153,204,51,0.25); }
   50%      { box-shadow: 0 0 0 7px rgba(153,204,51,0.05); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .split-media .badge-overlay::before { animation: none; }
 }
 
 /* --- Value card (glass-morphism with gradient border, used in Mission) --- */
