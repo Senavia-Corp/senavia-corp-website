@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Copy { en: string; es: string }
+interface Props {
+  /* Únicas perillas por página. Ambos idiomas se renderizan inline (spans
+     lang-only-*); el toggle CSS del sitio muestra el activo. Todo lo demás
+     (layout, tarjetas, carrusel, flechas, barra, CTA, nº de tarjetas) es FIJO
+     para que cada instancia sea idéntica a la referencia de la home. */
+  title?: Copy;
+  intro?: Copy;   // se pinta con set:html para permitir prosa rica del CMS
+  eyebrow?: Copy;
+}
+
+const {
+  title = { en: 'Blog & Tips', es: 'Blog y Consejos' },
+  intro = {
+    en: 'Expert insights on web development, SEO, digital marketing, and automation to grow traffic and stay competitive in South Florida.',
+    es: 'Perspectivas de expertos sobre desarrollo web, SEO, marketing digital y automatización para aumentar el tráfico y mantenerte competitivo en el Sur de Florida.',
+  },
+  eyebrow,
+} = Astro.props;
+
+/* Nº de tarjetas FIJO (6) — igual en todas las páginas. */
+const posts = (await getCollection('blog'))
+  .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
+  .slice(0, 6);
+
+const fmtEn = (d?: Date) =>
+  d ? d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+const fmtEs = (d?: Date) =>
+  d ? d.toLocaleDateString('es-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+---
+<section id="blog" class="section section--band" data-screen-label="Blog">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      {eyebrow && (
+        <div class="eyebrow">
+          <span class="lang-only-en">{eyebrow.en}</span>
+          <span class="lang-only-es">{eyebrow.es}</span>
+        </div>
+      )}
+      <h2>
+        <span class="lang-only-en">{title.en}</span>
+        <span class="lang-only-es">{title.es}</span>
+      </h2>
+      <p>
+        <span class="lang-only-en" set:html={intro.en} />
+        <span class="lang-only-es" set:html={intro.es} />
+      </p>
+    </div>
+
+    <!-- Reusa el motor global: class="carousel" lo inicializa public/scripts/home.js
+         (multi-instancia) y lo estiliza .carousel*/.blog-card en senavia.css. Nada duplicado. -->
+    <div class="carousel" data-carousel="blog">
+      <div class="carousel-arrows">
+        <button class="carousel-arrow prev" aria-label="Previous posts" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
+        </button>
+        <button class="carousel-arrow next" aria-label="Next posts" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+        </button>
+      </div>
+      <div class="carousel-viewport">
+        <div class="carousel-track" role="list">
+          {posts.map((post) => (
+            <a class="blog-card" role="listitem" href={`/blog/${post.id}`}>
+              <div class="cover">
+                {post.data.thumbnail && (
+                  <img src={post.data.thumbnail} alt={post.data.altImage} loading="lazy" decoding="async" />
+                )}
+              </div>
+              <h3>{post.data.title}</h3>
+              <p class="excerpt">{post.data.summary}</p>
+              <div class="meta">
+                <span><span class="lang-only-en">{fmtEn(post.data.pubDate)}</span><span class="lang-only-es">{fmtEs(post.data.pubDate)}</span></span>
+                {post.data.category && (<><span class="dot"></span><span>{post.data.category}</span></>)}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="carousel-scrollbar" role="presentation">
+        <div class="carousel-scrollbar-thumb"></div>
+      </div>
+    </div>
+
+    <div class="center-cta">
+      <a href="/blog" class="btn is-secondary"><span class="lang-only-en">View All Blogs</span><span class="lang-only-es">Ver Todos los Artículos</span></a>
+    </div>
+  </div>
+</section>

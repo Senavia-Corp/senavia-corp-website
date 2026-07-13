@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { SITE, NAP, NAV } from '@/data/site';
 import PortfolioCarousel from '@/components/PortfolioCarousel.astro';
+import BlogCarousel from '@/components/BlogCarousel.astro';
 import ProcessTestimonials from '@/components/ProcessTestimonials.astro';
 
 export async function getStaticPaths() {
@@ -28,20 +29,10 @@ const services = NAV.services;
 const cardVariant = ['is-purple', 'is-cyan', 'is-green'];
 const iconVariant = ['', 'is-cyan', 'is-green'];
 
-// Real CMS data for the strips.
-const posts = (await getCollection('blog'))
-  .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
-  .slice(0, 3);
-
 // Nearby cities in the same county (internal linking for local SEO).
 const nearby = all
   .filter((a) => a.data.county === d.county && a.id !== entry.id)
   .slice(0, 9);
-
-const fmtEn = (x?: Date) => (x ? x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '');
-const fmtEs = (x?: Date) => (x ? x.toLocaleDateString('es-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '');
-const catLabelEn: Record<string, string> = { 'web-design': 'Web Design', 'web-development': 'Web Development', 'digital-marketing': 'Traffic Generation' };
-const catLabelEs: Record<string, string> = { 'web-design': 'Diseño Web', 'web-development': 'Desarrollo Web', 'digital-marketing': 'Generación de Tráfico' };
 
 // WL-006 — bilingual template copy. Sanity fields are EN-only, so EN mode
 // renders the CMS content (or the EN fallback) and ES mode always renders
@@ -232,8 +223,6 @@ const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
   .sa-nearby a { font-size: 13px; padding: 7px 13px; border-radius: 999px; color: rgba(255,255,255,0.8);
     background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); text-decoration: none; transition: all .18s ease; }
   .sa-nearby a:hover { color: var(--primary); border-color: rgba(153,204,51,0.45); background: rgba(153,204,51,0.08); }
-
-  .sa-strip-cta { text-align: center; margin-top: 2.75rem; }
 </style>
 
 <script type="application/ld+json" set:html={cityLdJson} is:inline></script>
@@ -412,36 +401,11 @@ const cityLdJson = JSON.stringify(cityLd).replace(/</g, '\\u003c');
   />
 
   <!-- BLOG -->
-  <section class="section section--band" data-screen-label="08 Blog">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <span class="sa-sec-num">05</span>
-        <div class="eyebrow"><span class="lang-only-en">Insights</span><span class="lang-only-es">Recursos</span></div>
-        <h2><span class="lang-only-en">{d.headingBlog || t.blogHead.en}</span><span class="lang-only-es">{t.blogHead.es}</span></h2>
-        {d.paragraphBlog
-          ? <div class="cms-prose lang-only-en" style="margin:0 auto; max-width:760px;" set:html={d.paragraphBlog} />
-          : <p class="lang-only-en">{fb.blog.en}</p>}
-        <p class="lang-only-es">{fb.blog.es}</p>
-      </div>
-      <div class="grid-3" data-reveal-children>
-        {posts.map((p) => (
-          <a class="blog-card" href={`/blog/${p.id}`}>
-            <div class="cover">{(p.data.thumbnail || p.data.mainImage) && <img src={p.data.thumbnail || p.data.mainImage} alt={p.data.altImage} loading="lazy" decoding="async" />}</div>
-            <h3>{p.data.title}</h3>
-            <p class="excerpt">{p.data.summary}</p>
-            <div class="meta">
-              <span><span class="lang-only-en">{fmtEn(p.data.pubDate)}</span><span class="lang-only-es">{fmtEs(p.data.pubDate)}</span></span>
-              {p.data.category && (<><span class="dot"></span><span><span class="lang-only-en">{catLabelEn[p.data.category] ?? p.data.category}</span><span class="lang-only-es">{catLabelEs[p.data.category] ?? p.data.category}</span></span></>)}
-              <span class="lang-only-es">(en inglés)</span>
-            </div>
-          </a>
-        ))}
-      </div>
-      <div class="sa-strip-cta">
-        <a href="/blog" class="btn is-secondary"><span class="lang-only-en">View All Articles</span><span class="lang-only-es">Ver Todos los Artículos</span></a>
-      </div>
-    </div>
-  </section>
+  <BlogCarousel
+    eyebrow={{ en: 'Insights', es: 'Recursos' }}
+    title={{ en: d.headingBlog || t.blogHead.en, es: t.blogHead.es }}
+    intro={{ en: d.paragraphBlog || fb.blog.en, es: fb.blog.es }}
+  />
 
   <!-- CTA -->
   <section class="cta cta--glow" data-screen-label="09 CTA">

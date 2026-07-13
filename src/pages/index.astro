@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import PortfolioCarousel from '@/components/PortfolioCarousel.astro';
+import BlogCarousel from '@/components/BlogCarousel.astro';
 import ProcessTestimonials from '@/components/ProcessTestimonials.astro';
 import TrustBadges from '@/components/TrustBadges.astro';
 
@@ -10,16 +11,6 @@ const description = "Bilingual digital agency in Plantation, FL. Custom web desi
 
 /* Tool / integration logos for the hero marquee */
 const logos = (await getCollection('logos')).sort((a, b) => a.data.order - b.data.order);
-
-/* 2 most recent blog posts by publish date */
-const posts = (await getCollection('blog'))
-  .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
-  .slice(0, 2);
-
-const fmtEn = (d?: Date) =>
-  d ? d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
-const fmtEs = (d?: Date) =>
-  d ? d.toLocaleDateString('es-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
 ---
 <BaseLayout
   title={title}
@@ -134,51 +125,7 @@ const fmtEs = (d?: Date) =>
   <!-- ============================================================
        BLOG carousel
        ============================================================ -->
-  <section id="blog" class="section section--band" data-screen-label="07 Blog">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <h2><span class="lang-only-en">Blog &amp; Tips</span><span class="lang-only-es">Blog y Consejos</span></h2>
-        <p><span class="lang-only-en">Expert insights on web development, SEO, digital marketing, and automation to grow traffic and stay competitive in South Florida.</span><span class="lang-only-es">Perspectivas de expertos sobre desarrollo web, SEO, marketing digital y automatización para aumentar el tráfico y mantenerte competitivo en el Sur de Florida.</span></p>
-      </div>
-
-      <div class="carousel" data-carousel="blog">
-        <div class="carousel-arrows">
-          <button class="carousel-arrow prev" aria-label="Previous posts" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"></polyline></svg>
-          </button>
-          <button class="carousel-arrow next" aria-label="Next posts" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
-          </button>
-        </div>
-        <div class="carousel-viewport">
-          <div class="carousel-track" role="list">
-          {posts.map((post) => (
-            <a class="blog-card" role="listitem" href={`/blog/${post.id}`}>
-              <div class="cover">
-                {post.data.thumbnail && (
-                  <img src={post.data.thumbnail} alt={post.data.altImage} loading="lazy" decoding="async" />
-                )}
-              </div>
-              <h3>{post.data.title}</h3>
-              <p class="excerpt">{post.data.summary}</p>
-              <div class="meta">
-                <span><span class="lang-only-en">{fmtEn(post.data.pubDate)}</span><span class="lang-only-es">{fmtEs(post.data.pubDate)}</span></span>
-                {post.data.category && (<><span class="dot"></span><span>{post.data.category}</span></>)}
-              </div>
-            </a>
-          ))}
-        </div>
-        </div>
-        <div class="carousel-scrollbar" role="presentation">
-          <div class="carousel-scrollbar-thumb"></div>
-        </div>
-      </div>
-
-      <div class="center-cta">
-        <a href="/blog" class="btn is-secondary"><span class="lang-only-en">View All Blogs</span><span class="lang-only-es">Ver Todos los Artículos</span></a>
-      </div>
-    </div>
-  </section>
+  <BlogCarousel />
 
   <!-- ============================================================
        CTA
