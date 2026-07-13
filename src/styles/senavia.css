@@ -41,6 +41,22 @@
   /* Hairlines */
   --border-faint: 1px solid rgba(255,255,255,0.08);
   --shadow-soft:  0 10px 40px rgba(0,0,0,0.35);
+
+  /* Motion (scroll-reveal) — see section "Scroll-reveal animations" */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-reveal: 550ms;
+  --reveal-y: 20px;
+  --stagger-step: 70ms;
+}
+/* Mobile: 1-column layouts reveal one element at a time — shorter travel,
+   quicker settle and tighter stagger so content never feels laggy under
+   thumb-scrolling. */
+@media (max-width: 640px) {
+  :root {
+    --dur-reveal: 450ms;
+    --reveal-y: 14px;
+    --stagger-step: 45ms;
+  }
 }
 
 /* ---------- 2. Resets ---------- */
@@ -1683,29 +1699,40 @@ video::-webkit-media-controls-volume-slider {
    so it never sits flush against the next block (the CTA). */
 .green-bg > .section.section-flush:last-of-type { padding-bottom: var(--section-pad-y); }
 
-/* --- Scroll-reveal animations --- */
+/* --- Scroll-reveal animations ---
+   Tokens (--ease-reveal / --dur-reveal / --reveal-y / --stagger-step) live in
+   :root, with a mobile override. Gated behind html.js AND reduced-motion so
+   no-JS / reduced-motion visitors always get static, fully-visible content.
+   home.js adds .is-visible via IntersectionObserver (once, with safety nets). */
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-reveal] {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1);
-    will-change: opacity, transform;
+    transform: translateY(var(--reveal-y));
+    transition: opacity var(--dur-reveal) var(--ease-reveal), transform var(--dur-reveal) var(--ease-reveal);
   }
   html.js [data-reveal].is-visible {
     opacity: 1;
     transform: translateY(0);
   }
-  /* Stagger children */
-  html.js [data-reveal-children].is-visible > * { animation: fadeUp .7s cubic-bezier(.2,.6,.2,1) backwards; }
-  html.js [data-reveal-children].is-visible > *:nth-child(1) { animation-delay: 0ms; }
-  html.js [data-reveal-children].is-visible > *:nth-child(2) { animation-delay: 90ms; }
-  html.js [data-reveal-children].is-visible > *:nth-child(3) { animation-delay: 180ms; }
-  html.js [data-reveal-children].is-visible > *:nth-child(4) { animation-delay: 270ms; }
-  html.js [data-reveal-children].is-visible > *:nth-child(5) { animation-delay: 360ms; }
-  html.js [data-reveal-children].is-visible > *:nth-child(6) { animation-delay: 450ms; }
+  /* Stagger children. Keyframes (not transition-delay) on purpose: the reveal
+     runs exactly once, and animation-delay can't pollute the children's own
+     hover/press transitions the way a lingering transition-delay would.
+     Children are NOT pre-hidden — `backwards` fill hides them only once the
+     animation is scheduled, so a JS failure never leaves content invisible. */
+  html.js [data-reveal-children].is-visible > * { animation: fadeUp var(--dur-reveal) var(--ease-reveal) backwards; }
+  html.js [data-reveal-children].is-visible > *:nth-child(2) { animation-delay: var(--stagger-step); }
+  html.js [data-reveal-children].is-visible > *:nth-child(3) { animation-delay: calc(var(--stagger-step) * 2); }
+  html.js [data-reveal-children].is-visible > *:nth-child(4) { animation-delay: calc(var(--stagger-step) * 3); }
+  html.js [data-reveal-children].is-visible > *:nth-child(5) { animation-delay: calc(var(--stagger-step) * 4); }
+  html.js [data-reveal-children].is-visible > *:nth-child(6) { animation-delay: calc(var(--stagger-step) * 5); }
+  html.js [data-reveal-children].is-visible > *:nth-child(7) { animation-delay: calc(var(--stagger-step) * 6); }
+  html.js [data-reveal-children].is-visible > *:nth-child(8) { animation-delay: calc(var(--stagger-step) * 7); }
+  /* Big grids: children 9+ share one capped delay instead of "exploding" in
+     an ever-longer queue (service-area city grids have 15+ items). */
+  html.js [data-reveal-children].is-visible > *:nth-child(n+9) { animation-delay: calc(var(--stagger-step) * 8); }
 }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(var(--reveal-y)); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -1714,10 +1741,10 @@ video::-webkit-media-controls-volume-slider {
    IF the browser is honoring animations. Critically: no fill: backwards
    gating, so a stalled animation never leaves content invisible. */
 @media (prefers-reduced-motion: no-preference) {
-  html.js .hero-inner > * { animation: heroIn .9s cubic-bezier(.2,.6,.2,1) both; }
-  html.js .hero-inner > *:nth-child(1) { animation-delay: .1s; }
-  html.js .hero-inner > *:nth-child(2) { animation-delay: .25s; }
-  html.js .hero-inner > *:nth-child(3) { animation-delay: .4s; }
+  html.js .hero-inner > * { animation: heroIn .6s var(--ease-reveal) both; }
+  html.js .hero-inner > *:nth-child(1) { animation-delay: .05s; }
+  html.js .hero-inner > *:nth-child(2) { animation-delay: .15s; }
+  html.js .hero-inner > *:nth-child(3) { animation-delay: .25s; }
 }
 @keyframes heroIn {
   0%   { opacity: 0; transform: translateY(20px); }

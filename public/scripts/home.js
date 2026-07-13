@@ -283,6 +283,28 @@
      2. Scroll reveal (IntersectionObserver)
      ------------------------------------------------------------ */
   if ('IntersectionObserver' in window) {
+    /* Auto-coverage: house-convention blocks reveal on every page (incl. the
+       footer on all of them) without per-template attributes. Elements are
+       tagged ONLY when fully below the fold at this moment — hiding them is
+       invisible to the user, so there is zero flash / LCP / CLS risk by
+       construction. Above-the-fold content simply stays static. Explicit
+       data-reveal[-children] attributes always win; nothing inside the hero
+       or nav ever auto-animates. */
+    var AUTO_SINGLE = '.section-head, .split, .calendly-block, .legal-body .container, .cta .container';
+    var AUTO_GROUP = '.grid-3, .reasons-grid, .ideal-grid, .pkg-grid, .faq-list, .portfolio-grid, .footer-top';
+    function autoTag(selector, attr) {
+      document.querySelectorAll(selector).forEach(function (el) {
+        if (el.closest('[data-reveal], [data-reveal-children], .hero, .nav, nav')) return;
+        if (el.querySelector('[data-reveal], [data-reveal-children]')) return;
+        if (el.getBoundingClientRect().top > window.innerHeight) el.setAttribute(attr, '');
+      });
+    }
+    autoTag(AUTO_SINGLE, 'data-reveal');
+    autoTag(AUTO_GROUP, 'data-reveal-children');
+
+    /* Mobile: 15% of a tall stacked card = a lot of thumb-scroll before it
+       reveals — trigger earlier so content never arrives late. */
+    var revealThreshold = window.matchMedia('(max-width: 640px)').matches ? 0.05 : 0.15;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) {
@@ -290,7 +312,7 @@
           io.unobserve(e.target);
         }
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+    }, { threshold: revealThreshold, rootMargin: '0px 0px -8% 0px' });
 
     document.querySelectorAll('[data-reveal], [data-reveal-children]').forEach(function (el) {
       var r = el.getBoundingClientRect();
@@ -301,10 +323,15 @@
       }
     });
 
+    /* Safety net: nothing ON SCREEN may stay hidden if a reveal stalls.
+       Scoped to the viewport on purpose — a blanket reveal here would mark
+       every below-fold element visible 3s after load and disable the whole
+       scroll-reveal experience for anyone who reads before scrolling. */
     window.addEventListener('load', function () {
       setTimeout(function () {
         document.querySelectorAll('[data-reveal]:not(.is-visible), [data-reveal-children]:not(.is-visible)').forEach(function (el) {
-          el.classList.add('is-visible');
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('is-visible');
         });
       }, 3000);
     });
