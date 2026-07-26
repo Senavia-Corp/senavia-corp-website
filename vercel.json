@@ -10,7 +10,16 @@
     { "source": "/401.html", "destination": "/404", "permanent": true },
     { "source": "/401", "destination": "/404", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true },
-    { "source": "/services/digital-marketing", "destination": "/services/traffic-generation", "permanent": true }
+    { "source": "/services/digital-marketing", "destination": "/services/traffic-generation", "permanent": true },
+    { "source": "/:locale(en|es)", "destination": "/", "permanent": true },
+    { "source": "/:locale(en|es)/graphic-design", "destination": "/services", "permanent": true },
+    { "source": "/:locale(en|es)/web-design-miami", "destination": "/services/web-design", "permanent": true },
+    { "source": "/:locale(en|es)/web-development-miami", "destination": "/services/web-development", "permanent": true },
+    { "source": "/:locale(en|es)/digital-marketing-miami", "destination": "/services/traffic-generation", "permanent": true },
+    { "source": "/:locale(en|es)/testimonial", "destination": "/testimonials", "permanent": true },
+    { "source": "/:locale(en|es)/service-areas/:path*", "destination": "/service-areas", "permanent": true },
+    { "source": "/:locale(en|es)/blog/:path*", "destination": "/blog", "permanent": true },
+    { "source": "/:locale(en|es)/:rest*", "destination": "/:rest*", "permanent": true }
   ],
   "headers": [
     {
