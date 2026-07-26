@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "check:redirects": "node tools/check-redirects.mjs",
     "astro": "astro"
   },
   "dependencies": {
