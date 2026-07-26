@@ -8,11 +8,20 @@ import JsonLd from '@/components/JsonLd.astro';
 import SenaviaChat from '@/components/SenaviaChat.astro';
 import { CAL_LINK, CAL_NS, SITE } from '@/data/site';
 
-// Google Tag Manager container — the single site-wide container. GA4
-// (G-9442Q92NXR) and Google Ads (AW-711225908) tags live INSIDE GTM, not in
-// code, so there is exactly one source of truth and no double-counting. Loaded
-// on built deploys only (matches Plausible); local `astro dev` stays clean.
+// Google Tag Manager container — the single site-wide container. Loaded on
+// built deploys only (matches Plausible); local `astro dev` stays clean.
 const GTM_ID = 'GTM-N6H7BC5';
+
+// GA4 measurement ID — the ONLY data stream of property 335076382 (Senavia Corp).
+// It is NOT in the GTM container: verified 2026-07-26 by resolving the container's
+// runtime chain (gtm.js -> the 5 __googtag tags -> gtag/js?id=<each>). None of them
+// instantiates G-9442Q92NXR, and the 6 GA4 event tags read macro[3], which is still
+// UA-243711929-1 (Universal Analytics, shut down 2023). So the property receives
+// nothing and we send the page_view from code instead.
+//
+// ponytail: delete this const and the gtag block below THE DAY a Google tag for
+// G-9442Q92NXR is added in the GTM dashboard — running both double-counts the property.
+const GA4_ID = 'G-9442Q92NXR';
 
 interface Props {
   title: string;
@@ -59,9 +68,9 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google Tag Manager — as high in <head> as possible. Built deploys only
-         (local dev stays out of analytics). Every tag (GA4 + Ads + others) is
-         configured in the GTM dashboard; code only bootstraps the container and
-         pushes events to the dataLayer. -->
+         (local dev stays out of analytics). Ads and event tags are configured in
+         the GTM dashboard; code only bootstraps the container and pushes events
+         to the dataLayer. GA4 is the exception — see the gtag block below. -->
     {import.meta.env.PROD && (
       <script is:inline define:vars={{ GTM_ID }}>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -69,6 +78,24 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer',GTM_ID);
+      </script>
+    )}
+
+    <!-- GA4 — the container does not deliver to G-9442Q92NXR (see GA4_ID above),
+         so the property has been blind since the site went live. Sending the
+         page_view from code restores it. Shares window.dataLayer with GTM, which
+         is how gtag and GTM coexist without fighting over it. -->
+    {import.meta.env.PROD && (
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+    )}
+    {import.meta.env.PROD && (
+      <script is:inline define:vars={{ GA4_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        // define:vars wraps this in an IIFE, so bind gtag to window explicitly —
+        // otherwise it is function-scoped and unreachable from anywhere else.
+        window.gtag = function gtag(){ window.dataLayer.push(arguments) };
+        window.gtag('js', new Date());
+        window.gtag('config', GA4_ID);
       </script>
     )}
 
