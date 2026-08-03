@@ -1,44 +1,46 @@
-// Chat endpoint for the floating sales widget.
-//
-// Was a proxy in front of an n8n Cloud webhook (n8n → Gemini). Both
-// subscriptions lapsed; n8n started answering with its "404 - No workspace here"
-// HTML page and this route forwarded it verbatim, so visitors saw raw HTML in
-// the chat bubble. The answers now come from src/lib/chatBot.mjs — no upstream,
-// nothing to renew.
-//
-// Turnstile still guards the route: when the env is configured, only visitors
-// holding the HMAC-signed "human verified" cookie from /api/chat-verify get in.
-// Fail-open until that env exists, so the chat never breaks during setup.
+// Same-origin proxy in front of the n8n chat webhook.
+// - Hides the n8n webhook URL from the client.
+// - When Turnstile is configured (env set), requires the HMAC-signed "human
+//   verified" cookie set by /api/chat-verify, so bots can't reach Gemini.
+// - Fail-open until the env is configured, so the chat never breaks during setup.
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
 import { verifyToken } from '@/lib/chatAuth';
-import { botReply } from '@/lib/chatBot.mjs';
 
-const json = (data: unknown, status = 200) =>
-  new Response(JSON.stringify(data), {
-    status,
-    headers: { 'content-type': 'application/json' },
-  });
+const N8N_WEBHOOK =
+  'https://senavia.app.n8n.cloud/webhook/95bd1c1b-bdd5-4b05-8541-ce98f915b422/chat';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const cookieSecret = process.env.CHAT_COOKIE_SECRET;
   const gate = !!process.env.TURNSTILE_SECRET && !!cookieSecret;
 
-  if (gate && !verifyToken(cookies.get('chat_ok')?.value, cookieSecret!)) {
-    return json({ output: 'Please refresh the page to verify you are human.' }, 403);
+  if (gate) {
+    const ok = verifyToken(cookies.get('chat_ok')?.value, cookieSecret!);
+    if (!ok) {
+      return new Response(
+        JSON.stringify({ output: 'Please refresh the page to verify you are human.' }),
+        { status: 403, headers: { 'content-type': 'application/json' } },
+      );
+    }
   }
 
-  let body: { action?: string; chatInput?: string; metadata?: { site_lang?: string } } = {};
+  const body = await request.text();
   try {
-    body = await request.json();
+    const res = await fetch(N8N_WEBHOOK, {
+      method: 'POST',
+      headers: { 'content-type': request.headers.get('content-type') ?? 'application/json' },
+      body,
+    });
+    const text = await res.text();
+    return new Response(text, {
+      status: res.status,
+      headers: { 'content-type': res.headers.get('content-type') ?? 'application/json' },
+    });
   } catch {
-    // Malformed body → fall through and answer with the greeting.
+    return new Response(
+      JSON.stringify({ output: 'Chat is temporarily unavailable. Please try again.' }),
+      { status: 502, headers: { 'content-type': 'application/json' } },
+    );
   }
-
-  // The widget asks for the session history when it opens. We keep no history,
-  // so it renders its own initial messages instead.
-  if (body.action === 'loadPreviousSession') return json({ data: [] });
-
-  return json({ output: botReply({ text: body.chatInput, lang: body.metadata?.site_lang }) });
 };

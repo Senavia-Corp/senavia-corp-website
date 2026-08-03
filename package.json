@@ -10,7 +10,6 @@
     "preview": "astro preview",
     "check": "astro check",
     "check:redirects": "node tools/check-redirects.mjs",
-    "check:chat": "node tools/chat-check.mjs",
     "astro": "astro"
   },
   "dependencies": {
