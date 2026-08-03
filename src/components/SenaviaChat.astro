@@ -1,6 +1,6 @@
 ---
 /*
-  SENAVIA Sales Chat — floating widget, self-hosted @n8n/chat (v1.28.3).
+  SENAVIA AI Sales Chat — floating widget, self-hosted @n8n/chat (v1.28.3).
   Lazy: the bundle + CSS load ONLY when the visitor opens the chat, so zero
   third-party requests/cookies on initial load and Lighthouse stays intact.
 
@@ -9,10 +9,9 @@
   override to `#senavia-chat-panel` (id selector = higher specificity), so the
   brand theme reliably beats the widget defaults.
 */
-// Widget talks to our own /api/chat (answers from src/lib/chatBot.mjs — there is
-// no upstream service). Cloudflare Turnstile guards it, and activates only when
-// PUBLIC_TURNSTILE_SITEKEY is set (fail-open otherwise, so the chat never breaks
-// during setup).
+// Widget talks to a same-origin proxy (/api/chat) that hides the n8n webhook and
+// enforces Cloudflare Turnstile. Turnstile activates only when PUBLIC_TURNSTILE_SITEKEY
+// is set (fail-open otherwise, so the chat never breaks during setup).
 const WEBHOOK_URL = '/api/chat';
 const TURNSTILE_SITEKEY = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
 ---

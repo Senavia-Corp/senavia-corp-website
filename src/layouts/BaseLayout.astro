@@ -211,9 +211,9 @@ const absoluteUrl = new URL(canonicalPath, Astro.site ?? Astro.url.origin).href;
 
     <Footer />
 
-    <!-- Sales chat: lazy-loaded, self-hosted @n8n/chat widget answered by our
-         own /api/chat (src/lib/chatBot.mjs). PROD/preview only (kept out of
-         local dev, same as Plausible). Nothing loads until the visitor opens it. -->
+    <!-- AI sales chat: lazy-loaded, self-hosted @n8n/chat. PROD/preview only
+         (kept out of local dev, same as Plausible). Nothing loads until the
+         visitor opens it. -->
     {import.meta.env.PROD && <SenaviaChat />}
 
     <!-- Global language switcher logic -->
