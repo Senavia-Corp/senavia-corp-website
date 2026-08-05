@@ -1355,7 +1355,7 @@ video::-webkit-media-controls-volume-slider {
   filter: none;
   mix-blend-mode: screen;
 }
-.green-bg > .figure.f1 { top: -60px;  left: -60px;  width: 320px; }
+.green-bg > .figure.f1 { top: -60px;  left: -60px;  width: 480px; }
 .green-bg > .figure.f2 { top: 38%;    right: -80px; width: 380px; }
 .green-bg > .figure.f3 { bottom: -40px; left: -60px;  width: 300px; }
 /* El contenido va SIEMPRE por encima de las figuras. Se apunta a las secciones
