@@ -1357,7 +1357,7 @@ video::-webkit-media-controls-volume-slider {
 }
 .green-bg > .figure.f1 { top: -60px;  left: -60px;  width: 320px; }
 .green-bg > .figure.f2 { top: 38%;    right: -80px; width: 380px; }
-.green-bg > .figure.f3 { bottom: -40px; left: 28%;  width: 300px; }
+.green-bg > .figure.f3 { bottom: -40px; left: -60px;  width: 300px; }
 /* El contenido va SIEMPRE por encima de las figuras. Se apunta a las secciones
    porque son los hijos directos reales de .green-bg; los .container son nietos
    (.green-bg > section#process > .container), así que el viejo selector
