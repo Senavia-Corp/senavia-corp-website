@@ -74,12 +74,15 @@ body {
 }
 
 /* ---------- Global background system (branded, CSS-only) ----------
-   Viewport-pinned decor layer rendered as the first child of <body>.
-   Replaces the flat fixed bg.webp: deep navy base + large soft brand
-   glows (lime / cyan / violet) for depth, plus an ultra-subtle grid.
-   position:fixed (NOT background-attachment:fixed) — GPU-cheap, no
-   repaint on scroll, behaves correctly on mobile. Heroes & CTAs render
-   their own opaque video + navy base, so they occlude this naturally. */
+   Capa decorativa fija al viewport, primer hijo de <body>. Replica en CSS la
+   textura bg.webp del Webflow — orbes de color difusos sobre navy casi negro,
+   con grano de película — sin cargar 1.5 MB de imagen en cada visita.
+   La paleta cubre los seis orbes del original: lima, cian, azul, magenta y
+   violeta (la versión anterior sólo tenía lima/cian/violeta y a un tercio de
+   esta intensidad, de ahí que el sitio se viera plano).
+   position:fixed (NO background-attachment:fixed) — barato en GPU, sin
+   repintado al hacer scroll, correcto en móvil. Heroes y CTAs pintan su
+   propio video opaco encima, así que lo ocluyen de forma natural. */
 .site-bg {
   position: fixed;
   inset: 0;
@@ -87,10 +90,24 @@ body {
   pointer-events: none;
   background-color: var(--secondary);
   background-image:
-    radial-gradient(58rem 46rem at 8% -6%,   rgba(153,204,51,0.16), transparent 60%),
-    radial-gradient(52rem 52rem at 102% 22%, rgba(51,204,204,0.12), transparent 58%),
-    radial-gradient(60rem 58rem at -8% 96%,  rgba(123,63,228,0.14), transparent 60%),
-    radial-gradient(46rem 40rem at 88% 104%, rgba(153,204,51,0.08), transparent 60%);
+    radial-gradient(52rem 42rem at 6% -4%,   rgba(153,204,51,0.26), transparent 62%),
+    radial-gradient(30rem 26rem at 84% 4%,   rgba(153,204,51,0.13), transparent 60%),
+    radial-gradient(46rem 44rem at 104% 30%, rgba(51,204,204,0.19), transparent 60%),
+    radial-gradient(40rem 38rem at -6% 50%,  rgba(76,110,245,0.19), transparent 62%),
+    radial-gradient(34rem 30rem at 98% 74%,  rgba(193,59,138,0.17), transparent 60%),
+    radial-gradient(54rem 50rem at -4% 102%, rgba(123,63,228,0.22), transparent 62%);
+}
+/* Grano de película. Vive en ::before porque ::after ya lo ocupa la rejilla.
+   feTurbulence + feColorMatrix saturate(0) = ruido monocromo; en color el
+   ruido ensucia el navy. Va como data-URI: cero peticiones, y el CSP ya
+   permite `data:` en img-src. */
+.site-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.15;
 }
 .site-bg::after {
   content: '';
@@ -105,7 +122,10 @@ body {
   opacity: 0.6;
 }
 @media (max-width: 480px) {
-  .site-bg::after { display: none; }   /* save a paint layer on small phones */
+  /* Un par de capas de pintado menos en teléfonos chicos. Los orbes, que son
+     los que dan el carácter, se quedan: van en el propio .site-bg. */
+  .site-bg::after  { display: none; }
+  .site-bg::before { opacity: 0.10; }
 }
 
 /* Section rhythm — opt-in band (subtle lift + hairline top edge).
