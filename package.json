@@ -8,8 +8,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
+    "check": "node tools/carousel-check.mjs && node tools/check-redirects.mjs && astro check",
     "check:redirects": "node tools/check-redirects.mjs",
+    "check:carousel": "node tools/carousel-check.mjs",
     "astro": "astro"
   },
   "dependencies": {

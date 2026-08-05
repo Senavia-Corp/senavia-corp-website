@@ -1511,8 +1511,11 @@ video::-webkit-media-controls-volume-slider {
 }
 @media (max-width: 1100px) { .carousel-track > * { flex-basis: min(520px, 78%); } }
 @media (max-width: 700px)  { .carousel-track > * { flex-basis: 86%; } }
-.carousel.is-tight .carousel-track > * { flex: 0 0 360px; }
-@media (max-width: 600px)  { .carousel.is-tight .carousel-track > * { flex-basis: 84%; } }
+
+/* The carousel scrolls itself on click/keypress — honour the OS setting. */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track { scroll-behavior: auto; }
+}
 
 /* Edge fades — hint that there's more to scroll */
 .carousel-viewport::before,

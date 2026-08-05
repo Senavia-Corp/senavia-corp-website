@@ -9,6 +9,18 @@
 (function () {
   'use strict';
 
+  var REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Injected controls need labels in the page's language, not hardcoded English.
+     The switch is client-side (BaseLayout toggles <html lang> and fires
+     `languagechange`), so this is read at render time, never captured at load. */
+  function T() {
+    var es = (document.documentElement.lang || 'en').toLowerCase().indexOf('es') === 0;
+    return es
+      ? { position: 'Posición del carrusel', goTo: function (n) { return 'Ir a la tarjeta ' + n; } }
+      : { position: 'Carousel position',     goTo: function (n) { return 'Go to slide ' + n; } };
+  }
+
   /* ------------------------------------------------------------
      1. Carousel — refined for fluid feel
      ------------------------------------------------------------ */
@@ -24,8 +36,9 @@
     /* Build page dots — one per "page" (visible width) */
     var dotsWrap = document.createElement('div');
     dotsWrap.className = 'carousel-dots';
-    dotsWrap.setAttribute('role', 'tablist');
-    dotsWrap.setAttribute('aria-label', 'Carousel position');
+    // ponytail: group, not tablist — there are no tabpanels to point at, so
+    // tablist/tab/aria-selected was lying to screen readers.
+    dotsWrap.setAttribute('role', 'group');
     (bar ? bar.parentNode.insertBefore(dotsWrap, bar.nextSibling) : root.appendChild(dotsWrap));
 
     function pageCount() {
@@ -61,16 +74,18 @@
           var d = document.createElement('button');
           d.type = 'button';
           d.className = 'carousel-dot';
-          d.setAttribute('role', 'tab');
-          d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
           d.dataset.page = i;
           dotsWrap.appendChild(d);
         }
       }
       var current = activePage();
+      var t = T();
+      dotsWrap.setAttribute('aria-label', t.position);
       [].forEach.call(dotsWrap.children, function (d, i) {
         d.classList.toggle('is-active', i === current);
-        d.setAttribute('aria-selected', i === current ? 'true' : 'false');
+        d.setAttribute('aria-label', t.goTo(i + 1));
+        if (i === current) d.setAttribute('aria-current', 'true');
+        else d.removeAttribute('aria-current');
       });
     }
 
@@ -99,9 +114,25 @@
       renderDots();
     }
 
+    function scrollToX(x) {
+      var max = Math.max(0, track.scrollWidth - track.clientWidth);
+      track.scrollTo({ left: Math.max(0, Math.min(max, x)), behavior: REDUCE ? 'auto' : 'smooth' });
+    }
+
+    /* Move one card. If the leftover after this move would be a sliver, absorb
+       it — otherwise the last click travels ~16px and reads as a dead button. */
+    function nudge(dir) {
+      var s = step();
+      var max = Math.max(0, track.scrollWidth - track.clientWidth);
+      var target = track.scrollLeft + dir * s;
+      if (dir > 0 && max - target < s * 0.25) target = max;
+      if (dir < 0 && target < s * 0.25) target = 0;
+      scrollToX(target);
+    }
+
     /* Arrow controls — animate to next page (one card step) */
-    if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
-    if (next) next.addEventListener('click', function () { track.scrollBy({ left:  step(), behavior: 'smooth' }); });
+    if (prev) prev.addEventListener('click', function () { nudge(-1); });
+    if (next) next.addEventListener('click', function () { nudge(1); });
 
     /* Dot clicks — jump to that page */
     dotsWrap.addEventListener('click', function (e) {
@@ -112,16 +143,16 @@
       if (!first) return;
       var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || 0);
       var stepWidth = first.getBoundingClientRect().width + gap;
-      track.scrollTo({ left: i * stepWidth, behavior: 'smooth' });
+      scrollToX(i * stepWidth);
     });
 
     /* Keyboard nav when track is focused */
     track.tabIndex = 0;
     track.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left:  step(), behavior: 'smooth' }); }
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); track.scrollBy({ left: -step(), behavior: 'smooth' }); }
-      if (e.key === 'Home')       { e.preventDefault(); track.scrollTo({ left: 0, behavior: 'smooth' }); }
-      if (e.key === 'End')        { e.preventDefault(); track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); nudge(1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); nudge(-1); }
+      if (e.key === 'Home')       { e.preventDefault(); scrollToX(0); }
+      if (e.key === 'End')        { e.preventDefault(); scrollToX(track.scrollWidth); }
     });
 
     /* --- Pointer-based drag with momentum --- */
@@ -139,10 +170,15 @@
     var rafId = null;
 
     function onDown(e) {
+      // ponytail: mouse only. On touch the browser already pans natively AND
+      // fires pointer events, so writing scrollLeft here ran on top of the
+      // native pan — measured 1.6-2.1x movement per finger travel, sometimes
+      // inverted. Native touch scrolling has better inertia than this RAF anyway.
+      if (e.pointerType !== 'mouse') return;
       // Don't hijack if user clicks the scrollbar or arrows
       if (e.target.closest('.carousel-arrow, .carousel-scrollbar, .carousel-dot')) return;
-      // Only the primary button for mouse
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      // Only the primary button
+      if (e.button !== 0) return;
       pointer.active = true;
       pointer.pointerId = e.pointerId;
       pointer.startX = e.clientX;
@@ -175,15 +211,19 @@
     function onUp(e) {
       if (!pointer.active || (e.pointerId !== pointer.pointerId && e.type !== 'pointercancel')) return;
       pointer.active = false;
-      track.classList.remove('is-dragging');
       try { track.releasePointerCapture(pointer.pointerId); } catch (err) {}
 
-      if (!pointer.hasMoved) return; // a tap — let the click pass through
-
-      // Momentum: keep scrolling with decay
+      // a tap, no fling, or reduced motion — settle now and let snap take over
       var velocity = pointer.velocity * 1000; // px/sec — scale up
-      if (Math.abs(velocity) < 50) return; // no significant fling
+      if (!pointer.hasMoved || REDUCE || Math.abs(velocity) < 50) {
+        track.classList.remove('is-dragging');
+        return;
+      }
 
+      // Momentum: keep scrolling with decay. `is-dragging` (which disables
+      // scroll-snap) stays on until the RAF finishes — removing it here let the
+      // browser try to snap while this loop was still writing scrollLeft every
+      // frame, which is what made it jump on release.
       var decay = 0.94;
       var lastTime = performance.now();
       function frame(t) {
@@ -196,6 +236,7 @@
           rafId = requestAnimationFrame(frame);
         } else {
           rafId = null;
+          track.classList.remove('is-dragging'); // snap settles once, at the end
         }
       }
       rafId = requestAnimationFrame(frame);
@@ -228,7 +269,7 @@
           // Clicking the rail jumps to that position
           var pct = (e.clientX - rect.left - thumbRect.width / 2) / (rect.width - thumbRect.width);
           pct = Math.max(0, Math.min(1, pct));
-          track.scrollTo({ left: pct * max, behavior: 'smooth' });
+          scrollToX(pct * max);
           return;
         }
         barDrag.active = true;
@@ -272,6 +313,7 @@
 
     track.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
+    window.addEventListener('languagechange', update); // relabel the dots on EN/ES switch
     // Initial render after layout settles
     requestAnimationFrame(update);
     setTimeout(update, 100);
