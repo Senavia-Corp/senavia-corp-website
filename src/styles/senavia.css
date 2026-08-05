@@ -97,9 +97,10 @@ body {
 
 /* ---------- Global background system (branded, CSS-only) ----------
    Capa decorativa que va DEBAJO de todo (va tras el .skip-link en el markup, no
-   es el primer hijo de <body>). Replica en CSS la textura bg.webp del Webflow
-   —orbes de color difusos sobre navy casi negro, con grano de película— sin
-   cargar 1.5 MB de imagen en cada visita.
+   es el primer hijo de <body>). Replica en CSS la textura del Webflow —orbes de
+   color difusos sobre navy casi negro, con grano de película— sin cargar 1.5 MB
+   de imagen en cada visita. El original queda como referencia en
+   tools/qa/ref/bg-referencia.webp, fuera de public/ para no desplegarlo.
 
    Lo importante: en el Webflow el fondo SCROLLEA, así que cada sección atraviesa
    un color distinto conforme bajas (verde → cian/azul → violeta → magenta →
@@ -2079,9 +2080,10 @@ html.js .hero-inner > * {
 .green-bg #process { padding-bottom: 4rem; }
 .green-bg #reviews { padding-top: 3rem; }
 
-/* Fix iteración 2 — Body bg.webp interaction with section backgrounds —
-   the radial gradient bleeds inconsistently across sections.
-   Adding a subtle inner shadow at section boundaries creates intentional zones. */
+/* Contexto de posicionamiento para lo que estas secciones coloquen en absoluto.
+   (El comentario que había aquí describía una sombra interior en los bordes de
+   sección para contener el sangrado de bg.webp: ni la sombra ni bg.webp existen
+   ya, la regla sólo hace esto.) */
 #services, #portfolio, #blog {
   position: relative;
 }
