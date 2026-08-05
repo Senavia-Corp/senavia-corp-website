@@ -42,6 +42,20 @@
   --border-faint: 1px solid rgba(255,255,255,0.08);
   --shadow-soft:  0 10px 40px rgba(0,0,0,0.35);
 
+  /* Fondo global — ver "Global background system" más abajo.
+     --bg-cycle: alto de UN recorrido de color completo. 378vw = la proporción
+     1:3.78 de bg.webp, así el patrón conserva la densidad medida en el original
+     (un orbe cada ~419px sobre un lienzo de 1440). Clampado para que en móvil no
+     se repita seis veces y en pantallas anchas no se estire de más.
+     --bg-orb: multiplicador de radio. Los radios de la tabla de abajo son los del
+     NÚCLEO del orbe, no los de su extensión visible: medido sobre bg.webp, el
+     orbe verde grande ocupa ~24% del ancho cuando su núcleo mide 14.6%. 1.75 es
+     ese factor. En móvil, además, el tile queda mucho más estirado en vertical
+     que el 1:3.78 de referencia y los orbes se leerían como puntitos, así que
+     allí se agrandan otro 1.8. */
+  --bg-cycle: clamp(2600px, 378vw, 5000px);
+  --bg-orb: 1.9;
+
   /* Motion (scroll-reveal) — see section "Scroll-reveal animations" */
   --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-reveal: 550ms;
@@ -56,6 +70,10 @@
     --dur-reveal: 450ms;
     --reveal-y: 14px;
     --stagger-step: 45ms;
+    /* El tile queda clampado a 2600px de alto sobre ~390px de ancho: proporción
+       1:6.7 contra el 1:3.8 de bg.webp. Sin compensar, los orbes se leen como
+       puntitos separados por navy. 1.75 (núcleo→extensión) × 1.8 (estiramiento). */
+    --bg-orb: 3.4;
   }
 }
 
@@ -71,31 +89,94 @@ body {
   background-color: var(--secondary);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Bloque contenedor de .site-bg, que necesita medir el alto del DOCUMENTO y no
+     el de la ventana. `position:relative` con `z-index:auto` NO crea contexto de
+     apilado, así que el z-index:-10 del fondo sigue escapando al contexto raíz. */
+  position: relative;
 }
 
 /* ---------- Global background system (branded, CSS-only) ----------
-   Capa decorativa fija al viewport, primer hijo de <body>. Replica en CSS la
-   textura bg.webp del Webflow — orbes de color difusos sobre navy casi negro,
-   con grano de película — sin cargar 1.5 MB de imagen en cada visita.
-   La paleta cubre los seis orbes del original: lima, cian, azul, magenta y
-   violeta (la versión anterior sólo tenía lima/cian/violeta y a un tercio de
-   esta intensidad, de ahí que el sitio se viera plano).
-   position:fixed (NO background-attachment:fixed) — barato en GPU, sin
-   repintado al hacer scroll, correcto en móvil. Heroes y CTAs pintan su
-   propio video opaco encima, así que lo ocluyen de forma natural. */
+   Capa decorativa que va DEBAJO de todo (va tras el .skip-link en el markup, no
+   es el primer hijo de <body>). Replica en CSS la textura bg.webp del Webflow
+   —orbes de color difusos sobre navy casi negro, con grano de película— sin
+   cargar 1.5 MB de imagen en cada visita.
+
+   Lo importante: en el Webflow el fondo SCROLLEA, así que cada sección atraviesa
+   un color distinto conforme bajas (verde → cian/azul → violeta → magenta →
+   turquesa). La versión anterior era `position:fixed` con 6 orbes: idéntica en
+   todo momento y en todas las secciones, y por eso se veía plana.
+
+   Posiciones y colores medidos sobre bg.webp. El color de cada parada ES el píxel
+   compuesto medido (no un tinte con alfa): así el CSS es auditable contra la
+   referencia y, donde dos orbes se solapan, el de arriba manda en vez de sumarse
+   y aclarar de más.
+
+   SON 9, NO 13. La tabla de medidas trae 13 filas, pero cuatro pares/grupos son
+   el MISMO orbe detectado varias veces: los dos azules de (85.4, 35.7) y
+   (82.6, 39.9) —colores #154665 y #154768— y los cuatro turquesas de y 89.9 a
+   94.7 —#0b2631, #0b2533, #0c2633, #0c2632—. Renderizarlos por separado apilaba
+   cuatro orbes enormes y solapados y convertía el turquesa en un manchón que
+   cruzaba todo el ancho. Fusionados en su centroide, quedan los 9 orbes que se
+   cuentan a ojo en bg.webp.
+
+   Caída medida sobre el original (perfil radial del verde grande, el cian y el
+   magenta): la intensidad cae a la mitad a 0.75 del radio de la tabla y se apaga
+   hacia 1.9. Por eso el radio de la tabla es el del NÚCLEO y las paradas
+   (20%/42%/68%) reproducen esa curva en vez de un degradado lineal.
+
+   DESFASE DE 22%: la composición está rotada 22% respecto de bg.webp para que el
+   empalme del patrón caiga en la franja navy vacía que el original tiene entre el
+   verde de arriba y el cian (y ≈ 19%–26%). Así el tile cierra sin costura visible
+   y no hacen falta capas duplicadas a ambos lados del borde. El orden cíclico de
+   colores se conserva; sólo cambia por cuál entras.
+
+   Coste: un tile de `repeat-y` se rasteriza UNA vez y el compositor lo repite, así
+   que el coste no crece con el largo de la página (medido: p95 sin cambio). No
+   introduce movimiento —sólo se mueve con el scroll del documento—, así que no
+   necesita bloque `prefers-reduced-motion`. NUNCA meter aquí parallax,
+   `background-attachment:fixed` ni JS enganchado al scroll. */
 .site-bg {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;          /* = alto del documento, vía body{position:relative} */
+  min-height: 100vh;     /* guarda para páginas más cortas que la ventana */
   z-index: -10;
   pointer-events: none;
   background-color: var(--secondary);
+  background-repeat: repeat-y;
+  background-size: 100% var(--bg-cycle);
   background-image:
-    radial-gradient(52rem 42rem at 6% -4%,   rgba(153,204,51,0.26), transparent 62%),
-    radial-gradient(30rem 26rem at 84% 4%,   rgba(153,204,51,0.13), transparent 60%),
-    radial-gradient(46rem 44rem at 104% 30%, rgba(51,204,204,0.19), transparent 60%),
-    radial-gradient(40rem 38rem at -6% 50%,  rgba(76,110,245,0.19), transparent 62%),
-    radial-gradient(34rem 30rem at 98% 74%,  rgba(193,59,138,0.17), transparent 60%),
-    radial-gradient(54rem 50rem at -4% 102%, rgba(123,63,228,0.22), transparent 62%);
+    /* cian */
+    radial-gradient(calc(12.2vw * var(--bg-orb)) calc(12.2vw * var(--bg-orb)) at 36.1% 8.5%,
+                    #1c5970, #1c5970d9 20%, #1c597073 42%, #1c597030 68%, #1c597000 100%),
+    /* azul (fusión de 85.4/35.7 + 82.6/39.9) */
+    radial-gradient(calc(16.5vw * var(--bg-orb)) calc(16.5vw * var(--bg-orb)) at 84.0% 15.8%,
+                    #154766, #154766d9 20%, #15476673 42%, #15476630 68%, #15476600 100%),
+    /* azul-violeta */
+    radial-gradient(calc(19.1vw * var(--bg-orb)) calc(19.1vw * var(--bg-orb)) at 13.9% 35.9%,
+                    #222472, #222472d9 20%, #22247273 42%, #22247230 68%, #22247200 100%),
+    /* magenta */
+    radial-gradient(calc(12.8vw * var(--bg-orb)) calc(12.8vw * var(--bg-orb)) at 86.8% 43.3%,
+                    #5b1478, #5b1478d9 20%, #5b147873 42%, #5b147830 68%, #5b147800 100%),
+    /* magenta pequeño */
+    radial-gradient(calc(7.6vw * var(--bg-orb)) calc(7.6vw * var(--bg-orb)) at 9.7% 50.2%,
+                    #461b6b, #461b6bd9 20%, #461b6b73 42%, #461b6b30 68%, #461b6b00 100%),
+    /* azul-violeta bajo */
+    radial-gradient(calc(17.4vw * var(--bg-orb)) calc(17.4vw * var(--bg-orb)) at 13.9% 63.5%,
+                    #1e216d, #1e216dd9 20%, #1e216d73 42%, #1e216d30 68%, #1e216d00 100%),
+    /* turquesa (fusión de los 4 de y 89.9-94.7) */
+    radial-gradient(calc(29.0vw * var(--bg-orb)) calc(29.0vw * var(--bg-orb)) at 66.3% 70.3%,
+                    #0b2632, #0b2632d9 20%, #0b263273 42%, #0b263230 68%, #0b263200 100%),
+    /* lima pequeño */
+    radial-gradient(calc(7.6vw * var(--bg-orb)) calc(7.6vw * var(--bg-orb)) at 81.2% 83.9%,
+                    #27641e, #27641ed9 20%, #27641e73 42%, #27641e30 68%, #27641e00 100%),
+    /* El lima grande del original es #469a2c: con él, el texto blanco da 3.55:1 y
+       NO pasa AA. Capado a #37782b (5.4:1) — mismo tono, luminancia dentro del
+       techo. Es el único de los 9 que hubo que tocar. */
+    radial-gradient(calc(14.6vw * var(--bg-orb)) calc(14.6vw * var(--bg-orb)) at 25.0% 88.5%,
+                    #37782b, #37782bd9 20%, #37782b73 42%, #37782b30 68%, #37782b00 100%);
 }
 /* Grano de película. Vive en ::before porque ::after ya lo ocupa la rejilla.
    feTurbulence + feColorMatrix saturate(0) = ruido monocromo; en color el
