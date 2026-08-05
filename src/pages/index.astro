@@ -193,7 +193,7 @@ const logos = (await getCollection('logos')).sort((a, b) => a.data.order - b.dat
     btn.addEventListener('click', function () {
       var id = btn.getAttribute('data-yt-facade');
       var f = document.createElement('iframe');
-      f.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
       f.title = 'SENAVIA Corp — Agency reel';
       f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
       f.setAttribute('allowfullscreen', '');

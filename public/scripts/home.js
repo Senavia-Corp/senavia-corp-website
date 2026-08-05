@@ -439,25 +439,7 @@
   });
 
   /* ------------------------------------------------------------
-     5. Video iframe loaded state (YouTube etc.)
-     ------------------------------------------------------------ */
-  document.querySelectorAll('.video-frame').forEach(function (frame) {
-    var iframe = frame.querySelector('iframe');
-    if (!iframe) return;
-    // Hide play-button placeholder once the iframe has loaded its thumbnail/preview
-    if (iframe.complete || iframe.contentWindow) {
-      // Already may be loaded; give it a moment then mark loaded
-      setTimeout(function () { frame.classList.add('is-loaded'); }, 600);
-    }
-    iframe.addEventListener('load', function () {
-      frame.classList.add('is-loaded');
-    });
-    // Safety net — after 3s, force loaded state
-    setTimeout(function () { frame.classList.add('is-loaded'); }, 3000);
-  });
-
-  /* ------------------------------------------------------------
-     6. Safety net: force hero text visible (in case animations stall)
+     5. Safety net: force hero text visible (in case animations stall)
      ------------------------------------------------------------ */
   setTimeout(function () {
     document.querySelectorAll('.hero-inner > *').forEach(function (el) {

@@ -12,5 +12,5 @@
       <stop offset="1" stop-color="#31cb24"></stop>
     </radialGradient>
   </defs>
-  <circle class="st0" cx="25" cy="25" r="25"></circle>
+  <circle class="st0" fill="url(#Degradado_sin_nombre_56)" cx="25" cy="25" r="25"></circle>
 </svg>
