@@ -1220,11 +1220,31 @@ video::-webkit-media-controls-volume-slider {
   z-index: -2;
   pointer-events: none;
 }
+/* Velo sobre el video de fondo. Se baja mucho respecto del 0.85/0.70 original
+   —que apagaba por completo el verde/cian del video— pero NO de forma pareja:
+   el degradado sigue al contenido. El texto vive entre el 15% y el 33% de la
+   sección, así que esa franja conserva velo suficiente para pasar AA; del 37%
+   al 89% manda el .video-frame y sólo se ve video en los márgenes laterales,
+   donde no hay texto y el velo puede ceder para que el color luzca. */
 .intro::before {
   content:'';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(10,14,38,0.85), rgba(10,14,38,0.7) 50%, rgba(10,14,38,0.85));
+  background: linear-gradient(180deg,
+    rgba(10,14,38,0.50) 0%,
+    rgba(10,14,38,0.50) 36%,
+    rgba(10,14,38,0.28) 52%,
+    rgba(10,14,38,0.28) 84%,
+    rgba(10,14,38,0.44) 100%);
   z-index: -1;
+}
+/* El párrafo global va a rgba(255,255,255,0.72); sobre el verde claro del
+   video eso no llega a AA por sí solo. Se sube SÓLO aquí (es la única sección
+   con video vivo detrás de texto) en vez de tocar el .section-head de todo el
+   sitio. La sombra replica la técnica que ya usa .hero para el mismo problema. */
+.intro .section-head p { color: rgba(255,255,255,0.92); }
+.intro .section-head h2,
+.intro .section-head p {
+  text-shadow: 0 2px 18px rgba(0,0,0,0.45);
 }
 
 /* Rounded YouTube/video embed frame */
