@@ -1366,6 +1366,18 @@ video::-webkit-media-controls-volume-slider {
    figuras eran invisibles. */
 .green-bg > .section { position: relative; z-index: 1; }
 
+/* Variante sin banda: sólo las figuras, dejando ver la textura global.
+   Para secciones largas de lectura —el listado del blog mide 4189px y el del
+   portfolio 2786px, contra los 1413px de la banda del home— donde un bloque
+   azul opaco de miles de píxeles pesaría demasiado y taparía justo la textura
+   que le da el aire al sitio.
+   `isolation: auto` NO es opcional: .green-bg aísla su contexto de apilado, y
+   sin fondo las figuras harían mix-blend-mode:screen contra transparente
+   —screen contra nada devuelve el color pleno— y saldrían mucho más brillantes
+   que en el home. Al quitar el aislamiento el blend ocurre contra la textura
+   global, que es el efecto buscado. */
+.green-bg--plain { background: none; isolation: auto; }
+
 /* Móvil: las medidas de escritorio están pensadas para un lienzo de ~1280px.
    Tal cual, en 390px la f2 ocupaba el 97% del ancho (380px de 390) y la f1 el
    82%: dejaban de ser acentos y lavaban la pantalla entera. Se encogen y se
