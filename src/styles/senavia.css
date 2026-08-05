@@ -1366,6 +1366,16 @@ video::-webkit-media-controls-volume-slider {
    figuras eran invisibles. */
 .green-bg > .section { position: relative; z-index: 1; }
 
+/* Móvil: las medidas de escritorio están pensadas para un lienzo de ~1280px.
+   Tal cual, en 390px la f2 ocupaba el 97% del ancho (380px de 390) y la f1 el
+   82%: dejaban de ser acentos y lavaban la pantalla entera. Se encogen y se
+   empujan más allá del borde para que sólo asome un arco, como en Webflow. */
+@media (max-width: 640px) {
+  .green-bg > .figure.f1 { top: -40px;   left: -70px;  width: 180px; }
+  .green-bg > .figure.f2 { top: 42%;     right: -90px; width: 200px; }
+  .green-bg > .figure.f3 { bottom: -30px; left: -50px; width: 160px; }
+}
+
 /* --- .process-block (image-backed gradient-border card) --- */
 .process-block {
   position: relative;
