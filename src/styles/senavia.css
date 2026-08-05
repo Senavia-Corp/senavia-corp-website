@@ -1464,17 +1464,23 @@ video::-webkit-media-controls-volume-slider {
    figuras eran invisibles. */
 .green-bg > .section { position: relative; z-index: 1; }
 
-/* Variante sin banda: sólo las figuras, dejando ver la textura global.
-   Para secciones largas de lectura —el listado del blog mide 4189px y el del
-   portfolio 2786px, contra los 1413px de la banda del home— donde un bloque
-   azul opaco de miles de píxeles pesaría demasiado y taparía justo la textura
-   que le da el aire al sitio.
-   `isolation: auto` NO es opcional: .green-bg aísla su contexto de apilado, y
-   sin fondo las figuras harían mix-blend-mode:screen contra transparente
-   —screen contra nada devuelve el color pleno— y saldrían mucho más brillantes
-   que en el home. Al quitar el aislamiento el blend ocurre contra la textura
-   global, que es el efecto buscado. */
-.green-bg--plain { background: none; isolation: auto; }
+/* NORMA — dos sistemas de fondo que NO se mezclan:
+     1. la textura global (.site-bg): orbes + grano, va en las 111 páginas;
+     2. la banda azul (.green-bg): fondo OPACO con identidad propia.
+   Los círculos verdes pertenecen a la banda, y están calibrados
+   (mix-blend-mode:screen, opacidad 0.55) contra ESE azul. Donde hay círculos
+   tiene que haber banda; donde no hay banda, no van círculos.
+
+   Aquí vivía `.green-bg--plain`, que quitaba el azul y dejaba las figuras
+   flotando sobre la textura. Estaba en blog/index y portfolio/index porque sus
+   listados miden 4253px y 2850px (contra los 1413px de la banda del home) y
+   pintarlos de azul opaco entero tapaba la textura a lo largo de ~5 pantallas.
+   Se resolvió quitando las figuras de esas dos páginas, no la banda: no hay
+   ninguna sub-sección más corta que envolver (cada listado es UNA sección), así
+   que la otra salida obligaba a inventar contenido sólo para colgar decoración.
+   Conservan `.section--band` y cierran en `.cta`, que ya hace de corte de
+   capítulo. Con el fondo scrolleando son, además, las dos páginas largas menos
+   tapadas del sitio: justo donde mejor se lee el recorrido de color. */
 
 /* Móvil: las medidas de escritorio están pensadas para un lienzo de ~1280px.
    Tal cual, en 390px la f2 ocupaba el 97% del ancho (380px de 390) y la f1 el
