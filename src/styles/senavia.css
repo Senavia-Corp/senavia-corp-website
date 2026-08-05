@@ -1872,33 +1872,12 @@ html.js .hero-inner > * {
   font-family: 'Inter', sans-serif;
 }
 
-/* Fix iteración 1 — YouTube embed: visible loading state until iframe loads */
+/* Telón de fondo del embed mientras el iframe de YouTube arranca. El estado
+   previo al clic lo cubre entero .yt-lite (fondo, scrim y botón de play propio);
+   el dimensionado del iframe vive en el bloque .video-frame iframe de arriba. */
 .video-frame {
   background: linear-gradient(135deg, rgba(153,204,51,0.12), rgba(51,204,204,0.12));
 }
-.video-frame::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(60% 60% at 50% 50%, rgba(153,204,51,0.15), transparent 70%);
-  pointer-events: none;
-}
-.video-frame::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.95);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><polygon points='8,5 19,12 8,19' fill='black'/></svg>") center / 28px no-repeat;
-          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><polygon points='8,5 19,12 8,19' fill='black'/></svg>") center / 28px no-repeat;
-  pointer-events: none;
-  transition: opacity .4s ease;
-}
-.video-frame.is-loaded::after { opacity: 0; }
-.video-frame iframe { background: transparent; opacity: 0; transition: opacity .4s ease; position: relative; z-index: 1; }
-.video-frame.is-loaded iframe { opacity: 1; }
 
 /* Fix iteración 1 — Decorative figures: slightly more visible without breaking subtlety */
 .green-bg > .figure {
