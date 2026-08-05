@@ -131,9 +131,21 @@ body {
    y no hacen falta capas duplicadas a ambos lados del borde. El orden cíclico de
    colores se conserva; sólo cambia por cuál entras.
 
-   Coste: un tile de `repeat-y` se rasteriza UNA vez y el compositor lo repite, así
-   que el coste no crece con el largo de la página (medido: p95 sin cambio). No
-   introduce movimiento —sólo se mueve con el scroll del documento—, así que no
+   COSTE, medido — dos cosas distintas:
+   1. Repintado al hacer scroll: el tile se rasteriza UNA vez y el compositor lo
+      repite, así que NO crece con el largo de la página. p95 de tiempo de frame
+      9.2 → 9.5 ms (390x844, CPU 4x, 120 repintados forzados). Despreciable.
+   2. Primer pintado: `repeat-y` obliga a Chrome a rasterizar el tile ENTERO por
+      adelantado (5000px de alto a 1350 de ancho) aunque sólo se vean ~940px, y
+      cuesta ~19 ms POR ORBE — es lineal en el número de orbes, no en el número de
+      paradas de color. En localhost eso son +164 ms de FCP; contra Vercel, donde
+      la rasterización se solapa con la red, queda en +29 ms escritorio y +39 ms
+      móvil (Perf 100→99 y 68→67, mediana de 3). Se acepta.
+      SI AÑADES ORBES, cuestan ~19 ms de FCP cada uno. Si algún día hay que
+      recortar, las palancas son el número de orbes y --bg-cycle (menos alto de
+      tile = menos rasterización, a cambio de que el recorrido se repita antes).
+
+   No introduce movimiento —sólo se mueve con el scroll del documento—, así que no
    necesita bloque `prefers-reduced-motion`. NUNCA meter aquí parallax,
    `background-attachment:fixed` ni JS enganchado al scroll. */
 .site-bg {
