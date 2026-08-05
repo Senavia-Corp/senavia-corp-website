@@ -85,10 +85,18 @@ const videos = (await getCollection('videos'))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 ---
+<!-- OJO con el ?v= de las figuras: vercel.json sirve /images/ con
+     `max-age=31536000, immutable`, igual que /scripts/. Estos SVG no llevan
+     fingerprint en el nombre, así que editarlos sin cambiar la URL deja a los
+     visitantes recurrentes con la copia vieja durante un año — pasó el
+     2026-08-05: el servidor ya tenía los SVG arreglados y en el navegador
+     seguían saliendo negros. Si vuelves a tocar figure-bg-*.svg, sube el ?v=
+     en las 21 referencias (7 archivos: este componente + about, pricing,
+     contact, testimonials, blog/index, portfolio/index). -->
 <div class="green-bg">
-  <img class="figure f1" src="/images/figure-bg-3.svg" alt="" aria-hidden="true">
-  <img class="figure f2" src="/images/figure-bg-2.svg" alt="" aria-hidden="true">
-  <img class="figure f3" src="/images/figure-bg-1.svg" alt="" aria-hidden="true">
+  <img class="figure f1" src="/images/figure-bg-3.svg?v=20260805" alt="" aria-hidden="true">
+  <img class="figure f2" src="/images/figure-bg-2.svg?v=20260805" alt="" aria-hidden="true">
+  <img class="figure f3" src="/images/figure-bg-1.svg?v=20260805" alt="" aria-hidden="true">
 
   <!-- PROCESS -->
   <section id="process" class="section section-flush" data-screen-label={processScreenLabel}>
