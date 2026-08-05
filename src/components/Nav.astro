@@ -1,5 +1,5 @@
 ---
-import { NAV, NAP } from '@/data/site';
+import { NAV, NAP, SOCIAL } from '@/data/site';
 import { SUBSERVICES as WEB_DESIGN_SUBS } from '@/data/subservices';
 import { SUBSERVICES_TRAFFIC as TRAFFIC_SUBS } from '@/data/subservices-traffic';
 import { SUBSERVICES_WEBDEV as WEBDEV_SUBS } from '@/data/subservices-webdev';
@@ -276,9 +276,9 @@ const servicesNav = NAV.services.map((item) => ({
     <div class="row">
       <LangSwitcher />
       <span class="nav-social">
-        <a href={`https://www.instagram.com/senaviacorp`} aria-label="Instagram" target="_blank" rel="noopener"><Icon name="lucide:instagram" /></a>
-        <a href={`https://www.facebook.com/senaviacorp`} aria-label="Facebook" target="_blank" rel="noopener"><Icon name="lucide:facebook" /></a>
-        <a href={`https://www.youtube.com/@senaviacorp`} aria-label="YouTube" target="_blank" rel="noopener"><Icon name="lucide:youtube" /></a>
+        <a href={SOCIAL.instagram} aria-label="Instagram" target="_blank" rel="noopener"><Icon name="lucide:instagram" /></a>
+        <a href={SOCIAL.facebook} aria-label="Facebook" target="_blank" rel="noopener"><Icon name="lucide:facebook" /></a>
+        <a href={SOCIAL.youtube} aria-label="YouTube" target="_blank" rel="noopener"><Icon name="lucide:youtube" /></a>
       </span>
     </div>
   </div>

@@ -32,10 +32,12 @@ export const NAP = {
 export const CAL_LINK = import.meta.env.PUBLIC_CAL_LINK || 'senavia/30min';
 export const CAL_NS = '30min'; // embed namespace (fixed by the Cal.com dashboard)
 
+// Fuente única de los perfiles sociales — la usan el footer, el nav y el JSON-LD
+// (sameAs). Si cambian, se cambian AQUÍ y en ningún otro sitio.
 export const SOCIAL = {
-  instagram: 'https://www.instagram.com/senaviacorp',
-  facebook: 'https://www.facebook.com/senaviacorp',
-  youtube: 'https://www.youtube.com/@senaviacorp',
+  instagram: 'https://www.instagram.com/senaviawebdesign',
+  facebook: 'https://www.facebook.com/senaviawebdesign',
+  youtube: 'https://www.youtube.com/@senaviawebdesign',
 };
 
 export const GOOGLE_PARTNER_URL =
