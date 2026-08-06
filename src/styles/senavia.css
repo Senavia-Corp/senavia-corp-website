@@ -1114,13 +1114,30 @@ body.nav-locked { overflow: hidden; }
   z-index: -2;
   pointer-events: none;
 }
+/* Velo sobre cta-bg.mp4. Antes iba de 0.65 a 0.85: sólo se oscurecía hacia abajo,
+   y con el fondo global ya en color el CTA se leía como un agujero negro entre la
+   sección de arriba y el pie. Ahora abre en el medio igual que .intro::before, así
+   el video se ve.
+   OJO ANTES DE ACLARARLO MÁS: cta-bg.mp4 es MUCHO más brillante que el bg-video.mp4
+   del intro. Copiando el velo del intro tal cual, el titular blanco cae a 3.45:1 y
+   el párrafo a 2.82:1 — no pasa AA. Medido sobre píxeles reales, con este velo la
+   luminancia máxima del fondo es 0.152 → 5.20:1 con blanco puro. El techo para AA
+   (4.5:1) es 0.183; no subas de ahí. */
 .cta::before {
   content:''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(10,14,38,0.65), rgba(10,14,38,0.85));
+  background: linear-gradient(180deg,
+    rgba(10,14,38,0.60) 0%,
+    rgba(10,14,38,0.60) 30%,
+    rgba(10,14,38,0.45) 55%,
+    rgba(10,14,38,0.45) 84%,
+    rgba(10,14,38,0.58) 100%);
   z-index: -1;
 }
 .cta h2 { max-width: 880px; margin: 0 auto 14px; }
-.cta p  { max-width: 720px; margin: 0 auto 28px; color: rgba(255,255,255,0.85); }
+/* Blanco pleno, no 0.85: con el velo aclarado, el 15% de fondo que se cuela por
+   la transparencia baja el contraste ~20% y el párrafo se quedaba en 4.2:1. Mismo
+   arreglo que se hizo en .intro por la misma razón. */
+.cta p  { max-width: 720px; margin: 0 auto 28px; color: #fff; }
 /* CTA buttons sit bare in .container (no flex wrapper), so give them spacing
    that holds side-by-side on desktop and when they wrap/stack on mobile. */
 .cta .container > .btn { margin: 12px 6px 0; }
